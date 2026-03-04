@@ -242,38 +242,10 @@ body {
 }
 
 /* ─── Marker Cluster Overrides ──────────────────────────────── */
-.marker-cluster {
-  background-clip: padding-box;
-  border-radius: 50%;
-}
-
-.marker-cluster div {
-  background-color: var(--color-primary);
-  border-radius: 50%;
-  margin: 3px;
-  color: #fff;
-  font-family: var(--font-family);
-  font-size: 0.875rem;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.marker-cluster span {
-  line-height: 1;
-}
-
-.marker-cluster-small {
-  background-color: rgba(204, 34, 0, 0.25);
-}
-
-.marker-cluster-medium {
-  background-color: rgba(204, 34, 0, 0.35);
-}
-
-.marker-cluster-large {
-  background-color: rgba(204, 34, 0, 0.45);
+/* Custom clusters are rendered via iconCreateFunction in MapView.vue */
+.marker-cluster-custom {
+  background: none !important;
+  border: none !important;
 }
 
 /* ─── Loading Indicator ─────────────────────────────────────── */

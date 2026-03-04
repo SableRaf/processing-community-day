@@ -96,16 +96,33 @@ onMounted(async () => {
   );
   tileLayer.addTo(map);
 
-  // Cluster group
+  // Cluster group with Google Maps-style concentric circles
   const clusterGroup = (L as unknown as { markerClusterGroup: (opts?: object) => import('leaflet').LayerGroup }).markerClusterGroup({
     showCoverageOnHover: false,
+    iconCreateFunction: (cluster: { getChildCount: () => number }) => {
+      const count = cluster.getChildCount();
+      const r1 = 24, r2 = 18, r3 = 12;
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${r1 * 2}" height="${r1 * 2}" viewBox="0 0 ${r1 * 2} ${r1 * 2}">
+        <circle cx="${r1}" cy="${r1}" r="${r1}" fill="#5601A4" opacity="0.2"/>
+        <circle cx="${r1}" cy="${r1}" r="${r2}" fill="#5601A4" opacity="0.3"/>
+        <circle cx="${r1}" cy="${r1}" r="${r3}" fill="#5601A4" opacity="0.9"/>
+        <text x="${r1}" y="${r1}" text-anchor="middle" dominant-baseline="central"
+          font-family="IBM Plex Sans, system-ui, sans-serif" font-size="11" font-weight="600" fill="#fff">${count}</text>
+      </svg>`;
+      return L.divIcon({
+        html: svg,
+        className: 'marker-cluster-custom',
+        iconSize: [r1 * 2, r1 * 2],
+        iconAnchor: [r1, r1],
+      });
+    },
   });
 
   // Custom red SVG marker
-  const redIcon = L.divIcon({
+  const markerIcon = L.divIcon({
     className: '',
     html: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
-      <circle cx="10" cy="10" r="8" fill="#cc2200" stroke="#fff" stroke-width="2"/>
+      <circle cx="10" cy="10" r="8" fill="#5601A4" stroke="#fff" stroke-width="2"/>
     </svg>`,
     iconSize: [20, 20],
     iconAnchor: [10, 10],
@@ -114,7 +131,7 @@ onMounted(async () => {
 
   // Add markers
   props.nodes.forEach((node) => {
-    const marker = L.marker([node.lat, node.lng], { icon: redIcon });
+    const marker = L.marker([node.lat, node.lng], { icon: markerIcon });
     marker.bindPopup(() => makePopupContent(node), { maxWidth: 340 });
     markerMap.set(node.id, marker);
     clusterGroup.addLayer(marker);
