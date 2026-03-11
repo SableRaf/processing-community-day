@@ -3,8 +3,8 @@
 
 /* ─── Design Tokens ─────────────────────────────────────────── */
 :root {
-  --color-primary: #cc2200;
-  --color-primary-dark: #991a00;
+  --color-primary: #800f8d;
+  --color-primary-dark: #500f67;
   --color-focus: #005fcc;
   --color-text: #1a1a1a;
   --color-text-muted: #555;
@@ -215,19 +215,24 @@ body {
 }
 
 .leaflet-popup-content button.read-more {
-  background: none;
+  display: block;
+  width: 100%;
+  background: var(--color-primary);
   border: none;
-  padding: 0;
+  border-radius: 4px;
+  padding: 0.625rem 1rem;
+  margin-top: 0.75rem;
   cursor: pointer;
   font-family: var(--font-family);
-  font-size: 0.8125rem;
-  color: var(--color-focus);
-  text-decoration: underline;
-  margin-top: 0.25rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #fff;
+  text-decoration: none;
+  text-align: center;
 }
 
 .leaflet-popup-content button.read-more:hover {
-  color: var(--color-primary);
+  background: var(--color-primary-dark);
 }
 
 .popup-content .popup-link-row {

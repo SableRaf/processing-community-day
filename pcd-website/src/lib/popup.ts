@@ -1,7 +1,7 @@
 import { getIcon, addCollection } from '@iconify/vue';
 import biIcons from '@iconify-json/bi/icons.json' assert { type: 'json' };
 import type { Node } from './nodes';
-import { formatDate, calendarLinks } from './format';
+import { formatDateRange, calendarLinks } from './format';
 
 addCollection(biIcons as Parameters<typeof addCollection>[0]);
 
@@ -36,7 +36,7 @@ export function makePopupContent(node: Node): string {
     ? `${node.venue}, ${node.address}`
     : `${node.venue}, ${node.city}, ${node.country}`;
   const icsDataUri = `data:text/calendar;charset=utf-8,${encodeURIComponent(icsContent)}`;
-  const date = escapeHtml(formatDate(node.start_date));
+  const date = escapeHtml(formatDateRange(node.start_date, node.end_date));
   const location = escapeHtml(`${node.city}, ${node.country}`);
   const descriptionParagraphs = node.description
     .split(/\n\n+/)

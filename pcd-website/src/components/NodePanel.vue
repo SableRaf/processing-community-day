@@ -3,7 +3,7 @@ import { ref, watch, onMounted, onUnmounted } from 'vue';
 import { createFocusTrap, type FocusTrap } from 'focus-trap';
 import { Icon } from '@iconify/vue';
 import type { Node } from '../lib/nodes';
-import { formatDate, calendarLinks } from '../lib/format';
+import { formatDateRange, calendarLinks } from '../lib/format';
 
 const props = defineProps<{
   node: Node | null;
@@ -105,7 +105,7 @@ function getParagraphs(text: string): string[] {
         </div>
 
         <h2 id="panel-title" class="panel-name">{{ node.name }}</h2>
-        <p class="panel-meta">{{ formatDate(node.start_date) }}</p>
+        <p class="panel-meta">{{ formatDateRange(node.start_date, node.end_date) }}</p>
 
         <p class="panel-venue">
           <Icon icon="bi:geo-alt-fill" class="panel-icon" width="14" height="14" aria-hidden="true" />

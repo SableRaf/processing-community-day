@@ -16,6 +16,33 @@ export function formatDate(dateString: string): string {
   }
 }
 
+export function formatDateRange(startDate: string, endDate?: string): string {
+  if (!endDate || endDate === startDate) return formatDate(startDate);
+  try {
+    const [sy, sm, sd] = startDate.split('-').map(Number);
+    const [ey, em, ed] = endDate.split('-').map(Number);
+    const start = new Date(Date.UTC(sy, sm - 1, sd));
+    const end = new Date(Date.UTC(ey, em - 1, ed));
+    const sameYear = sy === ey;
+    const sameMonth = sameYear && sm === em;
+    if (sameMonth) {
+      // e.g. "October 17–18, 2026"
+      const month = start.toLocaleDateString('en-US', { month: 'long', timeZone: 'UTC' });
+      return `${month} ${sd}–${ed}, ${sy}`;
+    } else if (sameYear) {
+      // e.g. "October 30 – November 1, 2026"
+      const s = start.toLocaleDateString('en-US', { month: 'long', day: 'numeric', timeZone: 'UTC' });
+      const e = end.toLocaleDateString('en-US', { month: 'long', day: 'numeric', timeZone: 'UTC' });
+      return `${s} – ${e}, ${sy}`;
+    } else {
+      // e.g. "December 31, 2026 – January 1, 2027"
+      return `${formatDate(startDate)} – ${formatDate(endDate)}`;
+    }
+  } catch {
+    return formatDate(startDate);
+  }
+}
+
 function toICalDate(dateString: string): string {
   return dateString.replace(/-/g, '');
 }

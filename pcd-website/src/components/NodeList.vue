@@ -2,7 +2,7 @@
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
 import { createFocusTrap, type FocusTrap } from 'focus-trap';
 import type { Node } from '../lib/nodes';
-import { formatDate } from '../lib/format';
+import { formatDateRange } from '../lib/format';
 
 interface StyleOption { id: string; label: string; }
 
@@ -126,7 +126,7 @@ function handleKeydown(e: KeyboardEvent) {
         >
           <span class="node-name">{{ node.name }}</span>
           <span class="node-location">{{ node.city }}, {{ node.country }}</span>
-          <span class="node-date">{{ formatDate(node.start_date) }}</span>
+          <span class="node-date">{{ formatDateRange(node.start_date, node.end_date) }}</span>
         </button>
       </li>
     </ul>
