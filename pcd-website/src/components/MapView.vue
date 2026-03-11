@@ -93,13 +93,23 @@ function onStyleChange(styleId: string) {
   if (mapInstance && leafletRef) setMapStyle(styleId, mapInstance, leafletRef);
 }
 
+function setActiveMarker(nodeId: string | null) {
+  markerMap.forEach((marker, id) => {
+    marker.getElement()?.classList.toggle('marker-active', id === nodeId);
+  });
+}
+
 function openPanel(node: Node) {
   selectedNode.value = node;
   listOpen.value = false;
+  const marker = markerMap.get(node.id);
+  marker?.closePopup();
+  setActiveMarker(node.id);
 }
 
 function closePanel() {
   selectedNode.value = null;
+  setActiveMarker(null);
 }
 
 function openList() {
@@ -200,9 +210,8 @@ onMounted(async () => {
     },
   });
 
-  // Custom red SVG marker
   const markerIcon = L.divIcon({
-    className: '',
+    className: 'marker-node',
     html: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
       <circle cx="10" cy="10" r="8" fill="#5601A4" stroke="#fff" stroke-width="2"/>
     </svg>`,
@@ -276,5 +285,18 @@ onUnmounted(() => {
   width: 100vw;
   height: 100vh;
   z-index: 0;
+}
+</style>
+
+<style>
+.marker-node.marker-active svg {
+  overflow: visible;
+  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.95)) drop-shadow(0 0 10px rgba(86, 1, 164, 0.9));
+  transform: scale(1.4);
+  transform-origin: center;
+}
+
+.marker-node.marker-active svg circle {
+  stroke-width: 3.5;
 }
 </style>
