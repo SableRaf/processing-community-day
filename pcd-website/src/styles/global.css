@@ -24,6 +24,11 @@
   --spacing-md: 1rem;
   --spacing-lg: 1.5rem;
   --spacing-xl: 2rem;
+  --popup-block-spacing: 0.625rem;
+  --popup-info-date-size: 0.8125rem;
+  --popup-info-venue-name-size: 0.875rem;
+  --popup-info-venue-address-size: 0.8125rem;
+  --popup-info-time-size: 0.75rem;
 
   --z-map: 0;
   --z-controls: 1000;
@@ -149,17 +154,37 @@ body {
 }
 
 .popup-content .popup-info-card {
-  border: 1px solid var(--color-border);
-  border-radius: 10px;
-  padding: 10px 14px;
-  margin: 0 0 0.5rem;
-  background: var(--color-bg-panel);
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  margin: 0 0 var(--popup-block-spacing);
+  background: transparent;
 }
 
 .popup-content .popup-date {
-  margin: 0 0 0;
-  font-size: 0.875rem;
+  margin: 0;
+  font-size: var(--popup-info-date-size);
   color: var(--color-text);
+  line-height: 1.45;
+  display: flex;
+  align-items: baseline;
+  gap: 0.2rem;
+}
+
+.popup-content .popup-date-main {
+  font-size: var(--popup-info-date-size);
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.popup-content .popup-date-separator {
+  font-size: var(--popup-info-date-size);
+  color: var(--color-text-muted);
+}
+
+.popup-content .popup-date-time {
+  font-size: var(--popup-info-time-size);
+  color: var(--color-text-muted);
 }
 
 .popup-content .popup-placeholder {
@@ -169,7 +194,7 @@ body {
   padding: 0.5rem 0.625rem;
   font-size: 0.8125rem;
   line-height: 1.4;
-  margin-bottom: 0.625rem;
+  margin-bottom: var(--popup-block-spacing);
   color: var(--color-callout-placeholder-text);
 }
 
@@ -180,7 +205,7 @@ body {
   padding: 0.5rem 0.625rem;
   font-size: 0.8125rem;
   line-height: 1.4;
-  margin-bottom: 0.625rem;
+  margin-bottom: var(--popup-block-spacing);
   color: var(--color-callout-unconfirmed-text);
 }
 
@@ -189,19 +214,21 @@ body {
 }
 
 .popup-content .popup-venue {
-  margin: 6px 0 0;
-  font-size: 0.8125rem;
+  margin: 0.35rem 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
 }
 
 .popup-content .popup-venue-name {
-  display: block;
+  font-size: var(--popup-info-venue-name-size);
   font-weight: 500;
   color: var(--color-text);
   line-height: 1.35;
 }
 
 .popup-content .popup-venue-address {
-  display: block;
+  font-size: var(--popup-info-venue-address-size);
   color: var(--color-text-muted);
   text-decoration: none;
   text-decoration-line: underline;

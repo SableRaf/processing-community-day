@@ -1,5 +1,5 @@
 import type { Node } from './nodes';
-import { formatShortDate, formatTimeRange } from './format';
+import { formatPopupDate } from './format';
 
 export function escapeHtml(str: string): string {
   return str
@@ -13,10 +13,7 @@ export function escapeHtml(str: string): string {
 const POPUP_PREVIEW_LENGTH = 120;
 
 export function makePopupContent(node: Node): string {
-  const date = escapeHtml(formatShortDate(node.start_date));
-  const timeStr = node.start_time
-    ? ` · ${escapeHtml(formatTimeRange(node.start_time, node.end_time, node.timezone))}`
-    : '';
+  const date = escapeHtml(formatPopupDate(node.start_date, node.end_date));
 
   const rawText = node.short_description.trim() || ((node.long_description ?? '').split(/\n\n+/)[0] ?? '');
   const blurb = rawText.length > POPUP_PREVIEW_LENGTH
@@ -30,12 +27,6 @@ export function makePopupContent(node: Node): string {
       ? `<div class="popup-unconfirmed">&#8505; This event has not been confirmed yet.${node.forum_url ? ` <a href="${escapeHtml(node.forum_url)}" target="_blank" rel="noopener noreferrer">Follow the forum thread</a> for updates.` : ''}</div>`
       : '';
 
-  const addressQuery = node.address
-    ? `${node.venue}, ${node.address}`
-    : `${node.venue}, ${node.city}, ${node.country}`;
-  const osmUrl = `https://www.openstreetmap.org/search?query=${encodeURIComponent(addressQuery)}`;
-  const addressText = node.address || `${node.city}, ${node.country}`;
-
   const organizingEntityHtml = node.organizing_entity
     ? `<p class="popup-organizing-entity">by ${escapeHtml(node.organizing_entity)}</p>`
     : '';
@@ -46,11 +37,7 @@ export function makePopupContent(node: Node): string {
       <h3 class="popup-name">${escapeHtml(node.name)}</h3>
       ${organizingEntityHtml}
       <div class="popup-info-card">
-        <p class="popup-date"><strong>${date}${timeStr}</strong></p>
-        <p class="popup-venue">
-          <span class="popup-venue-name">${escapeHtml(node.venue)}</span>
-          <a href="${osmUrl}" target="_blank" rel="noopener noreferrer" class="popup-venue-address" onclick="event.stopPropagation()">${escapeHtml(addressText)}</a>
-        </p>
+        <p class="popup-date">${date} at ${escapeHtml(node.venue)}</p>
       </div>
       <div class="popup-body">
         ${descriptionHtml}
