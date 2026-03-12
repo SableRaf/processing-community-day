@@ -234,7 +234,9 @@ onMounted(async () => {
   const mapEl = document.getElementById('map');
   if (mapEl) {
     mapEl.addEventListener('click', (e) => {
-      const btn = (e.target as HTMLElement).closest('.read-more');
+      const target = e.target as HTMLElement;
+      if (target.closest('a')) return; // let icon links open without triggering panel
+      const btn = target.closest('.read-more');
       if (btn) {
         const nodeId = btn.getAttribute('data-node-id');
         if (nodeId) {

@@ -19,6 +19,9 @@ export interface Node {
   // Event
   start_date: string;
   end_date?: string;
+  start_time?: string;
+  end_time?: string;
+  timezone?: string;
   website: string;
   short_description: string;
   long_description?: string;
@@ -42,6 +45,9 @@ interface NodeInput {
   plus_code: string;
   start_date: string;
   end_date?: string;
+  start_time?: string;
+  end_time?: string;
+  timezone?: string;
   website: string;
   short_description: string;
   long_description?: string;

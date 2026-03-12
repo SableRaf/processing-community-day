@@ -75,7 +75,7 @@ export function calendarLinks(node: Node): { googleCalUrl: string; icsContent: s
     text: node.name,
     dates: `${startDate}/${endDate}`,
     location,
-    details: node.long_description ?? node.description,
+    details: node.long_description ?? node.short_description,
   });
   const googleCalUrl = `https://calendar.google.com/calendar/render?${params.toString()}`;
 
@@ -97,11 +97,33 @@ export function calendarLinks(node: Node): { googleCalUrl: string; icsContent: s
     `DTEND;VALUE=DATE:${endDate}`,
     `SUMMARY:${escapeIcs(node.name)}`,
     `LOCATION:${icsLocation}`,
-    `DESCRIPTION:${escapeIcs(node.long_description ?? node.description)}`,
+    `DESCRIPTION:${escapeIcs(node.long_description ?? node.short_description)}`,
     `URL:${node.website}`,
     'END:VEVENT',
     'END:VCALENDAR',
   ].join('\r\n');
 
   return { googleCalUrl, icsContent };
+}
+
+export function formatShortDate(dateStr: string): string {
+  const [y, m, d] = dateStr.split('-').map(Number);
+  const date = new Date(Date.UTC(y, m - 1, d));
+  return date.toLocaleDateString('en-US', {
+    weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC',
+  });
+}
+
+export function formatTimeRange(startTime?: string, endTime?: string, tz?: string): string {
+  if (!startTime) return '';
+  const fmt = (t: string) => {
+    const [h, min] = t.split(':').map(Number);
+    const period = h < 12 ? 'AM' : 'PM';
+    const h12 = h % 12 || 12;
+    return min === 0 ? `${h12}:00 ${period}` : `${h12}:${String(min).padStart(2, '0')} ${period}`;
+  };
+  const start = fmt(startTime);
+  const tzSuffix = tz ? ` ${tz}` : '';
+  if (endTime) return `${start} to ${fmt(endTime)}${tzSuffix}`;
+  return `${start}${tzSuffix}`;
 }
