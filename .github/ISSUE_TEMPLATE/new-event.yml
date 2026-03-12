@@ -97,7 +97,7 @@ body:
     attributes:
       label: Start time
       description: 24-hour time.
-      placeholder: 19:00
+      placeholder: "19:00"
     validations:
       required: true
   - type: input
@@ -105,7 +105,7 @@ body:
     attributes:
       label: End time
       description: 24-hour time.
-      placeholder: 21:30
+      placeholder: "21:30"
     validations:
       required: true
   - type: input
