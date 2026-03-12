@@ -191,8 +191,20 @@ async function share(node: Node) {
           ℹ This event has not been confirmed yet.<span v-if="node.forum_url"> <a :href="node.forum_url" target="_blank" rel="noopener noreferrer">Follow the forum thread</a> for updates.</span>
         </div>
 
-        <h2 id="panel-title" class="panel-name">{{ node.name }}</h2>
-        <p v-if="node.organizing_entity" class="panel-organizing-entity">by {{ node.organizing_entity }}</p>
+        <div class="panel-header-row">
+          <div class="panel-header-text">
+            <h2 id="panel-title" class="panel-name">{{ node.name }}</h2>
+            <p v-if="node.organizing_entity" class="panel-organizing-entity">by {{ node.organizing_entity }}</p>
+          </div>
+          <button
+            class="quick-action-btn"
+            aria-label="Share event"
+            title="Share event"
+            @click="share(node)"
+          >
+            <Icon icon="bi:share" width="20" height="20" aria-hidden="true" />
+          </button>
+        </div>
         <p v-if="node.organizers.length > 0" class="panel-hosts">hosted by {{ formatOrganizers(node.organizers) }}</p>
 
         <!-- Info Card -->
@@ -254,18 +266,6 @@ async function share(node: Node) {
 
         <!-- Minimap -->
         <div ref="minimapRef" class="panel-minimap" aria-hidden="true"></div>
-
-        <!-- Quick actions: Share only -->
-        <div class="panel-quick-actions">
-          <button
-            class="quick-action-btn"
-            aria-label="Share event"
-            title="Share event"
-            @click="share(node)"
-          >
-            <Icon icon="bi:share" width="20" height="20" aria-hidden="true" />
-          </button>
-        </div>
 
         <!-- Description -->
         <div class="panel-description">
@@ -406,16 +406,27 @@ async function share(node: Node) {
   color: inherit;
 }
 
+.panel-header-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.panel-header-text {
+  flex: 1;
+  min-width: 0;
+}
+
 .panel-name {
   margin: 0 0 0.25rem;
   font-size: 1.375rem;
   font-weight: 600;
   line-height: 1.3;
-  padding-right: 2.5rem;
 }
 
 .panel-organizing-entity {
-  margin: 0 0 0.25rem;
+  margin: 0;
   font-size: 0.875rem;
   color: var(--color-text-muted);
 }
@@ -428,10 +439,6 @@ async function share(node: Node) {
 
 /* ─── Info Card ─── */
 .panel-info-card {
-  border: 1px solid var(--color-border);
-  border-radius: 16px;
-  padding: 16px 20px;
-  background: var(--color-bg-panel);
   margin-bottom: 1.25rem;
 }
 
@@ -510,12 +517,7 @@ async function share(node: Node) {
   color: var(--color-text);
   line-height: 1.45;
   text-decoration: underline;
-  text-decoration-style: dotted;
   text-underline-offset: 2px;
-}
-
-.info-card-cal-trigger:hover {
-  text-decoration-style: solid;
 }
 
 /* ─── Calendar dropdown menu ─── */
@@ -528,7 +530,7 @@ async function share(node: Node) {
   border-radius: 8px;
   padding: 4px;
   min-width: 160px;
-  z-index: 10;
+  z-index: 1000;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
@@ -560,16 +562,8 @@ async function share(node: Node) {
   width: calc(100% + 3rem);
   margin-left: -1.5rem;
   aspect-ratio: 18 / 9;
-  margin-bottom: 0;
+  margin-bottom: 1.25rem;
   overflow: hidden;
-}
-
-/* ─── Quick Actions (share only) ─── */
-.panel-quick-actions {
-  display: flex;
-  gap: 0.5rem;
-  padding: 0.75rem 0;
-  margin-bottom: 0.5rem;
 }
 
 .quick-action-btn {
