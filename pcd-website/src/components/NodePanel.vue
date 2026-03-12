@@ -18,13 +18,16 @@ const panelRef = ref<HTMLElement | null>(null);
 const closeButtonRef = ref<HTMLButtonElement | null>(null);
 const minimapRef = ref<HTMLDivElement | null>(null);
 const calDropdownOpen = ref(false);
+const descExpanded = ref(false);
 let trap: FocusTrap | null = null;
 let minimap: L.Map | null = null;
+
+const PANEL_TRUNCATE_LENGTH = 200;
 
 function handleOutsideClick(e: MouseEvent) {
   if (calDropdownOpen.value) {
     const target = e.target as HTMLElement;
-    if (!target.closest('.quick-action-dropdown')) {
+    if (!target.closest('.info-card-calendar-row')) {
       calDropdownOpen.value = false;
     }
   }
@@ -73,7 +76,8 @@ async function initMinimap(node: Node) {
     boxZoom: false,
     keyboard: false,
     touchZoom: false,
-  });
+    tap: false,
+  } as L.MapOptions & { tap: boolean });
 
   L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
     subdomains: 'abcd',
@@ -96,6 +100,7 @@ watch(
   () => props.node,
   (newNode) => {
     calDropdownOpen.value = false;
+    descExpanded.value = false;
     if (newNode) {
       trap?.activate();
       initMinimap(newNode);
@@ -106,7 +111,6 @@ watch(
     }
   }
 );
-
 
 function downloadIcs(node: Node) {
   const { icsContent } = calendarLinks(node);
@@ -131,6 +135,32 @@ function getOsmUrl(node: Node): string {
 function getParagraphs(text: string): string[] {
   return text.split(/\n\n+/).filter(Boolean);
 }
+
+function formatOrganizers(organizers: string[]): string {
+  if (organizers.length === 1) return organizers[0];
+  if (organizers.length === 2) return `${organizers[0]} and ${organizers[1]}`;
+  if (organizers.length === 3) return `${organizers[0]}, ${organizers[1]}, and ${organizers[2]}`;
+  return `${organizers[0]}, ${organizers[1]}, ${organizers[2]}, …`;
+}
+
+function getDescPreview(node: Node): { text: string; hasMore: boolean } {
+  const full = node.long_description || node.short_description || '';
+  const paras = getParagraphs(full);
+  const first = paras[0] ?? '';
+  const truncated = first.length > PANEL_TRUNCATE_LENGTH
+    ? first.slice(0, PANEL_TRUNCATE_LENGTH).trimEnd() + '…'
+    : first;
+  return { text: truncated, hasMore: paras.length > 1 || first.length > PANEL_TRUNCATE_LENGTH };
+}
+
+async function share(node: Node) {
+  const url = `${window.location.href.split('#')[0]}#${node.id}`;
+  if (navigator.share) {
+    try { await navigator.share({ title: node.name, url }); } catch { /* user cancelled */ }
+  } else {
+    try { await navigator.clipboard.writeText(url); } catch { /* clipboard unavailable */ }
+  }
+}
 </script>
 
 <template>
@@ -146,6 +176,7 @@ function getParagraphs(text: string): string[] {
       ref="closeButtonRef"
       class="panel-close"
       aria-label="Close event details"
+      title="Close"
       @click="emit('close')"
     >
       ×
@@ -161,41 +192,51 @@ function getParagraphs(text: string): string[] {
         </div>
 
         <h2 id="panel-title" class="panel-name">{{ node.name }}</h2>
+        <p v-if="node.organizing_entity" class="panel-organizing-entity">by {{ node.organizing_entity }}</p>
+        <p v-if="node.organizers.length > 0" class="panel-hosts">hosted by {{ formatOrganizers(node.organizers) }}</p>
 
-        <div class="panel-info-row">
-          <!-- Event Info Card -->
-          <div class="panel-info-card">
-            <div class="info-card-row">
-              <Icon icon="bi:calendar-event" width="18" height="18" aria-hidden="true" class="info-card-icon" />
-              <div>
-                <span class="info-card-date">{{ formatDateRange(node.start_date, node.end_date) }}</span>
-                <span v-if="node.start_time" class="info-card-time">
-                  · {{ formatTimeRange(node.start_time, node.end_time, node.timezone) }}
-                </span>
-              </div>
-            </div>
-            <hr class="info-card-divider" aria-hidden="true" />
-            <div class="info-card-row">
-              <Icon icon="bi:geo-alt-fill" width="18" height="18" aria-hidden="true" class="info-card-icon" />
-              <div class="info-card-venue">
-                <span class="info-card-venue-name">{{ node.venue }}</span>
-                <span class="info-card-venue-address">{{ node.address || `${node.city}, ${node.country}` }}</span>
-              </div>
+        <!-- Info Card -->
+        <div class="panel-info-card">
+          <!-- Row 1: Date/time -->
+          <div class="info-card-row">
+            <Icon icon="bi:calendar-event" width="18" height="18" aria-hidden="true" class="info-card-icon" />
+            <div>
+              <span class="info-card-date">{{ formatDateRange(node.start_date, node.end_date) }}</span>
+              <span v-if="node.start_time" class="info-card-time">
+                · {{ formatTimeRange(node.start_time, node.end_time, node.timezone) }}
+              </span>
             </div>
           </div>
+          <hr class="info-card-divider" aria-hidden="true" />
 
-          <!-- Quick Actions -->
-          <div class="panel-quick-actions">
-            <!-- Calendar: dropdown -->
-            <div class="quick-action-dropdown" :class="{ open: calDropdownOpen }">
+          <!-- Row 2: Venue + address (OSM link) -->
+          <div class="info-card-row">
+            <Icon icon="bi:geo-alt-fill" width="18" height="18" aria-hidden="true" class="info-card-icon" />
+            <div class="info-card-venue">
+              <span class="info-card-venue-name">{{ node.venue }}</span>
+              <a
+                :href="getOsmUrl(node)"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="info-card-venue-address"
+                title="Get directions on OpenStreetMap"
+              >{{ node.address || `${node.city}, ${node.country}` }}</a>
+            </div>
+          </div>
+          <hr class="info-card-divider" aria-hidden="true" />
+
+          <!-- Row 3: Add to calendar -->
+          <div class="info-card-row info-card-calendar-row">
+            <Icon icon="bi:calendar-plus" width="18" height="18" aria-hidden="true" class="info-card-icon" />
+            <div class="info-card-cal-trigger-wrap">
               <button
-                class="quick-action-btn"
-                aria-label="Add to calendar"
+                class="info-card-cal-trigger"
+                title="Add to calendar"
                 @click.stop="calDropdownOpen = !calDropdownOpen"
               >
-                <Icon icon="bi:calendar-plus" width="20" height="20" aria-hidden="true" />
+                Add to calendar
               </button>
-              <div class="quick-action-menu" role="menu">
+              <div v-show="calDropdownOpen" class="quick-action-menu" role="menu">
                 <a
                   :href="calendarLinks(node).googleCalUrl"
                   target="_blank"
@@ -208,49 +249,77 @@ function getParagraphs(text: string): string[] {
                 </button>
               </div>
             </div>
-
-            <!-- Directions -->
-            <a
-              :href="getOsmUrl(node)"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="quick-action-btn"
-              aria-label="Get directions (OpenStreetMap)"
-            >
-              <Icon icon="bi:map" width="20" height="20" aria-hidden="true" />
-            </a>
-
-            <!-- Email -->
-            <a
-              v-if="node.contact_email"
-              :href="`mailto:${node.contact_email}`"
-              class="quick-action-btn"
-              aria-label="Email organiser"
-            >
-              <Icon icon="bi:envelope-fill" width="20" height="20" aria-hidden="true" />
-            </a>
-
-            <!-- Website -->
-            <a
-              v-if="node.website"
-              :href="node.website"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="quick-action-btn"
-              aria-label="Visit event website"
-            >
-              <Icon icon="bi:globe" width="20" height="20" aria-hidden="true" />
-            </a>
           </div>
         </div>
 
+        <!-- Minimap -->
         <div ref="minimapRef" class="panel-minimap" aria-hidden="true"></div>
 
+        <!-- Quick actions: Share only -->
+        <div class="panel-quick-actions">
+          <button
+            class="quick-action-btn"
+            aria-label="Share event"
+            title="Share event"
+            @click="share(node)"
+          >
+            <Icon icon="bi:share" width="20" height="20" aria-hidden="true" />
+          </button>
+        </div>
+
+        <!-- Description -->
         <div class="panel-description">
-          <p
-            v-for="(para, i) in getParagraphs(node.long_description || node.short_description)"
-            :key="i"
-          >{{ para }}</p>
+          <template v-if="descExpanded">
+            <p
+              v-for="(para, i) in getParagraphs(node.long_description || node.short_description)"
+              :key="i"
+            >{{ para }}</p>
+          </template>
+          <template v-else>
+            <p>{{ getDescPreview(node).text }}</p>
+          </template>
+          <button
+            v-if="getDescPreview(node).hasMore"
+            class="panel-read-more"
+            @click="descExpanded = !descExpanded"
+          >
+            {{ descExpanded ? 'Show less' : 'Read more…' }}
+          </button>
+        </div>
+
+        <!-- Links section -->
+        <div v-if="node.website || node.contact_email" class="panel-links">
+          <hr class="panel-separator" aria-hidden="true" />
+          <a
+            :href="getOsmUrl(node)"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="panel-link-row"
+            title="Get directions on OpenStreetMap"
+          >
+            <Icon icon="bi:map" width="16" height="16" aria-hidden="true" class="panel-link-icon" />
+            <span>Get directions</span>
+          </a>
+          <a
+            v-if="node.contact_email"
+            :href="`mailto:${node.contact_email}`"
+            class="panel-link-row"
+            :title="`Email ${node.contact_email}`"
+          >
+            <Icon icon="bi:envelope" width="16" height="16" aria-hidden="true" class="panel-link-icon" />
+            <span>{{ node.contact_email }}</span>
+          </a>
+          <a
+            v-if="node.website"
+            :href="node.website"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="panel-link-row"
+            :title="`Visit ${node.website}`"
+          >
+            <Icon icon="bi:globe" width="16" height="16" aria-hidden="true" class="panel-link-icon" />
+            <span>{{ node.website }}</span>
+          </a>
         </div>
       </div>
     </template>
@@ -338,28 +407,32 @@ function getParagraphs(text: string): string[] {
 }
 
 .panel-name {
-  margin: 0 0 1rem;
+  margin: 0 0 0.25rem;
   font-size: 1.375rem;
   font-weight: 600;
   line-height: 1.3;
   padding-right: 2.5rem;
 }
 
-/* ─── Info Row: card + quick actions ─── */
-.panel-info-row {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-  margin-bottom: 1.25rem;
+.panel-organizing-entity {
+  margin: 0 0 0.25rem;
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
 }
 
+.panel-hosts {
+  margin: 0 0 1rem;
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+}
+
+/* ─── Info Card ─── */
 .panel-info-card {
-  flex: 1;
   border: 1px solid var(--color-border);
   border-radius: 16px;
   padding: 16px 20px;
   background: var(--color-bg-panel);
-  min-width: 0;
+  margin-bottom: 1.25rem;
 }
 
 .info-card-row {
@@ -408,47 +481,47 @@ function getParagraphs(text: string): string[] {
   font-size: 0.8125rem;
   color: var(--color-text-muted);
   line-height: 1.4;
-}
-
-/* ─── Quick Actions ─── */
-.panel-quick-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 0.375rem;
-  flex-shrink: 0;
-}
-
-.quick-action-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border: 1px solid var(--color-border);
-  border-radius: 10px;
-  background: var(--color-bg-panel);
-  color: var(--color-text-muted);
-  cursor: pointer;
   text-decoration: none;
-  font-family: var(--font-family);
-  transition: background-color 0.12s ease, color 0.12s ease, border-color 0.12s ease;
 }
 
-.quick-action-btn:hover {
-  background: var(--color-primary);
-  color: #fff;
-  border-color: var(--color-primary);
+.info-card-venue-address:hover {
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 2px;
+  color: var(--color-text);
 }
 
-/* Calendar dropdown */
-.quick-action-dropdown {
+/* ─── Calendar row inside info card ─── */
+.info-card-calendar-row {
   position: relative;
 }
 
+.info-card-cal-trigger-wrap {
+  position: relative;
+}
+
+.info-card-cal-trigger {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: var(--font-family);
+  font-size: 0.9375rem;
+  color: var(--color-text);
+  line-height: 1.45;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 2px;
+}
+
+.info-card-cal-trigger:hover {
+  text-decoration-style: solid;
+}
+
+/* ─── Calendar dropdown menu ─── */
 .quick-action-menu {
-  display: none;
   position: absolute;
-  right: 0;
+  left: 0;
   top: calc(100% + 4px);
   background: var(--color-bg-panel);
   border: 1px solid var(--color-border);
@@ -457,9 +530,6 @@ function getParagraphs(text: string): string[] {
   min-width: 160px;
   z-index: 10;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.quick-action-dropdown.open .quick-action-menu {
   display: flex;
   flex-direction: column;
 }
@@ -485,37 +555,102 @@ function getParagraphs(text: string): string[] {
   background: var(--color-border);
 }
 
-@media (max-width: 400px) {
-  .panel-info-row {
-    flex-direction: column;
-  }
-
-  .panel-quick-actions {
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
-
-  .quick-action-menu {
-    right: auto;
-    left: 0;
-  }
-}
-
+/* ─── Minimap ─── */
 .panel-minimap {
   width: calc(100% + 3rem);
   margin-left: -1.5rem;
   aspect-ratio: 18 / 9;
-  margin-bottom: 1.25rem;
+  margin-bottom: 0;
   overflow: hidden;
 }
 
+/* ─── Quick Actions (share only) ─── */
+.panel-quick-actions {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.75rem 0;
+  margin-bottom: 0.5rem;
+}
+
+.quick-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-bg-panel);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  text-decoration: none;
+  font-family: var(--font-family);
+  transition: background-color 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+}
+
+.quick-action-btn:hover {
+  background: var(--color-primary);
+  color: #fff;
+  border-color: var(--color-primary);
+}
+
+/* ─── Description ─── */
 .panel-description {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .panel-description p {
   margin: 0 0 0.75rem;
   font-size: 0.9375rem;
   line-height: 1.6;
+}
+
+.panel-read-more {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: var(--font-family);
+  font-size: 0.875rem;
+  color: var(--color-focus);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ─── Links section ─── */
+.panel-links {
+  margin-bottom: 1.5rem;
+}
+
+.panel-separator {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: 0 0 0.75rem;
+}
+
+.panel-link-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0;
+  text-decoration: none;
+  color: var(--color-text);
+  font-size: 0.875rem;
+  overflow: hidden;
+}
+
+.panel-link-row span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.panel-link-row:hover {
+  color: var(--color-primary);
+}
+
+.panel-link-icon {
+  flex-shrink: 0;
+  color: var(--color-text-muted);
 }
 </style>

@@ -136,49 +136,28 @@ body {
 }
 
 .popup-content .popup-name {
-  margin: 0;
+  margin: 0 0 var(--spacing-xs);
   font-size: 1rem;
   font-weight: 600;
   color: var(--color-text);
 }
 
-.popup-content .popup-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 0.5rem;
-  margin-bottom: var(--spacing-xs);
-}
-
-.popup-header-icons {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  flex-shrink: 0;
-  margin-top: 1px;
-}
-
-.popup-icon-link {
-  display: flex;
-  align-items: center;
-  color: var(--color-text-muted);
-  text-decoration: none;
-  padding: 2px;
-  border-radius: 3px;
-}
-
-.popup-icon-link:hover {
-  color: var(--color-primary);
-}
-
-.popup-content .popup-organizer {
+.popup-content .popup-organizing-entity {
   margin: 0 0 var(--spacing-xs);
   font-size: 0.75rem;
   color: var(--color-text-muted);
 }
 
+.popup-content .popup-info-card {
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin: 0 0 0.5rem;
+  background: var(--color-bg-panel);
+}
+
 .popup-content .popup-date {
-  margin: 0 0 var(--spacing-xs);
+  margin: 0 0 0;
   font-size: 0.875rem;
   color: var(--color-text);
 }
@@ -210,38 +189,30 @@ body {
 }
 
 .popup-content .popup-venue {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.3rem;
-  margin: 0 0 var(--spacing-sm);
-  font-size: 0.875rem;
+  margin: 6px 0 0;
+  font-size: 0.8125rem;
 }
 
-.popup-content .popup-venue .popup-icon {
-  flex-shrink: 0;
-  margin-top: 0.1em;
-  color: var(--color-text-muted);
-}
-
-.popup-content .popup-venue a {
+.popup-content .popup-venue-name {
+  display: block;
+  font-weight: 500;
   color: var(--color-text);
-  text-decoration: underline;
+  line-height: 1.35;
+}
+
+.popup-content .popup-venue-address {
+  display: block;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  text-decoration-line: underline;
   text-decoration-style: dotted;
   text-underline-offset: 2px;
+  line-height: 1.4;
 }
 
-.popup-content .popup-venue a:hover {
+.popup-content .popup-venue-address:hover {
   text-decoration-style: solid;
-}
-
-.popup-content .popup-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-  border-top: 1px solid var(--color-border);
-  padding-top: 0.5rem;
-  margin-top: 0.5rem;
-  margin-bottom: 0;
+  color: var(--color-text);
 }
 
 .popup-content .popup-body {

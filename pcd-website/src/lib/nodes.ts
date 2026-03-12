@@ -27,6 +27,7 @@ export interface Node {
   long_description?: string;
   tags: string[];
   organizers: string[];
+  organizing_entity?: string;
   contact_email: string;
   submitter_email?: string;
   forum_url?: string;
@@ -53,6 +54,7 @@ interface NodeInput {
   long_description?: string;
   tags: string[];
   organizers: string[];
+  organizing_entity?: string;
   contact_email: string;
   submitter_email?: string;
   forum_url?: string;
