@@ -194,9 +194,9 @@ body:
   - type: input
     id: maintainer_name
     attributes:
-      label: Maintainer name
-      description: Person responsible for keeping this event entry current after publication.
-      placeholder: Jane Doe
+      label: Maintainer GitHub handle
+      description: GitHub handle of the person responsible for updating this event entry after publication.
+      placeholder: jane-doe
     validations:
       required: true
   - type: input
