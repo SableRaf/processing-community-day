@@ -49,7 +49,9 @@ export function makePopupContent(node: Node): string {
 
   const venueNameHtml = node.online
     ? ''
-    : `<span class="popup-venue-name">${escapeHtml(node.venue)}</span>`;
+    : node.location_tbd
+      ? '<span class="popup-venue-name popup-venue-tbd">Location TBD</span>'
+      : `<span class="popup-venue-name">${escapeHtml(node.venue)}</span>`;
 
   const onlineAddressText = node.online_url ? escapeHtml(node.online_url) : 'Online Event';
 
@@ -63,6 +65,8 @@ export function makePopupContent(node: Node): string {
           title="Join the online event"
         >${onlineAddressText}</a>`
       : `<span class="popup-venue-address">${onlineAddressText}</span>`
+    : node.location_tbd
+      ? ''
     : `<a
         href="${escapeHtml(getOsmUrl(node))}"
         target="_blank"

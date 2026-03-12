@@ -12,6 +12,7 @@ export interface Node {
   region: string;
   venue: string;
   address?: string;
+  location_tbd?: boolean;
   plus_code: string;
   lat: number;
   lng: number;
@@ -72,6 +73,11 @@ interface NodeInput {
   maintainer?: { name: string; email: string };
 }
 
+function normalizeOptionalText(value?: string): string | undefined {
+  const trimmed = value?.trim();
+  return trimmed ? trimmed : undefined;
+}
+
 export function loadNodes(): Node[] {
   const olc = new OpenLocationCode();
   const data = nodesData as unknown as { nodes: NodeInput[] };
@@ -85,9 +91,25 @@ export function loadNodes(): Node[] {
     }
 
     const decoded = olc.decode(input.plus_code);
+    const venue = input.venue.trim();
+    const address = normalizeOptionalText(input.address);
+    const start_date = normalizeOptionalText(input.start_date);
+    const end_date = normalizeOptionalText(input.end_date);
+    const start_time = normalizeOptionalText(input.start_time);
+    const end_time = normalizeOptionalText(input.end_time);
+    const location_tbd = !input.online && !venue && !address;
 
     return {
       ...input,
+      venue,
+      address,
+      start_date,
+      end_date,
+      start_time,
+      end_time,
+      date_tbd: !start_date,
+      time_tbd: !!start_date && !start_time,
+      location_tbd,
       lat: decoded.latitudeCenter,
       lng: decoded.longitudeCenter,
     };

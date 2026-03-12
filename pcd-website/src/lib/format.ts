@@ -69,7 +69,11 @@ function escapeIcs(str: string): string {
 export function calendarLinks(node: Node): { googleCalUrl: string; icsContent: string } {
   const startDate = toICalDate(node.start_date ?? '');
   const endDate = node.end_date ? toICalDate(node.end_date) : nextDay(node.start_date ?? '');
-  const location = node.address ? `${node.venue}, ${node.address}` : `${node.venue}, ${node.city}, ${node.country}`;
+  const location = node.location_tbd
+    ? 'Location TBD'
+    : node.address
+      ? `${node.venue}, ${node.address}`
+      : `${node.venue}, ${node.city}, ${node.country}`;
 
   // Google Calendar URL
   const params = new URLSearchParams({
@@ -84,9 +88,11 @@ export function calendarLinks(node: Node): { googleCalUrl: string; icsContent: s
   // ICS content
   const now = new Date();
   const dtstamp = now.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
-  const icsLocation = node.address
-    ? `${node.venue}\\, ${node.address}`
-    : `${node.venue}\\, ${node.city}\\, ${node.country}`;
+  const icsLocation = node.location_tbd
+    ? 'Location TBD'
+    : node.address
+      ? `${node.venue}\\, ${node.address}`
+      : `${node.venue}\\, ${node.city}\\, ${node.country}`;
 
   const icsContent = [
     'BEGIN:VCALENDAR',
@@ -148,16 +154,38 @@ export function onlinePlatformName(url?: string): string {
   return 'Online';
 }
 
+type FormattedTime = {
+  display: string;
+  base: string;
+  period?: 'AM' | 'PM';
+};
+
+export function formatTime(timeString: string): FormattedTime {
+  if (!timeString) return { display: '', base: '' };
+  const [hourSegment, minuteSegment = '00'] = timeString.split(':');
+  const hour = Number(hourSegment);
+  const minute = Number(minuteSegment);
+  if (!Number.isFinite(hour) || !Number.isFinite(minute)) {
+    return { display: timeString, base: timeString };
+  }
+  const normalizedHour = ((hour % 24) + 24) % 24;
+  const normalizedMinute = Math.min(59, Math.max(0, minute));
+  const hour12 = normalizedHour % 12 || 12;
+  const base = `${hour12}:${String(normalizedMinute).padStart(2, '0')}`;
+  const period = normalizedHour < 12 ? 'AM' : 'PM';
+  return { display: `${base} ${period}`, base, period };
+}
+
 export function formatTimeRange(startTime?: string, endTime?: string, tz?: string): string {
   if (!startTime) return '';
-  const fmt = (t: string) => {
-    const [h, min] = t.split(':').map(Number);
-    const period = h < 12 ? 'AM' : 'PM';
-    const h12 = h % 12 || 12;
-    return min === 0 ? `${h12}:00 ${period}` : `${h12}:${String(min).padStart(2, '0')} ${period}`;
-  };
-  const start = fmt(startTime);
+  const start = formatTime(startTime);
   const tzSuffix = tz ? ` ${tz}` : '';
-  if (endTime) return `${start} to ${fmt(endTime)}${tzSuffix}`;
-  return `${start}${tzSuffix}`;
+  if (endTime) {
+    const end = formatTime(endTime);
+    if (start.period && end.period && start.period === end.period) {
+      return `${start.base}-${end.base} ${start.period}${tzSuffix}`;
+    }
+    return `${start.display} to ${end.display}${tzSuffix}`;
+  }
+  return `${start.display}${tzSuffix}`;
 }

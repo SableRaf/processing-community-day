@@ -254,7 +254,7 @@ async function share(node: Node) {
             <div class="info-card-row-leading">
               <Icon icon="bi:link-45deg" width="18" height="18" aria-hidden="true" class="info-card-icon" />
               <div class="info-card-venue">
-                <span class="info-card-venue-name">{{ node.online ? onlinePlatformName(node.online_url) : node.venue }}</span>
+                <span class="info-card-venue-name">{{ node.online ? onlinePlatformName(node.online_url) : node.location_tbd ? 'Location TBD' : node.venue }}</span>
                 <a
                   v-if="node.online && node.online_url"
                   :href="node.online_url"
@@ -264,7 +264,7 @@ async function share(node: Node) {
                   title="Join the online event"
                 >{{ node.online_url }}</a>
                 <a
-                  v-else-if="!node.online"
+                  v-else-if="!node.online && !node.location_tbd"
                   :href="getOsmUrl(node)"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -337,7 +337,7 @@ async function share(node: Node) {
         <div v-if="node.website || node.contact_email" class="panel-links">
           <hr class="panel-separator" aria-hidden="true" />
           <a
-            v-if="!node.online"
+            v-if="!node.online && !node.location_tbd"
             :href="getOsmUrl(node)"
             target="_blank"
             rel="noopener noreferrer"
