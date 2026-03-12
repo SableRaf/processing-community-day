@@ -1,3 +1,4 @@
 - [ ] Add "create event" button to Map view (link to forum thread?)
 - [ ] Fix hover color for links in dark mode (currently very hard to see)
 - [ ] Fix popup color background in dark mode (currently too close to the sea color, making it hard to visually separate from the map)
+- [ ] Add link to discussion for events that have a forum thread and are not confirmed yet
