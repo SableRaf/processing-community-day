@@ -4,6 +4,4 @@ title: "PCD Online — Global"
 short_description: "A global online edition of Processing Community Day, open to participants from around the world."
 ---
 
-# Overview
-
 A global online edition of Processing Community Day, open to participants from around the world.
