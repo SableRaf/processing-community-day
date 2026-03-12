@@ -4,8 +4,6 @@ import { createFocusTrap, type FocusTrap } from 'focus-trap';
 import { Icon } from '@iconify/vue';
 import type { Node } from '../lib/nodes';
 import { formatDateRange, formatTimeRange, calendarLinks } from '../lib/format';
-import L from 'leaflet';
-
 const props = defineProps<{
   node: Node | null;
 }>();
@@ -20,7 +18,7 @@ const minimapRef = ref<HTMLDivElement | null>(null);
 const calDropdownOpen = ref(false);
 const descExpanded = ref(false);
 let trap: FocusTrap | null = null;
-let minimap: L.Map | null = null;
+let minimap: import('leaflet').Map | null = null;
 
 const PANEL_TRUNCATE_LENGTH = 200;
 
@@ -64,6 +62,8 @@ async function initMinimap(node: Node) {
   await nextTick();
   if (!minimapRef.value) return;
   destroyMinimap();
+
+  const L = (await import('leaflet')).default;
 
   minimap = L.map(minimapRef.value, {
     center: [node.lat, node.lng],
@@ -265,7 +265,10 @@ async function share(node: Node) {
         </div>
 
         <!-- Minimap -->
-        <div ref="minimapRef" class="panel-minimap" aria-hidden="true"></div>
+        <div class="panel-minimap-wrap" aria-hidden="true">
+          <div ref="minimapRef" class="panel-minimap"></div>
+          <div class="panel-minimap-shield"></div>
+        </div>
 
         <!-- Description -->
         <div class="panel-description">
@@ -524,13 +527,13 @@ async function share(node: Node) {
 .quick-action-menu {
   position: absolute;
   left: 0;
+  z-index: 1001;
   top: calc(100% + 4px);
   background: var(--color-bg-panel);
   border: 1px solid var(--color-border);
   border-radius: 8px;
   padding: 4px;
   min-width: 160px;
-  z-index: 1000;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
@@ -558,12 +561,24 @@ async function share(node: Node) {
 }
 
 /* ─── Minimap ─── */
-.panel-minimap {
+.panel-minimap-wrap {
+  position: relative;
   width: calc(100% + 3rem);
   margin-left: -1.5rem;
   aspect-ratio: 18 / 9;
   margin-bottom: 1.25rem;
   overflow: hidden;
+}
+
+.panel-minimap {
+  width: 100%;
+  height: 100%;
+}
+
+.panel-minimap-shield {
+  position: absolute;
+  inset: 0;
+  z-index: 1000;
 }
 
 .quick-action-btn {
