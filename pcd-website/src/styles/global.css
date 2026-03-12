@@ -5,6 +5,8 @@
 :root {
   --color-primary: #800f8d;
   --color-primary-dark: #500f67;
+  --color-link: #800f8d;
+  --color-link-hover: #500f67;
   --color-focus: #005fcc;
   --color-text: #1a1a1a;
   --color-text-muted: #555;
@@ -304,6 +306,8 @@ body {
 /* ─── Dark Mode Tokens ──────────────────────────────────────── */
 [data-theme="dark"] {
   --color-focus: #79b8ff;
+  --color-link: #c97ed4;
+  --color-link-hover: #e0aae8;
   --color-text: #e8e8e8;
   --color-text-muted: #999;
   --color-bg: #1a1a1a;

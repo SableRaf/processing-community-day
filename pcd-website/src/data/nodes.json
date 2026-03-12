@@ -2,7 +2,7 @@
   "nodes": [
     {
       "id": "pcd-berlin-2026",
-      "name": "PCD @ Berlin",
+      "name": "PCD @ Berlin with a very long name to test the layout of the node panel and see how it handles overflow issues",
       "city": "Berlin",
       "country": "Germany",
       "region": "Europe",
@@ -18,12 +18,19 @@
       "short_description": "",
       "long_description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.\n\nNemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet.\n\nAt vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident.\n\nNam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus.",
       "tags": [],
-      "organizers": [],
+      "organizers": [
+          { "name": "John Doe", "email": ""},
+          { "name": "Jane Smith", "email": ""},
+          { "name": "Sylvia de Longname-for-Testing", "email": ""},
+          { "name": "Michael Green", "email": ""},
+          { "name": "Emily Violet", "email": ""}
+      ],
       "organizing_entity": "Creative Code Berlin",
       "contact_email": "organizer@creativecode.berlin",
       "forum_url": "https://discourse.processing.org/t/pcd-worldwide-2026/48081",
       "confirmed": false,
-      "placeholder": true
+      "placeholder": true,
+      "maintainer": { "name": "", "email": "" }
     },
     {
       "id": "pcd-tokyo-2026",
@@ -41,12 +48,15 @@
       "short_description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.",
       "long_description": "",
       "tags": [],
-      "organizers": [],
+      "organizers": [
+          { "name": "", "email": ""}
+      ],
       "organizing_entity": "Processing Community Japan",
       "contact_email": "hello@pcd.tokyo",
       "forum_url": "",
       "confirmed": false,
-      "placeholder": true
+      "placeholder": true,
+      "maintainer": { "name": "", "email": "" }
     },
     {
       "id": "pcd-new-york-2026",
@@ -65,12 +75,15 @@
       "short_description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
       "long_description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n\nSed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.\n\nNemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.",
       "tags": [],
-      "organizers": [],
+      "organizers": [
+          { "name": "", "email": ""}
+      ],
       "organizing_entity": "CCNYC",
       "contact_email": "pcd@ccnyc.org",
       "forum_url": "",
       "confirmed": false,
-      "placeholder": true
+      "placeholder": true,
+      "maintainer": { "name": "", "email": "" }
     },
     {
       "id": "pcd-sao-paulo-2026",
@@ -87,12 +100,15 @@
       "website": "https://atelie397.com.br",
       "short_description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.",
       "tags": [],
-      "organizers": [],
+      "organizers": [
+          { "name": "", "email": ""}
+      ],
       "organizing_entity": "Creative Code SP",
       "contact_email": "pcd@atelie397.com.br",
       "forum_url": "",
       "confirmed": false,
-      "placeholder": true
+      "placeholder": true,
+      "maintainer": { "name": "", "email": "" }
     },
     {
       "id": "pcd-london-2026",
@@ -111,12 +127,15 @@
       "short_description": "",
       "long_description": "",
       "tags": [],
-      "organizers": [],
+      "organizers": [
+          { "name": "", "email": ""}
+      ],
       "organizing_entity": "Creative Code London",
       "contact_email": "organizer@example.co.uk",
       "forum_url": "",
       "confirmed": false,
-      "placeholder": true
+      "placeholder": true,
+      "maintainer": { "name": "", "email": "" }
     },
     {
       "id": "pcd-barcelona-2026",
@@ -135,12 +154,15 @@
       "short_description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.",
       "long_description": "",
       "tags": [],
-      "organizers": [],
+      "organizers": [
+          { "name": "", "email": ""}
+      ],
       "organizing_entity": "Hangar Barcelona",
       "contact_email": "organizer@example.es",
       "forum_url": "",
       "confirmed": false,
-      "placeholder": true
+      "placeholder": true,
+      "maintainer": { "name": "", "email": "" }
     },
     {
       "id": "pcd-nairobi-2026",
@@ -158,12 +180,15 @@
       "website": "https://example.co.ke/pcd",
       "short_description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
       "tags": [],
-      "organizers": [],
+      "organizers": [
+          { "name": "", "email": ""}
+      ],
       "organizing_entity": "CCClub Nairobi",
       "contact_email": "organizer@example.co.ke",
       "forum_url": "",
       "confirmed": false,
-      "placeholder": true
+      "placeholder": true,
+      "maintainer": { "name": "", "email": "" }
     },
     {
       "id": "pcd-melbourne-2026",
@@ -182,12 +207,15 @@
       "short_description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
       "long_description": "",
       "tags": [],
-      "organizers": [],
+      "organizers": [
+          { "name": "", "email": ""}
+      ],
       "organizing_entity": "Melbourne Creative Coding",
       "contact_email": "organizer@example.com.au",
       "forum_url": "",
       "confirmed": false,
-      "placeholder": true
+      "placeholder": true,
+      "maintainer": { "name": "", "email": "" }
     },
     {
       "id": "pcd-amsterdam-2026",
@@ -206,12 +234,15 @@
       "short_description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
       "long_description": "",
       "tags": [],
-      "organizers": [],
+      "organizers": [
+          { "name": "", "email": ""}
+      ],
       "organizing_entity": "Creative Coding Amsterdam",
       "contact_email": "organizer@example.nl",
       "forum_url": "",
       "confirmed": false,
-      "placeholder": true
+      "placeholder": true,
+      "maintainer": { "name": "", "email": "" }
     },
     {
       "id": "pcd-seoul-2026",
@@ -230,12 +261,15 @@
       "short_description": "",
       "long_description": "",
       "tags": [],
-      "organizers": [],
+      "organizers": [
+          { "name": "", "email": ""}
+      ],
       "organizing_entity": "Creative Coding Seoul",
       "contact_email": "organizer@example.kr",
       "forum_url": "",
       "confirmed": false,
-      "placeholder": true
+      "placeholder": true,
+      "maintainer": { "name": "", "email": "" }
     }
   ]
 }

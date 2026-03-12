@@ -17,10 +17,12 @@ const closeButtonRef = ref<HTMLButtonElement | null>(null);
 const minimapRef = ref<HTMLDivElement | null>(null);
 const calDropdownOpen = ref(false);
 const descExpanded = ref(false);
+const hostsExpanded = ref(false);
 let trap: FocusTrap | null = null;
 let minimap: import('leaflet').Map | null = null;
 
 const PANEL_TRUNCATE_LENGTH = 200;
+const HOSTS_VISIBLE = 3;
 
 function handleOutsideClick(e: MouseEvent) {
   if (calDropdownOpen.value) {
@@ -101,6 +103,7 @@ watch(
   (newNode) => {
     calDropdownOpen.value = false;
     descExpanded.value = false;
+    hostsExpanded.value = false;
     if (newNode) {
       trap?.activate();
       initMinimap(newNode);
@@ -136,11 +139,14 @@ function getParagraphs(text: string): string[] {
   return text.split(/\n\n+/).filter(Boolean);
 }
 
-function formatOrganizers(organizers: string[]): string {
-  if (organizers.length === 1) return organizers[0];
-  if (organizers.length === 2) return `${organizers[0]} and ${organizers[1]}`;
-  if (organizers.length === 3) return `${organizers[0]}, ${organizers[1]}, and ${organizers[2]}`;
-  return `${organizers[0]}, ${organizers[1]}, ${organizers[2]}, …`;
+function formatOrganizers(organizers: { name: string; email: string }[], expanded = false): string {
+  const names = organizers.map(o => o.name).filter(Boolean);
+  if (expanded || names.length <= HOSTS_VISIBLE) return names.join(', ');
+  return names.slice(0, HOSTS_VISIBLE).join(', ');
+}
+
+function hasMoreHosts(organizers: { name: string; email: string }[]): boolean {
+  return organizers.map(o => o.name).filter(Boolean).length > HOSTS_VISIBLE;
 }
 
 function getDescPreview(node: Node): { text: string; hasMore: boolean } {
@@ -192,10 +198,7 @@ async function share(node: Node) {
         </div>
 
         <div class="panel-header-row">
-          <div class="panel-header-text">
-            <h2 id="panel-title" class="panel-name">{{ node.name }}</h2>
-            <p v-if="node.organizing_entity" class="panel-organizing-entity">by {{ node.organizing_entity }}</p>
-          </div>
+          <h2 id="panel-title" class="panel-name">{{ node.name }}</h2>
           <button
             class="quick-action-btn"
             aria-label="Share event"
@@ -205,7 +208,18 @@ async function share(node: Node) {
             <Icon icon="bi:share" width="20" height="20" aria-hidden="true" />
           </button>
         </div>
-        <p v-if="node.organizers.length > 0" class="panel-hosts">hosted by {{ formatOrganizers(node.organizers) }}</p>
+        <div class="panel-byline">
+          <p v-if="node.organizing_entity" class="panel-organizing-entity">
+            <span class="panel-label">by</span> {{ node.organizing_entity }}
+          </p>
+          <p v-if="node.organizers.some(o => o.name)" class="panel-hosts">
+            <span class="panel-label">Hosts:</span>
+            <span v-if="!hostsExpanded" class="panel-hosts-line">
+              <span class="panel-hosts-names">{{ formatOrganizers(node.organizers, false) }}</span><template v-if="hasMoreHosts(node.organizers)"><span class="panel-hosts-more-wrap">…&nbsp;<button class="panel-hosts-more" @click="hostsExpanded = true">more</button></span></template>
+            </span>
+            <span v-else>{{ formatOrganizers(node.organizers, true) }}</span>
+          </p>
+        </div>
 
         <!-- Info Card -->
         <div class="panel-info-card">
@@ -413,31 +427,79 @@ async function share(node: Node) {
   display: flex;
   align-items: flex-start;
   gap: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.panel-byline {
   margin-bottom: 1.25rem;
 }
 
-.panel-header-text {
+.panel-name {
   flex: 1;
   min-width: 0;
-}
-
-.panel-name {
-  margin: 0 0 0.25rem;
-  font-size: 1.375rem;
+  margin: 0;
+  font-size: 1.875rem;
   font-weight: 600;
   line-height: 1.3;
 }
 
 .panel-organizing-entity {
-  margin: 0;
+  margin: 0 0 0.125rem;
   font-size: 0.875rem;
-  color: var(--color-text-muted);
+  color: var(--color-text);
 }
 
 .panel-hosts {
-  margin: 0 0 1rem;
-  font-size: 0.8125rem;
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--color-text);
+  display: flex;
+  align-items: baseline;
+  gap: 0.3em;
+  overflow: hidden;
+}
+
+.panel-label {
   color: var(--color-text-muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+}
+
+.panel-hosts-line {
+  display: flex;
+  align-items: baseline;
+  min-width: 0;
+  flex: 1;
+}
+
+.panel-hosts-names {
+  overflow: hidden;
+  white-space: nowrap;
+  min-width: 0;
+  flex-shrink: 1;
+}
+
+.panel-hosts-more-wrap {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.panel-hosts-more {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: var(--font-family);
+  font-size: inherit;
+  color: var(--color-link);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.panel-hosts-more:hover {
+  color: var(--color-link-hover);
 }
 
 /* ─── Info Card ─── */
@@ -621,9 +683,13 @@ async function share(node: Node) {
   cursor: pointer;
   font-family: var(--font-family);
   font-size: 0.875rem;
-  color: var(--color-focus);
+  color: var(--color-link);
   text-decoration: underline;
   text-underline-offset: 2px;
+}
+
+.panel-read-more:hover {
+  color: var(--color-link-hover);
 }
 
 /* ─── Links section ─── */
@@ -655,7 +721,7 @@ async function share(node: Node) {
 }
 
 .panel-link-row:hover {
-  color: var(--color-primary);
+  color: var(--color-link);
 }
 
 .panel-link-icon {

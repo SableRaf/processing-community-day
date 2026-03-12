@@ -26,13 +26,14 @@ export interface Node {
   short_description: string;
   long_description?: string;
   tags: string[];
-  organizers: string[];
+  organizers: { name: string; email: string }[];
   organizing_entity?: string;
   contact_email: string;
   submitter_email?: string;
   forum_url?: string;
   confirmed: boolean;
   placeholder?: boolean;
+  maintainer?: { name: string; email: string };
 }
 
 interface NodeInput {
@@ -53,13 +54,14 @@ interface NodeInput {
   short_description: string;
   long_description?: string;
   tags: string[];
-  organizers: string[];
+  organizers: { name: string; email: string }[];
   organizing_entity?: string;
   contact_email: string;
   submitter_email?: string;
   forum_url?: string;
   confirmed: boolean;
   placeholder?: boolean;
+  maintainer?: { name: string; email: string };
 }
 
 export function loadNodes(): Node[] {
