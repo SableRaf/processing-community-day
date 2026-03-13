@@ -1,0 +1,37 @@
+{
+  "id": "pcd-example-2026",
+  "organizers": [],
+  "primary_contact": {
+    "name": "Raphaël de Courville",
+    "email": "raphael@processingfoundation.org"
+  },
+  "organization_name": "",
+  "organization_url": "",
+  "organization_type": "",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Example",
+  "event_location": {
+    "address": "",
+    "plus_code": "9F4MH83R+89"
+  },
+  "event_date": "",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "Test event",
+  "event_activities": [
+    "Hands-on workshops",
+    "Beginner introductions to Processing or p5.js",
+    "Creative coding jams or hack sessions",
+    "Other"
+  ],
+  "event_website": "",
+  "forum_thread_url": "",
+  "city": "Santa-Maria Navarese",
+  "country": "Italy",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 2,
+    "maintainer_notes": "Nothing of note"
+  }
+}
