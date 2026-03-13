@@ -93,7 +93,7 @@ body:
     id: plus_code
     attributes:
       label: Full global plus code in the format XXXXXXXX+XX
-      description: Required for map placement. Find or verify the plus code for your event location at https://plus.codes.
+      description: Required for map placement (also for online events). Find or verify the plus code for your event location at https://plus.codes.
       placeholder: 9F4MFCCM+JF
     validations:
       required: true
