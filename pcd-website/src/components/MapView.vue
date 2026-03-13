@@ -263,6 +263,13 @@ onMounted(async () => {
 
   // Global keyboard shortcuts
   document.addEventListener('keydown', handleKeydown);
+
+  // Deep link: ?event=<node-id> auto-opens the panel for that event
+  const eventId = new URLSearchParams(window.location.search).get('event');
+  if (eventId) {
+    const node = props.nodes.find((n) => n.id === eventId);
+    if (node) openPanel(node);
+  }
 });
 
 onUnmounted(() => {

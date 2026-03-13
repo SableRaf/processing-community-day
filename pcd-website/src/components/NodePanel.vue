@@ -16,6 +16,8 @@ const panelRef = ref<HTMLElement | null>(null);
 const tabButtonRef = ref<HTMLButtonElement | null>(null);
 const minimapRef = ref<HTMLDivElement | null>(null);
 const calDropdownOpen = ref(false);
+const shareDropdownOpen = ref(false);
+const linkCopied = ref(false);
 const descExpanded = ref(false);
 const hostsExpanded = ref(false);
 let trap: FocusTrap | null = null;
@@ -25,11 +27,12 @@ const PANEL_TRUNCATE_LENGTH = 200;
 const HOSTS_VISIBLE = 3;
 
 function handleOutsideClick(e: MouseEvent) {
-  if (calDropdownOpen.value) {
-    const target = e.target as HTMLElement;
-    if (!target.closest('.info-card-calendar-row')) {
-      calDropdownOpen.value = false;
-    }
+  const target = e.target as HTMLElement;
+  if (calDropdownOpen.value && !target.closest('.info-card-calendar-row')) {
+    calDropdownOpen.value = false;
+  }
+  if (shareDropdownOpen.value && !target.closest('.share-btn-wrap')) {
+    shareDropdownOpen.value = false;
   }
 }
 
@@ -165,13 +168,15 @@ function getDescPreview(node: Node): { text: string; hasMore: boolean } {
   return { text: truncated, hasMore: paras.length > 1 || first.length > PANEL_TRUNCATE_LENGTH };
 }
 
-async function share(node: Node) {
-  const url = `${window.location.href.split('#')[0]}#${node.id}`;
-  if (navigator.share) {
-    try { await navigator.share({ title: node.event_name, url }); } catch { /* user cancelled */ }
-  } else {
-    try { await navigator.clipboard.writeText(url); } catch { /* clipboard unavailable */ }
-  }
+function getShareUrl(node: Node): string {
+  return `${window.location.origin}${window.location.pathname}?event=${node.id}`;
+}
+
+async function copyLink(node: Node) {
+  try { await navigator.clipboard.writeText(getShareUrl(node)); } catch { /* unavailable */ }
+  linkCopied.value = true;
+  shareDropdownOpen.value = false;
+  setTimeout(() => { linkCopied.value = false; }, 2000);
 }
 </script>
 
@@ -212,14 +217,40 @@ async function share(node: Node) {
 
         <div class="panel-header-row">
           <h2 id="panel-title" class="panel-name">{{ node.event_name }}</h2>
-          <button
-            class="quick-action-btn"
-            aria-label="Share event"
-            title="Share event"
-            @click="share(node)"
-          >
-            <Icon icon="bi:share" width="20" height="20" aria-hidden="true" />
-          </button>
+          <div class="share-btn-wrap">
+            <button
+              class="quick-action-btn"
+              :aria-label="linkCopied ? 'Link copied!' : 'Share event'"
+              :title="linkCopied ? 'Link copied!' : 'Share event'"
+              @click.stop="shareDropdownOpen = !shareDropdownOpen"
+            >
+              <Icon v-if="!linkCopied" icon="bi:box-arrow-up" width="20" height="20" aria-hidden="true" />
+              <Icon v-else icon="bi:check-lg" width="20" height="20" aria-hidden="true" />
+            </button>
+            <div v-show="shareDropdownOpen" class="quick-action-menu share-menu" role="menu">
+              <button role="menuitem" @click="copyLink(node)">Copy link</button>
+              <a
+                :href="`https://mastodon.social/share?text=${encodeURIComponent(node.event_name + ' ' + getShareUrl(node))}`"
+                target="_blank" rel="noopener noreferrer" role="menuitem"
+                @click="shareDropdownOpen = false"
+              >Share on Mastodon</a>
+              <a
+                :href="`https://bsky.app/intent/compose?text=${encodeURIComponent(node.event_name + ' ' + getShareUrl(node))}`"
+                target="_blank" rel="noopener noreferrer" role="menuitem"
+                @click="shareDropdownOpen = false"
+              >Share on Bluesky</a>
+              <a
+                :href="`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(getShareUrl(node))}`"
+                target="_blank" rel="noopener noreferrer" role="menuitem"
+                @click="shareDropdownOpen = false"
+              >Share on Facebook</a>
+              <a
+                :href="`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(getShareUrl(node))}`"
+                target="_blank" rel="noopener noreferrer" role="menuitem"
+                @click="shareDropdownOpen = false"
+              >Share on LinkedIn</a>
+            </div>
+          </div>
         </div>
         <div class="panel-byline">
           <p v-if="node.organization_name" class="panel-organizing-entity">
@@ -829,6 +860,16 @@ async function share(node: Node) {
   position: absolute;
   inset: 0;
   z-index: 1000;
+}
+
+.share-btn-wrap {
+  position: relative;
+}
+
+.share-menu {
+  right: 0;
+  left: auto;
+  top: calc(100% + 4px);
 }
 
 .quick-action-btn {
