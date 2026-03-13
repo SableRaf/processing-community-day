@@ -18,6 +18,14 @@ body:
       placeholder: PCD @ Example City
     validations:
       required: true
+  - type: input
+    id: plus_code
+    attributes:
+      label: Map placement
+      description: Find or verify the plus code for your event location at https://plus.codes. If your event is online or the location is still to be determined, use a general location such as the city center or a relevant landmark. The plus code should be 10 or 11 characters long (e.g. 9F4MFCCM+JF).
+      placeholder: 9F4MFCCM+JF
+    validations:
+      required: true
   - type: dropdown
     id: format
     attributes:
@@ -33,14 +41,6 @@ body:
       label: Event URL (only for online events)
       description: For online events, provide the URL where the event will take place (e.g. Zoom link, YouTube live stream, etc.).
       placeholder: https://zoom.us/j/123456789
-  - type: input
-    id: plus_code
-    attributes:
-      label: Map placement (required for both in-person and online events)
-      description: Find or verify the plus code for your event location at https://plus.codes.
-      placeholder: 9F4MFCCM+JF
-    validations:
-      required: true
   - type: input
     id: primary_contact_name
     attributes:
