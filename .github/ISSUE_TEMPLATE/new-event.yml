@@ -22,14 +22,16 @@ body:
     id: plus_code
     attributes:
       label: Map placement
-      description: Find or verify the plus code for your event location at https://plus.codes. The code should be 10 or 11 characters long (e.g. 9F4MFCCM+JF).
+      description: Find or verify the plus code for your event location at https://plus.codes. 
       placeholder: XXXXXXXX+XX
     validations:
       required: true
   - type: markdown
     attributes:
       value: |
-        If your event is online or the location is still to be determined, use a general location such as the city center or a relevant landmark. 
+        > [!IMPORTANT]
+        > The code should be 10 or 11 characters long (e.g. 9F4MFCCM+JF). This code is essential for accurately placing your event on the map. 
+        > If your event is online or the location is still to be determined, use a general location such as the city center or a relevant landmark. 
   - type: dropdown
     id: format
     attributes:
