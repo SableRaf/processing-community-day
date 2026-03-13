@@ -1,0 +1,32 @@
+{
+  "id": "pcd-amsterdam-2026",
+  "organizers": [
+    {
+      "name": ""
+    }
+  ],
+  "primary_contact": {
+    "name": "",
+    "email": "organizer@example.nl"
+  },
+  "organization_name": "Creative Coding Amsterdam",
+  "organization_url": "",
+  "organization_type": "",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Amsterdam",
+  "event_location": {
+    "address": "",
+    "plus_code": "9F469WFW+9W"
+  },
+  "event_date": "2026-10-17",
+  "event_start_time": "19:00",
+  "event_end_time": "22:00",
+  "event_short_description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+  "event_activities": [],
+  "event_website": "https://example.nl/pcd",
+  "forum_thread_url": "",
+  "city": "Amsterdam",
+  "country": "Netherlands",
+  "placeholder": true
+}

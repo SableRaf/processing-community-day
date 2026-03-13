@@ -1,0 +1,32 @@
+{
+  "id": "pcd-sydney-2026",
+  "organizers": [
+    {
+      "name": ""
+    }
+  ],
+  "primary_contact": {
+    "name": "",
+    "email": "organizer@example.com.au"
+  },
+  "organization_name": "Creative Code Sydney",
+  "organization_url": "",
+  "organization_type": "",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Sydney",
+  "event_location": {
+    "address": "245 Wilson St, Eveleigh NSW 2015, Australia",
+    "plus_code": "4RRH46J3+G3"
+  },
+  "event_date": "2026-10-17",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.",
+  "event_activities": [],
+  "event_website": "https://example.com.au/pcd-sydney",
+  "forum_thread_url": "",
+  "city": "Sydney",
+  "country": "Australia",
+  "placeholder": true
+}

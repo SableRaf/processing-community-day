@@ -1,0 +1,32 @@
+{
+  "id": "pcd-online-global-2026",
+  "organizers": [
+    {
+      "name": ""
+    }
+  ],
+  "primary_contact": {
+    "name": "",
+    "email": "organizer@processingfoundation.org"
+  },
+  "organization_name": "Processing Foundation",
+  "organization_url": "https://processingfoundation.org",
+  "organization_type": "Nonprofit, foundation, association",
+  "online_event": true,
+  "event_url": "https://zoom.us/j/example",
+  "event_name": "PCD Online — Global",
+  "event_location": {
+    "address": "",
+    "plus_code": "8FVC2222+22"
+  },
+  "event_date": "2026-10-10",
+  "event_start_time": "15:00",
+  "event_end_time": "17:00",
+  "event_short_description": "A global online edition of Processing Community Day, open to participants from around the world.",
+  "event_activities": [],
+  "event_website": "https://processingfoundation.org/pcd",
+  "forum_thread_url": "",
+  "city": "",
+  "country": "",
+  "placeholder": true
+}

@@ -1,0 +1,33 @@
+{
+  "id": "pcd-new-york-2026",
+  "organizers": [
+    {
+      "name": ""
+    }
+  ],
+  "primary_contact": {
+    "name": "",
+    "email": "pcd@ccnyc.org"
+  },
+  "organization_name": "CCNYC",
+  "organization_url": "",
+  "organization_type": "",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ New York",
+  "event_location": {
+    "name": "Pioneer Works",
+    "address": "159 Pioneer St, Brooklyn, NY 11231",
+    "plus_code": "87G7MPVQ+V9"
+  },
+  "event_date": "2026-10-24",
+  "event_start_time": "19:00",
+  "event_end_time": "21:30",
+  "event_short_description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  "event_activities": [],
+  "event_website": "https://pioneerworks.org",
+  "forum_thread_url": "",
+  "city": "New York",
+  "country": "United States",
+  "placeholder": true
+}

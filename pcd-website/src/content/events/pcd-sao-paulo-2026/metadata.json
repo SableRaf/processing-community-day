@@ -1,0 +1,32 @@
+{
+  "id": "pcd-sao-paulo-2026",
+  "organizers": [
+    {
+      "name": ""
+    }
+  ],
+  "primary_contact": {
+    "name": "",
+    "email": "pcd@atelie397.com.br"
+  },
+  "organization_name": "Creative Code SP",
+  "organization_url": "",
+  "organization_type": "",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ São Paulo",
+  "event_location": {
+    "address": "",
+    "plus_code": "588MC3Q6+R3"
+  },
+  "event_date": "2026-10-17",
+  "event_start_time": "18:00",
+  "event_end_time": "21:00",
+  "event_short_description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.",
+  "event_activities": [],
+  "event_website": "https://atelie397.com.br",
+  "forum_thread_url": "",
+  "city": "São Paulo",
+  "country": "Brazil",
+  "placeholder": true
+}

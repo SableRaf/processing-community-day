@@ -1,0 +1,33 @@
+{
+  "id": "pcd-london-2026",
+  "organizers": [
+    {
+      "name": ""
+    }
+  ],
+  "primary_contact": {
+    "name": "",
+    "email": "organizer@example.co.uk"
+  },
+  "organization_name": "Creative Code London",
+  "organization_url": "",
+  "organization_type": "",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ London",
+  "event_location": {
+    "name": "Barbican Centre",
+    "address": "Silk St, London EC2Y 8DS, United Kingdom",
+    "plus_code": "9C3XGWPX+CQ"
+  },
+  "event_date": "2026-10-17",
+  "event_start_time": "19:00",
+  "event_end_time": "21:30",
+  "event_short_description": "",
+  "event_activities": [],
+  "event_website": "https://example.co.uk/pcd",
+  "forum_thread_url": "",
+  "city": "London",
+  "country": "United Kingdom",
+  "placeholder": true
+}

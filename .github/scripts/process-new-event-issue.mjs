@@ -21,10 +21,13 @@ async function setOutput(key, value) {
 
 function parseIssueSections(body) {
   const normalized = body.replace(/\r/g, '');
-  const matches = [...normalized.matchAll(/^### (.+)\n([\s\S]*?)(?=^### |\s*$)/gm)];
-  return new Map(matches.map(([, label, value]) => {
+  const sections = normalized.split(/^### /m).slice(1);
+  return new Map(sections.map((section) => {
+    const newlineIndex = section.indexOf('\n');
+    const label = (newlineIndex === -1 ? section : section.slice(0, newlineIndex)).trim();
+    const value = newlineIndex === -1 ? '' : section.slice(newlineIndex + 1);
     const cleaned = value.trim().replace(/^_No response_\s*$/m, '').trim();
-    return [label.trim(), cleaned];
+    return [label, cleaned];
   }));
 }
 
@@ -67,10 +70,6 @@ function isValidPlusCode(value) {
   return /^[23456789CFGHJMPQRVWX]{8}\+[23456789CFGHJMPQRVWX]{2,3}$/.test(normalized);
 }
 
-function isValidGitHubProfileUrl(value) {
-  return /^https:\/\/github\.com\/[a-zA-Z0-9_-]+\/?$/.test(value.trim());
-}
-
 function slugify(value) {
   return value
     .normalize('NFKD')
@@ -95,14 +94,13 @@ function parseActivities(raw) {
     .filter(label => VALID_ACTIVITIES.has(label));
 }
 
-function parseOrganizers(raw, errors) {
+function parseOrganizers(raw) {
   const lines = raw
     .split('\n')
     .map((line) => line.trim())
     .filter(Boolean);
 
   if (!lines.length) {
-    errors.push('Organizers must include at least one person.');
     return [];
   }
 
@@ -112,20 +110,6 @@ function parseOrganizers(raw, errors) {
     const name = (match ? match[1] : line).trim();
     return { name };
   }).filter((organizer) => organizer.name);
-}
-
-function toYamlScalar(value) {
-  return JSON.stringify(value ?? '');
-}
-
-function toYamlList(values, indent = 0) {
-  const prefix = ' '.repeat(indent);
-  return values.map((value) => `${prefix}- ${toYamlScalar(value)}`).join('\n');
-}
-
-function toYamlOrganizerList(values, indent = 0) {
-  const prefix = ' '.repeat(indent);
-  return values.map((value) => `${prefix}- name: ${toYamlScalar(value.name)}`).join('\n');
 }
 
 function buildValidationComment(errors) {
@@ -145,8 +129,8 @@ function buildPrBody(number, name) {
     `This PR was generated from the "New Event" issue form for **${name}**.`,
     '',
     'Review checklist:',
+    '- [ ] Event format and venue/link details are correct',
     '- [ ] Dates and times are correct',
-    '- [ ] Address, plus code, or online URL are correct',
     '- [ ] Public contact info is correct',
     '- [ ] Short description and full event description are ready to publish',
   ].join('\n');
@@ -164,29 +148,29 @@ const fields = parseIssueSections(issueBody);
 const errors = [];
 
 const eventName = required(fields, 'Event name', errors);
-const city = fields.get('City')?.trim() ?? '';
+const plusCode = required(fields, 'Map placement', errors).replace(/\s+/g, '').toUpperCase();
+const eventFormat = required(fields, 'Event format', errors);
+const isOnlineEvent = eventFormat === 'Online';
+const eventUrl = fields.get('Event URL (only for online events)')?.trim() ?? '';
+const primaryContactName = required(fields, 'Primary contact name', errors);
+const contactEmail = required(fields, 'Primary contact email', errors);
+const city = fields.get('City or locality')?.trim() ?? '';
 const country = fields.get('Country')?.trim() ?? '';
 const organizationName = fields.get('Organization name')?.trim() ?? '';
 const organizationUrl = fields.get('Organization website')?.trim() ?? '';
-const organizationType = required(fields, 'Organization type', errors);
-const address = fields.get('Street address')?.trim() ?? '';
-const plusCode = required(fields, 'Full global plus code in the format XXXXXXXX+XX', errors).replace(/\s+/g, '').toUpperCase();
-const eventDate = required(fields, 'Event date', errors);
-const eventEndDate = fields.get('End date')?.trim() ?? '';
+const organizationType = fields.get('Organization type')?.trim() ?? '';
+const address = fields.get('Street address of the event venue')?.trim() ?? '';
+const eventDate = fields.get('Date of the event')?.trim() ?? '';
+const eventEndDate = fields.get('End date (for multi-day events)')?.trim() ?? '';
 const startTime = fields.get('Start time')?.trim() ?? '';
 const endTime = fields.get('End time')?.trim() ?? '';
 const eventWebsite = fields.get('Event website')?.trim() ?? '';
-const primaryContactName = required(fields, 'Primary contact name', errors);
-const contactEmail = required(fields, 'Primary contact email', errors);
-const organizers = parseOrganizers(required(fields, 'Organizers', errors), errors);
-const shortDescription = required(fields, 'Short description', errors);
-const fullDescription = required(fields, 'Full event description', errors);
+const organizers = parseOrganizers(fields.get('Organizers')?.trim() ?? '');
+const shortDescription = fields.get('Short description')?.trim() ?? '';
+const fullDescription = fields.get('Full event description')?.trim() ?? '';
 const activities = parseActivities(fields.get('Event activities')?.trim() ?? '');
-const eventUrl = fields.get('Online event URL')?.trim() ?? '';
 const forumThreadUrl = fields.get('Forum discussion URL')?.trim() ?? '';
-const submittedBy = fields.get('Your GitHub profile URL')?.trim() ?? '';
 const maintainerNotes = fields.get('Additional notes')?.trim() ?? '';
-
 const VALID_ORG_TYPES = new Set([
   'School, university, library',
   'Fablab, makerspace, hackerspace',
@@ -196,30 +180,47 @@ const VALID_ORG_TYPES = new Set([
   'Studio, tech company, startup',
   'Other',
 ]);
+const VALID_EVENT_FORMATS = new Set(['In person', 'Online']);
 
 if (eventDate && !isValidDate(eventDate)) errors.push(`Event date must use YYYY-MM-DD and be a real date. Received "${eventDate}".`);
 if (eventEndDate && !isValidDate(eventEndDate)) errors.push(`End date must use YYYY-MM-DD and be a real date. Received "${eventEndDate}".`);
 if (isValidDate(eventDate) && eventEndDate && isValidDate(eventEndDate) && eventEndDate < eventDate) errors.push('End date cannot be earlier than event date.');
 if (startTime && !isValidTime(startTime)) errors.push(`Start time must use 24-hour HH:MM. Received "${startTime}".`);
 if (endTime && !isValidTime(endTime)) errors.push(`End time must use 24-hour HH:MM. Received "${endTime}".`);
-if (startTime && endTime && isValidTime(startTime) && isValidTime(endTime) && endTime <= startTime) errors.push('End time must be later than start time.');
+if (
+  startTime &&
+  endTime &&
+  isValidTime(startTime) &&
+  isValidTime(endTime) &&
+  (!eventEndDate || eventEndDate === eventDate) &&
+  endTime <= startTime
+) {
+  errors.push('End time must be later than start time for single-day events.');
+}
 if (eventWebsite && !isValidHttpUrl(eventWebsite)) errors.push(`Event website must be a valid http or https URL. Received "${eventWebsite}".`);
 if (forumThreadUrl && !isValidHttpUrl(forumThreadUrl)) errors.push(`Forum discussion URL must be a valid http or https URL. Received "${forumThreadUrl}".`);
 if (contactEmail && !isValidEmail(contactEmail)) errors.push(`Primary contact email is not valid. Received "${contactEmail}".`);
 if (plusCode && !isValidPlusCode(plusCode)) errors.push(`Full global plus code is not valid. Received "${plusCode}".`);
 if (eventUrl && !isValidHttpUrl(eventUrl)) errors.push(`Online event URL must be a valid http or https URL. Received "${eventUrl}".`);
+if (organizationUrl && !isValidHttpUrl(organizationUrl)) errors.push(`Organization website must be a valid http or https URL. Received "${organizationUrl}".`);
+if (eventFormat && !VALID_EVENT_FORMATS.has(eventFormat)) errors.push(`Event format "${eventFormat}" is not one of the valid options.`);
 if (organizationType && !VALID_ORG_TYPES.has(organizationType)) errors.push(`Organization type "${organizationType}" is not one of the valid options.`);
-if (submittedBy && !isValidGitHubProfileUrl(submittedBy)) errors.push(`Your GitHub profile URL must start with https://github.com/. Received "${submittedBy}".`);
+if (isOnlineEvent && !eventUrl) errors.push('Event URL is required for online events.');
 
-const idSource = `${eventName}-${YEAR}`;
-const eventId = slugify(idSource.startsWith('pcd-') ? idSource : `pcd-${idSource}`);
+const normalizedEventName = slugify(eventName);
+const eventId = normalizedEventName.startsWith('pcd-')
+  ? `${normalizedEventName}-${YEAR}`
+  : `pcd-${normalizedEventName}-${YEAR}`;
 
-const nodesJsonPath = path.join(WORKSPACE, 'pcd-website/src/data/nodes.json');
-const markdownPath = path.join(WORKSPACE, 'pcd-website/src/content/events', `${eventId}.md`);
-const nodesData = JSON.parse(await fs.readFile(nodesJsonPath, 'utf8'));
+const eventDirPath = path.join(WORKSPACE, 'pcd-website/src/content/events', eventId);
+const markdownPath = path.join(eventDirPath, 'content.md');
+const metadataPath = path.join(eventDirPath, 'metadata.json');
 
-if (nodesData.nodes.some((node) => node.id === eventId)) {
+try {
+  await fs.access(eventDirPath);
   errors.push(`An event with the generated id "${eventId}" already exists. Update the existing event instead of creating a duplicate.`);
+} catch {
+  // Directory does not exist yet.
 }
 
 if (errors.length > 0) {
@@ -237,7 +238,7 @@ const nodeRecord = {
   organization_name: organizationName,
   organization_url: organizationUrl,
   organization_type: organizationType,
-  online_event: !!eventUrl,
+  online_event: isOnlineEvent,
   event_url: eventUrl,
   event_name: eventName,
   event_location: {
@@ -249,60 +250,29 @@ const nodeRecord = {
   event_start_time: startTime,
   event_end_time: endTime,
   event_short_description: shortDescription,
-  event_long_description: fullDescription,
   event_activities: activities,
   event_website: eventWebsite,
   forum_thread_url: forumThreadUrl,
   city,
   country,
   placeholder: false,
+  intake: {
+    issue_number: issueNumber,
+    maintainer_notes: maintainerNotes,
+  },
 };
-
-nodesData.nodes.push(nodeRecord);
-nodesData.nodes.sort((a, b) => {
-  const byDate = (a.event_date ?? '').localeCompare(b.event_date ?? '');
-  if (byDate !== 0) return byDate;
-  return a.event_name.localeCompare(b.event_name);
-});
 
 const markdownLines = [
   '---',
   `id: ${eventId}`,
-  `title: ${toYamlScalar(eventName)}`,
-  `organization_name: ${toYamlScalar(organizationName)}`,
-  `organization_url: ${toYamlScalar(organizationUrl)}`,
-  `organization_type: ${toYamlScalar(organizationType)}`,
-  `online_event: ${!!eventUrl}`,
-  `event_url: ${toYamlScalar(eventUrl)}`,
-  `event_date: ${toYamlScalar(eventDate)}`,
-  ...(eventEndDate ? [`event_end_date: ${toYamlScalar(eventEndDate)}`] : []),
-  `event_start_time: ${toYamlScalar(startTime)}`,
-  `event_end_time: ${toYamlScalar(endTime)}`,
-  'event_location:',
-  `  address: ${toYamlScalar(address)}`,
-  `  plus_code: ${toYamlScalar(plusCode)}`,
-  `event_website: ${toYamlScalar(eventWebsite)}`,
-  `event_short_description: ${toYamlScalar(shortDescription)}`,
-  ...(activities.length ? ['event_activities:', toYamlList(activities, 2)] : ['event_activities: []']),
-  `forum_thread_url: ${toYamlScalar(forumThreadUrl)}`,
-  `city: ${toYamlScalar(city)}`,
-  `country: ${toYamlScalar(country)}`,
-  'primary_contact:',
-  `  name: ${toYamlScalar(primaryContactName)}`,
-  `  email: ${toYamlScalar(contactEmail)}`,
-  'organizers:',
-  toYamlOrganizerList(organizers, 2),
-  `submitted_by: ${toYamlScalar(submittedBy)}`,
-  `issue_number: ${issueNumber}`,
-  `maintainer_notes: ${toYamlScalar(maintainerNotes)}`,
   '---',
   '',
-  fullDescription.trim(),
-  '',
+  ...(fullDescription ? [fullDescription, ''] : []),
 ];
 
-await fs.writeFile(nodesJsonPath, `${JSON.stringify(nodesData, null, 2)}\n`);
+await fs.mkdir(eventDirPath, { recursive: true });
 await fs.writeFile(markdownPath, markdownLines.join('\n'));
+await fs.writeFile(metadataPath, `${JSON.stringify(nodeRecord, null, 2)}\n`);
 
 const prBodyPath = path.join(RUNNER_TEMP, `new-event-${issueNumber}-pr-body.md`);
 await fs.writeFile(prBodyPath, buildPrBody(issueNumber, eventName));

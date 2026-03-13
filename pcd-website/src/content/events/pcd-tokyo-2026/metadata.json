@@ -1,0 +1,32 @@
+{
+  "id": "pcd-tokyo-2026",
+  "organizers": [
+    {
+      "name": ""
+    }
+  ],
+  "primary_contact": {
+    "name": "",
+    "email": "hello@pcd.tokyo"
+  },
+  "organization_name": "Processing Community Japan",
+  "organization_url": "",
+  "organization_type": "",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Tokyo",
+  "event_location": {
+    "address": "",
+    "plus_code": "8Q7XMP53+22"
+  },
+  "event_date": "2026-10-10",
+  "event_start_time": "18:30",
+  "event_end_time": "21:00",
+  "event_short_description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.",
+  "event_activities": [],
+  "event_website": "https://pcd.tokyo",
+  "forum_thread_url": "",
+  "city": "Tokyo",
+  "country": "Japan",
+  "placeholder": true
+}

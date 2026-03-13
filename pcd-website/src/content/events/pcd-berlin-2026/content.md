@@ -1,6 +1,5 @@
 ---
 id: pcd-berlin-2026
-title: "PCD @ Berlin with a very long name to test the layout of the node panel and see how it handles overflow issues"
 ---
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.

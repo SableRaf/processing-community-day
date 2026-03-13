@@ -1,0 +1,32 @@
+{
+  "id": "pcd-seoul-2026",
+  "organizers": [
+    {
+      "name": ""
+    }
+  ],
+  "primary_contact": {
+    "name": "",
+    "email": "organizer@example.kr"
+  },
+  "organization_name": "Creative Coding Seoul",
+  "organization_url": "",
+  "organization_type": "",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Seoul",
+  "event_location": {
+    "address": "Geumcheon District, 시흥제1동 113-49",
+    "plus_code": "8Q98FV4V+VR"
+  },
+  "event_date": "2026-10-10",
+  "event_start_time": "18:00",
+  "event_end_time": "21:00",
+  "event_short_description": "",
+  "event_activities": [],
+  "event_website": "https://example.kr/pcd",
+  "forum_thread_url": "",
+  "city": "Seoul",
+  "country": "South Korea",
+  "placeholder": true
+}

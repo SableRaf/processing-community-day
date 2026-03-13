@@ -2,7 +2,11 @@ name: New Event Intake
 
 on:
   issues:
-    types: [opened]
+    types: [opened, edited, reopened]
+
+concurrency:
+  group: new-event-intake-${{ github.event.issue.number }}
+  cancel-in-progress: true
 
 permissions:
   contents: write
@@ -13,12 +17,14 @@ jobs:
   create-event-pr:
     if: contains(github.event.issue.body, '<!-- new-event-template -->')
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     env:
       PCD_TEAM_ASSIGNEES: ${{ vars.PCD_TEAM_ASSIGNEES }}
       PCD_TEAM_REVIEWERS: ${{ vars.PCD_TEAM_REVIEWERS }}
+      STATUS_COMMENT_MARKER: <!-- new-event-intake-status -->
     steps:
       - name: Label and assign intake issue
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const owner = context.repo.owner;
@@ -58,38 +64,60 @@ jobs:
                 assignees,
               });
             }
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           ref: ${{ github.event.repository.default_branch }}
-      - uses: actions/setup-node@v4
+          persist-credentials: false
+      - uses: actions/setup-node@v6
         with:
-          node-version: '20'
+          node-version: '24'
       - name: Generate event files from issue
         id: generate
         run: node .github/scripts/process-new-event-issue.mjs
-      - name: Comment validation errors
+      - name: Upsert validation status comment
         if: steps.generate.outputs.valid != 'true'
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         env:
           VALIDATION_COMMENT_PATH: ${{ steps.generate.outputs.validation_comment_path }}
         with:
           script: |
             const fs = require('fs');
-            const body = fs.readFileSync(process.env.VALIDATION_COMMENT_PATH, 'utf8');
-            await github.rest.issues.createComment({
+            const marker = process.env.STATUS_COMMENT_MARKER;
+            const body = `${marker}\n${fs.readFileSync(process.env.VALIDATION_COMMENT_PATH, 'utf8')}`;
+            const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
-              body,
             });
+            const existing = comments.find((comment) =>
+              comment.user?.type === 'Bot' &&
+              comment.body?.includes(marker)
+            );
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }
       - name: Create pull request
         if: steps.generate.outputs.valid == 'true'
         id: create_pr
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@v8
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ steps.generate.outputs.branch }}
           delete-branch: true
+          add-paths: |
+            pcd-website/src/content/events/**
           commit-message: ${{ steps.generate.outputs.commit_message }}
           title: ${{ steps.generate.outputs.pr_title }}
           body-path: ${{ steps.generate.outputs.pr_body_path }}
@@ -98,7 +126,7 @@ jobs:
             New Event
       - name: Request team review
         if: steps.generate.outputs.valid == 'true' && steps.create_pr.outputs.pull-request-number != '' && env.PCD_TEAM_REVIEWERS != ''
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const owner = context.repo.owner;
@@ -117,14 +145,37 @@ jobs:
                 team_reviewers,
               });
             }
-      - name: Comment with pull request link
+      - name: Upsert pull request status comment
         if: steps.generate.outputs.valid == 'true' && steps.create_pr.outputs.pull-request-number != ''
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
+        env:
+          PR_NUMBER: ${{ steps.create_pr.outputs.pull-request-number }}
+          PR_URL: ${{ steps.create_pr.outputs.pull-request-url }}
         with:
           script: |
-            await github.rest.issues.createComment({
+            const marker = process.env.STATUS_COMMENT_MARKER;
+            const body = `${marker}\nA pull request has been opened for this submission: #${process.env.PR_NUMBER} (${process.env.PR_URL}).`;
+            const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
-              body: `A pull request has been opened for this submission: #${{ steps.create_pr.outputs.pull-request-number }}.`,
             });
+            const existing = comments.find((comment) =>
+              comment.user?.type === 'Bot' &&
+              comment.body?.includes(marker)
+            );
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }

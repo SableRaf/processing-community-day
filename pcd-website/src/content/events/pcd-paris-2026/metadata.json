@@ -1,0 +1,32 @@
+{
+  "id": "pcd-paris-2026",
+  "organizers": [
+    {
+      "name": ""
+    }
+  ],
+  "primary_contact": {
+    "name": "",
+    "email": "organizer@example.fr"
+  },
+  "organization_name": "Creative Code Paris",
+  "organization_url": "",
+  "organization_type": "",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Paris",
+  "event_location": {
+    "address": "Place Georges-Pompidou, 75004 Paris, France",
+    "plus_code": "8FW4V75V+8Q"
+  },
+  "event_date": "",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.",
+  "event_activities": [],
+  "event_website": "https://example.fr/pcd",
+  "forum_thread_url": "",
+  "city": "Paris",
+  "country": "France",
+  "placeholder": true
+}

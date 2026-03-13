@@ -1,0 +1,32 @@
+{
+  "id": "pcd-barcelona-2026",
+  "organizers": [
+    {
+      "name": ""
+    }
+  ],
+  "primary_contact": {
+    "name": "",
+    "email": "organizer@example.es"
+  },
+  "organization_name": "Hangar Barcelona",
+  "organization_url": "",
+  "organization_type": "Museum, gallery, media arts center",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Barcelona",
+  "event_location": {
+    "address": "Carrer de Pallars, 30, 08018 Barcelona, Spain",
+    "plus_code": "8FH49RMJ+4X"
+  },
+  "event_date": "2026-10-10",
+  "event_start_time": "19:00",
+  "event_end_time": "22:00",
+  "event_short_description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.",
+  "event_activities": [],
+  "event_website": "https://example.es/pcd",
+  "forum_thread_url": "",
+  "city": "Barcelona",
+  "country": "Spain",
+  "placeholder": true
+}

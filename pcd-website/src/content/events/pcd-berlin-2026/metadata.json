@@ -1,0 +1,46 @@
+{
+  "id": "pcd-berlin-2026",
+  "organizers": [
+    {
+      "name": "John Doe"
+    },
+    {
+      "name": "Jane Smith"
+    },
+    {
+      "name": "Sylvia de Longname-for-Testing"
+    },
+    {
+      "name": "Michael Green"
+    },
+    {
+      "name": "Emily Violet"
+    }
+  ],
+  "primary_contact": {
+    "name": "John Doe",
+    "email": "organizer@creativecode.berlin"
+  },
+  "organization_name": "Creative Code Berlin",
+  "organization_url": "",
+  "organization_type": "Meetup, code club, community group",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Berlin with a very long name to test the layout of the node panel and see how it handles overflow issues",
+  "event_location": {
+    "name": "Prachtsaal",
+    "address": "Jonasstraße 22, 12053 Berlin",
+    "plus_code": "9F4MFCCM+JF"
+  },
+  "event_date": "2026-10-17",
+  "event_end_date": "2026-10-18",
+  "event_start_time": "19:00",
+  "event_end_time": "22:00",
+  "event_short_description": "",
+  "event_activities": [],
+  "event_website": "https://creativecode.berlin",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-worldwide-2026/48081",
+  "city": "Berlin",
+  "country": "Germany",
+  "placeholder": true
+}

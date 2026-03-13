@@ -1,0 +1,32 @@
+{
+  "id": "pcd-melbourne-2026",
+  "organizers": [
+    {
+      "name": ""
+    }
+  ],
+  "primary_contact": {
+    "name": "",
+    "email": "organizer@example.com.au"
+  },
+  "organization_name": "Melbourne Creative Coding",
+  "organization_url": "",
+  "organization_type": "",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Melbourne",
+  "event_location": {
+    "address": "Federation Square, Melbourne VIC 3000, Australia",
+    "plus_code": "4RJ625RH+7V"
+  },
+  "event_date": "2026-10-03",
+  "event_start_time": "18:00",
+  "event_end_time": "21:00",
+  "event_short_description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
+  "event_activities": [],
+  "event_website": "https://example.com.au/pcd",
+  "forum_thread_url": "",
+  "city": "Melbourne",
+  "country": "Australia",
+  "placeholder": true
+}

@@ -1,6 +1,5 @@
 import { getCollection } from 'astro:content';
 import { OpenLocationCode } from 'open-location-code';
-import nodesData from '../data/nodes.json';
 
 export interface Node {
   // Identity
@@ -26,9 +25,8 @@ export interface Node {
   time_tbd?: boolean;
   online_event?: boolean;
   event_url?: string;
-  event_website: string;
+  event_website?: string;
   event_short_description: string;
-  event_long_description?: string;
   details_markdown: string;
   details_text: string;
   event_activities: string[];
@@ -57,13 +55,16 @@ interface NodeInput {
   event_start_time?: string;
   event_end_time?: string;
   event_short_description: string;
-  event_long_description?: string;
-  event_activities?: string[];
-  event_website: string;
+  event_activities: string[];
+  event_website?: string;
   forum_thread_url?: string;
   city?: string;
   country?: string;
   placeholder?: boolean;
+}
+
+interface MetadataModule {
+  default: NodeInput;
 }
 
 function normalizeOptionalText(value?: string): string | undefined {
@@ -89,11 +90,14 @@ function markdownToText(markdown: string): string {
 
 export async function loadNodes(): Promise<Node[]> {
   const olc = new OpenLocationCode();
-  const data = nodesData as unknown as { nodes: NodeInput[] };
   const eventEntries = await getCollection('events');
   const eventMap = new Map(eventEntries.map((entry) => [entry.data.id, entry]));
+  const metadataModules = import.meta.glob<MetadataModule>('../content/events/**/metadata.json', {
+    eager: true,
+  });
+  const inputs = Object.values(metadataModules).map((module) => module.default);
 
-  return data.nodes.map((input) => {
+  return inputs.map((input) => {
     const plusCode = input.event_location.plus_code.trim().toUpperCase();
 
     if (!olc.isValid(plusCode) || !olc.isFull(plusCode)) {
@@ -113,7 +117,7 @@ export async function loadNodes(): Promise<Node[]> {
     const online_event = input.online_event ?? false;
     const location_tbd = !online_event && !address;
     const eventEntry = eventMap.get(input.id);
-    const details_markdown = normalizeOptionalText(eventEntry?.body) ?? normalizeOptionalText(input.event_long_description) ?? '';
+    const details_markdown = normalizeOptionalText(eventEntry?.body) ?? '';
     const details_text = markdownToText(details_markdown);
 
     return {
@@ -135,12 +139,11 @@ export async function loadNodes(): Promise<Node[]> {
       time_tbd: !!event_date && !event_start_time,
       online_event,
       event_url: normalizeOptionalText(input.event_url),
-      event_website: input.event_website,
+      event_website: normalizeOptionalText(input.event_website),
       event_short_description: input.event_short_description,
-      event_long_description: normalizeOptionalText(input.event_long_description),
       details_markdown,
       details_text,
-      event_activities: input.event_activities ?? [],
+      event_activities: input.event_activities,
       organizers: input.organizers,
       organization_name: normalizeOptionalText(input.organization_name),
       organization_url: normalizeOptionalText(input.organization_url),
@@ -149,5 +152,9 @@ export async function loadNodes(): Promise<Node[]> {
       forum_thread_url: normalizeOptionalText(input.forum_thread_url),
       placeholder: input.placeholder,
     };
+  }).sort((a, b) => {
+    const byDate = (a.event_date ?? '').localeCompare(b.event_date ?? '');
+    if (byDate !== 0) return byDate;
+    return a.event_name.localeCompare(b.event_name);
   });
 }
