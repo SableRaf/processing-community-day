@@ -18,6 +18,21 @@ body:
       placeholder: PCD @ Example City
     validations:
       required: true
+  - type: dropdown
+    id: format
+    attributes:
+      label: Event format
+      options:
+        - In person
+        - Online
+    validations:
+      required: true
+  - type: input
+    id: online_event_url
+    attributes:
+      label: Online event URL
+      description: For online events, provide the URL where the event will take place (e.g. Zoom link, YouTube live stream, etc.).
+      placeholder: https://zoom.us/j/123456789
   - type: input
     id: primary_contact_name
     attributes:
@@ -154,21 +169,6 @@ body:
       label: Forum discussion URL
       description: Optional Processing forum thread with updates.
       placeholder: https://discourse.processing.org/t/pcd-worldwide-2026/48081
-  - type: dropdown
-    id: format
-    attributes:
-      label: Event format
-      options:
-        - In person
-        - Online
-    validations:
-      required: true
-  - type: input
-    id: online_event_url
-    attributes:
-      label: Online event URL
-      description: For online events, provide the URL where the event will take place (e.g. Zoom link, YouTube live stream, etc.).
-      placeholder: https://zoom.us/j/123456789
   - type: textarea
     id: maintainer_notes
     attributes:
