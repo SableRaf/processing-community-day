@@ -159,7 +159,7 @@ function hasMoreHosts(organizers: { name: string }[]): boolean {
 }
 
 function getDescPreview(node: Node): { text: string; hasMore: boolean } {
-  const full = node.details_text || node.event_short_description || '';
+  const full = node.details_text || '';
   const paras = getParagraphs(full);
   const first = paras[0] ?? '';
   const truncated = first.length > PANEL_TRUNCATE_LENGTH
@@ -358,7 +358,7 @@ async function copyLink(node: Node) {
         <div class="panel-description">
           <template v-if="descExpanded">
             <p
-              v-for="(para, i) in getParagraphs(node.details_text || node.event_short_description)"
+              v-for="(para, i) in getParagraphs(node.details_text)"
               :key="i"
             >{{ para }}</p>
           </template>

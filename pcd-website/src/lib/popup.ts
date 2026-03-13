@@ -24,7 +24,7 @@ export function makePopupContent(node: Node): string {
     ? 'Date TBD'
     : escapeHtml(formatPopupDate(node.event_date ?? '', node.event_end_date));
 
-  const rawText = node.event_short_description.trim() || ((node.details_text ?? '').split(/\n\n+/)[0] ?? '');
+  const rawText = node.event_short_description.trim();
   const blurb = rawText.length > POPUP_PREVIEW_LENGTH
     ? escapeHtml(rawText.slice(0, POPUP_PREVIEW_LENGTH).trimEnd()) + '&hellip;'
     : escapeHtml(rawText);

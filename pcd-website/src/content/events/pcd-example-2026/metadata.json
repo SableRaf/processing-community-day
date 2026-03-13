@@ -19,7 +19,7 @@
   "event_date": "",
   "event_start_time": "",
   "event_end_time": "",
-  "event_short_description": "Test event",
+  "event_short_description": "This is a short event description. It should be concise and to the point, giving a brief overview of what the event is about.",
   "event_activities": [
     "Hands-on workshops",
     "Beginner introductions to Processing or p5.js",
