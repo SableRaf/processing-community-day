@@ -228,7 +228,11 @@ async function copyLink(node: Node) {
               <Icon v-else icon="bi:check-lg" width="20" height="20" aria-hidden="true" />
             </button>
             <div v-show="shareDropdownOpen" class="quick-action-menu share-menu" role="menu">
-              <button role="menuitem" @click="copyLink(node)">Copy link</button>
+              <button role="menuitem" class="copy-link-btn" @click="copyLink(node)">
+                <Icon icon="bi:copy" width="14" height="14" aria-hidden="true" />
+                Copy link
+              </button>
+              <hr class="share-menu-divider" />
               <a
                 :href="`https://mastodon.social/share?text=${encodeURIComponent(node.event_name + ' ' + getShareUrl(node))}`"
                 target="_blank" rel="noopener noreferrer" role="menuitem"
@@ -813,7 +817,9 @@ async function copyLink(node: Node) {
 
 .quick-action-menu a,
 .quick-action-menu button {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 6px;
   width: 100%;
   padding: 8px 12px;
   text-align: left;
@@ -861,6 +867,12 @@ async function copyLink(node: Node) {
   right: 0;
   left: auto;
   top: calc(100% + 4px);
+}
+
+.share-menu-divider {
+  margin: 4px -4px 4px;
+  border: none;
+  border-top: 1px solid var(--color-border);
 }
 
 .quick-action-btn {
