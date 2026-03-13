@@ -276,7 +276,7 @@ onUnmounted(() => {
   <a
     id="host-btn"
     href="https://github.com/SableRaf/pcd-website-mvp-2/issues/new?template=new-event.yml"
-  >Want to host a PCD?</a>
+  >Submit your event</a>
   <button
     id="burger-btn"
     :aria-expanded="listOpen"
