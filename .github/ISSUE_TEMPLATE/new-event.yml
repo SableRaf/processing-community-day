@@ -1,6 +1,6 @@
-name: New Event
-description: Submit a new Processing Community Day event to the map.
-title: "[New Event]: "
+name: 📍 New Event
+description: Submit a new PCD event to the map.
+title: "New Event: "
 labels:
   - New Event
   - Needs Review
