@@ -34,6 +34,14 @@ body:
       description: For online events, provide the URL where the event will take place (e.g. Zoom link, YouTube live stream, etc.).
       placeholder: https://zoom.us/j/123456789
   - type: input
+    id: plus_code
+    attributes:
+      label: Full global plus code in the format XXXXXXXX+XX
+      description: Required for map placement (also for online events). Find or verify the plus code for your event location at https://plus.codes.
+      placeholder: 9F4MFCCM+JF
+    validations:
+      required: true
+  - type: input
     id: primary_contact_name
     attributes:
       label: Primary contact name
@@ -89,14 +97,6 @@ body:
       label: Street address
       description: You can leave this blank if the venue is still to be determined. 
       placeholder: Jonasstraße 22, 12053 Berlin
-  - type: input
-    id: plus_code
-    attributes:
-      label: Full global plus code in the format XXXXXXXX+XX
-      description: Required for map placement (also for online events). Find or verify the plus code for your event location at https://plus.codes.
-      placeholder: 9F4MFCCM+JF
-    validations:
-      required: true
   - type: input
     id: event_date
     attributes:
