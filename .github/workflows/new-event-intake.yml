@@ -128,9 +128,34 @@ jobs:
           commit-message: ${{ steps.generate.outputs.commit_message }}
           title: ${{ steps.generate.outputs.pr_title }}
           body-path: ${{ steps.generate.outputs.pr_body_path }}
-          labels: |
-            needs review
-            new event
+      - name: Label pull request
+        if: steps.generate.outputs.valid == 'true' && steps.create_pr.outputs.pull-request-number != ''
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const issue_number = Number('${{ steps.create_pr.outputs.pull-request-number }}');
+            const desiredLabels = [
+              { name: 'needs review', color: 'fbca04', description: 'Submission is ready for maintainer review' },
+              { name: 'new event', color: '0e8a16', description: 'New event submission intake' },
+            ];
+
+            for (const label of desiredLabels) {
+              try {
+                await github.rest.issues.getLabel({ owner, repo, name: label.name });
+              } catch (error) {
+                if (error.status !== 404) throw error;
+                await github.rest.issues.createLabel({ owner, repo, ...label });
+              }
+            }
+
+            await github.rest.issues.addLabels({
+              owner,
+              repo,
+              issue_number,
+              labels: desiredLabels.map((label) => label.name),
+            });
       - name: Request team review
         if: steps.generate.outputs.valid == 'true' && steps.create_pr.outputs.pull-request-number != '' && env.PCD_TEAM_REVIEWERS != ''
         uses: actions/github-script@v8
