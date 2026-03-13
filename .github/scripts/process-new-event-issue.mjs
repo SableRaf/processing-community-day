@@ -149,7 +149,6 @@ function buildPrBody(number, name) {
     '- [ ] Address, plus code, or online URL are correct',
     '- [ ] Public contact info is correct',
     '- [ ] Short description and full event description are ready to publish',
-    '- [ ] The event should be listed on the map in its current draft state',
   ].join('\n');
 }
 
@@ -185,7 +184,6 @@ const fullDescription = required(fields, 'Full event description', errors);
 const activities = parseActivities(fields.get('Event activities')?.trim() ?? '');
 const eventUrl = fields.get('Online event URL')?.trim() ?? '';
 const forumThreadUrl = fields.get('Forum discussion URL')?.trim() ?? '';
-const draftValue = required(fields, 'Is this event still being planned (draft)?', errors);
 const submittedBy = fields.get('Your GitHub profile URL')?.trim() ?? '';
 const maintainerNotes = fields.get('Additional notes')?.trim() ?? '';
 
@@ -212,9 +210,6 @@ if (plusCode && !isValidPlusCode(plusCode)) errors.push(`Full global plus code i
 if (eventUrl && !isValidHttpUrl(eventUrl)) errors.push(`Online event URL must be a valid http or https URL. Received "${eventUrl}".`);
 if (organizationType && !VALID_ORG_TYPES.has(organizationType)) errors.push(`Organization type "${organizationType}" is not one of the valid options.`);
 if (submittedBy && !isValidGitHubProfileUrl(submittedBy)) errors.push(`Your GitHub profile URL must start with https://github.com/. Received "${submittedBy}".`);
-if (!draftValue.startsWith('Yes') && !draftValue.startsWith('No')) errors.push('Draft status field must be answered.');
-
-const isDraft = draftValue.startsWith('Yes');
 
 const idSource = `${eventName}-${YEAR}`;
 const eventId = slugify(idSource.startsWith('pcd-') ? idSource : `pcd-${idSource}`);
@@ -260,7 +255,6 @@ const nodeRecord = {
   forum_thread_url: forumThreadUrl,
   city,
   country,
-  draft: isDraft,
   placeholder: false,
 };
 
@@ -293,7 +287,6 @@ const markdownLines = [
   `forum_thread_url: ${toYamlScalar(forumThreadUrl)}`,
   `city: ${toYamlScalar(city)}`,
   `country: ${toYamlScalar(country)}`,
-  `draft: ${isDraft}`,
   'primary_contact:',
   `  name: ${toYamlScalar(primaryContactName)}`,
   `  email: ${toYamlScalar(contactEmail)}`,

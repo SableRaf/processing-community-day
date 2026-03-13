@@ -211,9 +211,6 @@ async function copyLink(node: Node) {
         <div v-if="node.placeholder" class="panel-placeholder">
           ⚠ This is placeholder data. No real event has been confirmed at this location.
         </div>
-        <div v-else-if="node.draft" class="panel-unconfirmed">
-          ℹ This event has not been confirmed yet.<span v-if="node.forum_thread_url"> <a :href="node.forum_thread_url" target="_blank" rel="noopener noreferrer">Follow the forum thread</a> for updates.</span>
-        </div>
 
         <div class="panel-header-row">
           <h2 id="panel-title" class="panel-name">{{ node.event_name }}</h2>
@@ -573,20 +570,6 @@ async function copyLink(node: Node) {
   color: var(--color-callout-placeholder-text);
 }
 
-.panel-unconfirmed {
-  background: var(--color-callout-unconfirmed-bg);
-  border: 1px solid var(--color-callout-unconfirmed-border);
-  border-radius: 4px;
-  padding: 0.625rem 0.875rem;
-  font-size: 0.875rem;
-  line-height: 1.45;
-  margin-bottom: 1rem;
-  color: var(--color-callout-unconfirmed-text);
-}
-
-.panel-unconfirmed a {
-  color: inherit;
-}
 
 .panel-header-row {
   display: flex;

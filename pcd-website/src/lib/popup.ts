@@ -32,9 +32,7 @@ export function makePopupContent(node: Node): string {
 
   const placeholderBanner = node.placeholder
     ? `<div class="popup-placeholder">&#9888; This is placeholder data. No real event has been confirmed at this location.</div>`
-    : node.draft
-      ? `<div class="popup-unconfirmed">&#8505; This event has not been confirmed yet.${node.forum_thread_url ? ` <a href="${escapeHtml(node.forum_thread_url)}" target="_blank" rel="noopener noreferrer">Follow the forum thread</a> for updates.` : ''}</div>`
-      : '';
+    : '';
 
   const organizingEntityHtml = node.organization_name
     ? `<p class="popup-organizing-entity">by ${escapeHtml(node.organization_name)}</p>`

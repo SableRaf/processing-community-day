@@ -105,7 +105,7 @@ body:
     id: event_start_time
     attributes:
       label: Start time
-      description: 24-hour time. Leave blank if the event is an all-day event or if the start time is not yet determined.
+      description: 24-hour time. Leave blank if the start time is not yet determined.
       placeholder: "19:00"
     validations:
       required: false
@@ -113,7 +113,7 @@ body:
     id: event_end_time
     attributes:
       label: End time
-      description: 24-hour time. Leave blank if the event is an all-day event or if the end time is not yet determined.
+      description: 24-hour time. Leave blank if the end time is not yet determined.
       placeholder: "21:30"
     validations:
       required: false
@@ -162,7 +162,7 @@ body:
     id: full_description
     attributes:
       label: Full event description
-      description: This becomes the markdown body for the event details page. Use paragraphs, lists, and links as needed.
+      description: This becomes the markdown body for the event details page.
       placeholder: |-
         Tell visitors what the event is about, who it is for, and what to expect.
     validations:
@@ -195,15 +195,6 @@ body:
       label: Forum discussion URL
       description: Optional Processing forum thread with updates.
       placeholder: https://discourse.processing.org/t/pcd-worldwide-2026/48081
-  - type: dropdown
-    id: draft
-    attributes:
-      label: Is this event still being planned (draft)?
-      options:
-        - "Yes (draft — details not finalized)"
-        - "No (confirmed and ready to publish)"
-    validations:
-      required: true
   - type: input
     id: submitted_by
     attributes:

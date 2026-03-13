@@ -164,15 +164,6 @@ body:
       label: Forum discussion URL
       description: Optional Processing forum thread with updates.
       placeholder: https://discourse.processing.org/t/pcd-worldwide-2026/48081
-  - type: dropdown
-    id: draft
-    attributes:
-      label: Is this event still being planned (draft)?
-      options:
-        - "Yes (draft — details not finalized)"
-        - "No (confirmed and ready to publish)"
-    validations:
-      required: true
   - type: textarea
     id: maintainer_notes
     attributes:

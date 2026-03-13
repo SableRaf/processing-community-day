@@ -38,7 +38,6 @@ export interface Node {
   organization_type?: string;
   primary_contact: { name: string; email: string };
   forum_thread_url?: string;
-  draft: boolean;
   placeholder?: boolean;
 }
 
@@ -64,7 +63,6 @@ interface NodeInput {
   forum_thread_url?: string;
   city?: string;
   country?: string;
-  draft: boolean;
   placeholder?: boolean;
 }
 
@@ -149,7 +147,6 @@ export async function loadNodes(): Promise<Node[]> {
       organization_type: normalizeOptionalText(input.organization_type),
       primary_contact: input.primary_contact,
       forum_thread_url: normalizeOptionalText(input.forum_thread_url),
-      draft: input.draft,
       placeholder: input.placeholder,
     };
   });

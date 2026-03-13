@@ -32,7 +32,6 @@
       "forum_thread_url": "https://discourse.processing.org/t/pcd-worldwide-2026/48081",
       "city": "Berlin",
       "country": "Germany",
-      "draft": true,
       "placeholder": true
     },
     {
@@ -61,7 +60,6 @@
       "forum_thread_url": "",
       "city": "Tokyo",
       "country": "Japan",
-      "draft": true,
       "placeholder": true
     },
     {
@@ -91,7 +89,6 @@
       "forum_thread_url": "",
       "city": "New York",
       "country": "United States",
-      "draft": true,
       "placeholder": true
     },
     {
@@ -120,7 +117,6 @@
       "forum_thread_url": "",
       "city": "São Paulo",
       "country": "Brazil",
-      "draft": true,
       "placeholder": true
     },
     {
@@ -150,7 +146,6 @@
       "forum_thread_url": "",
       "city": "London",
       "country": "United Kingdom",
-      "draft": true,
       "placeholder": true
     },
     {
@@ -179,7 +174,6 @@
       "forum_thread_url": "",
       "city": "Barcelona",
       "country": "Spain",
-      "draft": true,
       "placeholder": true
     },
     {
@@ -208,7 +202,6 @@
       "forum_thread_url": "",
       "city": "Nairobi",
       "country": "Kenya",
-      "draft": true,
       "placeholder": true
     },
     {
@@ -237,7 +230,6 @@
       "forum_thread_url": "",
       "city": "Melbourne",
       "country": "Australia",
-      "draft": true,
       "placeholder": true
     },
     {
@@ -266,7 +258,6 @@
       "forum_thread_url": "",
       "city": "Amsterdam",
       "country": "Netherlands",
-      "draft": true,
       "placeholder": true
     },
     {
@@ -295,7 +286,6 @@
       "forum_thread_url": "",
       "city": "Paris",
       "country": "France",
-      "draft": true,
       "placeholder": true
     },
     {
@@ -324,7 +314,6 @@
       "forum_thread_url": "",
       "city": "Sydney",
       "country": "Australia",
-      "draft": true,
       "placeholder": true
     },
     {
@@ -353,7 +342,6 @@
       "forum_thread_url": "",
       "city": "",
       "country": "",
-      "draft": true,
       "placeholder": true
     },
     {
@@ -382,7 +370,6 @@
       "forum_thread_url": "",
       "city": "Seoul",
       "country": "South Korea",
-      "draft": true,
       "placeholder": true
     }
   ]
