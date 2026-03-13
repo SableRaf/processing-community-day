@@ -66,7 +66,7 @@ function escapeIcs(str: string): string {
     .replace(/\n/g, '\\n');
 }
 
-export function calendarLinks(node: Node): { googleCalUrl: string; icsContent: string } {
+export function calendarLinks(node: Node): { googleCalUrl: string; outlookCalUrl: string; icsContent: string } {
   const startDate = toICalDate(node.event_date ?? '');
   const endDate = node.event_end_date ? toICalDate(node.event_end_date) : nextDay(node.event_date ?? '');
   const location = node.location_tbd
@@ -82,6 +82,16 @@ export function calendarLinks(node: Node): { googleCalUrl: string; icsContent: s
     details: node.details_text || node.event_short_description,
   });
   const googleCalUrl = `https://calendar.google.com/calendar/render?${params.toString()}`;
+
+  // Outlook Web Calendar URL
+  const outlookParams = new URLSearchParams({
+    subject: node.event_name,
+    startdt: node.event_date ?? '',
+    enddt: node.event_end_date ?? node.event_date ?? '',
+    body: node.details_text || node.event_short_description,
+    location,
+  });
+  const outlookCalUrl = `https://outlook.live.com/calendar/0/action/compose?${outlookParams.toString()}`;
 
   // ICS content
   const now = new Date();
@@ -109,7 +119,7 @@ export function calendarLinks(node: Node): { googleCalUrl: string; icsContent: s
     'END:VCALENDAR',
   ].join('\r\n');
 
-  return { googleCalUrl, icsContent };
+  return { googleCalUrl, outlookCalUrl, icsContent };
 }
 
 export function formatShortDate(dateStr: string): string {

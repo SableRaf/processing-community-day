@@ -336,6 +336,13 @@ async function copyLink(node: Node) {
                   role="menuitem"
                   @click="calDropdownOpen = false"
                 >Google Calendar</a>
+                <a
+                  :href="calendarLinks(node).outlookCalUrl"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  role="menuitem"
+                  @click="calDropdownOpen = false"
+                >Outlook</a>
                 <button role="menuitem" @click="downloadIcs(node); calDropdownOpen = false">
                   Download .ics
                 </button>
