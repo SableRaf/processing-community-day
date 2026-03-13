@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   create-event-pr:
-    if: contains(github.event.issue.body, '<!-- new-event-template -->')
+    if: contains(github.event.issue.labels.*.name, 'new event')
     runs-on: ubuntu-latest
     timeout-minutes: 10
     env:
@@ -31,8 +31,8 @@ jobs:
             const repo = context.repo.repo;
             const issue_number = context.issue.number;
             const desiredLabels = [
-              { name: 'Needs Review', color: 'fbca04', description: 'Submission is ready for maintainer review' },
-              { name: 'New Event', color: '0e8a16', description: 'New event submission intake' },
+              { name: 'needs review', color: 'fbca04', description: 'Submission is ready for maintainer review' },
+              { name: 'new event', color: '0e8a16', description: 'New event submission intake' },
             ];
 
             for (const label of desiredLabels) {
@@ -122,8 +122,8 @@ jobs:
           title: ${{ steps.generate.outputs.pr_title }}
           body-path: ${{ steps.generate.outputs.pr_body_path }}
           labels: |
-            Needs Review
-            New Event
+            needs review
+            new event
       - name: Request team review
         if: steps.generate.outputs.valid == 'true' && steps.create_pr.outputs.pull-request-number != '' && env.PCD_TEAM_REVIEWERS != ''
         uses: actions/github-script@v8

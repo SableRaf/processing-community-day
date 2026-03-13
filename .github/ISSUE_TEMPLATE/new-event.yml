@@ -2,8 +2,8 @@ name: 📍 New Event
 description: Submit a new PCD event to the map.
 title: "New Event: "
 labels:
-  - New Event
-  - Needs Review
+  - new event
+  - needs review
 body:
   - type: markdown
     attributes:
