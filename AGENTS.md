@@ -69,6 +69,7 @@ Event data lives in `src/content/events/<event-id>/`:
 - **Vue scoped styles cannot target ancestor-based dark mode selectors** — put those overrides in `global.css`.
 
 ## Accessibility
+
 Must follow standard accessibility best practices (semantic HTML, ARIA attributes, keyboard navigation, focus management) for all interactive components (map, panels, buttons, etc.). WCAG 2.1 AA compliance is the goal.
 
 ## Event Submission Workflow
