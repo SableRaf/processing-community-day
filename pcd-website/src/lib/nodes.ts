@@ -25,7 +25,7 @@ export interface Node {
   time_tbd?: boolean;
   online_event?: boolean;
   event_url?: string;
-  event_website?: string;
+  event_page_url?: string;
   event_short_description: string;
   details_markdown: string;
   details_text: string;
@@ -56,7 +56,7 @@ interface NodeInput {
   event_end_time?: string;
   event_short_description: string;
   event_activities: string[];
-  event_website?: string;
+  event_page_url?: string;
   forum_thread_url?: string;
   city?: string;
   country?: string;
@@ -139,7 +139,7 @@ export async function loadNodes(): Promise<Node[]> {
       time_tbd: !!event_date && !event_start_time,
       online_event,
       event_url: normalizeOptionalText(input.event_url),
-      event_website: normalizeOptionalText(input.event_website),
+      event_page_url: normalizeOptionalText(input.event_page_url),
       event_short_description: input.event_short_description,
       details_markdown,
       details_text,

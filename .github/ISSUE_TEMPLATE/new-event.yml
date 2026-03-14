@@ -128,10 +128,11 @@ body:
       description: 24-hour time. Leave blank if the end time is not yet determined.
       placeholder: "21:30"
   - type: input
-    id: event_website
+    id: event_page_url
     attributes:
-      label: Event website
-      placeholder: https://example.org/pcd
+      label: Event page URL
+      description: This could be a Meetup or Eventbrite page, a forum thread with event details, or any public URL.
+      placeholder: https://myevents.com/pcd-my-city-123456789
   - type: textarea
     id: organizers
     attributes:

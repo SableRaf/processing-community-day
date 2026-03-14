@@ -114,7 +114,7 @@ export function calendarLinks(node: Node): { googleCalUrl: string; outlookCalUrl
     `SUMMARY:${escapeIcs(node.event_name)}`,
     `LOCATION:${icsLocation}`,
     `DESCRIPTION:${escapeIcs(node.details_text || node.event_short_description)}`,
-    `URL:${node.event_website ?? ''}`,
+    `URL:${node.event_page_url ?? ''}`,
     'END:VEVENT',
     'END:VCALENDAR',
   ].join('\r\n');

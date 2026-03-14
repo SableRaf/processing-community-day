@@ -24,7 +24,7 @@
   "event_end_time": "22:00",
   "event_short_description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.",
   "event_activities": [],
-  "event_website": "https://example.es/pcd",
+  "event_page_url": "https://example.es/pcd",
   "forum_thread_url": "",
   "city": "Barcelona",
   "country": "Spain",

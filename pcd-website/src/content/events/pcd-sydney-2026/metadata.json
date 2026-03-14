@@ -24,7 +24,7 @@
   "event_end_time": "",
   "event_short_description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.",
   "event_activities": [],
-  "event_website": "https://example.com.au/pcd-sydney",
+  "event_page_url": "https://example.com.au/pcd-sydney",
   "forum_thread_url": "",
   "city": "Sydney",
   "country": "Australia",

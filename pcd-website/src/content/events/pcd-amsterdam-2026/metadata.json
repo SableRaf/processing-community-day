@@ -24,7 +24,7 @@
   "event_end_time": "22:00",
   "event_short_description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
   "event_activities": [],
-  "event_website": "https://example.nl/pcd",
+  "event_page_url": "https://example.nl/pcd",
   "forum_thread_url": "",
   "city": "Amsterdam",
   "country": "Netherlands",

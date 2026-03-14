@@ -38,7 +38,7 @@
   "event_end_time": "22:00",
   "event_short_description": "This is a short description of the Berlin event. It should give a brief overview of what to expect at the event and entice people to click through to learn more.",
   "event_activities": [],
-  "event_website": "https://creativecode.berlin",
+  "event_page_url": "https://creativecode.berlin",
   "forum_thread_url": "https://discourse.processing.org/t/pcd-worldwide-2026/48081",
   "city": "Berlin",
   "country": "Germany",

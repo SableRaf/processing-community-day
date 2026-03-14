@@ -196,14 +196,14 @@ async function copyLink(node: Node) {
       aria-label="Close event details"
       @click="emit('close')"
     >
-      <Icon icon="bi:chevron-right" width="20" height="20" aria-hidden="true" />
+      <Icon icon="bi:chevron-right" width="1em" height="1em" aria-hidden="true" />
     </button>
 
     <div class="panel-scroll">
     <template v-if="node">
       <div class="panel-mobile-back">
         <button class="panel-back-btn" @click="emit('close')">
-          <Icon icon="bi:chevron-left" width="16" height="16" aria-hidden="true" />
+          <Icon icon="bi:chevron-left" width="1em" height="1em" aria-hidden="true" />
           Back to map
         </button>
       </div>
@@ -221,12 +221,12 @@ async function copyLink(node: Node) {
               :title="linkCopied ? 'Link copied!' : 'Share event'"
               @click.stop="shareDropdownOpen = !shareDropdownOpen"
             >
-              <Icon v-if="!linkCopied" icon="bi:box-arrow-up" width="20" height="20" aria-hidden="true" />
-              <Icon v-else icon="bi:check-lg" width="20" height="20" aria-hidden="true" />
+              <Icon v-if="!linkCopied" icon="bi:box-arrow-up" width="1.3em" height="1.3em" aria-hidden="true" />
+              <Icon v-else icon="bi:check-lg" width="1em" height="1em" aria-hidden="true" />
             </button>
             <div v-show="shareDropdownOpen" class="quick-action-menu share-menu" role="menu">
               <button role="menuitem" class="copy-link-btn" @click="copyLink(node)">
-                <Icon icon="bi:copy" width="14" height="14" aria-hidden="true" />
+                <Icon icon="bi:copy" width="1em" height="1em" aria-hidden="true" />
                 Copy link
               </button>
               <hr class="share-menu-divider" />
@@ -266,11 +266,20 @@ async function copyLink(node: Node) {
           </p>
         </div>
 
+        <!-- Event website CTA -->
+        <a
+          v-if="node.event_page_url"
+          :href="node.event_page_url"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="panel-event-website-btn"
+        >Visit event page <Icon icon="bi:box-arrow-up-right" width="1em" height="1em" aria-hidden="true" style="margin-left: 0.5rem; vertical-align: -0.1em;" /></a>
+
         <!-- Info Card -->
         <div class="panel-info-card">
           <!-- Row 1: Date/time -->
           <div class="info-card-row">
-            <Icon icon="bi:calendar-event" width="18" height="18" aria-hidden="true" class="info-card-icon" />
+            <Icon icon="bi:calendar-event" width="1em" height="1em" aria-hidden="true" class="info-card-icon" />
             <div>
               <span v-if="node.date_tbd" class="info-card-date info-card-tbd">Date TBD</span>
               <span v-else class="info-card-date">{{ formatDateRange(node.event_date ?? '', node.event_end_date) }}</span>
@@ -286,7 +295,7 @@ async function copyLink(node: Node) {
           <!-- Row 2: Venue + address (OSM link) or Online platform -->
           <div class="info-card-row info-card-venue-row">
             <div class="info-card-row-leading">
-              <Icon icon="bi:link-45deg" width="18" height="18" aria-hidden="true" class="info-card-icon" />
+              <Icon icon="bi:link-45deg" width="1em" height="1em" aria-hidden="true" class="info-card-icon" />
               <div class="info-card-venue">
                 <span class="info-card-venue-name">{{ node.online_event ? onlinePlatformName(node.event_url) : node.location_tbd ? 'Location TBD' : (node.location_name || node.address) }}</span>
                 <a
@@ -308,7 +317,7 @@ async function copyLink(node: Node) {
               </div>
             </div>
             <p v-if="node.online_event" class="panel-online-badge info-card-online-badge">
-              <Icon icon="bi:wifi" width="13" height="13" aria-hidden="true" />
+              <Icon icon="bi:wifi" width="1em" height="1em" aria-hidden="true" />
               Online Event
             </p>
           </div>
@@ -316,7 +325,7 @@ async function copyLink(node: Node) {
 
           <!-- Row 3: Add to calendar (hidden when date is TBD) -->
           <div v-if="!node.date_tbd" class="info-card-row info-card-calendar-row">
-            <Icon icon="bi:calendar-plus" width="18" height="18" aria-hidden="true" class="info-card-icon" />
+            <Icon icon="bi:calendar-plus" width="1em" height="1em" aria-hidden="true" class="info-card-icon" />
             <div class="info-card-cal-trigger-wrap">
               <button
                 class="info-card-cal-trigger"
@@ -375,7 +384,7 @@ async function copyLink(node: Node) {
         </div>
 
         <!-- Links section -->
-        <div v-if="node.event_website || node.primary_contact.email" class="panel-links">
+        <div v-if="node.event_page_url || node.primary_contact.email" class="panel-links">
           <hr class="panel-separator" aria-hidden="true" />
           <a
             v-if="!node.online_event && !node.location_tbd"
@@ -385,7 +394,7 @@ async function copyLink(node: Node) {
             class="panel-link-row"
             title="Get directions on OpenStreetMap"
           >
-            <Icon icon="bi:map" width="16" height="16" aria-hidden="true" class="panel-link-icon" />
+            <Icon icon="bi:map" width="1em" height="1em" aria-hidden="true" class="panel-link-icon" />
             <span>Get directions</span>
           </a>
 <a
@@ -394,19 +403,19 @@ async function copyLink(node: Node) {
             class="panel-link-row"
             :title="`Email ${node.primary_contact.email}`"
           >
-            <Icon icon="bi:envelope" width="16" height="16" aria-hidden="true" class="panel-link-icon" />
+            <Icon icon="bi:envelope" width="1em" height="1em" aria-hidden="true" class="panel-link-icon" />
             <span>{{ node.primary_contact.email }}</span>
           </a>
           <a
-            v-if="node.event_website"
-            :href="node.event_website"
+            v-if="node.event_page_url"
+            :href="node.event_page_url"
             target="_blank"
             rel="noopener noreferrer"
             class="panel-link-row"
-            :title="`Visit ${node.event_website}`"
+            :title="`Visit ${node.event_page_url}`"
           >
-            <Icon icon="bi:globe" width="16" height="16" aria-hidden="true" class="panel-link-icon" />
-            <span>{{ node.event_website }}</span>
+            <Icon icon="bi:globe" width="1em" height="1em" aria-hidden="true" class="panel-link-icon" />
+            <span>{{ node.event_page_url }}</span>
           </a>
         </div>
       </div>
@@ -675,6 +684,26 @@ async function copyLink(node: Node) {
 
 .panel-hosts-more:hover {
   color: var(--color-link-hover);
+}
+
+/* ─── Event website CTA ─── */
+.panel-event-website-btn {
+  display: block;
+  width: 100%;
+  margin-bottom: 1rem;
+  padding: 0.625rem 1rem;
+  background: var(--color-link);
+  color: #fff;
+  text-align: center;
+  text-decoration: none;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+.panel-event-website-btn:hover {
+  background: var(--color-link-hover);
 }
 
 /* ─── Info Card ─── */

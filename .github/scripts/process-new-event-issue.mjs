@@ -255,7 +255,7 @@ const nodeRecord = {
   event_end_time: endTime,
   event_short_description: shortDescription,
   event_activities: activities,
-  event_website: eventWebsite,
+  event_page_url: eventWebsite,
   forum_thread_url: forumThreadUrl,
   city,
   country,

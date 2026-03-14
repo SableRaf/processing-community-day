@@ -24,7 +24,7 @@
   "event_end_time": "20:00",
   "event_short_description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
   "event_activities": [],
-  "event_website": "https://example.co.ke/pcd",
+  "event_page_url": "https://example.co.ke/pcd",
   "forum_thread_url": "",
   "city": "Nairobi",
   "country": "Kenya",
