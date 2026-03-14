@@ -4,6 +4,7 @@ import type { Node } from '../lib/nodes';
 import { makePopupContent } from '../lib/popup';
 import NodePanel from './NodePanel.vue';
 import NodeList from './NodeList.vue';
+import { SUBMIT_EVENT_URL } from '../config';
 
 const props = defineProps<{
   nodes: Node[];
@@ -273,7 +274,7 @@ onUnmounted(() => {
   <div id="map" tabindex="-1" aria-label="World map of PCD 2026 nodes"></div>
   <a
     id="host-btn"
-    href="https://github.com/SableRaf/pcd-website-mvp-2/issues/new?template=new-event.yml"
+    :href="SUBMIT_EVENT_URL"
   >Submit your event</a>
   <button
     id="burger-btn"
