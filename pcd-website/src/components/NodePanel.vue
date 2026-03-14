@@ -458,7 +458,7 @@ async function copyLink(node: Node) {
   justify-content: center;
   width: 36px;
   height: 96px;
-  background: var(--color-bg-panel);
+  background: var(--color-bg-popup);
   border: none;
   cursor: pointer;
   color: var(--color-text-muted);
@@ -506,7 +506,7 @@ async function copyLink(node: Node) {
 }
 
 .panel-tab:hover {
-  background: var(--color-border);
+  background: var(--color-bg-popup-hover);
   color: var(--color-text);
 }
 
