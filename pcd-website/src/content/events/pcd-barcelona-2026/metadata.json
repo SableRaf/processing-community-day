@@ -24,8 +24,8 @@
   "event_end_time": "22:00",
   "event_short_description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.",
   "event_activities": [],
-  "event_page_url": "https://example.es/pcd",
-  "forum_thread_url": "",
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-barcelona-2026/placeholder",
   "city": "Barcelona",
   "country": "Spain",
   "placeholder": true

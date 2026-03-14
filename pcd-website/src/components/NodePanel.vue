@@ -290,6 +290,14 @@ function getReportIssueHref(node: Node): string {
           class="panel-event-website-btn"
           aria-label="Visit event page (opens in new tab)"
         >Visit event page <Icon icon="bi:box-arrow-up-right" width="1em" height="1em" aria-hidden="true" style="margin-left: 0.5rem; vertical-align: -0.1em;" /></a>
+        <a
+          v-else-if="node.forum_thread_url"
+          :href="node.forum_thread_url"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="panel-event-website-btn"
+          aria-label="Visit the forum thread (opens in new tab)"
+        >Visit the forum thread <Icon icon="bi:box-arrow-up-right" width="1em" height="1em" aria-hidden="true" style="margin-left: 0.5rem; vertical-align: -0.1em;" /></a>
 
         <!-- Info Card -->
         <div class="panel-info-card">
