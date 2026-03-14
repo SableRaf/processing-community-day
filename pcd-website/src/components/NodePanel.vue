@@ -191,9 +191,10 @@ function getReportIssueHref(node: Node): string {
   <aside
     ref="panelRef"
     role="dialog"
-    aria-modal="true"
+    :aria-modal="node !== null"
     aria-labelledby="panel-title"
     tabindex="-1"
+    :inert="node === null"
     :class="['node-panel', { 'node-panel--open': node !== null }]"
   >
     <button
@@ -226,6 +227,8 @@ function getReportIssueHref(node: Node): string {
               class="quick-action-btn"
               :aria-label="linkCopied ? 'Link copied!' : 'Share event'"
               :title="linkCopied ? 'Link copied!' : 'Share event'"
+              aria-haspopup="menu"
+              :aria-expanded="shareDropdownOpen"
               @click.stop="shareDropdownOpen = !shareDropdownOpen"
             >
               <Icon v-if="!linkCopied" icon="bi:box-arrow-up" width="1.3em" height="1.3em" aria-hidden="true" />
@@ -240,21 +243,25 @@ function getReportIssueHref(node: Node): string {
               <a
                 :href="`https://mastodon.social/share?text=${encodeURIComponent('Join me at ' + node.event_name + ' ' + getShareUrl(node))}`"
                 target="_blank" rel="noopener noreferrer" role="menuitem"
+                aria-label="Share on Mastodon (opens in new tab)"
                 @click="shareDropdownOpen = false"
               >Share on Mastodon</a>
               <a
                 :href="`https://bsky.app/intent/compose?text=${encodeURIComponent('Join me at ' + node.event_name + ' ' + getShareUrl(node))}`"
                 target="_blank" rel="noopener noreferrer" role="menuitem"
+                aria-label="Share on Bluesky (opens in new tab)"
                 @click="shareDropdownOpen = false"
               >Share on Bluesky</a>
               <a
                 :href="`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(getShareUrl(node))}`"
                 target="_blank" rel="noopener noreferrer" role="menuitem"
+                aria-label="Share on Facebook (opens in new tab)"
                 @click="shareDropdownOpen = false"
               >Share on Facebook</a>
               <a
                 :href="`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(getShareUrl(node))}`"
                 target="_blank" rel="noopener noreferrer" role="menuitem"
+                aria-label="Share on LinkedIn (opens in new tab)"
                 @click="shareDropdownOpen = false"
               >Share on LinkedIn</a>
             </div>
@@ -267,7 +274,7 @@ function getReportIssueHref(node: Node): string {
           <p v-if="node.organizers.some(o => o.name)" class="panel-hosts">
             <span class="panel-label">Hosts:</span>
             <span v-if="!hostsExpanded" class="panel-hosts-line">
-              <span class="panel-hosts-names">{{ formatOrganizers(node.organizers, false) }}</span><template v-if="hasMoreHosts(node.organizers)"><span class="panel-hosts-more-wrap">…&nbsp;<button class="panel-hosts-more" @click="hostsExpanded = true">more</button></span></template>
+              <span class="panel-hosts-names">{{ formatOrganizers(node.organizers, false) }}</span><template v-if="hasMoreHosts(node.organizers)"><span class="panel-hosts-more-wrap">…&nbsp;<button class="panel-hosts-more" aria-label="Show all hosts" @click="hostsExpanded = true">more</button></span></template>
             </span>
             <span v-else>{{ formatOrganizers(node.organizers, true) }}</span>
           </p>
@@ -280,6 +287,7 @@ function getReportIssueHref(node: Node): string {
           target="_blank"
           rel="noopener noreferrer"
           class="panel-event-website-btn"
+          aria-label="Visit event page (opens in new tab)"
         >Visit event page <Icon icon="bi:box-arrow-up-right" width="1em" height="1em" aria-hidden="true" style="margin-left: 0.5rem; vertical-align: -0.1em;" /></a>
 
         <!-- Info Card -->
@@ -336,7 +344,9 @@ function getReportIssueHref(node: Node): string {
             <div class="info-card-cal-trigger-wrap">
               <button
                 class="info-card-cal-trigger"
-                title="Add to calendar"
+                aria-label="Add to calendar"
+                aria-haspopup="menu"
+                :aria-expanded="calDropdownOpen"
                 @click.stop="calDropdownOpen = !calDropdownOpen"
               >
                 Add to calendar
@@ -347,6 +357,7 @@ function getReportIssueHref(node: Node): string {
                   target="_blank"
                   rel="noopener noreferrer"
                   role="menuitem"
+                  aria-label="Google Calendar (opens in new tab)"
                   @click="calDropdownOpen = false"
                 >Google Calendar</a>
                 <a
@@ -354,6 +365,7 @@ function getReportIssueHref(node: Node): string {
                   target="_blank"
                   rel="noopener noreferrer"
                   role="menuitem"
+                  aria-label="Outlook (opens in new tab)"
                   @click="calDropdownOpen = false"
                 >Outlook</a>
                 <button role="menuitem" @click="downloadIcs(node); calDropdownOpen = false">
@@ -384,6 +396,7 @@ function getReportIssueHref(node: Node): string {
           <button
             v-if="getDescPreview(node).hasMore"
             class="panel-read-more"
+            :aria-expanded="descExpanded"
             @click="descExpanded = !descExpanded"
           >
             {{ descExpanded ? 'Show less' : 'Read more…' }}

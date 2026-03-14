@@ -81,10 +81,11 @@ function handleKeydown(e: KeyboardEvent) {
   <div
     ref="containerRef"
     role="dialog"
-    aria-modal="true"
+    :aria-modal="open"
     aria-label="Node list"
     tabindex="-1"
     v-show="open"
+    :inert="!open"
     class="node-list"
     @keydown="handleKeydown"
   >
@@ -103,6 +104,7 @@ function handleKeydown(e: KeyboardEvent) {
       <li v-for="node in sortedNodes" :key="node.id">
         <button
           class="node-item"
+          :aria-label="`${node.event_name}, ${node.online_event ? 'Online event' : `${node.city}, ${node.country}`}, ${node.event_date ? formatDateRange(node.event_date, node.event_end_date) : 'Date TBD'}`"
           @click="emit('select', node)"
         >
           <span class="node-name">{{ node.event_name }}</span>
@@ -204,7 +206,7 @@ function handleKeydown(e: KeyboardEvent) {
 }
 
 .node-item:hover {
-  background: #f7f7f7;
+  background: var(--color-bg-popup-hover);
 }
 
 .node-name {

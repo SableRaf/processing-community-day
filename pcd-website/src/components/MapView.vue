@@ -16,6 +16,7 @@ const listOpen = ref(false);
 let mapInstance: import('leaflet').Map | null = null;
 let leafletRef: typeof import('leaflet') | null = null;
 const markerMap = new Map<string, import('leaflet').Marker>();
+let openPopupNodeId: string | null = null;
 
 // --- Tile style config ---
 interface TileLayerConfig { url: string; options: Record<string, unknown>; }
@@ -135,6 +136,17 @@ function handleKeydown(e: KeyboardEvent) {
       closePanel();
     } else if (listOpen.value) {
       closeList();
+    } else if (openPopupNodeId && mapInstance) {
+      e.stopPropagation(); // prevent Leaflet from also handling this Escape
+      const marker = markerMap.get(openPopupNodeId);
+      mapInstance.closePopup();
+      marker?.getElement()?.focus();
+    } else {
+      const mapEl = document.getElementById('map');
+      if (mapEl && (mapEl === document.activeElement || mapEl.contains(document.activeElement))) {
+        e.preventDefault();
+        document.getElementById('burger-btn')?.focus();
+      }
     }
   } else if (e.key === 'M' || e.key === 'm') {
     if (!isTextInput) {
@@ -164,6 +176,17 @@ onMounted(async () => {
   leafletRef = L;
 
   L.control.zoom({ position: 'bottomleft' }).addTo(map);
+
+  // Remove Leaflet-injected elements from tab order — keyboard navigation
+  // is handled by our own controls (burger, theme toggle, etc.)
+  requestAnimationFrame(() => {
+    document.querySelectorAll('.leaflet-control a, .leaflet-control button').forEach(el => {
+      el.setAttribute('tabindex', '-1');
+    });
+    // Leaflet sets tabindex="0" on the map container — force it back to -1
+    // so tab order flows through our own controls instead
+    map.getContainer().setAttribute('tabindex', '-1');
+  });
 
   // Try to center on visitor's location, fall back to world view
   if (navigator.geolocation) {
@@ -236,6 +259,21 @@ onMounted(async () => {
 
   map.addLayer(clusterGroup);
 
+  // Move focus into popup content when it opens
+  map.on('popupopen', (e) => {
+    const container = e.popup.getElement();
+    if (!container) return;
+    // Track which node's popup is open
+    const btn = container.querySelector<HTMLElement>('.read-more');
+    openPopupNodeId = btn?.getAttribute('data-node-id') ?? null;
+    const focusTarget = container.querySelector<HTMLElement>('button, a, [tabindex]');
+    focusTarget?.focus();
+  });
+
+  map.on('popupclose', () => {
+    openPopupNodeId = null;
+  });
+
   // Delegated click for .read-more buttons in popups
   const mapEl = document.getElementById('map');
   if (mapEl) {
@@ -271,11 +309,6 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div id="map" tabindex="-1" aria-label="World map of PCD 2026 nodes"></div>
-  <a
-    id="host-btn"
-    :href="SUBMIT_EVENT_URL"
-  >Submit your event</a>
   <button
     id="burger-btn"
     :aria-expanded="listOpen"
@@ -284,6 +317,10 @@ onUnmounted(() => {
   >
     ☰
   </button>
+  <a
+    id="host-btn"
+    :href="SUBMIT_EVENT_URL"
+  >Submit your event</a>
   <NodePanel :node="selectedNode" @close="closePanel" />
   <button
     id="theme-toggle"
@@ -305,6 +342,7 @@ onUnmounted(() => {
     @close="closeList"
     @select="onNodeSelect"
   />
+  <div id="map" tabindex="-1" aria-label="World map of PCD 2026 nodes"></div>
 </template>
 
 <style scoped>

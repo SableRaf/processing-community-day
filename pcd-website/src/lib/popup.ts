@@ -91,7 +91,7 @@ export function makePopupContent(node: Node): string {
       </div>
       <div class="popup-body">
         ${descriptionHtml}
-        <button class="read-more" data-node-id="${escapeHtml(node.id)}">See details &rarr;</button>
+        <button class="read-more" data-node-id="${escapeHtml(node.id)}" aria-label="See details for ${escapeHtml(node.event_name)}">See details &rarr;</button>
       </div>
     </div>
   `.trim();
