@@ -1,6 +1,8 @@
 
 > [!NOTE] 
-> This project is in early development. The map and event data are not yet complete, but we welcome contributions from the community! To add an event, please open a GitHub Issue using the [**New Event**](https://github.com/processing/processing-community-day/issues/new?template=new-event.yml) template.
+> This project is in early development. The map and event data are not yet complete, but we welcome contributions from the community! 
+
+[Submit your event](https://github.com/processing/processing-community-day/issues/new?template=new-event.yml) to the map!
 
 # Processing Community Day Website
 
