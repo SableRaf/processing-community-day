@@ -60,6 +60,21 @@ Event data lives in `src/content/events/<event-id>/`:
 | `src/lib/popup.ts` | Leaflet popup HTML generation (`makePopupContent()`) |
 | `src/styles/global.css` | Design tokens (CSS custom properties), IBM Plex Sans, Leaflet overrides |
 | `src/content.config.ts` | Astro content collection Zod schema for events |
+| `src/config.ts` | Global static constants (contact email, etc.) |
+
+## Global Configuration (`src/config.ts`)
+
+Use `src/config.ts` for static, non-secret values that are referenced across multiple files or are likely to change. Import from it rather than hardcoding inline.
+
+**Store here:**
+- Contact emails (e.g. `PCD_EMAIL`)
+- Stable URLs referenced in UI (e.g. a feedback form link)
+- Project-wide constants (e.g. site name, org name)
+
+**Do not store here:**
+- Environment-specific or secret values — use `.env` with `import.meta.env` for those
+- Anything already defined in `astro.config.mjs` (e.g. base path)
+- Component-local constants that aren't shared
 
 ## UI / Styling Rules
 

@@ -4,6 +4,7 @@ import { createFocusTrap, type FocusTrap } from 'focus-trap';
 import { Icon } from '@iconify/vue';
 import type { Node } from '../lib/nodes';
 import { formatDateRange, formatTimeRange, calendarLinks, onlinePlatformName } from '../lib/format';
+import { PCD_EMAIL } from '../config';
 const props = defineProps<{
   node: Node | null;
 }>();
@@ -182,7 +183,7 @@ async function copyLink(node: Node) {
 function getReportIssueHref(node: Node): string {
   const subject = `[Report] Issue with "${node.event_name}" page`;
   const body = `Hi PCD team,\n\nI would like to report an issue with the following page:\n\n- Name: "${node.event_name}"\n- Link: ${getShareUrl(node)}\n\n[Please describe the issue here].\n\nThank you!`;
-  return `mailto:day@processingfoundation.org?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  return `mailto:${PCD_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
 </script>
 
