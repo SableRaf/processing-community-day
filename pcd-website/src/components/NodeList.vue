@@ -172,7 +172,9 @@ function handleKeydown(e: KeyboardEvent) {
 }
 
 .list-close:hover {
-  background: #f5f5f5;
+  background: var(--color-primary);
+  color: #fff;
+  border-color: var(--color-primary);
 }
 
 .list-items {
