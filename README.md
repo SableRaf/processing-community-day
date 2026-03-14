@@ -4,6 +4,10 @@ A global map of [Processing Community Day](https://discourse.processing.org/t/pc
 
 This will grow into a full-featured PCD site with event details, organizer kit, guidelines, resources, and more, but for now it's a simple map-based directory of events.
 
+## Adding an event
+
+Open a GitHub Issue using the **New Event** template. The intake workflow validates the submission and opens a pull request with the generated event files. The PR must be reviewed and merged by a maintainer before the event appears on the map.
+
 ## Tech
 
 - **[Astro 5](https://astro.build)** — static site generation; single entry point (`pcd-website/src/pages/index.astro`)
@@ -22,7 +26,3 @@ npm run dev      # localhost:4321
 npm run build    # production build → dist/
 npm run preview  # preview production build
 ```
-
-## Adding an event
-
-Open a GitHub Issue using the **New Event** template. The intake workflow validates the submission and opens a pull request with the generated event files.
