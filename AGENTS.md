@@ -13,9 +13,10 @@ The Astro project root is `pcd-website/`. All build commands run from there.
 All from the `pcd-website/` directory:
 
 ```sh
-astro dev      # Dev server at localhost:4321
-astro build    # Production build to dist/
-astro preview  # Preview built site
+npm install
+npm run dev      # localhost:4321
+npm run build    # production build → dist/
+npm run preview  # preview production build
 ```
 
 There are currently no test or lint scripts configured.
