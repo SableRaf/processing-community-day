@@ -4,19 +4,14 @@ import { createFocusTrap, type FocusTrap } from 'focus-trap';
 import type { Node } from '../lib/nodes';
 import { formatDateRange } from '../lib/format';
 
-interface StyleOption { id: string; label: string; }
-
 const props = defineProps<{
   nodes: Node[];
   open: boolean;
-  currentStyle: string;
-  availableStyles: StyleOption[];
 }>();
 
 const emit = defineEmits<{
   close: [];
   select: [node: Node];
-  'style-change': [styleId: string];
 }>();
 
 const containerRef = ref<HTMLElement | null>(null);
@@ -102,20 +97,6 @@ function handleKeydown(e: KeyboardEvent) {
       >
         ×
       </button>
-    </div>
-
-    <div class="style-selector">
-      <p class="style-label">Map style</p>
-      <div class="style-buttons" role="group" aria-label="Map style">
-        <button
-          v-for="style in availableStyles"
-          :key="style.id"
-          class="style-btn"
-          :class="{ 'style-btn--active': style.id === currentStyle }"
-          :aria-pressed="style.id === currentStyle"
-          @click="emit('style-change', style.id)"
-        >{{ style.label }}</button>
-      </div>
     </div>
 
     <ul class="list-items">
@@ -240,49 +221,5 @@ function handleKeydown(e: KeyboardEvent) {
   color: var(--color-text-muted);
 }
 
-.style-selector {
-  padding: 0.75rem 1rem 1.25rem;
-  border-bottom: 1px solid var(--color-border);
-}
 
-.style-label {
-  margin: 0 0 0.5rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--color-text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
-
-.style-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.375rem;
-}
-
-.style-btn {
-  padding: 0.3125rem 0.625rem;
-  font-size: 0.8125rem;
-  font-family: var(--font-family);
-  background: transparent;
-  border: 1px solid var(--color-border);
-  border-radius: 4px;
-  cursor: pointer;
-  color: var(--color-text);
-  transition: background-color 0.1s ease, border-color 0.1s ease;
-}
-
-.style-btn:hover {
-  background: #f5f5f5;
-}
-
-.style-btn--active {
-  background: #5601A4;
-  border-color: #5601A4;
-  color: #fff;
-}
-
-.style-btn--active:hover {
-  background: #6a01c8;
-}
 </style>

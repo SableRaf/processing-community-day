@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import type { Node } from '../lib/nodes';
 import { makePopupContent } from '../lib/popup';
 import NodePanel from './NodePanel.vue';
@@ -21,7 +21,6 @@ interface TileLayerConfig { url: string; options: Record<string, unknown>; }
 interface MapStyle { id: string; label: string; layers: TileLayerConfig[]; }
 
 const CARTO_ATTR = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>';
-const ESRI_ATTR = 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community';
 
 const MAP_STYLES: MapStyle[] = [
   {
@@ -52,21 +51,12 @@ const MAP_STYLES: MapStyle[] = [
       },
     ],
   },
-  {
-    id: 'fun',
-    label: 'Fun',
-    layers: [{
-      url: 'https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}',
-      options: { attribution: ESRI_ATTR, maxZoom: 16 },
-    }],
-  },
 ];
 
 const STORAGE_KEY = 'pcd-map-style';
 let activeTileLayers: import('leaflet').TileLayer[] = [];
 
 const currentStyle = ref<string>('');
-const availableStyles = computed(() => MAP_STYLES.map(s => ({ id: s.id, label: s.label })));
 
 function getInitialStyle(): string {
   const stored = localStorage.getItem(STORAGE_KEY);
@@ -89,8 +79,9 @@ function setMapStyle(styleId: string, map: import('leaflet').Map, L: typeof impo
   document.documentElement.dataset.theme = styleId === 'dark' ? 'dark' : 'light';
 }
 
-function onStyleChange(styleId: string) {
-  if (mapInstance && leafletRef) setMapStyle(styleId, mapInstance, leafletRef);
+function toggleTheme() {
+  const next = currentStyle.value === 'dark' ? 'light' : 'dark';
+  if (mapInstance && leafletRef) setMapStyle(next, mapInstance, leafletRef);
 }
 
 function setActiveMarker(nodeId: string | null) {
@@ -293,14 +284,25 @@ onUnmounted(() => {
     ☰
   </button>
   <NodePanel :node="selectedNode" @close="closePanel" />
+  <button
+    id="theme-toggle"
+    :aria-label="currentStyle === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'"
+    :title="currentStyle === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'"
+    @click="toggleTheme"
+  >
+    <svg v-if="currentStyle === 'dark'" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="4"/>
+      <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+    </svg>
+    <svg v-else xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+    </svg>
+  </button>
   <NodeList
     :nodes="nodes"
     :open="listOpen"
-    :current-style="currentStyle"
-    :available-styles="availableStyles"
     @close="closeList"
     @select="onNodeSelect"
-    @style-change="onStyleChange"
   />
 </template>
 
@@ -312,6 +314,36 @@ onUnmounted(() => {
   width: 100vw;
   height: 100vh;
   z-index: 0;
+}
+
+#theme-toggle {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: var(--z-controls);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-popup);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--color-text);
+  transition: background-color 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+}
+
+#theme-toggle:hover {
+  background: var(--color-primary);
+  color: #fff;
+  border-color: var(--color-primary);
+}
+
+#theme-toggle:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
 }
 </style>
 
