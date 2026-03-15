@@ -711,7 +711,7 @@ function getReportIssueHref(node: Node): string {
   border-radius: 4px;
   border: 1px solid var(--color-border);
   background: var(--color-bg-panel);
-  color: var(--color-text);
+  color: var(--color-text-subtle);
   text-transform: capitalize;
 }
 
@@ -784,7 +784,7 @@ function getReportIssueHref(node: Node): string {
   width: 100%;
   margin-bottom: 1.5rem;
   padding: 0.625rem 1rem;
-  background: var(--color-link);
+  background: var(--color-primary);
   color: #fff;
   text-align: center;
   text-decoration: none;
@@ -795,7 +795,7 @@ function getReportIssueHref(node: Node): string {
 }
 
 .panel-event-website-btn:hover {
-  background: var(--color-link-hover);
+  opacity: 0.85;
 }
 
 /* ─── Info Card ─── */
