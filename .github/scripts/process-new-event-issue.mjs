@@ -135,17 +135,32 @@ function buildValidationComment(errors) {
   ].join('\n');
 }
 
-function buildPrBody(number, name) {
+function buildPrBody(number, name, submitterLogin, isOnlineEvent, eventDate, startTime, address) {
+  const submitterMention = submitterLogin ? `@${submitterLogin}` : 'the submitter';
+  const locationLine = isOnlineEvent
+    ? '- [ ] Online event URL is correct and accessible'
+    : address
+      ? '- [ ] Venue address and map pin placement are correct'
+      : '- [ ] Location is marked TBD — confirm this is intentional';
+  const dateLine = eventDate
+    ? startTime
+      ? '- [ ] Date and time are correct'
+      : '- [ ] Date is correct; time is marked TBD — confirm this is intentional'
+    : '- [ ] Date is marked TBD — confirm this is intentional';
+
   return [
     `Closes #${number}`,
     '',
     `This PR was generated from the "New Event" issue form for **${name}**.`,
+    `Submitted by ${submitterMention}.`,
     '',
     'Review checklist:',
-    '- [ ] Event format and venue/link details are correct',
-    '- [ ] Dates and times are correct',
+    '- [ ] Event name and short description are ready to publish',
+    '- [ ] Full event description is ready to publish (or intentionally blank)',
     '- [ ] Public contact info is correct',
-    '- [ ] Short description and full event description are ready to publish',
+    dateLine,
+    locationLine,
+    '- [ ] Check the map and event details page in the **Netlify preview** (link posted below by the Netlify bot)',
   ].join('\n');
 }
 
@@ -300,7 +315,7 @@ await fs.writeFile(markdownPath, markdownLines.join('\n'));
 await fs.writeFile(metadataPath, `${JSON.stringify(nodeRecord, null, 2)}\n`);
 
 const prBodyPath = path.join(RUNNER_TEMP, `new-event-${issueNumber}-pr-body.md`);
-await fs.writeFile(prBodyPath, buildPrBody(issueNumber, eventName));
+await fs.writeFile(prBodyPath, buildPrBody(issueNumber, eventName, submitterLogin, isOnlineEvent, eventDate, startTime, address));
 
 console.log(`[process-new-event-issue] validation passed — event id: ${eventId}`);
 await setOutput('valid', 'true');
