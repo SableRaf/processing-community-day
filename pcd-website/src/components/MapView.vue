@@ -431,7 +431,12 @@ onMounted(async () => {
       }
     });
 
-    if (foundNode) panToKeepInView(foundNode.lat, foundNode.lng);
+    if (foundNode) {
+      const lat = foundNode.lat;
+      const lng = foundNode.lng;
+      // Defer past Leaflet's own focus/keyboard handlers that may pan synchronously
+      requestAnimationFrame(() => panToKeepInView(lat, lng));
+    }
   };
   map.getContainer().addEventListener('focusin', slidingWindowHandler);
 
