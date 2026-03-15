@@ -1,6 +1,7 @@
 <template>
-  <div class="lang-switcher" ref="wrapRef">
+  <div class="lang-switcher" ref="wrapRef" @keydown.escape="closeAndRefocus">
     <button
+      ref="btnRef"
       class="lang-btn"
       :aria-label="t('language_switcher.label')"
       :title="t('language_switcher.label')"
@@ -47,6 +48,7 @@ import { currentLocale, setLocale } from '../i18n/localeState';
 const { t } = useI18n();
 const open = ref(false);
 const wrapRef = ref<HTMLElement | null>(null);
+const btnRef = ref<HTMLButtonElement | null>(null);
 
 const LANGUAGE_NAMES: Record<SupportedLocale, string> = {
   en: 'English',
@@ -65,6 +67,11 @@ function select(locale: SupportedLocale) {
   open.value = false;
 }
 
+function closeAndRefocus() {
+  open.value = false;
+  btnRef.value?.focus();
+}
+
 function handleOutsideClick(e: MouseEvent) {
   if (open.value && !wrapRef.value?.contains(e.target as Node)) {
     open.value = false;
@@ -77,10 +84,7 @@ onUnmounted(() => document.removeEventListener('click', handleOutsideClick));
 
 <style scoped>
 .lang-switcher {
-  position: fixed;
-  top: 1rem;
-  right: calc(1rem + 40px + 0.5rem);
-  z-index: var(--z-controls);
+  position: relative;
 }
 
 .lang-btn {
@@ -129,7 +133,7 @@ onUnmounted(() => document.removeEventListener('click', handleOutsideClick));
 
 .lang-dropdown {
   position: absolute;
-  right: 0;
+  left: 0;
   top: calc(100% + 4px);
   list-style: none;
   margin: 0;

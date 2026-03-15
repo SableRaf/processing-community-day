@@ -64,6 +64,28 @@ body {
   line-height: 1.5;
 }
 
+html.theme-transition,
+html.theme-transition *,
+html.theme-transition *::before,
+html.theme-transition *::after {
+  transition:
+    background-color 0.28s ease,
+    border-color 0.28s ease,
+    color 0.28s ease,
+    fill 0.28s ease,
+    stroke 0.28s ease,
+    box-shadow 0.28s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.theme-transition,
+  html.theme-transition *,
+  html.theme-transition *::before,
+  html.theme-transition *::after {
+    transition: none;
+  }
+}
+
 /* ─── Skip Link ─────────────────────────────────────────────── */
 .skip-link {
   position: absolute;
@@ -142,8 +164,8 @@ body {
   top: var(--spacing-md);
   left: var(--spacing-md);
   z-index: var(--z-controls);
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   background: var(--color-bg-popup);
   border: 1px solid var(--color-border);
   border-radius: 8px;

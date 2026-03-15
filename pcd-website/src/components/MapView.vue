@@ -63,6 +63,7 @@ const MAP_STYLES: MapStyle[] = [
 
 const STORAGE_KEY = 'pcd-map-style';
 let activeTileLayers: import('leaflet').TileLayer[] = [];
+let themeTransitionTimer: number | null = null;
 
 const currentStyle = ref<string>('');
 
@@ -87,9 +88,25 @@ function setMapStyle(styleId: string, map: import('leaflet').Map, L: typeof impo
   document.documentElement.dataset.theme = styleId === 'dark' ? 'dark' : 'light';
 }
 
+function animateThemeTransition() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const root = document.documentElement;
+  root.classList.add('theme-transition');
+  if (themeTransitionTimer !== null) {
+    window.clearTimeout(themeTransitionTimer);
+  }
+  themeTransitionTimer = window.setTimeout(() => {
+    root.classList.remove('theme-transition');
+    themeTransitionTimer = null;
+  }, 360);
+}
+
 function toggleTheme() {
   const next = currentStyle.value === 'dark' ? 'light' : 'dark';
-  if (mapInstance && leafletRef) setMapStyle(next, mapInstance, leafletRef);
+  if (mapInstance && leafletRef) {
+    animateThemeTransition();
+    setMapStyle(next, mapInstance, leafletRef);
+  }
 }
 
 function setActiveMarker(nodeId: string | null) {
@@ -420,6 +437,10 @@ onMounted(async () => {
 });
 
 onUnmounted(() => {
+  if (themeTransitionTimer !== null) {
+    window.clearTimeout(themeTransitionTimer);
+  }
+  document.documentElement.classList.remove('theme-transition');
   document.removeEventListener('keydown', handleKeydown);
   mapInstance?.remove();
 });
@@ -435,25 +456,38 @@ onUnmounted(() => {
   >
     ☰
   </button>
+  <div class="banner-controls-left">
+    <LanguageSwitcher />
+  </div>
   <a
     id="host-btn"
     :href="SUBMIT_EVENT_URL"
   >{{ t('nav.submit_event') }}</a>
-  <LanguageSwitcher />
-  <button
-    id="theme-toggle"
-    :aria-label="currentStyle === 'dark' ? t('nav.switch_to_light') : t('nav.switch_to_dark')"
-    :title="currentStyle === 'dark' ? t('nav.switch_to_light') : t('nav.switch_to_dark')"
-    @click="toggleTheme"
-  >
-    <svg v-if="currentStyle === 'dark'" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <circle cx="12" cy="12" r="4"/>
-      <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
-    </svg>
-    <svg v-else xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-    </svg>
-  </button>
+  <div class="banner-controls-right">
+    <button
+      id="theme-toggle"
+      role="switch"
+      :aria-checked="currentStyle === 'dark'"
+      :aria-label="currentStyle === 'dark' ? t('nav.switch_to_light') : t('nav.switch_to_dark')"
+      :title="currentStyle === 'dark' ? t('nav.switch_to_light') : t('nav.switch_to_dark')"
+      @click="toggleTheme"
+    >
+      <span class="theme-toggle__track" aria-hidden="true">
+        <span class="theme-toggle__thumb"></span>
+        <span class="theme-toggle__icon theme-toggle__icon--sun">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="4"/>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+          </svg>
+        </span>
+        <span class="theme-toggle__icon theme-toggle__icon--moon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </span>
+      </span>
+    </button>
+  </div>
   </div>
   <NodePanel :node="selectedNode" @close="closePanel" />
   <NodeList
@@ -475,34 +509,124 @@ onUnmounted(() => {
   z-index: 0;
 }
 
-#theme-toggle {
+.banner-controls-right {
   position: fixed;
   top: 1rem;
   right: 1rem;
   z-index: var(--z-controls);
-  width: 40px;
+  display: flex;
+  align-items: center;
+}
+
+.banner-controls-left {
+  position: fixed;
+  top: 1rem;
+  left: calc(1rem + 44px + 0.5rem);
+  z-index: var(--z-controls);
+  display: flex;
+  align-items: center;
+}
+
+#theme-toggle {
+  width: 75px;
   height: 40px;
+  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--color-bg-popup);
+  background: color-mix(in srgb, var(--color-bg-popup) 86%, transparent);
   border: 1px solid var(--color-border);
-  border-radius: 8px;
+  border-radius: 999px;
   cursor: pointer;
   color: var(--color-text);
-  transition: background-color 0.12s ease, color 0.12s ease, border-color 0.12s ease;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.28s ease, color 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease;
+  box-shadow: 0 10px 28px rgba(18, 19, 33, 0.18);
+  backdrop-filter: blur(14px);
 }
 
 #theme-toggle:hover {
-  background: var(--color-primary);
-  color: #fff;
-  border-color: var(--color-primary);
+  background: var(--color-bg-popup-hover);
 }
 
 #theme-toggle:focus-visible {
   outline: 2px solid var(--color-focus);
   outline-offset: 2px;
+}
+
+.theme-toggle__track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  padding: 4px;
+}
+
+.theme-toggle__thumb {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #f7d76d 0%, #f3c84d 48%, #ecaa2a 100%);
+  box-shadow: 0 8px 18px rgba(124, 79, 10, 0.32);
+  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1), background 0.32s ease, box-shadow 0.32s ease;
+}
+
+.theme-toggle__icon {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  justify-self: center;
+  color: var(--color-text-muted);
+  transition: color 0.24s ease, opacity 0.24s ease;
+}
+
+.theme-toggle__icon--sun {
+  transform: translateX(-1px);
+}
+
+.theme-toggle__icon--moon {
+  transform: translateX(3px);
+}
+
+#theme-toggle[aria-checked="false"] .theme-toggle__icon--sun,
+#theme-toggle[aria-checked="true"] .theme-toggle__icon--moon {
+  color: #241336;
+  opacity: 1;
+}
+
+#theme-toggle[aria-checked="false"] .theme-toggle__icon--moon,
+#theme-toggle[aria-checked="true"] .theme-toggle__icon--sun {
+  opacity: 0.68;
+}
+
+#theme-toggle[aria-checked="true"] .theme-toggle__thumb {
+  transform: translateX(37px);
+  background: linear-gradient(135deg, #d8b4fe 0%, #c084fc 44%, #9d4edd 100%);
+  box-shadow: 0 8px 18px rgba(88, 28, 135, 0.34);
+}
+
+#theme-toggle[aria-checked="true"] {
+  background: color-mix(in srgb, var(--color-bg-popup) 78%, #0b1024 22%);
+}
+
+#theme-toggle[aria-checked="true"]:hover {
+  background: color-mix(in srgb, var(--color-bg-popup-hover) 76%, #0b1024 24%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #theme-toggle,
+  .theme-toggle__thumb,
+  .theme-toggle__icon {
+    transition: none;
+  }
 }
 </style>
 
