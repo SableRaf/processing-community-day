@@ -129,7 +129,9 @@ function buildValidationComment(errors) {
     '',
     ...errors.map(formatError),
     '',
-    `Once you've edited the issue with the corrected information, this check will run again automatically. If you need help, post in the [PCD 2026 forum thread](${PCD_FORUM_THREAD_URL}).`,
+    `Please edit and save the issue with the corrected information, this check will run again automatically. `,
+    '',
+    `If you need help, post in the [PCD 2026 forum thread](${PCD_FORUM_THREAD_URL}).`,
   ].join('\n');
 }
 
@@ -306,3 +308,4 @@ await setOutput('branch', `automation/new-event-${issueNumber}-${eventId}`);
 await setOutput('commit_message', `Add ${eventName} event from issue #${issueNumber}`);
 await setOutput('pr_title', `Add ${eventName} to the PCD map`);
 await setOutput('pr_body_path', prBodyPath);
+await setOutput('event_name', eventName);
