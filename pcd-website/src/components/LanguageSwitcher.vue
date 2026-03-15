@@ -56,8 +56,8 @@ const LANGUAGE_NAMES: Record<SupportedLocale, string> = {
   de: 'Deutsch',
   fr: 'Français',
   pt: 'Português',
-  'zh-TW': '中文（繁體）',
-  'zh-CN': '中文（简体）',
+  'zh-TW': '正體中文', // Traditional Chinese
+  'zh-CN': '简体中文', // Simplified Chinese
   ja: '日本語',
   ko: '한국어',
 };
@@ -158,11 +158,11 @@ onUnmounted(() => document.removeEventListener('click', handleOutsideClick));
 }
 
 .lang-option:hover {
-  background: var(--color-border);
+  background: var(--color-bg-popup-hover);
 }
 
 .lang-option--active {
-  color: var(--color-primary);
+  color: var(--color-link);
   font-weight: 600;
 }
 
