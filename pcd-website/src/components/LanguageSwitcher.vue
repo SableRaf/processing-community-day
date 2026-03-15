@@ -14,6 +14,7 @@
     </button>
     <ul
       v-show="open"
+      :inert="!open"
       role="listbox"
       :aria-label="t('language_switcher.label')"
       class="lang-dropdown"
@@ -25,7 +26,10 @@
         :aria-selected="locale === currentLocale"
         class="lang-option"
         :class="{ 'lang-option--active': locale === currentLocale }"
+        tabindex="0"
         @click="select(locale)"
+        @keydown.enter.prevent="select(locale)"
+        @keydown.space.prevent="select(locale)"
       >
         {{ LANGUAGE_NAMES[locale] }}
       </li>
