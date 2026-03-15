@@ -262,7 +262,7 @@ jobs:
               marker,
               'Thank you for your submission! 🎉',
               '',
-              `**${process.env.EVENT_NAME}** has been successfully parsed and a pull request has been opened for review: #${process.env.PR_NUMBER} (${process.env.PR_URL}).`,
+              `**${process.env.EVENT_NAME}** has been successfully parsed and a pull request has been opened for review: #${process.env.PR_NUMBER}).`,
               '',
               'Once the PR is merged, your event will be added to the map at https://day.processing.org.',
             ].join('\n');

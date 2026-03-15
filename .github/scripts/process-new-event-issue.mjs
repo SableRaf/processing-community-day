@@ -131,7 +131,7 @@ function buildValidationComment(errors) {
     '',
     `Please edit and save the issue with the corrected information, this check will run again automatically. `,
     '',
-    `If you need help, post in the [PCD 2026 forum thread](${PCD_FORUM_THREAD_URL}).`,
+    `If you need help, please ask in the [PCD 2026 forum thread](${PCD_FORUM_THREAD_URL}) (recommended) or write to (${PCD_CONTACT_EMAIL}).`,
   ].join('\n');
 }
 
@@ -239,7 +239,7 @@ const metadataPath = path.join(eventDirPath, 'metadata.json');
 
 try {
   await fs.access(eventDirPath);
-  errors.push({ field: 'Event name', found: eventName, message: `An event with the generated ID \`${eventId}\` already exists. If you need to update an existing event, post in the [PCD 2026 forum thread](${PCD_FORUM_THREAD_URL}) or contact ${PCD_EMAIL}.` });
+  errors.push({ field: 'Event name', found: eventName, message: `An event with the generated ID \`${eventId}\` already exists. If you need to update an existing event, post in the [PCD 2026 forum thread](${PCD_FORUM_THREAD_URL}) (recommended) or write to ${PCD_EMAIL}.` });
 } catch {
   // Directory does not exist yet.
 }
