@@ -18,7 +18,7 @@ function t(key: string, params?: Record<string, string>): string {
 
 const POPUP_PREVIEW_LENGTH = 120;
 
-function getOsmUrl(node: Node): string {
+export function getOsmUrl(node: Node): string {
   const query = node.location_name
     ? [node.location_name, node.address].filter(Boolean).join(', ')
     : node.address ?? '';
@@ -43,7 +43,7 @@ export function makePopupContent(node: Node): string {
     : '';
 
   const organizingEntityHtml = node.organization_name
-    ? `<p class="popup-organizing-entity">by ${escapeHtml(node.organization_name)}</p>`
+    ? `<p class="popup-organizing-entity">${t('panel.by')} ${escapeHtml(node.organization_name)}</p>`
     : '';
 
   const onlineBadgeHtml = node.online_event ? `<span class="popup-online-badge">${t('popup.online_event')}</span>` : '';

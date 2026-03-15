@@ -22,6 +22,7 @@ const listOpen = ref(false);
 let mapInstance: import('leaflet').Map | null = null;
 let leafletRef: typeof import('leaflet') | null = null;
 const markerMap = new Map<string, import('leaflet').Marker>();
+const nodeMap = new Map<string, Node>(); // id → Node, for O(1) lookups
 let openPopupNodeId: string | null = null;
 let slidingWindowHandler: ((e: FocusEvent) => void) | null = null;
 
@@ -205,7 +206,12 @@ function handleKeydown(e: KeyboardEvent) {
         document.getElementById('burger-btn')?.focus();
       }
     }
-  } else if (!isTextInput && /^[0-9]$/.test(e.key)) {
+    return;
+  }
+
+  if (isTextInput) return;
+
+  if (/^[0-9]$/.test(e.key)) {
     e.preventDefault();
     e.stopPropagation();
     if (e.key === '0') {
@@ -213,19 +219,19 @@ function handleKeydown(e: KeyboardEvent) {
     } else {
       mapInstance?.setZoom(parseInt(e.key));
     }
-  } else if (!isTextInput && (e.key === '+' || e.key === '=' || e.key === 'Add')) {
+  } else if (e.key === '+' || e.key === '=' || e.key === 'Add') {
     e.preventDefault();
     e.stopPropagation();
     mapInstance?.zoomIn();
-  } else if (!isTextInput && (e.key === '-' || e.key === 'Subtract')) {
+  } else if (e.key === '-' || e.key === 'Subtract') {
     e.preventDefault();
     e.stopPropagation();
     mapInstance?.zoomOut();
-  } else if (!isTextInput && (e.key === 'M' || e.key === 'm')) {
+  } else if (e.key === 'M' || e.key === 'm') {
     e.preventDefault();
     listOpen.value = !listOpen.value;
     if (listOpen.value) selectedNode.value = null;
-  } else if (!isTextInput && (e.key === 'L' || e.key === 'l')) {
+  } else if (e.key === 'L' || e.key === 'l') {
     e.preventDefault();
     document.getElementById('map')?.focus();
   }
@@ -354,6 +360,7 @@ onMounted(async () => {
 
   // Add markers
   props.nodes.forEach((node) => {
+    nodeMap.set(node.id, node);
     const icon = node.online_event ? onlineMarkerIcon : markerIcon;
     const marker = L.marker([node.lat, node.lng], { icon });
     marker.bindPopup(() => makePopupContent(node), { maxWidth: 340 });
@@ -368,7 +375,7 @@ onMounted(async () => {
   // animates (which shows/hides individual markers as clusters form or dissolve).
   function applyMarkerLabels() {
     markerMap.forEach((marker, id) => {
-      const node = props.nodes.find(n => n.id === id);
+      const node = nodeMap.get(id);
       if (node) {
         marker.getElement()?.setAttribute('aria-label', node.event_name);
       }
@@ -430,11 +437,12 @@ onMounted(async () => {
     if (!target.classList.contains('marker-node')) return;
 
     let foundNode: Node | undefined;
-    markerMap.forEach((marker, id) => {
+    for (const [id, marker] of markerMap) {
       if (marker.getElement() === target) {
-        foundNode = props.nodes.find(n => n.id === id);
+        foundNode = nodeMap.get(id);
+        break;
       }
-    });
+    }
 
     if (foundNode) {
       const lat = foundNode.lat;

@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { ref, watch, onMounted, onUnmounted, nextTick } from 'vue';
+import { ref, computed, watch, onMounted, onUnmounted, nextTick } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { createFocusTrap, type FocusTrap } from 'focus-trap';
 import { Icon } from '@iconify/vue';
 import type { Node } from '../lib/nodes';
 import { formatDateRange, formatTimeRange, calendarLinks, onlinePlatformName } from '../lib/format';
+import { getOsmUrl } from '../lib/popup';
 import { PCD_EMAIL } from '../config';
 const props = defineProps<{
   node: Node | null;
@@ -135,31 +136,27 @@ function downloadIcs(node: Node) {
   const a = document.createElement('a');
   a.href = url;
   a.download = `${node.id}.ics`;
-  document.body.appendChild(a);
   a.click();
-  document.body.removeChild(a);
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
-function getOsmUrl(node: Node): string {
-  const query = node.location_name
-    ? [node.location_name, node.address].filter(Boolean).join(', ')
-    : node.address ?? '';
-  return `https://www.openstreetmap.org/search?query=${encodeURIComponent(query)}`;
-}
 
 function getParagraphs(text: string): string[] {
   return text.split(/\n\n+/).filter(Boolean);
 }
 
+function getOrganizerNames(organizers: { name: string }[]): string[] {
+  return organizers.map(o => o.name).filter(Boolean);
+}
+
 function formatOrganizers(organizers: { name: string }[], expanded = false): string {
-  const names = organizers.map(o => o.name).filter(Boolean);
+  const names = getOrganizerNames(organizers);
   if (expanded || names.length <= HOSTS_VISIBLE) return names.join(', ');
   return names.slice(0, HOSTS_VISIBLE).join(', ');
 }
 
 function hasMoreHosts(organizers: { name: string }[]): boolean {
-  return organizers.map(o => o.name).filter(Boolean).length > HOSTS_VISIBLE;
+  return getOrganizerNames(organizers).length > HOSTS_VISIBLE;
 }
 
 function getDescPreview(node: Node): { text: string; hasMore: boolean } {
@@ -189,6 +186,9 @@ function getReportIssueHref(node: Node): string {
   const body = t('panel.email_body', { name: node.event_name, link: getShareUrl(node) });
   return `mailto:${PCD_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
+
+const descPreview = computed(() => props.node ? getDescPreview(props.node) : null);
+const calLinks = computed(() => props.node && !props.node.date_tbd ? calendarLinks(props.node) : null);
 </script>
 
 <template>
@@ -365,7 +365,7 @@ function getReportIssueHref(node: Node): string {
                 </button>
                 <div v-show="calDropdownOpen" class="quick-action-menu" role="menu">
                   <a
-                    :href="calendarLinks(node).googleCalUrl"
+                    :href="calLinks!.googleCalUrl"
                     target="_blank"
                     rel="noopener noreferrer"
                     role="menuitem"
@@ -373,7 +373,7 @@ function getReportIssueHref(node: Node): string {
                     @click="calDropdownOpen = false"
                   >{{ t('panel.google_calendar') }}</a>
                   <a
-                    :href="calendarLinks(node).outlookCalUrl"
+                    :href="calLinks!.outlookCalUrl"
                     target="_blank"
                     rel="noopener noreferrer"
                     role="menuitem"
@@ -417,10 +417,10 @@ function getReportIssueHref(node: Node): string {
             >{{ para }}</p>
           </template>
           <template v-else>
-            <p>{{ getDescPreview(node).text }}</p>
+            <p>{{ descPreview!.text }}</p>
           </template>
           <button
-            v-if="getDescPreview(node).hasMore"
+            v-if="descPreview!.hasMore"
             class="panel-read-more"
             :aria-expanded="descExpanded"
             @click="descExpanded = !descExpanded"
