@@ -146,7 +146,7 @@ function buildValidationComment(errors) {
   ].join('\n');
 }
 
-function buildPrBody(number, name, submitterLogin, isOnlineEvent, eventDate, startTime, address, plusCodeNote, rawPlusCode) {
+function buildPrBody(number, name, submitterLogin, isOnlineEvent, eventDate, startTime, address, plusCodeNote, rawPlusCode, shortDescription, fullDescription, contactName, contactEmail) {
   const submitterMention = submitterLogin ? `@${submitterLogin}` : 'the submitter';
   const locationLine = isOnlineEvent
     ? '- [ ] Online event URL is correct and accessible'
@@ -175,9 +175,10 @@ function buildPrBody(number, name, submitterLogin, isOnlineEvent, eventDate, sta
     `Submitted by ${submitterMention}.`,
     '',
     'Review checklist:',
-    '- [ ] Event name and short description are ready to publish',
-    '- [ ] Full event description is ready to publish (or intentionally blank)',
-    '- [ ] Public contact info is correct',
+    `- [ ] Event name "${name}" is correct`,
+    `- [ ] Public contact info "${contactName} <${contactEmail}>" is correct`,
+    ...(shortDescription ? [] : ['- [ ] Short description is left blank — confirm this is intentional']),
+    ...(fullDescription ? [] : ['- [ ] Long description is left blank — confirm this is intentional']),
     dateLine,
     locationLine,
     '- [ ] Check the map and event details page in the **Netlify preview** (link posted below by the Netlify bot)',
@@ -386,7 +387,7 @@ async function main() {
   await fs.writeFile(metadataPath, `${JSON.stringify(nodeRecord, null, 2)}\n`);
 
   const prBodyPath = path.join(RUNNER_TEMP, `new-event-${issueNumber}-pr-body.md`);
-  await fs.writeFile(prBodyPath, buildPrBody(issueNumber, eventName, submitterLogin, isOnlineEvent, eventDate, startTime, address, plusCodeNote, rawPlusCode));
+  await fs.writeFile(prBodyPath, buildPrBody(issueNumber, eventName, submitterLogin, isOnlineEvent, eventDate, startTime, address, plusCodeNote, rawPlusCode, shortDescription, fullDescription, primaryContactName, contactEmail));
 
   console.log(`[process-new-event-issue] validation passed — event id: ${eventId}`);
   await setOutput('valid', 'true');
