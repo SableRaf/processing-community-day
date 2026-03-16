@@ -1,0 +1,46 @@
+{
+  "id": "pcd-chicago-2026",
+  "organizers": [
+    {
+      "name": "Grace Grace Grace"
+    },
+    {
+      "name": "Maddie Brucker"
+    }
+  ],
+  "primary_contact": {
+    "name": "Grace Grace Grace",
+    "email": "pcd@ccam.world"
+  },
+  "organization_name": "Center for Concrete and Abstract Machine [CCAM] x Peripheral Study",
+  "organization_url": "https://ccam.world",
+  "organization_type": "Nonprofit, foundation, association",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Chicago",
+  "event_location": {
+    "address": "3219 S Morgan Street, Chicago IL 60608",
+    "plus_code": "86HJR8PX+7G9"
+  },
+  "event_date": "",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "Processing Community Day Chicago: Creative Coding Workshops for Risograph and More+++",
+  "event_activities": [
+    "Hands-on workshops",
+    "Live coding",
+    "Beginner introductions to Processing or p5.js",
+    "Creative coding jams or hack sessions"
+  ],
+  "event_page_url": "",
+  "forum_thread_url": "",
+  "city": "Chicago",
+  "country": "United States",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 14,
+    "submitted_by_github": "hypergrace",
+    "submitted_date": "2026-03-16",
+    "maintainer_notes": "I could only get an 8-digit Plus code -- let me know if I am missing something!"
+  }
+}
