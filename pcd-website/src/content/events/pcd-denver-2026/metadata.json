@@ -1,0 +1,34 @@
+{
+  "id": "pcd-denver-2026",
+  "organizers": [],
+  "primary_contact": {
+    "name": "Norton King",
+    "email": "nortonking@hey.com"
+  },
+  "organization_name": "Creative Code Denver",
+  "organization_url": "https://www.meetup.com/creative-code-denver/",
+  "organization_type": "Meetup, code club, community group",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Denver",
+  "event_location": {
+    "address": "",
+    "plus_code": "85FPQX5Q+C5"
+  },
+  "event_date": "",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "",
+  "event_activities": [],
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-denver-2026/48143",
+  "city": "Denver, Colorado",
+  "country": "United States",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 10,
+    "submitted_by_github": "n64k",
+    "submitted_date": "2026-03-16",
+    "maintainer_notes": ""
+  }
+}
