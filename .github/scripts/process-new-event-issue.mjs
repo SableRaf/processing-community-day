@@ -132,7 +132,7 @@ function buildValidationComment(errors) {
   ].join('\n');
 }
 
-function buildPrBody(number, name, submitterLogin, isOnlineEvent, eventDate, startTime, address, plusCodeNote, rawPlusCode, shortDescription, fullDescription, contactName, contactEmail) {
+function buildPrBody(number, name, submitterLogin, isOnlineEvent, eventDate, startTime, address, plusCodeNote, rawPlusCode, resolvedPlusCode, shortDescription, fullDescription, contactName, contactEmail) {
   const submitterMention = submitterLogin ? `@${submitterLogin}` : 'the submitter';
   const locationLine = isOnlineEvent
     ? '- [ ] Online event URL is correct and accessible'
@@ -148,7 +148,7 @@ function buildPrBody(number, name, submitterLogin, isOnlineEvent, eventDate, sta
   const noteBlock = plusCodeNote
     ? [
         '> [!NOTE]',
-        `> The Plus Code was auto-recovered from the user's input (\`${rawPlusCode}\`) using the city as a reference. Please verify the map pin placement is correct (https://plus.codes/${plusCodeNote.code}).`,
+        `> The Plus Code was auto-recovered from the user's input (\`${rawPlusCode}\`) using the city as a reference. Please verify the map pin placement is correct (https://plus.codes/${resolvedPlusCode}).`,
         '',
       ]
     : [];
@@ -332,7 +332,7 @@ async function main() {
   await fs.writeFile(metadataPath, `${JSON.stringify(nodeRecord, null, 2)}\n`);
 
   const prBodyPath = path.join(RUNNER_TEMP, `new-event-${issueNumber}-pr-body.md`);
-  await fs.writeFile(prBodyPath, buildPrBody(issueNumber, eventName, submitterLogin, isOnlineEvent, eventDate, startTime, address, plusCodeNote, rawPlusCode, shortDescription, fullDescription, primaryContactName, contactEmail));
+  await fs.writeFile(prBodyPath, buildPrBody(issueNumber, eventName, submitterLogin, isOnlineEvent, eventDate, startTime, address, plusCodeNote, rawPlusCode, resolvedPlusCode, shortDescription, fullDescription, primaryContactName, contactEmail));
 
   console.log(`[process-new-event-issue] validation passed — event id: ${eventId}`);
   await setOutput('valid', 'true');
