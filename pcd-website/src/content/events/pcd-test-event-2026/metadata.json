@@ -1,0 +1,34 @@
+{
+  "id": "pcd-test-event-2026",
+  "organizers": [],
+  "primary_contact": {
+    "name": "Raphaël de Courville",
+    "email": "raphael@processingfoundation.org"
+  },
+  "organization_name": "",
+  "organization_url": "",
+  "organization_type": "",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "Test event",
+  "event_location": {
+    "address": "",
+    "plus_code": "85FPQX5Q+C5"
+  },
+  "event_date": "",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "",
+  "event_activities": [],
+  "event_page_url": "",
+  "forum_thread_url": "",
+  "city": "Denver",
+  "country": "",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 15,
+    "submitted_by_github": "SableRaf",
+    "submitted_date": "2026-03-16",
+    "maintainer_notes": ""
+  }
+}
