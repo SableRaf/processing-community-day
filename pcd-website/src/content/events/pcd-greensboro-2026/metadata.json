@@ -1,0 +1,34 @@
+{
+  "id": "pcd-greensboro-2026",
+  "organizers": [],
+  "primary_contact": {
+    "name": "Leilei Xia",
+    "email": "leileixiawork@gmail.com"
+  },
+  "organization_name": "",
+  "organization_url": "",
+  "organization_type": "",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Greensboro",
+  "event_location": {
+    "address": "",
+    "plus_code": "8782358V+56"
+  },
+  "event_date": "",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "",
+  "event_activities": [],
+  "event_page_url": "",
+  "forum_thread_url": "",
+  "city": "Greensboro",
+  "country": "USA",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 9,
+    "submitted_by_github": "lilyxia99",
+    "submitted_date": "2026-03-16",
+    "maintainer_notes": ""
+  }
+}
