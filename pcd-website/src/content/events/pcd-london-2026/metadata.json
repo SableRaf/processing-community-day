@@ -1,33 +1,34 @@
 {
   "id": "pcd-london-2026",
-  "organizers": [
-    {
-      "name": ""
-    }
-  ],
+  "organizers": [],
   "primary_contact": {
-    "name": "",
-    "email": "organizer@example.co.uk"
+    "name": "Kenneth Lim",
+    "email": "k.lim@arts.ac.uk"
   },
-  "organization_name": "Creative Code London",
-  "organization_url": "",
-  "organization_type": "",
+  "organization_name": "UAL Creative Computing Institute",
+  "organization_url": "https://www.arts.ac.uk/creative-computing-institute",
+  "organization_type": "School, university, library",
   "online_event": false,
   "event_url": "",
   "event_name": "PCD @ London",
   "event_location": {
-    "name": "Barbican Centre",
-    "address": "Silk St, London EC2Y 8DS, United Kingdom",
-    "plus_code": "9C3XGWPX+CQ"
+    "address": "45-65 Peckham Rd, London SE5 8UF",
+    "plus_code": "9C3XFWF9+HP"
   },
-  "event_date": "2026-10-17",
-  "event_start_time": "19:00",
-  "event_end_time": "21:30",
+  "event_date": "",
+  "event_start_time": "",
+  "event_end_time": "",
   "event_short_description": "",
-  "event_activities": ["talk", "workshop", "showcase"],
-  "event_page_url": "https://example.co.uk/pcd",
+  "event_activities": [],
+  "event_page_url": "",
   "forum_thread_url": "",
   "city": "London",
-  "country": "United Kingdom",
-  "placeholder": true
+  "country": "UK",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 6,
+    "submitted_by_github": "limzykenneth",
+    "submitted_date": "2026-03-16",
+    "maintainer_notes": ""
+  }
 }
