@@ -14,7 +14,7 @@ body:
     attributes:
       value: |
         > [!TIP]
-        > For the fastest experience, go to your event's page on the [PCD map](https://day.processing.org) and scroll down to the **Edit event data** link. It will open this form with all fields pre-populated.
+        > Go to your event's page and use the **Edit event data** link. It will open this form with all fields pre-populated.
   - type: input
     id: canonical_id
     attributes:
