@@ -1,0 +1,45 @@
+{
+  "id": "pcd-uruguay-2026",
+  "organizers": [],
+  "primary_contact": {
+    "name": "Cabe Trust",
+    "email": "virginiarigon@gmail.com"
+  },
+  "organization_name": "",
+  "organization_url": "",
+  "organization_type": "",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD Uruguay",
+  "event_location": {
+    "address": "",
+    "plus_code": "48Q53RMJ+X3"
+  },
+  "event_date": "",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "",
+  "event_activities": [
+    "Show-and-tell",
+    "Hands-on workshops",
+    "Live coding",
+    "Exhibition",
+    "Panel discussions",
+    "Beginner introductions to Processing or p5.js",
+    "Creative coding jams or hack sessions",
+    "Student project presentations",
+    "Screening",
+    "Other"
+  ],
+  "event_page_url": "",
+  "forum_thread_url": "",
+  "city": "Montevideo",
+  "country": "Uruguay",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 7,
+    "submitted_by_github": "cabetrust",
+    "submitted_date": "2026-03-16",
+    "maintainer_notes": ""
+  }
+}
