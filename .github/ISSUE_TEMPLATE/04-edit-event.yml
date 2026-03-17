@@ -8,13 +8,13 @@ body:
   - type: markdown
     attributes:
       value: |
-        <!-- edit-event-template -->
-        Everything submitted here will be publicly visible online. Please avoid including any private or sensitive information in the form.
+        > [!TIP]
+        > Go to your event's page and use the **Edit event data** link. It will open this form already pre-filled.
   - type: markdown
     attributes:
       value: |
-        > [!TIP]
-        > Go to your event's page and use the **Edit event data** link. It will open this form with all fields pre-populated.
+        <!-- edit-event-template -->
+        Everything submitted here will be publicly visible online. Please avoid including any private or sensitive information in the form.
   - type: input
     id: canonical_id
     attributes:
