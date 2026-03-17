@@ -43,13 +43,14 @@ body:
     id: plus_code
     attributes:
       label: Plus Code (for map placement)
-      description: Find or verify the plus code for your event location at https://plus.codes. Full codes (e.g. 9F4MFCCM+JF) are preferred, but most standard plus code formats are accepted.
+      description: Find or verify the plus code for your event location at https://plus.codes. 
       placeholder: XXXXXXXX+XX
     validations:
       required: true
   - type: markdown
     attributes:
       value: |
+        Full codes (e.g. 9F4MFCCM+JF) are preferred, but most standard plus code formats are accepted.
         If your event is online or the location is still to be determined, use a general location such as the city center or a relevant landmark. 
   - type: dropdown
     id: format
