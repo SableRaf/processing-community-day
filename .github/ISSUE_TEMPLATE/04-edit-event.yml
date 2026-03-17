@@ -1,0 +1,201 @@
+name: ✏️ Edit Event
+description: Edit an existing PCD event on the map.
+title: "Edit Event: "
+labels:
+  - edit event
+  - needs review
+body:
+  - type: markdown
+    attributes:
+      value: |
+        <!-- edit-event-template -->
+        Everything submitted here will be publicly visible online. Please avoid including any private or sensitive information in the form.
+  - type: input
+    id: event_id
+    attributes:
+      label: Event ID
+      description: This is the internal ID of the event in our database. You can find this in the URL of the event details page (e.g. `https://pcd2026.processing.org/events/pcd-mycity-2026` → `pcd-mycity-2026` is the event ID). This field is required to identify which event you want to edit.
+      placeholder: PCD @ Example City
+    validations:
+      required: true
+  - type: input
+    id: event_name
+    attributes:
+      label: Event name
+      description: Public-facing event title as it should appear on the site.
+      placeholder: PCD @ Example City
+    validations:
+      required: true
+  - type: input
+    id: forum_thread_url
+    attributes:
+      label: Forum discussion URL
+      description: Post a thread in the [Processing forum](https://discourse.processing.org/c/pcd/pcd-worldwide-2026) (`PCD @ Your City 2026`) as a public discussion space for your event. Paste the URL to that thread here.
+      placeholder: https://discourse.processing.org/t/pcd-worldwide-2026/48081
+    validations:
+      required: true
+  - type: input
+    id: plus_code
+    attributes:
+      label: Map placement
+      description: Find or verify the plus code for your event location at https://plus.codes. 
+      placeholder: XXXXXXXX+XX
+    validations:
+      required: true
+  - type: markdown
+    attributes:
+      value: |
+        > [!IMPORTANT]
+        > The code should be 10 or 11 characters long (e.g. 9F4MFCCM+JF). This code is essential for accurately placing your event on the map. 
+        > If your event is online or the location is still to be determined, use a general location such as the city center or a relevant landmark. 
+  - type: dropdown
+    id: format
+    attributes:
+      label: Event format
+      options:
+        - In person
+        - Online
+    validations:
+      required: true
+  - type: input
+    id: online_event_url
+    attributes:
+      label: Event URL (only for online events)
+      description: For online events, provide the URL where the event will take place (e.g. Zoom link, YouTube live stream, etc.).
+      placeholder: https://zoom.us/j/123456789
+  - type: input
+    id: primary_contact_name
+    attributes:
+      label: Primary contact name
+      description: Name of the person who can be contacted about this event.
+      placeholder: Jane Doe
+    validations:
+      required: true
+  - type: input
+    id: contact_email
+    attributes:
+      label: Primary contact email
+      description: Public contact email shown on the event page.
+      placeholder: hello@example.org
+    validations:
+      required: true
+  - type: input
+    id: city
+    attributes:
+      label: City or locality
+      placeholder: Berlin
+  - type: input
+    id: country
+    attributes:
+      label: Country
+      placeholder: Germany
+  - type: input
+    id: organization_name
+    attributes:
+      label: Organization name
+      description: The organization or group responsible for organizing the event. Can be left blank if there is no specific organizing entity.
+      placeholder: Something Group, University of Somewhere, etc.
+  - type: input
+    id: organization_url
+    attributes:
+      label: Organization website
+      placeholder: https://example.org
+  - type: dropdown
+    id: organization_type
+    attributes:
+      label: Organization type
+      description: Select the category that best describes the organizing group.
+      options:
+        - School, university, library
+        - Fablab, makerspace, hackerspace
+        - Museum, gallery, media arts center
+        - Meetup, code club, community group
+        - Nonprofit, foundation, association
+        - Studio, tech company, startup
+        - Other
+  - type: input
+    id: address
+    attributes:
+      label: Street address of the event venue
+      description: You can leave this blank if the venue is still to be determined. 
+      placeholder: Jonasstraße 22, 12053 Berlin
+  - type: input
+    id: event_date
+    attributes:
+      label: Date of the event
+      description: You can leave this blank if the date is not yet determined.
+      placeholder: "2026-10-17"
+  - type: input
+    id: event_end_date
+    attributes:
+      label: End date (for multi-day events)
+      description: Leave blank for single-day events.
+      placeholder: "2026-10-18"
+  - type: input
+    id: event_start_time
+    attributes:
+      label: Start time
+      description: 24-hour time. Leave blank if the start time is not yet determined.
+      placeholder: "19:00"
+  - type: input
+    id: event_end_time
+    attributes:
+      label: End time
+      description: 24-hour time. Leave blank if the end time is not yet determined.
+      placeholder: "21:30"
+  - type: input
+    id: event_page_url
+    attributes:
+      label: Event page URL
+      description: This could be a Meetup or Eventbrite page, a forum thread with event details, or any public URL.
+      placeholder: https://myevents.com/pcd-my-city-123456789
+  - type: textarea
+    id: organizers
+    attributes:
+      label: Organizers
+      description: One name per line. You can leave this blank if there are no specific organizers to highlight or if you prefer not to list individual names.
+      placeholder: |-
+        Jane Doe
+        Alex Smith
+  - type: input
+    id: short_description
+    attributes:
+      label: Short description
+      description: One short summary sentence for the map popup and preview UI.
+      placeholder: A short description of the event for the map popup and preview cards.
+  - type: textarea
+    id: full_description
+    attributes:
+      label: Full event description
+      description: This becomes the markdown body for the event details page.
+      placeholder: |-
+        Tell visitors what the event is about, who it is for, and what to expect.
+  - type: checkboxes
+    id: event_activities
+    attributes:
+      label: Event activities
+      description: Select all activities that apply.
+      options:
+        - label: Show-and-tell
+        - label: Hands-on workshops
+        - label: Live coding
+        - label: Exhibition
+        - label: Panel discussions
+        - label: Beginner introductions to Processing or p5.js
+        - label: Creative coding jams or hack sessions
+        - label: Student project presentations
+        - label: Screening
+        - label: Other
+  - type: textarea
+    id: maintainer_notes
+    attributes:
+      label: Additional notes
+      description: Optional context for the maintainers reviewing this edit. This field will not be published on the site.
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for submitting your event! The PCD team will review the information provided and may reach out if we have any questions.
+
+        If you have questions about the submission process, please ask in the [PCD 2026 forum thread](https://discourse.processing.org/t/pcd-worldwide-2026/48081).
+
+        For private questions, feel free to contact the PCD team at [day@processingfoundation.org](mailto:day@processingfoundation.org).
