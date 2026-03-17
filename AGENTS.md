@@ -144,4 +144,4 @@ New events are submitted via GitHub Issues using `.github/ISSUE_TEMPLATE/new-eve
 
 ## Deployment
 
-GitHub Pages via `.github/workflows/deploy.yml`. Triggered on push to `main` (for paths under `pcd-website/`). The site base path is `/pcd-website-mvp-2` (set in `astro.config.mjs`).
+Netlify, configured via `netlify.toml`. The site deploys to `https://day.processing.org/` on push to `main`.
