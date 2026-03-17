@@ -1,23 +1,38 @@
 ---
-import { loadNodes } from '../../lib/nodes';
+import { loadNodes, canonicalEventId } from '../../lib/nodes';
 import type { Node } from '../../lib/nodes';
+import MapView from '../../components/MapView.vue';
+import '../../styles/global.css';
 import ogImage from '../../images/og-image.png';
 
 export async function getStaticPaths() {
   const nodes = await loadNodes();
-  return nodes.map((node) => ({ params: { id: node.id }, props: { node } }));
+  return nodes.flatMap((node) => {
+    const cid = canonicalEventId(node);
+    return [
+      // Original slug → redirect to canonical (slug+uid)
+      { params: { id: node.id }, props: { node, nodes, redirectTo: cid } },
+      // Canonical slug+uid → full page with OG tags + map SPA pre-opened
+      { params: { id: cid }, props: { node, nodes, redirectTo: null } },
+      // Short uid only → redirect to canonical (slug+uid)
+      { params: { id: node.uid }, props: { node, nodes, redirectTo: cid } },
+    ];
+  });
 }
 
-interface Props { node: Node; }
-const { node } = Astro.props;
+interface Props { node: Node; nodes: Node[]; redirectTo: string | null; }
+const { node, nodes, redirectTo } = Astro.props;
 
 const siteUrl = Astro.site ? Astro.site.href.replace(/\/$/, '') : '';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const ogImageUrl = `${siteUrl}${ogImage.src}`;
-const spaUrl = `${siteUrl}${base}/?event=${node.id}`;
 
+const canonicalId = canonicalEventId(node);
+const canonicalUrl = `${siteUrl}${base}/event/${canonicalId}/`;
+const redirectUrl = redirectTo ? `${base}/event/${redirectTo}/` : null;
+
+const ogImageUrl = `${siteUrl}${ogImage.src}`;
 const title = `${node.event_name} — Processing Community Day 2026`;
-const description = node.event_short_description;
+const description = node.event_short_description || `Join Processing Community Day 2026 in ${node.city ?? node.country ?? 'your city'}.`;
 ---
 
 <!DOCTYPE html>
@@ -27,25 +42,68 @@ const description = node.event_short_description;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <meta name="robots" content="noindex" />
-    <meta http-equiv="refresh" content={`0;url=${spaUrl}`} />
-    <link rel="canonical" href={spaUrl} />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content={spaUrl} />
-    <meta property="og:image" content={ogImageUrl} />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={ogImageUrl} />
+    {redirectUrl ? (
+      // Redirect variants: bounce to canonical, no OG tags
+      <>
+        <meta name="robots" content="noindex" />
+        <meta http-equiv="refresh" content={`0;url=${redirectUrl}`} />
+        <link rel="canonical" href={canonicalUrl} />
+      </>
+    ) : (
+      // Canonical page: full OG tags, indexable
+      <>
+        <link rel="canonical" href={canonicalUrl} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:image" content={ogImageUrl} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={ogImageUrl} />
+        <link rel="icon" type="image/x-icon" href={`${base}/favicon.ico`} />
+        <link
+          rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin=""
+        />
+        <link
+          rel="stylesheet"
+          href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"
+          crossorigin=""
+        />
+        <link
+          rel="stylesheet"
+          href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"
+          crossorigin=""
+        />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+        <script is:inline>
+          const stored = localStorage.getItem('pcd-map-style');
+          const isDark = stored === 'dark' || (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches);
+          document.documentElement.dataset.theme = isDark ? 'dark' : 'light';
+        </script>
+      </>
+    )}
   </head>
   <body>
-    <script is:inline define:vars={{ spaUrl }}>
-      window.location.replace(spaUrl);
-    </script>
-    <a href={spaUrl}>{`View ${node.event_name} on the PCD 2026 map`}</a>
+    {redirectUrl ? (
+      <>
+        <script is:inline define:vars={{ redirectUrl }}>
+          window.location.replace(redirectUrl);
+        </script>
+        <a href={redirectUrl}>{`View ${node.event_name} on the PCD 2026 map`}</a>
+      </>
+    ) : (
+      <>
+        <a href="#map" class="skip-link" id="skip-link">Skip to map</a>
+        <MapView nodes={nodes} initialEventId={node.id} client:only="vue" />
+      </>
+    )}
   </body>
 </html>

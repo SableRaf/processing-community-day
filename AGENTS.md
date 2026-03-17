@@ -30,6 +30,9 @@ See [TEST.md](TEST.md) for the full test inventory and coverage notes.
 ### Running tests
 
 ```sh
+node --test .github/scripts/event-issue-helpers.test.mjs
+node --test .github/scripts/process-new-event-issue.test.mjs
+node --test .github/scripts/process-edit-event-issue.test.mjs
 node --test .github/scripts/plus-code.test.mjs
 ```
 
@@ -52,8 +55,8 @@ No install needed — `open-location-code` is already available at `pcd-website/
 ### Data loading at build time
 
 Event data lives in `src/content/events/<event-id>/`:
-- `metadata.json` — event fields (id, name, location, dates, organizers, etc.)
-- `content.md` — markdown body (frontmatter must include `id:`)
+- `metadata.json` — event fields (id, uid, name, location, dates, organizers, etc.)
+- `content.md` — markdown body (frontmatter must include `id:` and `uid:`)
 
 `src/lib/nodes.ts` loads all events at Astro build time using `import.meta.glob()` + `getCollection('events')`, validates plus codes with `OpenLocationCode`, decodes lat/lng, and returns a sorted `Node[]` array passed as props to `<MapView>`.
 
@@ -64,8 +67,9 @@ Event data lives in `src/content/events/<event-id>/`:
 - **Leaflet CSS** is loaded via `<link>` tags in `index.astro`, NOT via JS imports — avoids SSR issues since MapView is `client:only="vue"`.
 - **`open-location-code`** exports `{ OpenLocationCode }` as a named export — use `new OpenLocationCode()` (not static methods).
 - **`leaflet.markercluster`** causes a circular dependency warning, suppressed via `rollupOptions.onwarn` in `astro.config.mjs`.
-- **Deep linking:** `?event=<id>` query param auto-opens the event detail panel.
+- **Deep linking:** `?event=<id-or-uid>` query param auto-opens the event detail panel. Both the slug `id` and the short `uid` are accepted.
 - **Map style preference** persisted in `localStorage`.
+- **Event UIDs:** Each event has a stable 7-char hex `uid` stored in both `metadata.json` and `content.md` frontmatter. UIDs never change after creation. Three static URL formats are generated per event: `/event/<slug>` (redirects to canonical), `/event/<slug>-<uid>` (canonical, has OG tags, redirects into SPA), and `/event/<uid>` (short form, redirects to canonical). The canonical URL is what the share button copies.
 
 ### Component roles
 
@@ -140,7 +144,23 @@ Must follow standard accessibility best practices (semantic HTML, ARIA attribute
 
 ## Event Submission Workflow
 
-New events are submitted via GitHub Issues using `.github/ISSUE_TEMPLATE/new-event.yml`. The workflow `.github/workflows/new-event-intake.yml` runs `.github/scripts/process-new-event-issue.mjs` to validate the issue and, if valid, opens a PR with generated `metadata.json` + `content.md` files.
+### New events
+
+New events are submitted via GitHub Issues using `.github/ISSUE_TEMPLATE/01-new-event.yml`. The workflow `.github/workflows/new-event-intake.yml` (`process-new-event` job) runs `.github/scripts/process-new-event-issue.mjs` to validate the issue and, if valid, opens a PR with generated `metadata.json` + `content.md` files. A stable `uid` is generated at intake and written into both files.
+
+### Edit events
+
+Organizers can edit existing events via `.github/ISSUE_TEMPLATE/04-edit-event.yml`. The same workflow (`process-edit-event` job) runs `.github/scripts/process-edit-event-issue.mjs`. The edit script: reads the existing event by `event_id`, preserves the immutable `uid` and `intake` block, preserves `event_activities` if all checkboxes are unchecked (GitHub issue forms cannot prefill checkboxes), and preserves `content.md` if `full_description` is blank.
+
+### Shared helpers
+
+Pure functions shared by both intake scripts live in `.github/scripts/event-issue-helpers.mjs`. This includes `parseIssueSections`, validation helpers, `slugify`, `parseActivities`, `parseOrganizers`, `buildValidationComment`, and `generateUniqueUid`.
+
+### Template detection
+
+Both scripts guard against running on the wrong template:
+- `process-new-event-issue.mjs` skips if the body contains `### Event ID` (unique to the edit template)
+- `process-edit-event-issue.mjs` skips if the body does NOT contain `### Event ID`
 
 ## Deployment
 

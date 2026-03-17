@@ -13,11 +13,9 @@ import {
   isValidTime,
   isValidEmail,
   isValidHttpUrl,
-  slugify,
   parseActivities,
   parseOrganizers,
   buildValidationComment,
-  generateUniqueUid,
 } from './event-issue-helpers.mjs';
 
 const WORKSPACE = process.cwd();
@@ -38,7 +36,7 @@ async function setOutput(key, value) {
   await fs.appendFile(OUTPUT_PATH, `${key}=${String(value)}\n`);
 }
 
-function buildPrBody(number, name, submitterLogin, isOnlineEvent, eventDate, startTime, address, plusCodeNote, rawPlusCode, resolvedPlusCode, shortDescription, fullDescription, contactName, contactEmail) {
+function buildPrBody(number, eventName, submitterLogin, isOnlineEvent, eventDate, startTime, address, plusCodeNote, rawPlusCode, resolvedPlusCode, shortDescription, fullDescription, contactName, contactEmail) {
   const submitterMention = submitterLogin ? `@${submitterLogin}` : 'the submitter';
   const locationLine = isOnlineEvent
     ? '- [ ] Online event URL is correct and accessible'
@@ -63,11 +61,11 @@ function buildPrBody(number, name, submitterLogin, isOnlineEvent, eventDate, sta
     ...noteBlock,
     `Closes #${number}`,
     '',
-    `This PR was generated from the "New Event" issue form for **${name}**.`,
+    `This PR was generated from the "Edit Event" issue form for **${eventName}**.`,
     `Submitted by ${submitterMention}.`,
     '',
     'Review checklist:',
-    `- [ ] Event name "${name}" is correct`,
+    `- [ ] Event name "${eventName}" is correct`,
     `- [ ] Public contact info "${contactName} <${contactEmail}>" is correct`,
     ...(shortDescription ? [] : ['- [ ] Short description is left blank — confirm this is intentional']),
     ...(fullDescription ? [] : ['- [ ] Long description is left blank — confirm this is intentional']),
@@ -77,19 +75,11 @@ function buildPrBody(number, name, submitterLogin, isOnlineEvent, eventDate, sta
   ].join('\n');
 }
 
-console.log(`[process-new-event-issue] issue #${issueNumber}, body length: ${issueBody.length}`);
+console.log(`[process-edit-event-issue] issue #${issueNumber}, body length: ${issueBody.length}`);
 
-// Skip if this is an edit-event issue (has ### Event ID heading)
-if (issueBody.includes('### Event ID')) {
-  console.log('[process-new-event-issue] found ### Event ID heading — skipping (this is an edit event issue)');
-  await setOutput('valid', 'skip');
-  process.exit(0);
-}
-
-// GitHub strips HTML comments from markdown blocks, so we detect the template
-// by checking for a heading that is unique to the new-event issue form.
-if (!issueBody.includes('### Map placement')) {
-  console.log('[process-new-event-issue] template headings not found — skipping (not a new event issue)');
+// Skip if this is NOT an edit-event issue (must have ### Event ID heading)
+if (!issueBody.includes('### Event ID')) {
+  console.log('[process-edit-event-issue] ### Event ID heading not found — skipping (not an edit event issue)');
   await setOutput('valid', 'skip');
   process.exit(0);
 }
@@ -98,6 +88,7 @@ async function main() {
   const fields = parseIssueSections(issueBody);
   const errors = [];
 
+  const eventId = required(fields, 'Event ID', errors);
   const eventName = required(fields, 'Event name', errors);
   const rawPlusCode = required(fields, 'Map placement', errors, {
     field: 'Map placement (Plus Code)',
@@ -111,7 +102,6 @@ async function main() {
   const eventUrl = fields.get('Event URL (only for online events)')?.trim() ?? '';
   const primaryContactName = required(fields, 'Primary contact name', errors);
   const contactEmail = required(fields, 'Primary contact email', errors);
-  // Parse city/country before plus_code resolution — needed for short-code recovery
   const city = fields.get('City or locality')?.trim() ?? '';
   const country = fields.get('Country')?.trim() ?? '';
   const organizationName = fields.get('Organization name')?.trim() ?? '';
@@ -126,15 +116,45 @@ async function main() {
   const organizers = parseOrganizers(fields.get('Organizers')?.trim() ?? '');
   const shortDescription = fields.get('Short description')?.trim() ?? '';
   const fullDescription = fields.get('Full event description')?.trim() ?? '';
-  const activities = parseActivities(fields.get('Event activities')?.trim() ?? '');
+  const submittedActivities = parseActivities(fields.get('Event activities')?.trim() ?? '');
   const forumThreadUrl = fields.get('Forum discussion URL')?.trim() ?? '';
   const maintainerNotes = fields.get('Additional notes')?.trim() ?? '';
+
+  if (!eventId) {
+    // eventId required error already pushed above
+  }
+
+  const eventDirPath = eventId
+    ? path.join(WORKSPACE, 'pcd-website/src/content/events', eventId)
+    : null;
+  const markdownPath = eventDirPath ? path.join(eventDirPath, 'content.md') : null;
+  const metadataPath = eventDirPath ? path.join(eventDirPath, 'metadata.json') : null;
+
+  // Check event exists (only if eventId was provided)
+  let existingMeta = null;
+  let existingContent = null;
+  if (eventId && errors.length === 0) {
+    try {
+      await fs.access(eventDirPath);
+    } catch {
+      errors.push({ field: 'Event ID', found: eventId, message: `No event with ID \`${eventId}\` exists. Please double-check the event ID and try again.` });
+    }
+
+    if (errors.length === 0) {
+      existingMeta = JSON.parse(await fs.readFile(metadataPath, 'utf8'));
+      try {
+        existingContent = await fs.readFile(markdownPath, 'utf8');
+      } catch {
+        existingContent = null;
+      }
+    }
+  }
 
   // Resolve plus_code with smart recovery before validation
   const { code: resolvedPlusCode, note: plusCodeNote } = await resolvePlusCode(rawPlusCode, city, country);
   const plusCode = resolvedPlusCode ?? rawPlusCode.replace(/\s+/g, '').toUpperCase();
   if (plusCodeNote) {
-    console.log(`[process-new-event-issue] plus_code auto-recovered: ${rawPlusCode} → ${plusCode}`);
+    console.log(`[process-edit-event-issue] plus_code auto-recovered: ${rawPlusCode} → ${plusCode}`);
   }
 
   if (eventDate && !isValidDate(eventDate)) errors.push({ field: 'Event date', found: eventDate, message: 'Invalid format. Please use `YYYY-MM-DD`, e.g. `2026-03-21`.' });
@@ -152,7 +172,7 @@ async function main() {
   ) {
     errors.push({ field: 'End time', found: endTime, message: 'End time must be later than start time for single-day events.' });
   }
-  if (eventPageUrl && !isValidHttpUrl(eventPageUrl)) errors.push({ field: 'Event page URL', found: eventPageUrl, message: 'Must be a valid URL starting with `http://` or `https://`, e.g. `https://example.com/pcd`.' });
+  if (eventPageUrl && !isValidHttpUrl(eventPageUrl)) errors.push({ field: 'Event page URL', found: eventPageUrl, message: 'Must be a valid URL starting with `http://` or `https://`.' });
   if (forumThreadUrl && !isValidHttpUrl(forumThreadUrl)) errors.push({ field: 'Forum discussion URL', found: forumThreadUrl, message: 'Must be a valid URL starting with `http://` or `https://`.' });
   if (contactEmail && !isValidEmail(contactEmail)) errors.push({ field: 'Primary contact email', found: contactEmail, message: 'Not a valid email address. Please provide a valid email like `you@example.com`.' });
   if (rawPlusCode && !resolvedPlusCode) errors.push({ field: 'Map placement (Plus Code)', found: rawPlusCode.replace(/\s+/g, '').toUpperCase(), message: 'Not a valid full global Plus Code. It should look like `8FW4V75V+8Q`. [Find your Plus Code →](https://plus.codes/)' });
@@ -162,24 +182,8 @@ async function main() {
   if (organizationType && !VALID_ORG_TYPES.has(organizationType)) errors.push({ field: 'Organization type', found: organizationType, message: 'Not a recognized option. Please choose one of the valid options from the form.' });
   if (isOnlineEvent && !eventUrl) errors.push({ field: 'Event URL', message: 'An event URL is required for online events. Please provide the URL where people can join.' });
 
-  const normalizedEventName = slugify(eventName);
-  const eventId = normalizedEventName.startsWith('pcd-')
-    ? `${normalizedEventName}-${YEAR}`
-    : `pcd-${normalizedEventName}-${YEAR}`;
-
-  const eventDirPath = path.join(WORKSPACE, 'pcd-website/src/content/events', eventId);
-  const markdownPath = path.join(eventDirPath, 'content.md');
-  const metadataPath = path.join(eventDirPath, 'metadata.json');
-
-  try {
-    await fs.access(eventDirPath);
-    errors.push({ field: 'Event name', found: eventName, message: `An event with the generated ID \`${eventId}\` already exists. If you need to update an existing event, post in the [PCD 2026 forum thread](${PCD_FORUM_THREAD_URL}) (recommended) or write to ${PCD_CONTACT_EMAIL}.` });
-  } catch {
-    // Directory does not exist yet.
-  }
-
   if (errors.length > 0) {
-    console.log(`[process-new-event-issue] validation failed with ${errors.length} error(s):`);
+    console.log(`[process-edit-event-issue] validation failed with ${errors.length} error(s):`);
     errors.forEach((e) => console.log(`  - [${e.field}]${e.found !== undefined ? ` (found: "${e.found}")` : ''} ${e.message}`));
     const validationCommentPath = path.join(RUNNER_TEMP, `validation-${issueNumber}.md`);
     await fs.writeFile(validationCommentPath, buildValidationComment(errors));
@@ -188,23 +192,16 @@ async function main() {
     process.exit(0);
   }
 
-  // Collect existing uids and generate a new unique one
-  const existingEventDirs = await fs.readdir(path.join(WORKSPACE, 'pcd-website/src/content/events')).catch(() => []);
-  const existingUids = new Set();
-  for (const dir of existingEventDirs) {
-    const mpath = path.join(WORKSPACE, 'pcd-website/src/content/events', dir, 'metadata.json');
-    try {
-      const meta = JSON.parse(await fs.readFile(mpath, 'utf8'));
-      if (meta.uid) existingUids.add(meta.uid);
-    } catch {
-      // skip
-    }
-  }
-  const uid = generateUniqueUid(existingUids);
+  // Preserve uid (immutable) and intake block from existing metadata
+  const uid = existingMeta.uid;
+  const existingIntake = existingMeta.intake;
+
+  // Preserve event_activities if all checkboxes came back unchecked
+  const activities = submittedActivities.length > 0 ? submittedActivities : (existingMeta.event_activities ?? []);
 
   const nodeRecord = {
     id: eventId,
-    uid,
+    ...(uid ? { uid } : {}),
     organizers,
     primary_contact: { name: primaryContactName, email: contactEmail },
     organization_name: organizationName,
@@ -227,48 +224,47 @@ async function main() {
     forum_thread_url: forumThreadUrl,
     city,
     country,
-    placeholder: false,
-    intake: {
-      issue_number: issueNumber,
-      submitted_by_github: submitterLogin,
-      submitted_date: new Date().toISOString().slice(0, 10),
-      maintainer_notes: maintainerNotes,
-    },
+    placeholder: existingMeta.placeholder ?? false,
+    intake: existingIntake,
   };
 
-  const markdownLines = [
-    '---',
-    `id: ${eventId}`,
-    `uid: ${uid}`,
-    '---',
-    '',
-    ...(fullDescription ? [fullDescription, ''] : []),
-  ];
-
-  await fs.mkdir(eventDirPath, { recursive: true });
-  await fs.writeFile(markdownPath, markdownLines.join('\n'));
   await fs.writeFile(metadataPath, `${JSON.stringify(nodeRecord, null, 2)}\n`);
+
+  // Preserve content.md if full_description is blank
+  if (fullDescription) {
+    const markdownLines = [
+      '---',
+      `id: ${eventId}`,
+      ...(uid ? [`uid: ${uid}`] : []),
+      '---',
+      '',
+      fullDescription,
+      '',
+    ];
+    await fs.writeFile(markdownPath, markdownLines.join('\n'));
+  }
+  // else: leave existing content.md unchanged
 
   const prBodyPath = path.join(RUNNER_TEMP, `pr-body-${issueNumber}.md`);
   await fs.writeFile(prBodyPath, buildPrBody(issueNumber, eventName, submitterLogin, isOnlineEvent, eventDate, startTime, address, plusCodeNote, rawPlusCode, resolvedPlusCode, shortDescription, fullDescription, primaryContactName, contactEmail));
 
-  console.log(`[process-new-event-issue] validation passed — event id: ${eventId}, uid: ${uid}`);
+  console.log(`[process-edit-event-issue] validation passed — event id: ${eventId}`);
   await setOutput('valid', 'true');
-  await setOutput('branch', `automation/new-event-${issueNumber}-${eventId}`);
-  await setOutput('commit_message', `Add ${eventName} event from issue #${issueNumber}`);
-  await setOutput('pr_title', `Add ${eventName} to the PCD map`);
+  await setOutput('branch', `automation/edit-event-${issueNumber}-${eventId}`);
+  await setOutput('commit_message', `Update ${eventName} event from issue #${issueNumber}`);
+  await setOutput('pr_title', `Update ${eventName} on the PCD map`);
   await setOutput('pr_body_path', prBodyPath);
   await setOutput('event_name', eventName);
-  await setOutput('pr_label', 'new event');
-  await setOutput('action_verb', 'added to');
+  await setOutput('pr_label', 'edit event');
+  await setOutput('action_verb', 'updated on');
 }
 
 await main().catch(async (err) => {
-  console.error('[process-new-event-issue] unhandled error:', err);
+  console.error('[process-edit-event-issue] unhandled error:', err);
   try {
     const validationCommentPath = path.join(RUNNER_TEMP, `validation-${issueNumber}.md`);
     await fs.writeFile(validationCommentPath, [
-      'Thanks for submitting your event to Processing Community Day 2026! 🌍',
+      'Thanks for submitting your event edit to Processing Community Day 2026! 🌍',
       '',
       'An unexpected error occurred while processing your submission. Our team has been notified.',
       '',
@@ -277,7 +273,7 @@ await main().catch(async (err) => {
     await setOutput('valid', 'false');
     await setOutput('validation_comment_path', validationCommentPath);
   } catch {
-    // Best-effort — if we can't write the comment, at least exit non-zero
+    // Best-effort
   }
   process.exit(1);
 });

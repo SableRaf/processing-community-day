@@ -6,7 +6,7 @@ import { Icon } from '@iconify/vue';
 import type { Node } from '../lib/nodes';
 import { formatDateRange, formatTimeRange, calendarLinks, onlinePlatformName } from '../lib/format';
 import { getOsmUrl } from '../lib/popup';
-import { GITHUB_EVENTS_BASE_URL, GITHUB_CONTENT_ISSUE_URL } from '../config';
+import { GITHUB_EDIT_EVENT_URL, GITHUB_CONTENT_ISSUE_URL } from '../config';
 const props = defineProps<{
   node: Node | null;
 }>();
@@ -170,8 +170,8 @@ function getDescPreview(node: Node): { text: string; hasMore: boolean } {
 }
 
 function getShareUrl(node: Node): string {
-  const base = window.location.pathname.replace(/\/$/, '');
-  return `${window.location.origin}${base}/event/${node.id}/`;
+  const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+  return `${window.location.origin}${base}/event/${node.id}-${node.uid}/`;
 }
 
 async function copyLink(node: Node) {
@@ -186,7 +186,28 @@ function getReportIssueHref(node: Node): string {
 }
 
 function getEditEventHref(node: Node): string {
-  return `${GITHUB_EVENTS_BASE_URL}/${node.id}`;
+  const params = new URLSearchParams();
+  params.set('event_id', node.id);
+  params.set('event_name', node.event_name);
+  if (node.forum_thread_url) params.set('forum_thread_url', node.forum_thread_url);
+  params.set('plus_code', node.plus_code);
+  if (node.event_url) params.set('online_event_url', node.event_url);
+  params.set('primary_contact_name', node.primary_contact.name);
+  params.set('contact_email', node.primary_contact.email);
+  if (node.city) params.set('city', node.city);
+  if (node.country) params.set('country', node.country);
+  if (node.organization_name) params.set('organization_name', node.organization_name);
+  if (node.organization_url) params.set('organization_url', node.organization_url);
+  if (node.address) params.set('address', node.address);
+  if (node.event_date) params.set('event_date', node.event_date);
+  if (node.event_end_date) params.set('event_end_date', node.event_end_date);
+  if (node.event_start_time) params.set('event_start_time', node.event_start_time);
+  if (node.event_end_time) params.set('event_end_time', node.event_end_time);
+  params.set('event_page_url', getShareUrl(node));
+  if (node.organizers.length) params.set('organizers', node.organizers.map(o => o.name).join('\n'));
+  params.set('short_description', node.event_short_description);
+  if (node.details_markdown) params.set('full_description', node.details_markdown);
+  return `${GITHUB_EDIT_EVENT_URL}&${params.toString().replace(/\+/g, '%20')}`;
 }
 
 const descPreview = computed(() => props.node ? getDescPreview(props.node) : null);

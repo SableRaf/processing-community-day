@@ -1,0 +1,36 @@
+---
+import { loadNodes, canonicalEventId } from '../lib/nodes';
+
+const nodes = await loadNodes();
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+// Build a uid → canonical-path map to embed in the page
+const uidMap: Record<string, string> = {};
+for (const node of nodes) {
+  uidMap[node.uid] = `${base}/event/${canonicalEventId(node)}/`;
+}
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Page not found — Processing Community Day 2026</title>
+  </head>
+  <body>
+    <script is:inline define:vars={{ uidMap, base }}>
+      // If the path looks like /event/<anything>-<uid>/, extract the uid
+      // and redirect to the canonical event URL.
+      const match = window.location.pathname.match(/\/event\/.*-([0-9a-f]{7})\/?$/);
+      if (match) {
+        const uid = match[1];
+        const target = uidMap[uid];
+        if (target) {
+          window.location.replace(target);
+        }
+      }
+    </script>
+    <p>Page not found. <a href={`${base}/`}>Go to the map</a>.</p>
+  </body>
+</html>

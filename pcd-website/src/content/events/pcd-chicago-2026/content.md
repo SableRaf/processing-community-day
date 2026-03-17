@@ -1,5 +1,6 @@
 ---
 id: pcd-chicago-2026
+uid: e56fc2e
 ---
 
 [The Center for Concrete and Abstract Machine](https://ccam.world) and [Peripheral Study](https://instagram.com/peripheral_study) is hosting a Chicago-based meeting of Processing Community Day in October 2026. We’ll be celebrating 25 years of Processing with workshops, talks, and presentations at Co-Prosperity in Bridgeport.

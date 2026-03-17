@@ -1,4 +1,4 @@
-name: New Event Intake
+name: Event Intake
 
 on:
   issues:
@@ -17,7 +17,7 @@ env:
   STATUS_COMMENT_MARKER: <!-- new-event-intake-status -->
 
 jobs:
-  process-submission:
+  process-new-event:
     if: contains(github.event.issue.labels.*.name, 'new event')
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -32,6 +32,8 @@ jobs:
       pr_body_path: ${{ steps.generate.outputs.pr_body_path }}
       validation_comment_path: ${{ steps.generate.outputs.validation_comment_path }}
       event_name: ${{ steps.generate.outputs.event_name }}
+      pr_label: ${{ steps.generate.outputs.pr_label }}
+      action_verb: ${{ steps.generate.outputs.action_verb }}
     steps:
       - name: Label and assign intake issue
         uses: actions/github-script@v8
@@ -116,9 +118,120 @@ jobs:
           path: ${{ steps.generate.outputs.validation_comment_path }}
           retention-days: 1
 
+  process-edit-event:
+    if: contains(github.event.issue.labels.*.name, 'edit event')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PCD_TEAM_ASSIGNEES: ${{ vars.PCD_TEAM_ASSIGNEES }}
+      PCD_TEAM_REVIEWERS: ${{ vars.PCD_TEAM_REVIEWERS }}
+    outputs:
+      valid: ${{ steps.generate.outputs.valid }}
+      branch: ${{ steps.generate.outputs.branch }}
+      commit_message: ${{ steps.generate.outputs.commit_message }}
+      pr_title: ${{ steps.generate.outputs.pr_title }}
+      pr_body_path: ${{ steps.generate.outputs.pr_body_path }}
+      validation_comment_path: ${{ steps.generate.outputs.validation_comment_path }}
+      event_name: ${{ steps.generate.outputs.event_name }}
+      pr_label: ${{ steps.generate.outputs.pr_label }}
+      action_verb: ${{ steps.generate.outputs.action_verb }}
+    steps:
+      - name: Label and assign intake issue
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const issue_number = context.issue.number;
+            const desiredLabels = [
+              { name: 'needs review', color: 'fbca04', description: 'Submission is ready for maintainer review' },
+              { name: 'edit event', color: '0075ca', description: 'Edit event submission intake' },
+            ];
+
+            for (const label of desiredLabels) {
+              try {
+                await github.rest.issues.getLabel({ owner, repo, name: label.name });
+              } catch (error) {
+                if (error.status !== 404) throw error;
+                await github.rest.issues.createLabel({ owner, repo, ...label });
+              }
+            }
+
+            await github.rest.issues.addLabels({
+              owner,
+              repo,
+              issue_number,
+              labels: desiredLabels.map((label) => label.name),
+            });
+
+            const assignees = (process.env.PCD_TEAM_ASSIGNEES || '')
+              .split(',')
+              .map((value) => value.trim())
+              .filter(Boolean);
+
+            if (assignees.length) {
+              await github.rest.issues.addAssignees({
+                owner,
+                repo,
+                issue_number,
+                assignees,
+              });
+            }
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - name: Install script dependencies
+        run: npm install --prefix /tmp/script-deps open-location-code
+      - name: Generate event files from issue
+        id: generate
+        run: node .github/scripts/process-edit-event-issue.mjs
+      - name: Log generate outputs
+        if: always()
+        run: |
+          echo "valid=${{ steps.generate.outputs.valid }}"
+          echo "branch=${{ steps.generate.outputs.branch }}"
+          echo "event_name=${{ steps.generate.outputs.event_name }}"
+          echo "validation_comment_path=${{ steps.generate.outputs.validation_comment_path }}"
+          echo "pr_body_path=${{ steps.generate.outputs.pr_body_path }}"
+      - name: Upload event files artifact
+        if: steps.generate.outputs.valid == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: event-files-${{ github.event.issue.number }}
+          path: pcd-website/src/content/events/
+          retention-days: 1
+      - name: Upload PR body artifact
+        if: steps.generate.outputs.valid == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr-body-${{ github.event.issue.number }}
+          path: ${{ steps.generate.outputs.pr_body_path }}
+          retention-days: 1
+      - name: Upload validation comment artifact
+        if: steps.generate.outputs.valid == 'false'
+        uses: actions/upload-artifact@v4
+        with:
+          name: validation-comment-${{ github.event.issue.number }}
+          path: ${{ steps.generate.outputs.validation_comment_path }}
+          retention-days: 1
+
   handle-validation-failure:
-    needs: process-submission
-    if: needs.process-submission.result == 'failure' || needs.process-submission.outputs.valid == 'false'
+    needs: [process-new-event, process-edit-event]
+    if: |
+      always() && (
+        (needs.process-new-event.result != 'skipped' && (
+          needs.process-new-event.result == 'failure' ||
+          needs.process-new-event.outputs.valid == 'false'
+        )) ||
+        (needs.process-edit-event.result != 'skipped' && (
+          needs.process-edit-event.result == 'failure' ||
+          needs.process-edit-event.outputs.valid == 'false'
+        ))
+      )
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -133,7 +246,7 @@ jobs:
           script: |
             const fs = require('fs');
             const marker = process.env.STATUS_COMMENT_MARKER;
-            const commentPath = `/tmp/validation-comment/new-event-${context.issue.number}-validation.md`;
+            const commentPath = `/tmp/validation-comment/validation-${context.issue.number}.md`;
             const body = `${marker}\n${fs.readFileSync(commentPath, 'utf8')}`;
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
@@ -161,8 +274,10 @@ jobs:
             }
 
   create-pr:
-    needs: process-submission
-    if: needs.process-submission.outputs.valid == 'true'
+    needs: [process-new-event, process-edit-event]
+    if: |
+      (needs.process-new-event.result != 'skipped' && needs.process-new-event.outputs.valid == 'true') ||
+      (needs.process-edit-event.result != 'skipped' && needs.process-edit-event.outputs.valid == 'true')
     runs-on: ubuntu-latest
     timeout-minutes: 10
     outputs:
@@ -187,16 +302,16 @@ jobs:
         uses: peter-evans/create-pull-request@v8
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ needs.process-submission.outputs.branch }}
+          branch: ${{ needs.process-new-event.outputs.branch || needs.process-edit-event.outputs.branch }}
           delete-branch: true
           add-paths: |
             pcd-website/src/content/events/**
-          commit-message: ${{ needs.process-submission.outputs.commit_message }}
-          title: ${{ needs.process-submission.outputs.pr_title }}
-          body-path: /tmp/pr-body/new-event-${{ github.event.issue.number }}-pr-body.md
+          commit-message: ${{ needs.process-new-event.outputs.commit_message || needs.process-edit-event.outputs.commit_message }}
+          title: ${{ needs.process-new-event.outputs.pr_title || needs.process-edit-event.outputs.pr_title }}
+          body-path: /tmp/pr-body/pr-body-${{ github.event.issue.number }}.md
 
   post-pr-actions:
-    needs: [process-submission, create-pr]
+    needs: [process-new-event, process-edit-event, create-pr]
     if: needs.create-pr.outputs.pull-request-number != ''
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -210,9 +325,10 @@ jobs:
             const owner = context.repo.owner;
             const repo = context.repo.repo;
             const issue_number = Number('${{ needs.create-pr.outputs.pull-request-number }}');
+            const prLabel = '${{ needs.process-new-event.outputs.pr_label || needs.process-edit-event.outputs.pr_label }}';
             const desiredLabels = [
               { name: 'needs review', color: 'fbca04', description: 'Submission is ready for maintainer review' },
-              { name: 'new event', color: '0e8a16', description: 'New event submission intake' },
+              { name: prLabel, color: prLabel === 'new event' ? '0e8a16' : '0075ca', description: prLabel === 'new event' ? 'New event submission intake' : 'Edit event submission intake' },
             ];
 
             for (const label of desiredLabels) {
@@ -256,7 +372,8 @@ jobs:
         env:
           PR_NUMBER: ${{ needs.create-pr.outputs.pull-request-number }}
           PR_URL: ${{ needs.create-pr.outputs.pull-request-url }}
-          EVENT_NAME: ${{ needs.process-submission.outputs.event_name }}
+          EVENT_NAME: ${{ needs.process-new-event.outputs.event_name || needs.process-edit-event.outputs.event_name }}
+          ACTION_VERB: ${{ needs.process-new-event.outputs.action_verb || needs.process-edit-event.outputs.action_verb }}
         with:
           script: |
             const marker = process.env.STATUS_COMMENT_MARKER;
@@ -266,7 +383,7 @@ jobs:
               '',
               `**${process.env.EVENT_NAME}** has been successfully parsed and a pull request has been opened for review: [#${process.env.PR_NUMBER}](${process.env.PR_URL}).`,
               '',
-              'Once the PR is merged, your event will be added to the map at https://day.processing.org.',
+              `Once the PR is merged, your event will be **${process.env.ACTION_VERB}** the map at https://day.processing.org.`,
             ].join('\n');
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,

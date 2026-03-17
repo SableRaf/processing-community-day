@@ -1,5 +1,60 @@
 # Tests
 
+## Event issue helpers
+
+**File:** `.github/scripts/event-issue-helpers.test.mjs`
+**Run:** `node --test .github/scripts/event-issue-helpers.test.mjs`
+**Requires:** Node built-ins only — no install needed.
+
+These tests cover the shared pure functions extracted into `event-issue-helpers.mjs`, which are used by both the new-event and edit-event intake scripts.
+
+| Function | Cases |
+|---|---|
+| `parseIssueSections` | Normal sections, `_No response_` cleaning, empty body, `\r\n` normalization |
+| `isValidDate` | Valid date, missing leading zero, non-ISO format, out-of-range month/day, empty string |
+| `isValidTime` | Valid time, midnight, hour 25, missing colon, minute 60 |
+| `isValidEmail` | Valid email, missing `@`, missing TLD, empty string |
+| `isValidHttpUrl` | `http`/`https` valid, `ftp` rejected, non-URL string, empty string |
+| `slugify` | Accent removal, lowercase+space→dash, leading/trailing dash strip, multiple dash collapse, special char removal |
+| `parseActivities` | Checked boxes, all unchecked, unknown activity filtered, case-insensitive `[X]` |
+| `parseOrganizers` | Plain names, `name <email>` suffix stripped, blank lines ignored, empty input |
+| `generateUniqueUid` | Length 7, hex chars only, not in existing set, added to set, multiple unique in sequence |
+
+---
+
+## New event intake script
+
+**File:** `.github/scripts/process-new-event-issue.test.mjs`
+**Run:** `node --test .github/scripts/process-new-event-issue.test.mjs`
+**Requires:** Node built-ins + `open-location-code` at `pcd-website/node_modules/`. Runs the script as a child process against a real temp filesystem.
+
+| Case | Expected |
+|---|---|
+| Valid new-event issue body | `valid=true`, writes `metadata.json` with all fields including `uid` (7 hex chars) |
+| `Event page URL` field present | Value appears in `metadata.json` as `event_page_url` (regression for the `Event website` field-name bug) |
+| Duplicate event directory | `valid=false`, validation comment mentions the generated id |
+| Issue body contains `### Event ID` heading | `valid=skip` (guard against running on edit-event template) |
+| Issue body missing `### Map placement` and no `### Event ID` | `valid=skip` (unrecognized template) |
+
+---
+
+## Edit event intake script
+
+**File:** `.github/scripts/process-edit-event-issue.test.mjs`
+**Run:** `node --test .github/scripts/process-edit-event-issue.test.mjs`
+**Requires:** Node built-ins + `open-location-code` at `pcd-website/node_modules/`. Runs the script as a child process; sets up a real test event directory in the repo's events folder with `beforeEach`/`afterEach` cleanup.
+
+| Case | Expected |
+|---|---|
+| Valid edit issue, event exists | `valid=true`, `pr_label=edit event`, `action_verb=updated on`, metadata updated, `uid` and `intake` preserved |
+| Blank `full_description` | Existing `content.md` unchanged |
+| All activities unchecked | Existing `event_activities` preserved (checkbox prefill limitation) |
+| Some activities checked | `event_activities` overwritten with checked values |
+| Event directory does not exist | `valid=false`, validation comment mentions the missing event id |
+| Missing `### Event ID` heading | `valid=skip` (guard against running on new-event template) |
+
+---
+
 ## Plus Code functions
 
 **File:** `.github/scripts/plus-code.test.mjs`

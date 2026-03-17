@@ -12,6 +12,7 @@ import { i18n } from '../i18n/index';
 
 const props = defineProps<{
   nodes: Node[];
+  initialEventId?: string;
 }>();
 
 const { t } = useI18n();
@@ -489,9 +490,9 @@ onMounted(async () => {
   document.addEventListener('keydown', handleKeydown);
 
   // Deep link: ?event=<node-id> auto-opens the panel for that event
-  const eventId = new URLSearchParams(window.location.search).get('event');
+  const eventId = props.initialEventId ?? new URLSearchParams(window.location.search).get('event');
   if (eventId) {
-    const node = props.nodes.find((n) => n.id === eventId);
+    const node = props.nodes.find((n) => n.id === eventId || n.uid === eventId);
     if (node) openPanel(node);
   }
 

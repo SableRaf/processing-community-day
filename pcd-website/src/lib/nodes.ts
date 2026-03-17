@@ -1,9 +1,14 @@
 import { getCollection } from 'astro:content';
 import { OpenLocationCode } from 'open-location-code';
 
+export function canonicalEventId(node: Pick<Node, 'id' | 'uid'>): string {
+  return `${node.id}-${node.uid}`;
+}
+
 export interface Node {
   // Identity
   id: string;
+  uid: string;
   event_name: string;
 
   // Location
@@ -41,6 +46,7 @@ export interface Node {
 
 interface NodeInput {
   id: string;
+  uid?: string;
   organizers: { name: string }[];
   primary_contact: { name: string; email: string };
   organization_name?: string;
@@ -128,6 +134,7 @@ export async function loadNodes(): Promise<Node[]> {
 
     return {
       id: input.id,
+      uid: input.uid ?? input.id,
       event_name: input.event_name,
       city: normalizeOptionalText(input.city),
       country: normalizeOptionalText(input.country),
