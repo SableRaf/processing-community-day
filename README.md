@@ -25,11 +25,19 @@ The map site is open source and contributions are welcome!
 
 ## Adding an event
 
-To add your event to the map, open a GitHub Issue using the [**New Event**](https://github.com/processing/processing-community-day/issues/new?template=new-event.yml) template.
+To add your event to the map, open a GitHub Issue using the [**New Event**](https://github.com/processing/processing-community-day/issues/new?template=01-new-event.yml) template.
 
 A script will automatically validate your submission and create a pull request. If there are errors (missing fields, invalid dates, etc.), you'll receive friendly error messages. Once the validation passes, a maintainer will review and merge the PR, and your event will appear on the map.
 
 If you have any questions or need help, feel free to ask in the [forum thread](https://discourse.processing.org/t/pcd-worldwide-2026/48081) or join the [Processing Foundation Discord server](https://discord.gg/q5NksnwGsY).
+
+## Updating an event
+
+To update your event, go to the event details page on the map, scroll down, and click the "Edit this event data". 
+
+This will open a pre-filled GitHub Issue form with your event's current information. Make your changes, and submit the form. 
+
+A new pull request will be automatically created with the updates. A maintainer will review and merge the PR, and your changes will be reflected on the map.
 
 ## Tech
 
