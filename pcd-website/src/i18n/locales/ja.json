@@ -8,7 +8,13 @@
     "submit_event": "イベントを登録する",
     "switch_to_light": "ライトモードに切り替える",
     "switch_to_dark": "ダークモードに切り替える",
-    "change_language": "言語を変更"
+    "change_language": "言語を変更",
+    "info_button_label": "About Processing Community Day",
+    "info_modal_title": "Processing Community Day",
+    "info_modal_description": "Processing Community Day（PCD）は、アート・コード・オープンソースのクリエイティブツールを祝う、世界各地のコミュニティが主催するイベントシリーズです。地図からお近くのイベントを見つけるか、自分でイベントを主催してみましょう！",
+    "info_modal_forum_btn": "フォーラムで詳しく見る",
+    "info_modal_forum_btn_new_tab": "Visit the forum thread (opens in new tab)",
+    "info_modal_close": "Close"
   },
   "node_list": {
     "dialog_label": "イベントリスト",

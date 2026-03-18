@@ -8,7 +8,13 @@
     "submit_event": "提交您的活動",
     "switch_to_light": "切換至淺色模式",
     "switch_to_dark": "切換至深色模式",
-    "change_language": "變更語言"
+    "change_language": "變更語言",
+    "info_button_label": "About Processing Community Day",
+    "info_modal_title": "Processing Community Day",
+    "info_modal_description": "Processing Community Day（PCD）是由全球各地社群主辦的系列活動，旨在慶祝藝術、程式碼與開源創意工具。在地圖上找到您附近的活動，或開始籌辦您自己的活動！",
+    "info_modal_forum_btn": "在論壇了解更多",
+    "info_modal_forum_btn_new_tab": "Visit the forum thread (opens in new tab)",
+    "info_modal_close": "Close"
   },
   "node_list": {
     "dialog_label": "活動清單",

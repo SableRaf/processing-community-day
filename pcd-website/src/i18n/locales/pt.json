@@ -8,7 +8,13 @@
     "submit_event": "Enviar seu evento",
     "switch_to_light": "Mudar para modo claro",
     "switch_to_dark": "Mudar para modo escuro",
-    "change_language": "Mudar idioma"
+    "change_language": "Mudar idioma",
+    "info_button_label": "About Processing Community Day",
+    "info_modal_title": "Processing Community Day",
+    "info_modal_description": "O Processing Community Day (PCD) é uma série mundial de eventos organizados por comunidades locais que celebram a arte, o código e as ferramentas criativas de código aberto. Encontre o seu evento local no mapa ou comece a organizar o seu próprio!",
+    "info_modal_forum_btn": "Saiba mais no fórum",
+    "info_modal_forum_btn_new_tab": "Visit the forum thread (opens in new tab)",
+    "info_modal_close": "Close"
   },
   "node_list": {
     "dialog_label": "Lista de eventos",

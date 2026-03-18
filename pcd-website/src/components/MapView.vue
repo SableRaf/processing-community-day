@@ -6,6 +6,7 @@ import { makePopupContent } from '../lib/popup';
 import NodePanel from './NodePanel.vue';
 import NodeList from './NodeList.vue';
 import LanguageSwitcher from './LanguageSwitcher.vue';
+import InfoModal from './InfoModal.vue';
 import { SUBMIT_EVENT_URL } from '../config';
 import { currentLocale } from '../i18n/localeState';
 import { i18n } from '../i18n/index';
@@ -19,6 +20,7 @@ const { t } = useI18n();
 
 const selectedNode = ref<Node | null>(null);
 const listOpen = ref(false);
+const infoModalOpen = ref(false);
 
 let mapInstance: import('leaflet').Map | null = null;
 let leafletRef: typeof import('leaflet') | null = null;
@@ -623,10 +625,18 @@ onUnmounted(() => {
   <div class="banner-controls-left">
     <LanguageSwitcher />
   </div>
-  <a
-    id="host-btn"
-    :href="SUBMIT_EVENT_URL"
-  >{{ t('nav.submit_event') }}</a>
+  <div class="host-btn-group">
+    <a
+      id="host-btn"
+      :href="SUBMIT_EVENT_URL"
+    >{{ t('nav.submit_event') }}</a>
+    <button
+      id="info-btn"
+      :aria-label="t('nav.info_button_label')"
+      @click="infoModalOpen = true"
+    >i</button>
+  </div>
+  <InfoModal :open="infoModalOpen" @close="infoModalOpen = false" />
   <div class="banner-controls-right">
     <button
       id="theme-toggle"
