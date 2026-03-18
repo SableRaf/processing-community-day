@@ -276,8 +276,10 @@ jobs:
   create-pr:
     needs: [process-new-event, process-edit-event]
     if: |
-      (needs.process-new-event.result != 'skipped' && needs.process-new-event.outputs.valid == 'true') ||
-      (needs.process-edit-event.result != 'skipped' && needs.process-edit-event.outputs.valid == 'true')
+      always() && (
+        (needs.process-new-event.result != 'skipped' && needs.process-new-event.outputs.valid == 'true') ||
+        (needs.process-edit-event.result != 'skipped' && needs.process-edit-event.outputs.valid == 'true')
+      )
     runs-on: ubuntu-latest
     timeout-minutes: 10
     outputs:
