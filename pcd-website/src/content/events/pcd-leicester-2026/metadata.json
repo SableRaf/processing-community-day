@@ -1,0 +1,44 @@
+{
+  "id": "pcd-leicester-2026",
+  "uid": "e1d7594",
+  "organizers": [
+    {
+      "name": "Sean Carroll"
+    }
+  ],
+  "primary_contact": {
+    "name": "Sean Carroll",
+    "email": "hi@newmediaart.club"
+  },
+  "organization_name": "New Media Art Club",
+  "organization_url": "https://www.newmediaart.club/",
+  "organization_type": "Other",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Leicester",
+  "event_location": {
+    "address": "31 Rutland Street",
+    "plus_code": "9C4WJVMC+RJ7"
+  },
+  "event_date": "",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "",
+  "event_activities": [
+    "Hands-on workshops",
+    "Live coding",
+    "Beginner introductions to Processing or p5.js",
+    "Creative coding jams or hack sessions"
+  ],
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-leicester-2026/48214",
+  "city": "Leicester",
+  "country": "England",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 25,
+    "submitted_by_github": "NewMediaArtClub",
+    "submitted_date": "2026-03-18",
+    "maintainer_notes": ""
+  }
+}
