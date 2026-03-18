@@ -1,5 +1,11 @@
 > [!TIP]
-> Organizing a PCD, or just thinking about it? Come say hi on the [forum thread](https://discourse.processing.org/t/pcd-worldwide-2026-call-for-organizers/48081). You can [add your event to the map](https://github.com/processing/processing-community-day/issues/new?template=new-event.yml) anytime, even if it’s still a work in progress.
+> Thinking about organizing a PCD? Here are a few first steps.
+
+1. Say hi on the [forum](https://discourse.processing.org/t/pcd-worldwide-2026-call-for-organizers/48081)
+2. [Open a thread](https://discourse.processing.org/tag/pcd/) `PCD @ Your City 2026` and invite your local community to help you organize and share ideas.
+3. [Add your event to the map](https://github.com/processing/processing-community-day/issues/new?template=01-new-event.yml)
+
+You don't need to have it all figured out. Most organizers begin with a rough idea and develop it with others. PCD events are built together :)
 
 # Processing Community Day Website
 
