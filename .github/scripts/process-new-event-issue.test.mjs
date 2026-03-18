@@ -49,7 +49,7 @@ function makeValidBody({
     '### Event name',
     eventName,
     '',
-    '### Map placement',
+    '### Plus Code (for map placement)',
     plusCode,
     '',
     '### Event format',
@@ -251,15 +251,31 @@ describe('process-new-event-issue', () => {
     }
   });
 
-  test('issue body with ### Event ID heading causes valid=skip', async () => {
-    const body = makeValidBody() + '\n### Event ID\npcd-some-event-2026\n';
+  test('issue body with ### Event canonical ID heading causes valid=skip', async () => {
+    const body = makeValidBody() + '\n### Event canonical ID\npcd-some-event-2026-abc1234\n';
     const { outputs } = await runScript(body, { tmpDir, eventsDir, number: 4 });
     assert.equal(outputs.valid, 'skip');
   });
 
-  test('issue body missing ### Map placement heading causes valid=skip', async () => {
+  test('issue body missing ### Plus Code (for map placement) heading causes valid=skip', async () => {
     const body = '### Event name\nPCD @ Nowhere\n### Some other heading\nvalue\n';
     const { outputs } = await runScript(body, { tmpDir, eventsDir, number: 5 });
+    assert.equal(outputs.valid, 'skip');
+  });
+
+  test('edit-event issue body (with ### Event canonical ID) causes valid=skip on new-event script', async () => {
+    const body = [
+      '### Event canonical ID',
+      'pcd-some-event-2026-abc1234',
+      '',
+      '### Event name',
+      'PCD @ Some City',
+      '',
+      '### Plus Code (for map placement)',
+      '8FW4V75V+8Q',
+      '',
+    ].join('\n');
+    const { outputs } = await runScript(body, { tmpDir, eventsDir, number: 6 });
     assert.equal(outputs.valid, 'skip');
   });
 });

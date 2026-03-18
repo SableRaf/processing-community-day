@@ -77,7 +77,7 @@ function makeValidEditBody({
     '### Forum discussion URL',
     forumThreadUrl,
     '',
-    '### Map placement',
+    '### Plus Code (for map placement)',
     plusCode,
     '',
     '### Event format',
@@ -257,7 +257,7 @@ describe('process-edit-event-issue', () => {
   });
 
   test('missing ### Event canonical ID heading causes valid=skip', async () => {
-    const body = '### Event name\nPCD @ Test\n### Map placement\n8FW4V75V+8Q\n';
+    const body = '### Event name\nPCD @ Test\n### Plus Code (for map placement)\n8FW4V75V+8Q\n';
     const { outputs } = await runScript(body, { tmpDir, number: 15 });
     assert.equal(outputs.valid, 'skip');
   });

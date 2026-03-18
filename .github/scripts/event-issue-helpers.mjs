@@ -16,6 +16,25 @@ export const VALID_ORG_TYPES = new Set([
 
 export const VALID_EVENT_FORMATS = new Set(['In person', 'Online']);
 
+// Historical aliases in newest-first order (covers retried or edited older issues)
+export const PLUS_CODE_FIELD_ALIASES = [
+  'Plus Code (for map placement)',   // current
+  'Plus Code for map placement',     // transitional (commit 24064d2)
+  'Map placement',                   // original
+];
+
+export const PLUS_CODE_FIELD_LABEL = PLUS_CODE_FIELD_ALIASES[0];
+
+// Like required(), but tries each label in order and returns the first non-empty value.
+export function requiredAny(fields, labels, errors, errorOverride) {
+  for (const label of labels) {
+    const v = fields.get(label)?.trim();
+    if (v) return v;
+  }
+  errors.push(errorOverride ?? { field: labels[0], message: 'This field is required.' });
+  return '';
+}
+
 export function parseIssueSections(body) {
   const normalized = body.replace(/\r/g, '');
   const sections = normalized.split(/^### /m).slice(1);

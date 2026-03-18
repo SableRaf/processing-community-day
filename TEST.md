@@ -33,8 +33,9 @@ These tests cover the shared pure functions extracted into `event-issue-helpers.
 | Valid new-event issue body | `valid=true`, writes `metadata.json` with all fields including `uid` (7 hex chars) |
 | `Event page URL` field present | Value appears in `metadata.json` as `event_page_url` (regression for the `Event website` field-name bug) |
 | Duplicate event directory | `valid=false`, validation comment mentions the generated id |
-| Issue body contains `### Event ID` heading | `valid=skip` (guard against running on edit-event template) |
-| Issue body missing `### Map placement` and no `### Event ID` | `valid=skip` (unrecognized template) |
+| Issue body contains `### Event canonical ID` heading | `valid=skip` (guard against running on edit-event template) |
+| Edit-event issue body (contains `### Event canonical ID` and `### Plus Code (for map placement)`) | `valid=skip` (regression: edit-event body must not be processed as new event) |
+| Issue body missing `### Plus Code (for map placement)` and no `### Event canonical ID` | `valid=skip` (unrecognized template) |
 
 ---
 
@@ -51,7 +52,7 @@ These tests cover the shared pure functions extracted into `event-issue-helpers.
 | All activities unchecked | Existing `event_activities` preserved (checkbox prefill limitation) |
 | Some activities checked | `event_activities` overwritten with checked values |
 | Event directory does not exist | `valid=false`, validation comment mentions the missing event id |
-| Missing `### Event ID` heading | `valid=skip` (guard against running on new-event template) |
+| Missing `### Event canonical ID` heading | `valid=skip` (guard against running on new-event template) |
 
 ---
 

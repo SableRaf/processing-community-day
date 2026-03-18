@@ -7,8 +7,11 @@ import {
   PCD_CONTACT_EMAIL,
   VALID_ORG_TYPES,
   VALID_EVENT_FORMATS,
+  PLUS_CODE_FIELD_LABEL,
+  PLUS_CODE_FIELD_ALIASES,
   parseIssueSections,
   required,
+  requiredAny,
   isValidDate,
   isValidTime,
   isValidEmail,
@@ -79,16 +82,17 @@ function buildPrBody(number, name, submitterLogin, isOnlineEvent, eventDate, sta
 
 console.log(`[process-new-event-issue] issue #${issueNumber}, body length: ${issueBody.length}`);
 
-// Skip if this is an edit-event issue (has ### Event ID heading)
-if (issueBody.includes('### Event ID')) {
-  console.log('[process-new-event-issue] found ### Event ID heading — skipping (this is an edit event issue)');
+// Skip if this is an edit-event issue (has ### Event canonical ID heading)
+if (issueBody.includes('### Event canonical ID')) {
+  console.log('[process-new-event-issue] found ### Event canonical ID heading — skipping (this is an edit event issue)');
   await setOutput('valid', 'skip');
   process.exit(0);
 }
 
-// GitHub strips HTML comments from markdown blocks, so we detect the template
-// by checking for a heading that is unique to the new-event issue form.
-if (!issueBody.includes('### Map placement')) {
+// GitHub strips HTML comments from markdown blocks. The edit-event guard above
+// handles the only other template that uses this heading, so reaching here means
+// we are processing a new-event issue or something unrecognized.
+if (!issueBody.includes(`### ${PLUS_CODE_FIELD_LABEL}`)) {
   console.log('[process-new-event-issue] template headings not found — skipping (not a new event issue)');
   await setOutput('valid', 'skip');
   process.exit(0);
@@ -99,7 +103,7 @@ async function main() {
   const errors = [];
 
   const eventName = required(fields, 'Event name', errors);
-  const rawPlusCode = required(fields, 'Map placement', errors, {
+  const rawPlusCode = requiredAny(fields, PLUS_CODE_FIELD_ALIASES, errors, {
     field: 'Map placement (Plus Code)',
     message: 'This field is required. A Plus Code looks like `8FW4V75V+8Q`. [Find your Plus Code →](https://plus.codes/)',
   });

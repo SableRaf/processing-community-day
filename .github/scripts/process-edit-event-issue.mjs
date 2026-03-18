@@ -7,8 +7,10 @@ import {
   PCD_CONTACT_EMAIL,
   VALID_ORG_TYPES,
   VALID_EVENT_FORMATS,
+  PLUS_CODE_FIELD_ALIASES,
   parseIssueSections,
   required,
+  requiredAny,
   isValidDate,
   isValidTime,
   isValidEmail,
@@ -90,7 +92,7 @@ async function main() {
 
   const canonicalId = required(fields, 'Event canonical ID', errors);
   const eventName = required(fields, 'Event name', errors);
-  const rawPlusCode = required(fields, 'Map placement', errors, {
+  const rawPlusCode = requiredAny(fields, PLUS_CODE_FIELD_ALIASES, errors, {
     field: 'Map placement (Plus Code)',
     message: 'This field is required. A Plus Code looks like `8FW4V75V+8Q`. [Find your Plus Code →](https://plus.codes/)',
   });
