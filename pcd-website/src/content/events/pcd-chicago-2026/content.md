@@ -9,4 +9,4 @@ The programming is still firming up, but participants will learn how to use p5.j
 
 Any questions can be sent to [pcd@ccam.world](mailto:pcd@ccam.world)
 
-Get email updates: https://forms.gle/VP48crWGwovEZXGEA"
+Get email updates: https://forms.gle/VP48crWGwovEZXGEA
