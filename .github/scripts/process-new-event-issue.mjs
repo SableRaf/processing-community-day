@@ -71,7 +71,7 @@ function buildPrBody(number, name, submitterLogin, isOnlineEvent, eventDate, sta
     '',
     'Review checklist:',
     `- [ ] Event name "${name}" is correct`,
-    `- [ ] Public contact info "${contactName} <${contactEmail}>" is correct`,
+    `- [ ] Public name "${contactName}" and address "${address}" are correct`,
     ...(shortDescription ? [] : ['- [ ] Short description is left blank — confirm this is intentional']),
     ...(fullDescription ? [] : ['- [ ] Long description is left blank — confirm this is intentional']),
     dateLine,

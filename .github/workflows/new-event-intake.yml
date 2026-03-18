@@ -381,8 +381,6 @@ jobs:
             const marker = process.env.STATUS_COMMENT_MARKER;
             const body = [
               marker,
-              'Thank you for your submission! 🎉',
-              '',
               `**${process.env.EVENT_NAME}** has been successfully parsed and a pull request has been opened for review: [#${process.env.PR_NUMBER}](${process.env.PR_URL}).`,
               '',
               `Once the PR is merged, your event will be **${process.env.ACTION_VERB}** the map at https://day.processing.org.`,
