@@ -66,6 +66,7 @@ onUnmounted(() => {
           class="info-modal-banner"
           alt=""
           aria-hidden="true"
+          loading="lazy"
         />
         <div class="info-modal-body">
           <h2 class="info-modal-title">{{ t('nav.info_modal_title') }}</h2>

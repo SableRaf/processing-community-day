@@ -23,6 +23,11 @@ const selectedNode = ref<Node | null>(null);
 const listOpen = ref(false);
 const infoModalOpen = ref(false);
 
+function preloadBannerImage() {
+  const url = props.bannerImageUrl;
+  if (url) new Image().src = url;
+}
+
 let mapInstance: import('leaflet').Map | null = null;
 let leafletRef: typeof import('leaflet') | null = null;
 const markerMap = new Map<string, import('leaflet').Marker>();
@@ -634,6 +639,7 @@ onUnmounted(() => {
     <button
       id="info-btn"
       :aria-label="t('nav.info_button_label')"
+      @mouseenter="preloadBannerImage"
       @click="infoModalOpen = true"
     >i</button>
   </div>
