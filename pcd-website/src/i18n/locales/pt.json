@@ -16,7 +16,17 @@
     "info_modal_forum_btn_new_tab": "Visit the forum thread (opens in new tab)",
     "info_modal_go_to_map": "Ir para o mapa",
     "info_modal_back_to_map": "Voltar ao mapa",
-    "info_modal_dont_show_again": "Não mostrar novamente"
+    "info_modal_dont_show_again": "Não mostrar novamente",
+    "opens_in_new_tab": "abre em nova aba",
+    "submit_modal_title": "Como enviar seu evento",
+    "submit_modal_step1_heading": "Apresente-se",
+    "submit_modal_step1_body": "Nos informe que você tem interesse no tópico dos organizadores.",
+    "submit_modal_step2_heading": "Crie um tópico no fórum",
+    "submit_modal_step2_body": "Inicie um tópico no fórum para sua cidade/país/local.",
+    "submit_modal_step3_heading": "Envie pelo GitHub",
+    "submit_modal_step3_body": "Preencha o formulário. Vamos adicionar seu evento ao mapa.",
+    "submit_modal_note": "Sem conta no GitHub? É só dizer oi no tópico do fórum e te ajudamos a partir daí.",
+    "submit_modal_close": "Fechar"
   },
   "node_list": {
     "dialog_label": "Lista de eventos",

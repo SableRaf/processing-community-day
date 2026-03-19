@@ -16,7 +16,17 @@
     "info_modal_forum_btn_new_tab": "Visit the forum thread (opens in new tab)",
     "info_modal_go_to_map": "前往地圖",
     "info_modal_back_to_map": "返回地圖",
-    "info_modal_dont_show_again": "不再顯示"
+    "info_modal_dont_show_again": "不再顯示",
+    "opens_in_new_tab": "在新分頁開啟",
+    "submit_modal_title": "如何提交您的活動",
+    "submit_modal_step1_heading": "自我介紹",
+    "submit_modal_step1_body": "在主辦者討論串中讓我們知道您有意參與。",
+    "submit_modal_step2_heading": "建立論壇主題",
+    "submit_modal_step2_body": "在論壇上為您的城市／國家／地點開啟一個討論串。",
+    "submit_modal_step3_heading": "透過 GitHub 提交",
+    "submit_modal_step3_body": "填寫表單，我們將把您的活動加入地圖。",
+    "submit_modal_note": "沒有 GitHub 帳號？只需在論壇討論串打聲招呼，我們會從那裡協助您。",
+    "submit_modal_close": "關閉"
   },
   "node_list": {
     "dialog_label": "活動清單",

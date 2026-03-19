@@ -16,7 +16,17 @@
     "info_modal_forum_btn_new_tab": "Visit the forum thread (opens in new tab)",
     "info_modal_go_to_map": "Zur Karte",
     "info_modal_back_to_map": "Zurück zur Karte",
-    "info_modal_dont_show_again": "Nicht mehr anzeigen"
+    "info_modal_dont_show_again": "Nicht mehr anzeigen",
+    "opens_in_new_tab": "öffnet in neuem Tab",
+    "submit_modal_title": "So reichst du deine Veranstaltung ein",
+    "submit_modal_step1_heading": "Stell dich vor",
+    "submit_modal_step1_body": "Melde dich im Organisator-Thread und zeig dein Interesse.",
+    "submit_modal_step2_heading": "Erstelle ein Forum-Thema",
+    "submit_modal_step2_body": "Starte einen Thread im Forum für deine Stadt/dein Land/deinen Ort.",
+    "submit_modal_step3_heading": "Einreichen über GitHub",
+    "submit_modal_step3_body": "Fülle das Formular aus. Wir fügen deine Veranstaltung zur Karte hinzu.",
+    "submit_modal_note": "Kein GitHub-Konto? Melde dich einfach im Forum-Thread und wir helfen dir weiter.",
+    "submit_modal_close": "Schließen"
   },
   "node_list": {
     "dialog_label": "Veranstaltungsliste",

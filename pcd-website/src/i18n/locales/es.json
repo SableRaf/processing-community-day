@@ -16,7 +16,17 @@
     "info_modal_forum_btn_new_tab": "Visit the forum thread (opens in new tab)",
     "info_modal_go_to_map": "Ir al mapa",
     "info_modal_back_to_map": "Volver al mapa",
-    "info_modal_dont_show_again": "No volver a mostrar"
+    "info_modal_dont_show_again": "No volver a mostrar",
+    "opens_in_new_tab": "abre en una nueva pestaña",
+    "submit_modal_title": "Cómo registrar tu evento",
+    "submit_modal_step1_heading": "Preséntate",
+    "submit_modal_step1_body": "Haznos saber que estás interesado/a en el hilo de organizadores.",
+    "submit_modal_step2_heading": "Crea un tema en el foro",
+    "submit_modal_step2_body": "Inicia un hilo en el foro para tu ciudad/país/lugar.",
+    "submit_modal_step3_heading": "Registra tu evento en GitHub",
+    "submit_modal_step3_body": "Rellena el formulario. Añadiremos tu evento al mapa.",
+    "submit_modal_note": "¿Sin cuenta de GitHub? Saluda en el hilo del foro y te ayudaremos desde allí.",
+    "submit_modal_close": "Cerrar"
   },
   "node_list": {
     "dialog_label": "Lista de eventos",

@@ -16,7 +16,17 @@
     "info_modal_forum_btn_new_tab": "Visit the forum thread (opens in new tab)",
     "info_modal_go_to_map": "Aller à la carte",
     "info_modal_back_to_map": "Retour à la carte",
-    "info_modal_dont_show_again": "Ne plus afficher"
+    "info_modal_dont_show_again": "Ne plus afficher",
+    "opens_in_new_tab": "ouvre dans un nouvel onglet",
+    "submit_modal_title": "Comment soumettre votre événement",
+    "submit_modal_step1_heading": "Présentez-vous",
+    "submit_modal_step1_body": "Faites-nous savoir que vous êtes intéressé·e dans le fil des organisateur·rice·s.",
+    "submit_modal_step2_heading": "Créez un sujet sur le forum",
+    "submit_modal_step2_body": "Démarrez un fil sur le forum pour votre ville/pays/lieu.",
+    "submit_modal_step3_heading": "Soumettez via GitHub",
+    "submit_modal_step3_body": "Remplissez le formulaire. Nous ajouterons votre événement à la carte.",
+    "submit_modal_note": "Pas de compte GitHub ? Dites simplement bonjour dans le fil du forum et nous vous aiderons à ajouter votre événement.",
+    "submit_modal_close": "Fermer"
   },
   "node_list": {
     "dialog_label": "Liste des événements",

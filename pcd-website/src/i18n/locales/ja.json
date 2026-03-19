@@ -16,7 +16,17 @@
     "info_modal_forum_btn_new_tab": "Visit the forum thread (opens in new tab)",
     "info_modal_go_to_map": "地図を見る",
     "info_modal_back_to_map": "地図に戻る",
-    "info_modal_dont_show_again": "今後表示しない"
+    "info_modal_dont_show_again": "今後表示しない",
+    "opens_in_new_tab": "新しいタブで開く",
+    "submit_modal_title": "イベントの登録方法",
+    "submit_modal_step1_heading": "自己紹介をする",
+    "submit_modal_step1_body": "主催者スレッドで興味があることをお知らせください。",
+    "submit_modal_step2_heading": "フォーラムにトピックを作成する",
+    "submit_modal_step2_body": "あなたの都市・国・地域のためにフォーラムにスレッドを立ててください。",
+    "submit_modal_step3_heading": "GitHub から登録する",
+    "submit_modal_step3_body": "フォームに記入してください。あなたのイベントを地図に追加します。",
+    "submit_modal_note": "GitHub アカウントがない場合は、フォーラムのスレッドで一言いただければサポートします。",
+    "submit_modal_close": "閉じる"
   },
   "node_list": {
     "dialog_label": "イベントリスト",
