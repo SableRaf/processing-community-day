@@ -1,0 +1,45 @@
+{
+  "id": "pcd-copenhagen-2026-2026",
+  "uid": "8ef7919",
+  "organizers": [
+    {
+      "name": "Andreas Refsgaard"
+    },
+    {
+      "name": "Rune Madsen"
+    },
+    {
+      "name": "Stig Møller Hansen"
+    }
+  ],
+  "primary_contact": {
+    "name": "Stig Møller Hansen",
+    "email": "kontakt@stigmollerhansen.dk"
+  },
+  "organization_name": "The Danish School of Media and Journalism",
+  "organization_url": "https://www.dmjx.dk",
+  "organization_type": "Other",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Copenhagen 2026",
+  "event_location": {
+    "address": "Amagerfælledvej 190, 2300 København",
+    "plus_code": "9F7JMH4V+62"
+  },
+  "event_date": "",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "",
+  "event_activities": [],
+  "event_page_url": "https://pcdcph.com/",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-copenhagen-2026/48226",
+  "city": "Copenhagen",
+  "country": "Denmark",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 30,
+    "submitted_by_github": "stigmollerhansen",
+    "submitted_date": "2026-03-19",
+    "maintainer_notes": ""
+  }
+}
