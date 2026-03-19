@@ -166,7 +166,7 @@ async function main() {
   if (organizationType && !VALID_ORG_TYPES.has(organizationType)) errors.push({ field: 'Organization type', found: organizationType, message: 'Not a recognized option. Please choose one of the valid options from the form.' });
   if (isOnlineEvent && !eventUrl) errors.push({ field: 'Event URL', message: 'An event URL is required for online events. Please provide the URL where people can join.' });
 
-  const normalizedEventName = slugify(eventName);
+  const normalizedEventName = slugify(eventName).replace(/-\d{4}$/, '');
   const eventId = normalizedEventName.startsWith('pcd-')
     ? `${normalizedEventName}-${YEAR}`
     : `pcd-${normalizedEventName}-${YEAR}`;
