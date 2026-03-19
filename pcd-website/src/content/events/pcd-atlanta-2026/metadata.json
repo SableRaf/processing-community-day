@@ -1,0 +1,39 @@
+{
+  "id": "pcd-atlanta-2026",
+  "uid": "a07b310",
+  "organizers": [
+    {
+      "name": "Eddie Farr"
+    }
+  ],
+  "primary_contact": {
+    "name": "Eddie Farr",
+    "email": "ed.mc.farr@gmail.com"
+  },
+  "organization_name": "",
+  "organization_url": "",
+  "organization_type": "",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Atlanta",
+  "event_location": {
+    "address": "",
+    "plus_code": "865QQJ35+6P3"
+  },
+  "event_date": "",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "TBD PCD event in Atlanta, GA",
+  "event_activities": [],
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-atlanta-2026/48231",
+  "city": "Atlanta",
+  "country": "United States",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 36,
+    "submitted_by_github": "freaug",
+    "submitted_date": "2026-03-19",
+    "maintainer_notes": ""
+  }
+}
