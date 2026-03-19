@@ -1,0 +1,48 @@
+{
+  "id": "pcd-bath-2026",
+  "uid": "bcda01b",
+  "organizers": [
+    {
+      "name": "Dave Webb"
+    },
+    {
+      "name": "Coral Manton"
+    }
+  ],
+  "primary_contact": {
+    "name": "Dave Webb",
+    "email": "d.webb@bathspa.ac.uk"
+  },
+  "organization_name": "",
+  "organization_url": "",
+  "organization_type": "",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Bath",
+  "event_location": {
+    "address": "Bath Spa University, Sion Hill campus",
+    "plus_code": "9C3V9JJ6+VR"
+  },
+  "event_date": "",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "A set of easy access workshops, talks and networking for everyone curious about making art with technology",
+  "event_activities": [
+    "Show-and-tell",
+    "Hands-on workshops",
+    "Live coding",
+    "Beginner introductions to Processing or p5.js",
+    "Screening"
+  ],
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-bath-2026/48139",
+  "city": "Bath",
+  "country": "United Kingdom",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 32,
+    "submitted_by_github": "cranbim",
+    "submitted_date": "2026-03-19",
+    "maintainer_notes": ""
+  }
+}
