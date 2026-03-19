@@ -35,7 +35,8 @@ const ogImageUrl = redirectUrl
   ? ''
   : `${siteUrl}${(await getImage({ src: ogImageSrc, format: 'jpeg', quality: 85 })).src}`;
 const title = `${node.event_name} — Processing Community Day 2026`;
-const description = node.event_short_description || `Join Processing Community Day 2026 in ${node.city ?? node.country ?? 'your city'}.`;
+const locationLabel = node.city || 'your city';
+const description = node.event_short_description || node.details_text.slice(0, 200).trimEnd() || `Join the global celebration at Processing Community Day 2026 in ${locationLabel}. Find your local event on the map, or start a PCD in your community.`;
 ---
 
 <!DOCTYPE html>
