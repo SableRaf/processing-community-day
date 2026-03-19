@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, watch, nextTick, onUnmounted, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { Icon } from '@iconify/vue';
 import { createFocusTrap, type FocusTrap } from 'focus-trap';
 import fallbackBannerImage from '../images/community_background_2x.png?url';
 
@@ -60,6 +61,13 @@ onUnmounted(() => {
         :aria-label="t('nav.info_modal_title')"
         class="info-modal"
       >
+        <button
+          class="info-modal-close"
+          :aria-label="t('nav.info_modal_back_to_map')"
+          @click="handleClose()"
+        >
+          <Icon icon="bi:x-lg" width="1.125em" height="1.125em" aria-hidden="true" />
+        </button>
         <img
           :src="bannerImage"
           class="info-modal-banner"
@@ -109,6 +117,33 @@ onUnmounted(() => {
   width: 100%;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
   overflow: hidden;
+}
+
+.info-modal-close {
+  position: absolute;
+  top: var(--spacing-sm);
+  right: var(--spacing-sm);
+  z-index: 1;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.35);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.info-modal-close:hover {
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.info-modal-close:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
 }
 
 .info-modal-banner {
