@@ -1,0 +1,35 @@
+{
+  "id": "pcd-amsterdam-2026",
+  "uid": "847884e",
+  "organizers": [],
+  "primary_contact": {
+    "name": "David Vandenbogaerde",
+    "email": "david+pcd@d17e.dev"
+  },
+  "organization_name": "Creative Coding Amsterdam & otheres",
+  "organization_url": "https://cca.codes",
+  "organization_type": "Meetup, code club, community group",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Amsterdam",
+  "event_location": {
+    "address": "",
+    "plus_code": "9F469WM3+M5"
+  },
+  "event_date": "",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "",
+  "event_activities": [],
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-amsterdam-2026/48140",
+  "city": "Amsterdam",
+  "country": "Netherlands",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 34,
+    "submitted_by_github": "dxviie",
+    "submitted_date": "2026-03-19",
+    "maintainer_notes": ""
+  }
+}
