@@ -9,6 +9,7 @@ import LanguageSwitcher from './LanguageSwitcher.vue';
 import InfoModal from './InfoModal.vue';
 import SubmitModal from './SubmitModal.vue';
 import { currentLocale } from '../i18n/localeState';
+import { trackEvent, SUBMIT_EVENT_BUTTON_CLICK } from '../lib/analytics';
 import { i18n } from '../i18n/index';
 
 const props = defineProps<{
@@ -26,6 +27,16 @@ const INFO_MODAL_SUPPRESS_KEY = 'pcd-info-modal-suppressed';
 const infoModalOpen = ref(false);
 const infoModalAutoOpened = ref(false);
 const submitModalOpen = ref(false);
+
+function handleSubmitClick() {
+  submitModalOpen.value = true;
+  trackEvent(SUBMIT_EVENT_BUTTON_CLICK);
+}
+
+function handleInfoClick() {
+  infoModalOpen.value = true;
+  infoModalAutoOpened.value = false;
+}
 
 function shouldAutoOpenInfoModal(): boolean {
   return localStorage.getItem(INFO_MODAL_SUPPRESS_KEY) !== 'true';
@@ -698,13 +709,13 @@ onUnmounted(() => {
   <div class="host-btn-group">
     <button
       id="host-btn"
-      @click="submitModalOpen = true"
+      @click="handleSubmitClick()"
     >{{ t('nav.submit_event') }}</button>
     <button
       id="info-btn"
       :aria-label="t('nav.info_button_label')"
       @mouseenter="preloadBannerImage"
-      @click="infoModalOpen = true; infoModalAutoOpened = false"
+      @click="handleInfoClick()"
     >i</button>
   </div>
   <InfoModal :open="infoModalOpen" :bannerImageUrl="props.bannerImageUrl" :autoOpened="infoModalAutoOpened" @close="infoModalOpen = false" @suppress="suppressInfoModal" />

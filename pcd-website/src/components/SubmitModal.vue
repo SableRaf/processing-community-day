@@ -3,6 +3,11 @@ import { ref, watch, nextTick, onUnmounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { createFocusTrap, type FocusTrap } from 'focus-trap';
 import { SUBMIT_EVENT_URL, PCD_FORUM_THREAD_URL, PCD_FORUM_NEW_TOPIC_URL } from '../config';
+import { trackEvent, SUBMIT_STEP_1, SUBMIT_STEP_2, SUBMIT_STEP_3, type AnalyticsEvent } from '../lib/analytics';
+
+function handleStepClick(event: AnalyticsEvent) {
+  trackEvent(event);
+}
 
 const props = defineProps<{ open: boolean }>();
 const emit = defineEmits<{ close: [] }>();
@@ -78,6 +83,7 @@ onUnmounted(() => {
                 :href="PCD_FORUM_THREAD_URL"
                 target="_blank"
                 rel="noopener"
+                @click="handleStepClick(SUBMIT_STEP_1)"
                 :aria-label="`${t('nav.submit_modal_step1_heading')} — ${t('nav.submit_modal_step1_body')} (${t('nav.opens_in_new_tab')})`"
               >
                 <span class="step-btn-text">
@@ -94,6 +100,7 @@ onUnmounted(() => {
                 :href="PCD_FORUM_NEW_TOPIC_URL"
                 target="_blank"
                 rel="noopener"
+                @click="handleStepClick(SUBMIT_STEP_2)"
                 :aria-label="`${t('nav.submit_modal_step2_heading')} — ${t('nav.submit_modal_step2_body')} (${t('nav.opens_in_new_tab')})`"
               >
                 <span class="step-btn-text">
@@ -110,6 +117,7 @@ onUnmounted(() => {
                 :href="SUBMIT_EVENT_URL"
                 target="_blank"
                 rel="noopener"
+                @click="handleStepClick(SUBMIT_STEP_3)"
                 :aria-label="`${t('nav.submit_modal_step3_heading')} — ${t('nav.submit_modal_step3_body')} (${t('nav.opens_in_new_tab')})`"
               >
                 <span class="step-btn-text">
