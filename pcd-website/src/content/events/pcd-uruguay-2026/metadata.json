@@ -11,7 +11,7 @@
   "organization_type": "",
   "online_event": false,
   "event_url": "",
-  "event_name": "PCD Uruguay",
+  "event_name": "PCD @ Montevideo",
   "event_location": {
     "address": "",
     "plus_code": "48Q53RMJ+X3"
@@ -33,7 +33,7 @@
     "Other"
   ],
   "event_page_url": "",
-  "forum_thread_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-montevideo-2026/48252",
   "city": "Montevideo",
   "country": "Uruguay",
   "placeholder": false,
