@@ -1,0 +1,55 @@
+{
+  "id": "pcd-lira-2026",
+  "uid": "18bd672",
+  "organizers": [
+    {
+      "name": "Emmanuel Angoda"
+    },
+    {
+      "name": "Oscar Okwanga"
+    },
+    {
+      "name": "Sharon Aciro"
+    },
+    {
+      "name": "Jennifer Ajok"
+    },
+    {
+      "name": "Ediko Fred"
+    }
+  ],
+  "primary_contact": {
+    "name": "Emmanuel Angoda",
+    "email": "angodaemmanuel@gmail.com"
+  },
+  "organization_name": "Triskelion Education and Skills Initiative",
+  "organization_url": "https://triskelionedu.org/",
+  "organization_type": "Nonprofit, foundation, association",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Lira",
+  "event_location": {
+    "address": "Lira Job Centre, Housing Estate, Ireda Rd",
+    "plus_code": "6GJJ6WM3+PM"
+  },
+  "event_date": "2026-10-10",
+  "event_start_time": "11:00",
+  "event_end_time": "",
+  "event_short_description": "",
+  "event_activities": [
+    "Show-and-tell",
+    "Hands-on workshops",
+    "Student project presentations"
+  ],
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-lira-2026/48539",
+  "city": "Lira",
+  "country": "Uganda",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 82,
+    "submitted_by_github": "angoda",
+    "submitted_date": "2026-05-18",
+    "maintainer_notes": ""
+  }
+}
