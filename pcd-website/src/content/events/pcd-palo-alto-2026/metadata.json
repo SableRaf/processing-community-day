@@ -1,0 +1,35 @@
+{
+  "id": "pcd-palo-alto-2026",
+  "uid": "3ade3dd",
+  "organizers": [],
+  "primary_contact": {
+    "name": "Natalia",
+    "email": "natalia@nodefoundation.com"
+  },
+  "organization_name": "NODE",
+  "organization_url": "https://nodefoundation.com",
+  "organization_type": "",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Palo Alto",
+  "event_location": {
+    "address": "180 University Ave",
+    "plus_code": "849VCRVQ+P2"
+  },
+  "event_date": "",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "",
+  "event_activities": [],
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-palo-alto-2026/48508",
+  "city": "Palo Alto",
+  "country": "United States",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 80,
+    "submitted_by_github": "pmohun",
+    "submitted_date": "2026-05-07",
+    "maintainer_notes": ""
+  }
+}
