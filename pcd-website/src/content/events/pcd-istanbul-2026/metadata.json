@@ -10,20 +10,20 @@
     "name": "Alp Tuğan",
     "email": "alp.tugan@ozyegin.edu.tr"
   },
-  "organization_name": "",
-  "organization_url": "",
-  "organization_type": "",
+  "organization_name": "Ozyegin University",
+  "organization_url": "https://cod.ozyegin.edu.tr/",
+  "organization_type": "Nonprofit, foundation, association",
   "online_event": false,
   "event_url": "",
   "event_name": "PCD @ Istanbul 2026",
   "event_location": {
-    "address": "",
-    "plus_code": "8GHF27J5+78"
+    "address": "Rasimpaşa Mah. Duatepe Sk. No: 61 Yeldeğirmeni KADIKÖY – İSTANBUL",
+    "plus_code": "8GGFX2WJ+89"
   },
-  "event_date": "",
-  "event_start_time": "",
-  "event_end_time": "",
-  "event_short_description": "Algorithmic Art & Anatolian Motifs",
+  "event_date": "2026-10-17",
+  "event_start_time": "13:00",
+  "event_end_time": "17:00",
+  "event_short_description": "Hands-on Creative Coding Workshop With Algorithmic Art & Anatolian Motifs",
   "event_activities": [
     "Show-and-tell",
     "Hands-on workshops",
