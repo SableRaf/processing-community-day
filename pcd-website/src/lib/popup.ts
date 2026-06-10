@@ -19,10 +19,8 @@ function t(key: string, params?: Record<string, string>): string {
 const POPUP_PREVIEW_LENGTH = 120;
 
 export function getOsmUrl(node: Node): string {
-  const query = node.location_name
-    ? [node.location_name, node.address].filter(Boolean).join(', ')
-    : node.address ?? '';
-  return `https://www.openstreetmap.org/search?query=${encodeURIComponent(query)}`;
+  const { lat, lng } = node;
+  return `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}#map=18/${lat}/${lng}`;
 }
 
 export function makePopupContent(node: Node): string {
