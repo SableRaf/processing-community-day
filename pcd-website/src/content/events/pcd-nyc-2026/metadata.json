@@ -23,14 +23,20 @@
   "event_url": "",
   "event_name": "PCD @ NYC",
   "event_location": {
-    "address": "",
-    "plus_code": "87G8M2V8+2V"
+    "address": "370 Jay St 4th Floor, Brooklyn, NY",
+    "plus_code": "87G8M2V7+72"
   },
-  "event_date": "",
+  "event_date": "2026-10-03",
   "event_start_time": "",
   "event_end_time": "",
   "event_short_description": "",
-  "event_activities": [],
+  "event_activities": [
+    "Hands-on workshops",
+    "Exhibition",
+    "Panel discussions",
+    "Beginner introductions to Processing or p5.js",
+    "Creative coding jams or hack sessions"
+  ],
   "event_page_url": "",
   "forum_thread_url": "https://discourse.processing.org/t/pcd-new-york-city-2026/48393",
   "city": "New York City",
