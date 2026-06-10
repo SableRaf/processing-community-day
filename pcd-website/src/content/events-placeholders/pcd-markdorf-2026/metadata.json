@@ -1,0 +1,48 @@
+{
+  "id": "pcd-markdorf-2026",
+  "uid": "bbe97e1",
+  "organizers": [
+    {
+      "name": "Ada Lovelace"
+    },
+    {
+      "name": "Grace Hopper"
+    }
+  ],
+  "primary_contact": {
+    "name": "Ada Lovelace",
+    "email": "ada@example.com"
+  },
+  "organization_name": "Markdorf Creative Coding Collective",
+  "organization_url": "https://example.com",
+  "organization_type": "Community group or collective",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Markdorf 2026",
+  "event_location": {
+    "name": "Stadtbücherei Markdorf",
+    "address": "Marktstraße 1, 88677 Markdorf, Germany",
+    "plus_code": "8FVFP99R+QQ"
+  },
+  "event_date": "2026-10-17",
+  "event_start_time": "10:00",
+  "event_end_time": "17:00",
+  "event_short_description": "A friendly day of creative coding, talks, and hands-on workshops in Markdorf.",
+  "event_activities": [
+    "Show-and-tell",
+    "Hands-on workshops",
+    "Live coding",
+    "Beginner introductions to Processing or p5.js"
+  ],
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/",
+  "city": "Markdorf",
+  "country": "Germany",
+  "placeholder": true,
+  "intake": {
+    "issue_number": 0,
+    "submitted_by_github": "test-fixture",
+    "submitted_date": "2026-06-10",
+    "maintainer_notes": "Fake event for testing markdown rendering."
+  }
+}
