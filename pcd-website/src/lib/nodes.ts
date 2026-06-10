@@ -1,5 +1,7 @@
 import { getCollection } from 'astro:content';
 import { OpenLocationCode } from 'open-location-code';
+import { micromark } from 'micromark';
+import { gfm, gfmHtml } from 'micromark-extension-gfm';
 
 export function canonicalEventId(node: Pick<Node, 'id' | 'uid'>): string {
   return `${node.id}-${node.uid}`;
@@ -33,6 +35,7 @@ export interface Node {
   event_page_url?: string;
   event_short_description: string;
   details_markdown: string;
+  details_html: string;
   details_text: string;
   event_activities: string[];
   organizers: { name: string }[];
@@ -84,6 +87,19 @@ function normalizeOptionalText(value?: string): string | undefined {
   return trimmed ? trimmed : undefined;
 }
 
+// Render the long description markdown to HTML for display in the details panel.
+// micromark escapes raw HTML and sanitizes link protocols by default, so the
+// output is safe to inject with v-html (descriptions are also PR-reviewed).
+function markdownToHtml(markdown: string): string {
+  if (!markdown) return '';
+  const html = micromark(markdown, {
+    extensions: [gfm()],
+    htmlExtensions: [gfmHtml()],
+  });
+  // Open links in a new tab without leaking the opener.
+  return html.replace(/<a /g, '<a target="_blank" rel="noopener noreferrer" ');
+}
+
 function markdownToText(markdown: string): string {
   return markdown
     .replace(/```[\s\S]*?```/g, '')
@@ -130,6 +146,7 @@ export async function loadNodes(): Promise<Node[]> {
     const location_tbd = !online_event && !address;
     const eventEntry = eventMap.get(input.id);
     const details_markdown = normalizeOptionalText(eventEntry?.body) ?? '';
+    const details_html = markdownToHtml(details_markdown);
     const details_text = markdownToText(details_markdown);
 
     return {
@@ -155,6 +172,7 @@ export async function loadNodes(): Promise<Node[]> {
       event_page_url: normalizeOptionalText(input.event_page_url),
       event_short_description: input.event_short_description,
       details_markdown,
+      details_html,
       details_text,
       event_activities: input.event_activities,
       organizers: input.organizers,

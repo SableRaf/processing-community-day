@@ -19,15 +19,19 @@ const { t, locale } = useI18n();
 const panelRef = ref<HTMLElement | null>(null);
 const tabButtonRef = ref<HTMLButtonElement | null>(null);
 const minimapRef = ref<HTMLDivElement | null>(null);
+const descContentRef = ref<HTMLElement | null>(null);
 const calDropdownOpen = ref(false);
 const shareDropdownOpen = ref(false);
 const linkCopied = ref(false);
 const descExpanded = ref(false);
+const descHasMore = ref(false);
 const hostsExpanded = ref(false);
 let trap: FocusTrap | null = null;
 let minimap: import('leaflet').Map | null = null;
 
-const PANEL_TRUNCATE_LENGTH = 200;
+// Collapsed height of the description, in px. Must match the max-height set on
+// .panel-description-content--clamped in the styles below.
+const DESC_CLAMP_PX = 132;
 const HOSTS_VISIBLE = 3;
 
 function handleOutsideClick(e: MouseEvent) {
@@ -57,13 +61,24 @@ onMounted(() => {
     });
   }
   document.addEventListener('click', handleOutsideClick);
+  window.addEventListener('resize', measureDesc);
 });
 
 onUnmounted(() => {
   trap?.deactivate();
   destroyMinimap();
   document.removeEventListener('click', handleOutsideClick);
+  window.removeEventListener('resize', measureDesc);
 });
+
+// Decide whether the description overflows its collapsed height and needs a
+// "read more" toggle. scrollHeight reports full content height regardless of
+// the clamp's max-height, so this works whether or not the clamp is applied.
+async function measureDesc() {
+  await nextTick();
+  const el = descContentRef.value;
+  descHasMore.value = !!el && el.scrollHeight > DESC_CLAMP_PX + 8;
+}
 
 function destroyMinimap() {
   if (minimap) {
@@ -118,10 +133,12 @@ watch(
   async (newNode) => {
     calDropdownOpen.value = false;
     descExpanded.value = false;
+    descHasMore.value = false;
     hostsExpanded.value = false;
     if (newNode) {
       await nextTick();
       trap?.activate();
+      measureDesc();
       if (!newNode.online_event && !newNode.location_tbd) initMinimap(newNode);
       else destroyMinimap();
     } else {
@@ -144,10 +161,6 @@ function downloadIcs(node: Node) {
 }
 
 
-function getParagraphs(text: string): string[] {
-  return text.split(/\n\n+/).filter(Boolean);
-}
-
 function getOrganizerNames(organizers: { name: string }[]): string[] {
   return organizers.map(o => o.name).filter(Boolean);
 }
@@ -160,16 +173,6 @@ function formatOrganizers(organizers: { name: string }[], expanded = false): str
 
 function hasMoreHosts(organizers: { name: string }[]): boolean {
   return getOrganizerNames(organizers).length > HOSTS_VISIBLE;
-}
-
-function getDescPreview(node: Node): { text: string; hasMore: boolean } {
-  const full = node.details_text || '';
-  const paras = getParagraphs(full);
-  const first = paras[0] ?? '';
-  const truncated = first.length > PANEL_TRUNCATE_LENGTH
-    ? first.slice(0, PANEL_TRUNCATE_LENGTH).trimEnd() + '…'
-    : first;
-  return { text: truncated, hasMore: paras.length > 1 || first.length > PANEL_TRUNCATE_LENGTH };
 }
 
 function getShareUrl(node: Node): string {
@@ -235,7 +238,6 @@ function getEditEventHref(node: Node): string {
   return `${GITHUB_EDIT_EVENT_URL}&${params.toString().replace(/\+/g, '%20')}`;
 }
 
-const descPreview = computed(() => props.node ? getDescPreview(props.node) : null);
 const calLinks = computed(() => props.node && !props.node.date_tbd ? calendarLinks(props.node) : null);
 </script>
 
@@ -457,18 +459,17 @@ const calLinks = computed(() => props.node && !props.node.date_tbd ? calendarLin
         </div>
 
         <!-- Description -->
-        <div class="panel-description">
-          <template v-if="descExpanded">
-            <p
-              v-for="(para, i) in getParagraphs(node.details_text)"
-              :key="i"
-            >{{ para }}</p>
-          </template>
-          <template v-else>
-            <p>{{ descPreview!.text }}</p>
-          </template>
+        <div v-if="node.details_html" class="panel-description">
+          <!-- details_html is rendered from PR-reviewed markdown; micromark escapes
+               raw HTML and sanitizes link protocols at build time. -->
+          <div
+            ref="descContentRef"
+            class="panel-description-content markdown-body"
+            :class="{ 'panel-description-content--clamped': !descExpanded && descHasMore }"
+            v-html="node.details_html"
+          ></div>
           <button
-            v-if="descPreview!.hasMore"
+            v-if="descHasMore"
             class="panel-read-more"
             :aria-expanded="descExpanded"
             @click="descExpanded = !descExpanded"
@@ -1080,13 +1081,122 @@ const calLinks = computed(() => props.node && !props.node.date_tbd ? calendarLin
   margin-bottom: 1rem;
 }
 
-.panel-description p {
-  margin: 0 0 0.75rem;
+.panel-description-content {
   font-size: 0.9375rem;
   line-height: 1.6;
 }
 
+/* Collapse long descriptions behind a "read more" toggle. The max-height here
+   must match DESC_CLAMP_PX in the script. */
+.panel-description-content--clamped {
+  max-height: 132px;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 60%, transparent 100%);
+}
+
+/* ─── Rendered markdown (v-html, so :deep is required) ─── */
+.panel-description-content :deep(> *:first-child) {
+  margin-top: 0;
+}
+
+.panel-description-content :deep(> *:last-child) {
+  margin-bottom: 0;
+}
+
+.panel-description-content :deep(p) {
+  margin: 0 0 0.75rem;
+}
+
+.panel-description-content :deep(a) {
+  color: var(--color-link);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.panel-description-content :deep(a:hover) {
+  color: var(--color-link-hover);
+}
+
+.panel-description-content :deep(h1),
+.panel-description-content :deep(h2),
+.panel-description-content :deep(h3),
+.panel-description-content :deep(h4) {
+  margin: 1.25rem 0 0.5rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.panel-description-content :deep(h1) { font-size: 1.25rem; }
+.panel-description-content :deep(h2) { font-size: 1.125rem; }
+.panel-description-content :deep(h3) { font-size: 1rem; }
+.panel-description-content :deep(h4) { font-size: 0.9375rem; }
+
+.panel-description-content :deep(ul),
+.panel-description-content :deep(ol) {
+  margin: 0 0 0.75rem;
+  padding-left: 1.5rem;
+}
+
+.panel-description-content :deep(li) {
+  margin: 0.2rem 0;
+}
+
+.panel-description-content :deep(blockquote) {
+  margin: 0 0 0.75rem;
+  padding-left: 0.875rem;
+  border-left: 3px solid var(--color-border);
+  color: var(--color-text-muted);
+}
+
+.panel-description-content :deep(code) {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.85em;
+  background: var(--color-border);
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+}
+
+.panel-description-content :deep(pre) {
+  margin: 0 0 0.75rem;
+  padding: 0.75rem;
+  background: var(--color-border);
+  border-radius: 6px;
+  overflow-x: auto;
+}
+
+.panel-description-content :deep(pre code) {
+  background: none;
+  padding: 0;
+}
+
+.panel-description-content :deep(img) {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+}
+
+.panel-description-content :deep(hr) {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: 1rem 0;
+}
+
+.panel-description-content :deep(table) {
+  border-collapse: collapse;
+  margin: 0 0 0.75rem;
+  font-size: 0.875rem;
+}
+
+.panel-description-content :deep(th),
+.panel-description-content :deep(td) {
+  border: 1px solid var(--color-border);
+  padding: 0.3rem 0.55rem;
+  text-align: left;
+}
+
 .panel-read-more {
+  margin-top: 0.5rem;
   background: none;
   border: none;
   padding: 0;

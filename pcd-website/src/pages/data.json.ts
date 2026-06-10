@@ -32,6 +32,7 @@ export const GET: APIRoute = async ({ site }) => {
       event_page_url: node.event_page_url ?? null,
       event_short_description: node.event_short_description,
       details_text: node.details_text,
+      details_html: node.details_html,
       event_activities: node.event_activities,
       organizers: node.organizers,
       organization_name: node.organization_name ?? null,
