@@ -1,0 +1,44 @@
+{
+  "id": "pcd-san-francisco-2026",
+  "uid": "e655ea6",
+  "organizers": [
+    {
+      "name": "[Gray Area](https://grayarea.org) & [tiat](https://tiat.place)"
+    }
+  ],
+  "primary_contact": {
+    "name": "Kate Hollenbach",
+    "email": "kate@grayarea.org"
+  },
+  "organization_name": "Gray Area × tiat",
+  "organization_url": "",
+  "organization_type": "Nonprofit, foundation, association",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ San Francisco",
+  "event_location": {
+    "address": "2665 Mission St, San Francisco CA, 94110",
+    "plus_code": "849VQH3J+RQ6"
+  },
+  "event_date": "",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "Workshops & lightning talks!",
+  "event_activities": [
+    "Hands-on workshops",
+    "Beginner introductions to Processing or p5.js",
+    "Student project presentations",
+    "Other"
+  ],
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-san-francisco-2026/48820",
+  "city": "San Francisco",
+  "country": "USA",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 101,
+    "submitted_by_github": "kjhollen",
+    "submitted_date": "2026-06-15",
+    "maintainer_notes": ""
+  }
+}
