@@ -1,0 +1,42 @@
+{
+  "id": "pcd-los-angeles-2026",
+  "uid": "1fa83af",
+  "organizers": [
+    {
+      "name": "Xin Xin"
+    },
+    {
+      "name": "Whisper"
+    }
+  ],
+  "primary_contact": {
+    "name": "Xin Xin",
+    "email": "contact@xin-xin.info"
+  },
+  "organization_name": "",
+  "organization_url": "",
+  "organization_type": "",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Los Angeles",
+  "event_location": {
+    "address": "",
+    "plus_code": "85633Q8P+4X"
+  },
+  "event_date": "2026-11-07",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "One-day unconference about creative coding, vibe coding, and labor",
+  "event_activities": [],
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-los-angeles-2026/48821",
+  "city": "Los Angeles",
+  "country": "United States",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 103,
+    "submitted_by_github": "xinemata",
+    "submitted_date": "2026-06-15",
+    "maintainer_notes": ""
+  }
+}
