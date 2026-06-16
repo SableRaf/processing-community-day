@@ -1,0 +1,44 @@
+{
+  "id": "pcd-melbourne-australia-2026",
+  "uid": "7a76e26",
+  "organizers": [
+    {
+      "name": "Mel Huang Buntine"
+    }
+  ],
+  "primary_contact": {
+    "name": "Mel Huang Buntine",
+    "email": "hello@melaniehuang.com"
+  },
+  "organization_name": "",
+  "organization_url": "",
+  "organization_type": "Museum, gallery, media arts center",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Melbourne, Australia",
+  "event_location": {
+    "address": "",
+    "plus_code": "4RJ752GP+XH"
+  },
+  "event_date": "",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "I will host PCD Melbourne in October as part of the programming for the Radical Computing exhibition. Dates tbc.",
+  "event_activities": [
+    "Hands-on workshops",
+    "Live coding",
+    "Exhibition",
+    "Beginner introductions to Processing or p5.js"
+  ],
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-melbourne-2026/48807",
+  "city": "Melbourne",
+  "country": "Australia",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 97,
+    "submitted_by_github": "melaniehuang",
+    "submitted_date": "2026-06-16",
+    "maintainer_notes": ""
+  }
+}
