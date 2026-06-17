@@ -1,0 +1,39 @@
+{
+  "id": "pcd-washington-dc-2026",
+  "uid": "5910fa8",
+  "organizers": [
+    {
+      "name": "Andrew Bryant"
+    }
+  ],
+  "primary_contact": {
+    "name": "Andrew Bryant",
+    "email": "bryant.andrew01@gmail.com"
+  },
+  "organization_name": "",
+  "organization_url": "",
+  "organization_type": "",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Washington, DC",
+  "event_location": {
+    "address": "",
+    "plus_code": "87C4WX54+VJ"
+  },
+  "event_date": "",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "",
+  "event_activities": [],
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-washington-dc-2026/48815",
+  "city": "",
+  "country": "",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 99,
+    "submitted_by_github": "apbryant",
+    "submitted_date": "2026-06-17",
+    "maintainer_notes": ""
+  }
+}
