@@ -12,15 +12,15 @@
   },
   "organization_name": "Creative Computing Group",
   "organization_url": "https://creative-computing.org",
-  "organization_type": "School, university, library",
+  "organization_type": "",
   "online_event": false,
   "event_url": "",
   "event_name": "PCD @ Seoul 2026",
   "event_location": {
-    "address": "",
+    "address": "Sogang University, Seoul",
     "plus_code": "8Q98HW2V+H6"
   },
-  "event_date": "",
+  "event_date": "2026-10-31",
   "event_start_time": "",
   "event_end_time": "",
   "event_short_description": "",
