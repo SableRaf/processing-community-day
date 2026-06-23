@@ -1,0 +1,39 @@
+{
+  "id": "pcd-aarhus-2026",
+  "uid": "22d6c23",
+  "organizers": [],
+  "primary_contact": {
+    "name": "Anders Visti",
+    "email": "mail@andersvisti.dk"
+  },
+  "organization_name": "Code&Share[ ]",
+  "organization_url": "https://codeandshare.net/",
+  "organization_type": "Meetup, code club, community group",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Aarhus",
+  "event_location": {
+    "address": "",
+    "plus_code": "9F8G5626+39"
+  },
+  "event_date": "",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "",
+  "event_activities": [
+    "Show-and-tell",
+    "Hands-on workshops",
+    "Creative coding jams or hack sessions"
+  ],
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-aarhus-2026/48852",
+  "city": "Aarhus",
+  "country": "Denmark",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 107,
+    "submitted_by_github": "cirkavisti",
+    "submitted_date": "2026-06-23",
+    "maintainer_notes": ""
+  }
+}
