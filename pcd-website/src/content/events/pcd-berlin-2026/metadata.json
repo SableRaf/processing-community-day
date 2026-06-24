@@ -1,0 +1,39 @@
+{
+  "id": "pcd-berlin-2026",
+  "uid": "6ccd7a5",
+  "organizers": [],
+  "primary_contact": {
+    "name": "Jan-Henning Raff",
+    "email": "j.raff@media-university.de"
+  },
+  "organization_name": "",
+  "organization_url": "https://www.media-university.de/",
+  "organization_type": "School, university, library",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Berlin",
+  "event_location": {
+    "address": "Ackerstraße 76",
+    "plus_code": "9F4MG9QM+CQ"
+  },
+  "event_date": "",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "",
+  "event_activities": [
+    "Hands-on workshops",
+    "Live coding",
+    "Beginner introductions to Processing or p5.js"
+  ],
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-berlin-2026/48870",
+  "city": "",
+  "country": "",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 117,
+    "submitted_by_github": "j0000r111",
+    "submitted_date": "2026-06-24",
+    "maintainer_notes": ""
+  }
+}
