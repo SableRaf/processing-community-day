@@ -18,22 +18,25 @@
   "organization_type": "Nonprofit, foundation, association",
   "online_event": false,
   "event_url": "",
-  "event_name": "PCD @ Chicago",
+  "event_name": "PCD @ Chicago: Emergence and Improvisation",
   "event_location": {
     "address": "3219 S Morgan Street, Chicago IL 60608",
     "plus_code": "86HJR8PX+7G9"
   },
-  "event_date": "",
-  "event_start_time": "",
-  "event_end_time": "",
+  "event_date": "2026-10-11",
+  "event_start_time": "14:00",
+  "event_end_time": "20:00",
   "event_short_description": "Processing Community Day Chicago: Creative Coding Workshops for Risograph and More+++",
   "event_activities": [
     "Hands-on workshops",
     "Live coding",
+    "Exhibition",
+    "Panel discussions",
     "Beginner introductions to Processing or p5.js",
-    "Creative coding jams or hack sessions"
+    "Creative coding jams or hack sessions",
+    "Other"
   ],
-  "event_page_url": "",
+  "event_page_url": "https://ccam.world/programs/26-10-processing-day/",
   "forum_thread_url": "https://discourse.processing.org/t/pcd-2026-chicago/48157",
   "city": "Chicago",
   "country": "United States",
