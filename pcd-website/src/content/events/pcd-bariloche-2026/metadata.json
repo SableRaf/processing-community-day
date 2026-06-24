@@ -1,0 +1,47 @@
+{
+  "id": "pcd-bariloche-2026",
+  "uid": "e8dd272",
+  "organizers": [
+    {
+      "name": "Carola Dreidemie"
+    },
+    {
+      "name": "Fernan Inchaurza"
+    }
+  ],
+  "primary_contact": {
+    "name": "Carola Dreidemie",
+    "email": "cdreidemie@unrn.edu.ar"
+  },
+  "organization_name": "LVCC Laboratorio de Visualizaciones y Código Creativo - UNRN Universidad Nacional de Río Negro",
+  "organization_url": "https://www.unrn.edu.ar",
+  "organization_type": "School, university, library",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Bariloche",
+  "event_location": {
+    "address": "Anasagasti 1463, R8400 San Carlos de Bariloche, Río Negro",
+    "plus_code": "47CCVP56+35"
+  },
+  "event_date": "2026-10-06",
+  "event_end_date": "2026-10-07",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "Presentación y Taller Introductorio",
+  "event_activities": [
+    "Panel discussions",
+    "Beginner introductions to Processing or p5.js",
+    "Student project presentations"
+  ],
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-bariloche-2026/48861",
+  "city": "Bariloche",
+  "country": "Argentina",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 109,
+    "submitted_by_github": "CaroDREIDEMIE",
+    "submitted_date": "2026-06-24",
+    "maintainer_notes": ""
+  }
+}
