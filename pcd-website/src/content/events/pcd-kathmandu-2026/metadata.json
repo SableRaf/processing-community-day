@@ -1,0 +1,37 @@
+{
+  "id": "pcd-kathmandu-2026",
+  "uid": "4456eeb",
+  "organizers": [],
+  "primary_contact": {
+    "name": "Aashish Panthi",
+    "email": "mail@aashishpanthi.info.np"
+  },
+  "organization_name": "",
+  "organization_url": "",
+  "organization_type": "",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Kathmandu",
+  "event_location": {
+    "address": "",
+    "plus_code": "7MV7M8M3+J4"
+  },
+  "event_date": "",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "",
+  "event_activities": [
+    "Live coding"
+  ],
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-kathmandu-nepal-2026/48872",
+  "city": "Kathmandu",
+  "country": "Nepal",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 111,
+    "submitted_by_github": "aashishpanthi",
+    "submitted_date": "2026-06-24",
+    "maintainer_notes": ""
+  }
+}
