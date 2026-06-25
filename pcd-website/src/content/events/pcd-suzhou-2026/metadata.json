@@ -1,0 +1,41 @@
+{
+  "id": "pcd-suzhou-2026",
+  "uid": "3a665a1",
+  "organizers": [],
+  "primary_contact": {
+    "name": "Luo Xiao",
+    "email": "dadadaluo@gmail.com"
+  },
+  "organization_name": "code2art",
+  "organization_url": "https://code2art.com",
+  "organization_type": "Meetup, code club, community group",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Suzhou",
+  "event_location": {
+    "address": "Nanmen Rd, Gusu District, Suzhou, Jiangsu, China, 215007",
+    "plus_code": "8Q327JPH+M9H"
+  },
+  "event_date": "",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "",
+  "event_activities": [
+    "Show-and-tell",
+    "Live coding",
+    "Exhibition",
+    "Beginner introductions to Processing or p5.js",
+    "Creative coding jams or hack sessions"
+  ],
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-suzhou-2026/48877",
+  "city": "Suzhou",
+  "country": "China",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 119,
+    "submitted_by_github": "avantcontra",
+    "submitted_date": "2026-06-25",
+    "maintainer_notes": "Hi~ When I initially launched PCD Shanghai, I included the neighboring city of Suzhou in the same thread. Now that the organizing work in Shanghai is being led by a team of highly professional individuals with prior PCD experience—and g**iven that the plans for Suzhou have a distinct local character**—we think that it would be more beneficial to build a separate “PCD Suzhou” thread.\nThanks~"
+  }
+}
