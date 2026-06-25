@@ -1,0 +1,40 @@
+{
+  "id": "pcd-san-marcos-tx-2026",
+  "uid": "d0e8f8d",
+  "organizers": [],
+  "primary_contact": {
+    "name": "Natalie Freed",
+    "email": "nataliefreed@txstate.edu"
+  },
+  "organization_name": "Families Learning Together",
+  "organization_url": "https://fltsmtx.org/",
+  "organization_type": "Fablab, makerspace, hackerspace",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ San Marcos, TX",
+  "event_location": {
+    "address": "",
+    "plus_code": "76X4V3M5+3J"
+  },
+  "event_date": "",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "",
+  "event_activities": [
+    "Show-and-tell",
+    "Hands-on workshops",
+    "Beginner introductions to Processing or p5.js",
+    "Student project presentations"
+  ],
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-san-marcos-tx-2026/48884",
+  "city": "San Marcos, TX",
+  "country": "USA",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 123,
+    "submitted_by_github": "nataliefreed",
+    "submitted_date": "2026-06-25",
+    "maintainer_notes": ""
+  }
+}
