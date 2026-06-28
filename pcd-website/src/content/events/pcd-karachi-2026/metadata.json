@@ -1,0 +1,44 @@
+{
+  "id": "pcd-karachi-2026",
+  "uid": "8e74306",
+  "organizers": [
+    {
+      "name": "Nabeera Hussain"
+    }
+  ],
+  "primary_contact": {
+    "name": "Nabeera",
+    "email": "codecircles@proton.me"
+  },
+  "organization_name": "Code Circles",
+  "organization_url": "",
+  "organization_type": "Meetup, code club, community group",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Karachi",
+  "event_location": {
+    "address": "",
+    "plus_code": "7JP9W42H+926"
+  },
+  "event_date": "",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "",
+  "event_activities": [
+    "Hands-on workshops",
+    "Exhibition",
+    "Beginner introductions to Processing or p5.js",
+    "Creative coding jams or hack sessions"
+  ],
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-karachi-2026/48900",
+  "city": "Karachi",
+  "country": "Pakistan",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 133,
+    "submitted_by_github": "ni-ui",
+    "submitted_date": "2026-06-28",
+    "maintainer_notes": ""
+  }
+}
