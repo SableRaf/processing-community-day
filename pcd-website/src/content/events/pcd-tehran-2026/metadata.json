@@ -1,0 +1,35 @@
+{
+  "id": "pcd-tehran-2026",
+  "uid": "ccefec1",
+  "organizers": [],
+  "primary_contact": {
+    "name": "Pedram Sadegh-Beyki",
+    "email": "pitheorem@gmail.com"
+  },
+  "organization_name": "Art and Technology Group Iran",
+  "organization_url": "https://www.atgiran.ir",
+  "organization_type": "Meetup, code club, community group",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Tehran",
+  "event_location": {
+    "address": "Iran Computer Museum, Ostad Hassan Banna (Majidieh), Tehran, Iran.",
+    "plus_code": "8H7HPFXC+46"
+  },
+  "event_date": "",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "",
+  "event_activities": [],
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-tehran-2026/48894",
+  "city": "Tehran",
+  "country": "Iran",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 127,
+    "submitted_by_github": "pitheorem",
+    "submitted_date": "2026-06-27",
+    "maintainer_notes": ""
+  }
+}
