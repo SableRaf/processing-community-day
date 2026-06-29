@@ -1,0 +1,42 @@
+{
+  "id": "pcd-tel-aviv-2026",
+  "uid": "8a5be40",
+  "organizers": [
+    {
+      "name": "[Rony Ginosar](http://ronyginosar.com)"
+    }
+  ],
+  "primary_contact": {
+    "name": "Rony Ginosar",
+    "email": "rony.ginosar@gmail.com"
+  },
+  "organization_name": "",
+  "organization_url": "",
+  "organization_type": "",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Tel Aviv",
+  "event_location": {
+    "address": "",
+    "plus_code": "8G4P3QGJ+8Q"
+  },
+  "event_date": "",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "",
+  "event_activities": [
+    "Show-and-tell",
+    "Panel discussions"
+  ],
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-tel-aviv-2026/48879",
+  "city": "Tel Aviv",
+  "country": "Israel",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 121,
+    "submitted_by_github": "ronyginosar",
+    "submitted_date": "2026-06-29",
+    "maintainer_notes": ""
+  }
+}
