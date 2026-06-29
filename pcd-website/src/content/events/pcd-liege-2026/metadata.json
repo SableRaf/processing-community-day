@@ -1,0 +1,38 @@
+{
+  "id": "pcd-liege-2026",
+  "uid": "2333151",
+  "organizers": [],
+  "primary_contact": {
+    "name": "Greg Berger",
+    "email": "greg@overflow.gallery"
+  },
+  "organization_name": "",
+  "organization_url": "https://overflow.gallery",
+  "organization_type": "Museum, gallery, media arts center",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Liège",
+  "event_location": {
+    "address": "rue Hongrée 6b, 4000 Liège",
+    "plus_code": "9F27JHWJ+MQX"
+  },
+  "event_date": "2026-10-31",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "",
+  "event_activities": [
+    "Hands-on workshops",
+    "Creative coding jams or hack sessions"
+  ],
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-liege-belgium-2026/48891",
+  "city": "Liège",
+  "country": "Belgium",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 125,
+    "submitted_by_github": "gregberger",
+    "submitted_date": "2026-06-29",
+    "maintainer_notes": ""
+  }
+}
