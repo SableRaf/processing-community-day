@@ -1,0 +1,42 @@
+{
+  "id": "pcd-west-lafayette-2026",
+  "uid": "b2e2fa7",
+  "organizers": [
+    {
+      "name": "Josie Koch"
+    }
+  ],
+  "primary_contact": {
+    "name": "Josie Koch",
+    "email": "kochjosie2@gmail.com"
+  },
+  "organization_name": "",
+  "organization_url": "",
+  "organization_type": "",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ West Lafayette",
+  "event_location": {
+    "address": "",
+    "plus_code": "86GMC3FV+W8M"
+  },
+  "event_date": "",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "I will be hosting a Processing Day community event to talk about the possibilities for using code in art!",
+  "event_activities": [
+    "Beginner introductions to Processing or p5.js",
+    "Creative coding jams or hack sessions"
+  ],
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-west-lafayette-2026/48863/2",
+  "city": "West Lafayette",
+  "country": "United States of America",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 116,
+    "submitted_by_github": "kochjosie",
+    "submitted_date": "2026-06-29",
+    "maintainer_notes": ""
+  }
+}
