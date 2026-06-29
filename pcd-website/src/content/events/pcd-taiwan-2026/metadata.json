@@ -1,0 +1,65 @@
+{
+  "id": "pcd-taiwan-2026",
+  "uid": "8bc999c",
+  "organizers": [
+    {
+      "name": "[Tzuyun Wei](https://bushwasroom.com/)"
+    },
+    {
+      "name": "[Munus Shih](munusshih.com)"
+    },
+    {
+      "name": "[Mor Liao](https://www.behance.net/onemoooooor)"
+    },
+    {
+      "name": "[Viviane Roi](https://vivianeroi.com/)"
+    },
+    {
+      "name": "[Yu Lee](yu-y.ing)"
+    },
+    {
+      "name": "[Tuan Ting Huang](https://tuan-h.com/about)"
+    },
+    {
+      "name": "[Billy Ho](https://choose-image.com/)"
+    }
+  ],
+  "primary_contact": {
+    "name": "Munus Shih",
+    "email": "munus@coassembly.work"
+  },
+  "organization_name": "SpOnAcT!",
+  "organization_url": "https://www.instagram.com/spon.act/",
+  "organization_type": "Other",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Taiwan",
+  "event_location": {
+    "address": "",
+    "plus_code": "7QQ32GV7+688"
+  },
+  "event_date": "2026-07-01",
+  "event_end_date": "2026-07-15",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "",
+  "event_activities": [
+    "Show-and-tell",
+    "Hands-on workshops",
+    "Live coding",
+    "Panel discussions",
+    "Beginner introductions to Processing or p5.js",
+    "Creative coding jams or hack sessions"
+  ],
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-taiwan-2026/48715",
+  "city": "Taipei, New Taipei, Taichung",
+  "country": "",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 87,
+    "submitted_by_github": "munusshih",
+    "submitted_date": "2026-06-29",
+    "maintainer_notes": ""
+  }
+}
