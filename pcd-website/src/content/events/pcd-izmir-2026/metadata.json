@@ -1,0 +1,42 @@
+{
+  "id": "pcd-izmir-2026",
+  "uid": "d70e9eb",
+  "organizers": [
+    {
+      "name": "Murat Atimtay"
+    }
+  ],
+  "primary_contact": {
+    "name": "Murat Atimtay",
+    "email": "atimtay@gmail.com"
+  },
+  "organization_name": "",
+  "organization_url": "",
+  "organization_type": "",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Izmir",
+  "event_location": {
+    "address": "",
+    "plus_code": "8GC9C4GV+28"
+  },
+  "event_date": "",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "",
+  "event_activities": [
+    "Show-and-tell",
+    "Hands-on workshops"
+  ],
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-izmir-2026/48699",
+  "city": "Izmir",
+  "country": "Turkey",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 131,
+    "submitted_by_github": "atimtakus",
+    "submitted_date": "2026-06-29",
+    "maintainer_notes": ""
+  }
+}
