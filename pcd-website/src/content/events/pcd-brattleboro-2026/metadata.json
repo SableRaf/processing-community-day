@@ -1,0 +1,46 @@
+{
+  "id": "pcd-brattleboro-2026",
+  "uid": "080064e",
+  "organizers": [
+    {
+      "name": "Izzy Snyder"
+    },
+    {
+      "name": "Robert Parks"
+    }
+  ],
+  "primary_contact": {
+    "name": "Izzy Snyder",
+    "email": "izzysnyder2001@gmail.com"
+  },
+  "organization_name": "",
+  "organization_url": "",
+  "organization_type": "",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Brattleboro",
+  "event_location": {
+    "address": "",
+    "plus_code": "87J9VC4Q+4Q"
+  },
+  "event_date": "",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "A short workshop introducing people to processing and creative coding",
+  "event_activities": [
+    "Show-and-tell",
+    "Hands-on workshops",
+    "Beginner introductions to Processing or p5.js"
+  ],
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-brattleboro-2026/48882/2",
+  "city": "Brattleboro, VT",
+  "country": "United States",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 137,
+    "submitted_by_github": "Izzy-Snyder",
+    "submitted_date": "2026-06-29",
+    "maintainer_notes": ""
+  }
+}
