@@ -1,0 +1,46 @@
+{
+  "id": "pcd-hangzhou-2026",
+  "uid": "9cc655b",
+  "organizers": [
+    {
+      "name": "Zhiyuan Zhou"
+    },
+    {
+      "name": "Chifei xue"
+    }
+  ],
+  "primary_contact": {
+    "name": "Zhiyuan Zhou(Zack)",
+    "email": "public@designanything.design"
+  },
+  "organization_name": "D&A Community",
+  "organization_url": "https://designanything.design/",
+  "organization_type": "School, university, library",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Hangzhou",
+  "event_location": {
+    "address": "",
+    "plus_code": "8Q22924P+WM9"
+  },
+  "event_date": "",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "",
+  "event_activities": [
+    "Show-and-tell",
+    "Creative coding jams or hack sessions",
+    "Student project presentations"
+  ],
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-hangzhou-2026/48898",
+  "city": "Hangzhou",
+  "country": "China",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 129,
+    "submitted_by_github": "ZeizeiY",
+    "submitted_date": "2026-06-29",
+    "maintainer_notes": ""
+  }
+}
