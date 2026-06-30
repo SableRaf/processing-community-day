@@ -1,0 +1,35 @@
+{
+  "id": "pcd-seattle-2026",
+  "uid": "5ea5839",
+  "organizers": [],
+  "primary_contact": {
+    "name": "Sabin Timalsena",
+    "email": "hello@sabin.art"
+  },
+  "organization_name": "Seattle Creative Code",
+  "organization_url": "https://seattlecreativecode.com",
+  "organization_type": "",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Seattle",
+  "event_location": {
+    "address": "",
+    "plus_code": "84VVJM28+MF"
+  },
+  "event_date": "",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "",
+  "event_activities": [],
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-seattle-2026/48913",
+  "city": "Seattle",
+  "country": "USA",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 140,
+    "submitted_by_github": "SabinT",
+    "submitted_date": "2026-06-29",
+    "maintainer_notes": ""
+  }
+}
