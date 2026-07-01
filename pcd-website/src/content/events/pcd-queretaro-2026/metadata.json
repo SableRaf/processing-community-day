@@ -1,0 +1,40 @@
+{
+  "id": "pcd-queretaro-2026",
+  "uid": "0bb4284",
+  "organizers": [],
+  "primary_contact": {
+    "name": "Enrique García Alcalá",
+    "email": "me@egarciaa.com"
+  },
+  "organization_name": "",
+  "organization_url": "",
+  "organization_type": "",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Querétaro",
+  "event_location": {
+    "address": "",
+    "plus_code": "75GXHJP7+26"
+  },
+  "event_date": "",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "",
+  "event_activities": [
+    "Show-and-tell",
+    "Hands-on workshops",
+    "Exhibition",
+    "Panel discussions"
+  ],
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-queretaro-2026/48925",
+  "city": "",
+  "country": "",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 143,
+    "submitted_by_github": "egarcia93",
+    "submitted_date": "2026-07-01",
+    "maintainer_notes": ""
+  }
+}
