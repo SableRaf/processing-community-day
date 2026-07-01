@@ -1,0 +1,55 @@
+{
+  "id": "pcd-mexico-city-2026",
+  "uid": "ff3d33f",
+  "organizers": [
+    {
+      "name": "[JuanFuent.es](https://www.instagram.com/juanfuent.es/)"
+    },
+    {
+      "name": "[Andrew Alva](https://www.instagram.com/andrew__alva/)"
+    },
+    {
+      "name": "[Andrés Ochoa](https://www.instagram.com/typebrain/)"
+    },
+    {
+      "name": "[Eli Ramos](https://www.instagram.com/_elibbit_/)"
+    }
+  ],
+  "primary_contact": {
+    "name": "JuanFuent.es",
+    "email": "input@juanfuent.es"
+  },
+  "organization_name": "Letrismo",
+  "organization_url": "https://equills.letrismo.com",
+  "organization_type": "Meetup, code club, community group",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Mexico City",
+  "event_location": {
+    "address": "",
+    "plus_code": "76F2CVM8+49"
+  },
+  "event_date": "",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "A Mexico City gathering around p5.js, digital calligraphy, and experimental/creative writing code tools.",
+  "event_activities": [
+    "Show-and-tell",
+    "Hands-on workshops",
+    "Live coding",
+    "Beginner introductions to Processing or p5.js",
+    "Creative coding jams or hack sessions",
+    "Other"
+  ],
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-mexico-2026/48924",
+  "city": "CDMX",
+  "country": "México",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 145,
+    "submitted_by_github": "juanfuent-es",
+    "submitted_date": "2026-07-01",
+    "maintainer_notes": "*¡Trae tu laptop y prepárate para experimentar!*"
+  }
+}
