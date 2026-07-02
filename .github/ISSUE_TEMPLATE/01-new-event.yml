@@ -70,6 +70,13 @@ body:
       placeholder: hello@example.org
     validations:
       required: true
+  - type: checkboxes
+    id: contact_email_consent
+    attributes:
+      label: Contact email consent
+      options:
+        - label: "I understand that this contact email will be published on the Processing Community Day website, included in the public /data.json feed, and may be indexed, copied, or archived by third parties."
+          required: true
   - type: input
     id: city
     attributes:
