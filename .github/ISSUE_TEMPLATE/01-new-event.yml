@@ -74,8 +74,9 @@ body:
     id: contact_email_consent
     attributes:
       label: Contact email consent
+      description: This contact email will be published on the Processing Community Day website, included in the public /data.json feed, and may be indexed, copied, or archived by third parties.
       options:
-        - label: "I understand that this contact email will be published on the Processing Community Day website, included in the public /data.json feed, and may be indexed, copied, or archived by third parties."
+        - label: I understand and agree to the above.
           required: true
   - type: input
     id: city
