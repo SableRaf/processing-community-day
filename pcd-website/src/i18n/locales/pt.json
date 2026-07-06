@@ -84,7 +84,7 @@
         "download_ics": "Baixar .ics",
         "read_more": "Ler mais…",
         "show_less": "Mostrar menos",
-        "disclaimer_with_org": "Este evento é organizado por {org} e não é afiliado à Processing Foundation. Para quaisquer dúvidas ou preocupações sobre este evento, entre em contato diretamente com os organizadores.",
+        "disclaimer_with_org": "Este evento é organizado por <em>{org}</em> e não é afiliado à Processing Foundation. Para quaisquer dúvidas ou preocupações sobre este evento, entre em contato diretamente com os organizadores.",
         "disclaimer_without_org": "Este evento é organizado de forma independente e não é afiliado à Processing Foundation. Para quaisquer dúvidas ou preocupações sobre este evento, entre em contato diretamente com os organizadores.",
         "activities_label": "Atividades",
         "report_issue": "Reportar um problema nesta página",

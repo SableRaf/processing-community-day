@@ -84,7 +84,7 @@
         "download_ics": ".ics をダウンロード",
         "read_more": "もっと読む…",
         "show_less": "折りたたむ",
-        "disclaimer_with_org": "このイベントは {org} が主催しており、Processing Foundation とは直接の関係はありません。このイベントに関するご質問・ご不明点は、主催者に直接お問い合わせください。",
+        "disclaimer_with_org": "このイベントは <em>{org}</em> が主催しており、Processing Foundation とは直接の関係はありません。このイベントに関するご質問・ご不明点は、主催者に直接お問い合わせください。",
         "disclaimer_without_org": "このイベントは独自に主催されており、Processing Foundation とは直接の関係はありません。このイベントに関するご質問・ご不明点は、主催者に直接お問い合わせください。",
         "activities_label": "アクティビティ",
         "report_issue": "このページの問題を報告",

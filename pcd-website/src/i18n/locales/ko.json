@@ -84,7 +84,7 @@
         "download_ics": ".ics 다운로드",
         "read_more": "더 읽기…",
         "show_less": "접기",
-        "disclaimer_with_org": "이 이벤트는 {org}이(가) 주최하며 Processing Foundation과 관련이 없습니다. 이 이벤트에 관한 질문이나 우려 사항은 주최자에게 직접 문의하세요.",
+        "disclaimer_with_org": "이 이벤트는 <em>{org}</em>이(가) 주최하며 Processing Foundation과 관련이 없습니다. 이 이벤트에 관한 질문이나 우려 사항은 주최자에게 직접 문의하세요.",
         "disclaimer_without_org": "이 이벤트는 독립적으로 주최되며 Processing Foundation과 관련이 없습니다. 이 이벤트에 관한 질문이나 우려 사항은 주최자에게 직접 문의하세요.",
         "activities_label": "활동",
         "report_issue": "이 페이지의 문제 신고",

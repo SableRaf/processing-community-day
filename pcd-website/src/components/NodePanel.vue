@@ -532,9 +532,13 @@ const calLinks = computed(() => props.node && !props.node.date_tbd ? calendarLin
         <!-- Disclaimer -->
         <template v-if="!node.organization_name?.toLowerCase().includes('processing foundation')">
           <hr class="panel-separator" aria-hidden="true" />
-          <p v-if="node.organization_name" class="panel-disclaimer">
-            {{ t('panel.disclaimer_with_org', { org: node.organization_name }) }}
-          </p>
+          <!-- disclaimer_with_org wraps {org} in <em>; org name may itself
+               contain PR-reviewed inline markdown, so inject as HTML. -->
+          <p
+            v-if="node.organization_name"
+            class="panel-disclaimer panel-inline-md"
+            v-html="t('panel.disclaimer_with_org', { org: node.organization_name_html })"
+          ></p>
           <p v-else class="panel-disclaimer">
             {{ t('panel.disclaimer_without_org') }}
           </p>
