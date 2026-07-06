@@ -376,7 +376,7 @@ const calLinks = computed(() => props.node && !props.node.date_tbd ? calendarLin
           <!-- Row 2: Venue + address (OSM link) or Online platform -->
           <div class="info-card-row info-card-venue-row">
             <div class="info-card-row-leading">
-              <Icon icon="bi:link-45deg" width="1em" height="1em" aria-hidden="true" class="info-card-icon" />
+              <Icon :icon="!node.online_event && node.location_tbd ? 'bi:geo-alt' : 'bi:link-45deg'" width="1em" height="1em" aria-hidden="true" class="info-card-icon" />
               <div class="info-card-venue">
                 <span class="info-card-venue-name">{{ node.online_event ? onlinePlatformName(node.event_url) : node.location_tbd ? t('panel.location_tbd') : (node.location_name || node.address) }}</span>
                 <a
