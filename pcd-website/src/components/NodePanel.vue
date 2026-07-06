@@ -818,7 +818,7 @@ const calLinks = computed(() => props.node && !props.node.date_tbd ? calendarLin
 }
 
 .panel-inline-md :deep(a:hover) {
-  color: inherit;
+  color: var(--color-link-hover);
 }
 
 .panel-inline-md :deep(code) {
