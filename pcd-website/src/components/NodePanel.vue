@@ -876,13 +876,13 @@ const calLinks = computed(() => props.node && !props.node.date_tbd ? calendarLin
   cursor: pointer;
   font-family: var(--font-family);
   font-size: inherit;
-  color: var(--color-link);
+  color: var(--color-text-muted);
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 
 .panel-hosts-more:hover {
-  color: var(--color-link-hover);
+  color: var(--color-text);
 }
 
 /* ─── Event website CTA ─── */
@@ -1235,13 +1235,13 @@ const calLinks = computed(() => props.node && !props.node.date_tbd ? calendarLin
   cursor: pointer;
   font-family: var(--font-family);
   font-size: 0.875rem;
-  color: var(--color-link);
+  color: var(--color-text-muted);
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 
 .panel-read-more:hover {
-  color: var(--color-link-hover);
+  color: var(--color-text);
 }
 
 /* ─── Links section ─── */
