@@ -31,7 +31,7 @@ let minimap: import('leaflet').Map | null = null;
 
 // Collapsed height of the description, in px. Must match the max-height set on
 // .panel-description-content--clamped in the styles below.
-const DESC_CLAMP_PX = 132;
+const DESC_CLAMP_PX = 240;
 const HOSTS_VISIBLE = 3;
 
 function handleOutsideClick(e: MouseEvent) {
@@ -1121,7 +1121,7 @@ const calLinks = computed(() => props.node && !props.node.date_tbd ? calendarLin
 /* Collapse long descriptions behind a "read more" toggle. The max-height here
    must match DESC_CLAMP_PX in the script. */
 .panel-description-content--clamped {
-  max-height: 132px;
+  max-height: 240px;
   overflow: hidden;
   -webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent 100%);
   mask-image: linear-gradient(to bottom, #000 60%, transparent 100%);
