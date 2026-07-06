@@ -1,0 +1,35 @@
+{
+  "id": "pcd-leon-mx-2026",
+  "uid": "26e2c00",
+  "organizers": [],
+  "primary_contact": {
+    "name": "Edmundo Medel",
+    "email": "edramede@gmail.com"
+  },
+  "organization_name": "Visuales Perros",
+  "organization_url": "",
+  "organization_type": "Meetup, code club, community group",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD León, Mx",
+  "event_location": {
+    "address": "",
+    "plus_code": "75HW489H+CHM"
+  },
+  "event_date": "",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "",
+  "event_activities": [],
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-leon-mx-2026/48954",
+  "city": "Leon",
+  "country": "Mexico",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 151,
+    "submitted_by_github": "edomedo00",
+    "submitted_date": "2026-07-06",
+    "maintainer_notes": ""
+  }
+}
