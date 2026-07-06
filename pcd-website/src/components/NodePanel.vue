@@ -161,18 +161,22 @@ function downloadIcs(node: Node) {
 }
 
 
-function getOrganizerNames(organizers: { name: string }[]): string[] {
-  return organizers.map(o => o.name).filter(Boolean);
+type Organizer = { name: string; name_html: string };
+
+function getOrganizers(organizers: Organizer[]): Organizer[] {
+  return organizers.filter(o => o.name);
 }
 
-function formatOrganizers(organizers: { name: string }[], expanded = false): string {
-  const names = getOrganizerNames(organizers);
-  if (expanded || names.length <= HOSTS_VISIBLE) return names.join(', ');
-  return names.slice(0, HOSTS_VISIBLE).join(', ');
+// Join organizer names as inline HTML (names support markdown, so name_html
+// carries the rendered markup). The separator is plain text between spans.
+function formatOrganizers(organizers: Organizer[], expanded = false): string {
+  const list = getOrganizers(organizers);
+  const visible = expanded ? list : list.slice(0, HOSTS_VISIBLE);
+  return visible.map(o => o.name_html).join(', ');
 }
 
-function hasMoreHosts(organizers: { name: string }[]): boolean {
-  return getOrganizerNames(organizers).length > HOSTS_VISIBLE;
+function hasMoreHosts(organizers: Organizer[]): boolean {
+  return getOrganizers(organizers).length > HOSTS_VISIBLE;
 }
 
 function getShareUrl(node: Node): string {
@@ -323,14 +327,14 @@ const calLinks = computed(() => props.node && !props.node.date_tbd ? calendarLin
         </div>
         <div class="panel-byline">
           <p v-if="node.organization_name" class="panel-organizing-entity">
-            <span class="panel-label">{{ t('panel.by') }}</span> {{ node.organization_name }}
+            <span class="panel-label">{{ t('panel.by') }}</span> <span class="panel-inline-md" v-html="node.organization_name_html"></span>
           </p>
           <p v-if="node.organizers.some(o => o.name)" class="panel-hosts">
             <span class="panel-label">{{ t('panel.hosts_label') }}</span>
             <span v-if="!hostsExpanded" class="panel-hosts-line">
-              <span class="panel-hosts-names">{{ formatOrganizers(node.organizers, false) }}</span><template v-if="hasMoreHosts(node.organizers)"><span class="panel-hosts-more-wrap">…&nbsp;<button class="panel-hosts-more" :aria-label="t('panel.show_all_hosts')" @click="hostsExpanded = true">{{ t('panel.more') }}</button></span></template>
+              <span class="panel-hosts-names panel-inline-md" v-html="formatOrganizers(node.organizers, false)"></span><template v-if="hasMoreHosts(node.organizers)"><span class="panel-hosts-more-wrap">…&nbsp;<button class="panel-hosts-more" :aria-label="t('panel.show_all_hosts')" @click="hostsExpanded = true">{{ t('panel.more') }}</button></span></template>
             </span>
-            <span v-else>{{ formatOrganizers(node.organizers, true) }}</span>
+            <span v-else class="panel-inline-md" v-html="formatOrganizers(node.organizers, true)"></span>
           </p>
         </div>
 
@@ -792,6 +796,30 @@ const calLinks = computed(() => props.node && !props.node.date_tbd ? calendarLin
 
 [data-theme="dark"] .panel-activity-tag {
   border-color: var(--color-border-light);
+}
+
+/* Inline markdown rendered via v-html (host/org names, disclaimer). */
+.panel-inline-md :deep(em) {
+  font-style: italic;
+}
+
+.panel-inline-md :deep(strong) {
+  font-weight: 600;
+}
+
+.panel-inline-md :deep(a) {
+  color: var(--color-link);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.panel-inline-md :deep(a:hover) {
+  color: var(--color-link-hover);
+}
+
+.panel-inline-md :deep(code) {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.9em;
 }
 
 .panel-organizing-entity {
