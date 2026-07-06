@@ -31,7 +31,7 @@ let minimap: import('leaflet').Map | null = null;
 
 // Collapsed height of the description, in px. Must match the max-height set on
 // .panel-description-content--clamped in the styles below.
-const DESC_CLAMP_PX = 132;
+const DESC_CLAMP_PX = 240;
 const HOSTS_VISIBLE = 3;
 
 function handleOutsideClick(e: MouseEvent) {
@@ -161,18 +161,22 @@ function downloadIcs(node: Node) {
 }
 
 
-function getOrganizerNames(organizers: { name: string }[]): string[] {
-  return organizers.map(o => o.name).filter(Boolean);
+type Organizer = { name: string; name_html: string };
+
+function getOrganizers(organizers: Organizer[]): Organizer[] {
+  return organizers.filter(o => o.name);
 }
 
-function formatOrganizers(organizers: { name: string }[], expanded = false): string {
-  const names = getOrganizerNames(organizers);
-  if (expanded || names.length <= HOSTS_VISIBLE) return names.join(', ');
-  return names.slice(0, HOSTS_VISIBLE).join(', ');
+// Join organizer names as inline HTML (names support markdown, so name_html
+// carries the rendered markup). The separator is plain text between spans.
+function formatOrganizers(organizers: Organizer[], expanded = false): string {
+  const list = getOrganizers(organizers);
+  const visible = expanded ? list : list.slice(0, HOSTS_VISIBLE);
+  return visible.map(o => o.name_html).join(', ');
 }
 
-function hasMoreHosts(organizers: { name: string }[]): boolean {
-  return getOrganizerNames(organizers).length > HOSTS_VISIBLE;
+function hasMoreHosts(organizers: Organizer[]): boolean {
+  return getOrganizers(organizers).length > HOSTS_VISIBLE;
 }
 
 function getShareUrl(node: Node): string {
@@ -323,14 +327,14 @@ const calLinks = computed(() => props.node && !props.node.date_tbd ? calendarLin
         </div>
         <div class="panel-byline">
           <p v-if="node.organization_name" class="panel-organizing-entity">
-            <span class="panel-label">{{ t('panel.by') }}</span> {{ node.organization_name }}
+            <span class="panel-label">{{ t('panel.by') }}</span> <span class="panel-inline-md" v-html="node.organization_name_html"></span>
           </p>
           <p v-if="node.organizers.some(o => o.name)" class="panel-hosts">
             <span class="panel-label">{{ t('panel.hosts_label') }}</span>
             <span v-if="!hostsExpanded" class="panel-hosts-line">
-              <span class="panel-hosts-names">{{ formatOrganizers(node.organizers, false) }}</span><template v-if="hasMoreHosts(node.organizers)"><span class="panel-hosts-more-wrap">…&nbsp;<button class="panel-hosts-more" :aria-label="t('panel.show_all_hosts')" @click="hostsExpanded = true">{{ t('panel.more') }}</button></span></template>
+              <span class="panel-hosts-names panel-inline-md" v-html="formatOrganizers(node.organizers, false)"></span><template v-if="hasMoreHosts(node.organizers)"><span class="panel-hosts-more-wrap">…&nbsp;<button class="panel-hosts-more" :aria-label="t('panel.show_all_hosts')" @click="hostsExpanded = true">{{ t('panel.more') }}</button></span></template>
             </span>
-            <span v-else>{{ formatOrganizers(node.organizers, true) }}</span>
+            <span v-else class="panel-inline-md" v-html="formatOrganizers(node.organizers, true)"></span>
           </p>
         </div>
 
@@ -372,7 +376,7 @@ const calLinks = computed(() => props.node && !props.node.date_tbd ? calendarLin
           <!-- Row 2: Venue + address (OSM link) or Online platform -->
           <div class="info-card-row info-card-venue-row">
             <div class="info-card-row-leading">
-              <Icon icon="bi:link-45deg" width="1em" height="1em" aria-hidden="true" class="info-card-icon" />
+              <Icon :icon="!node.online_event && node.location_tbd ? 'bi:geo-alt' : 'bi:link-45deg'" width="1em" height="1em" aria-hidden="true" class="info-card-icon" />
               <div class="info-card-venue">
                 <span class="info-card-venue-name">{{ node.online_event ? onlinePlatformName(node.event_url) : node.location_tbd ? t('panel.location_tbd') : (node.location_name || node.address) }}</span>
                 <a
@@ -528,9 +532,13 @@ const calLinks = computed(() => props.node && !props.node.date_tbd ? calendarLin
         <!-- Disclaimer -->
         <template v-if="!node.organization_name?.toLowerCase().includes('processing foundation')">
           <hr class="panel-separator" aria-hidden="true" />
-          <p v-if="node.organization_name" class="panel-disclaimer">
-            {{ t('panel.disclaimer_with_org', { org: node.organization_name }) }}
-          </p>
+          <!-- disclaimer_with_org wraps {org} in <em>; org name may itself
+               contain PR-reviewed inline markdown, so inject as HTML. -->
+          <p
+            v-if="node.organization_name"
+            class="panel-disclaimer panel-inline-md"
+            v-html="t('panel.disclaimer_with_org', { org: node.organization_name_html })"
+          ></p>
           <p v-else class="panel-disclaimer">
             {{ t('panel.disclaimer_without_org') }}
           </p>
@@ -794,6 +802,30 @@ const calLinks = computed(() => props.node && !props.node.date_tbd ? calendarLin
   border-color: var(--color-border-light);
 }
 
+/* Inline markdown rendered via v-html (host/org names, disclaimer). */
+.panel-inline-md :deep(em) {
+  font-style: italic;
+}
+
+.panel-inline-md :deep(strong) {
+  font-weight: 600;
+}
+
+.panel-inline-md :deep(a) {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.panel-inline-md :deep(a:hover) {
+  color: var(--color-link-hover);
+}
+
+.panel-inline-md :deep(code) {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.9em;
+}
+
 .panel-organizing-entity {
   margin: 0 0 0.125rem;
   font-size: 0.875rem;
@@ -844,13 +876,13 @@ const calLinks = computed(() => props.node && !props.node.date_tbd ? calendarLin
   cursor: pointer;
   font-family: var(--font-family);
   font-size: inherit;
-  color: var(--color-link);
+  color: var(--color-text-muted);
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 
 .panel-hosts-more:hover {
-  color: var(--color-link-hover);
+  color: var(--color-text);
 }
 
 /* ─── Event website CTA ─── */
@@ -1089,7 +1121,7 @@ const calLinks = computed(() => props.node && !props.node.date_tbd ? calendarLin
 /* Collapse long descriptions behind a "read more" toggle. The max-height here
    must match DESC_CLAMP_PX in the script. */
 .panel-description-content--clamped {
-  max-height: 132px;
+  max-height: 240px;
   overflow: hidden;
   -webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent 100%);
   mask-image: linear-gradient(to bottom, #000 60%, transparent 100%);
@@ -1109,13 +1141,13 @@ const calLinks = computed(() => props.node && !props.node.date_tbd ? calendarLin
 }
 
 .panel-description-content :deep(a) {
-  color: var(--color-link);
+  color: var(--color-text);
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 
 .panel-description-content :deep(a:hover) {
-  color: var(--color-link-hover);
+  color: var(--color-text);
 }
 
 .panel-description-content :deep(h1),
@@ -1203,13 +1235,13 @@ const calLinks = computed(() => props.node && !props.node.date_tbd ? calendarLin
   cursor: pointer;
   font-family: var(--font-family);
   font-size: 0.875rem;
-  color: var(--color-link);
+  color: var(--color-text-muted);
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 
 .panel-read-more:hover {
-  color: var(--color-link-hover);
+  color: var(--color-text);
 }
 
 /* ─── Links section ─── */

@@ -84,7 +84,7 @@
         "download_ics": "下载 .ics",
         "read_more": "阅读更多…",
         "show_less": "收起",
-        "disclaimer_with_org": "本活动由 {org} 主办，与 Processing Foundation 无关。如对本活动有任何疑问，请直接联系主办方。",
+        "disclaimer_with_org": "本活动由 <em>{org}</em> 主办，与 Processing Foundation 无关。如对本活动有任何疑问，请直接联系主办方。",
         "disclaimer_without_org": "本活动为独立主办，与 Processing Foundation 无关。如对本活动有任何疑问，请直接联系主办方。",
         "activities_label": "活动类型",
         "report_issue": "举报此页面的问题",

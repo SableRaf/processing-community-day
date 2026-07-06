@@ -38,8 +38,9 @@ export interface Node {
   details_html: string;
   details_text: string;
   event_activities: string[];
-  organizers: { name: string }[];
+  organizers: { name: string; name_html: string }[];
   organization_name?: string;
+  organization_name_html?: string;
   organization_url?: string;
   organization_type?: string;
   primary_contact: { name: string; email: string };
@@ -100,6 +101,16 @@ function markdownToHtml(markdown: string): string {
   return html.replace(/<a /g, '<a target="_blank" rel="noopener noreferrer" ');
 }
 
+// Render a short, single-line field (host or organization name) as inline
+// markdown. micromark wraps output in <p>…</p>; we strip that so the result
+// can sit inline. Same escaping/sanitization guarantees as markdownToHtml, and
+// these fields are PR-reviewed, so the output is safe to inject with v-html.
+function inlineMarkdownToHtml(text: string): string {
+  if (!text) return '';
+  const html = markdownToHtml(text).trim();
+  return html.replace(/^<p>/, '').replace(/<\/p>$/, '');
+}
+
 function markdownToText(markdown: string): string {
   return markdown
     .replace(/```[\s\S]*?```/g, '')
@@ -142,6 +153,7 @@ export async function loadNodes(): Promise<Node[]> {
     const event_end_date = normalizeOptionalText(input.event_end_date);
     const event_start_time = normalizeOptionalText(input.event_start_time);
     const event_end_time = normalizeOptionalText(input.event_end_time);
+    const organization_name = normalizeOptionalText(input.organization_name);
     const online_event = input.online_event ?? false;
     const location_tbd = !online_event && !address;
     const eventEntry = eventMap.get(input.id);
@@ -175,8 +187,14 @@ export async function loadNodes(): Promise<Node[]> {
       details_html,
       details_text,
       event_activities: input.event_activities,
-      organizers: input.organizers,
-      organization_name: normalizeOptionalText(input.organization_name),
+      organizers: input.organizers.map((o) => ({
+        name: o.name,
+        name_html: inlineMarkdownToHtml(o.name),
+      })),
+      organization_name,
+      organization_name_html: organization_name
+        ? inlineMarkdownToHtml(organization_name)
+        : undefined,
       organization_url: normalizeOptionalText(input.organization_url),
       organization_type: normalizeOptionalText(input.organization_type),
       primary_contact: input.primary_contact,
