@@ -1,29 +1,35 @@
 {
   "id": "pcd-kathmandu-2026",
   "uid": "4456eeb",
-  "organizers": [],
+  "organizers": [
+    {
+      "name": "Aashish Panthi"
+    }
+  ],
   "primary_contact": {
     "name": "Aashish Panthi",
-    "email": "mail@aashishpanthi.info.np"
+    "email": "aashish.panthi@cosognepal.org"
   },
-  "organization_name": "",
-  "organization_url": "",
-  "organization_type": "",
+  "organization_name": "Coding for Social Good Nepal",
+  "organization_url": "https://cosognepal.org/",
+  "organization_type": "Nonprofit, foundation, association",
   "online_event": false,
   "event_url": "",
   "event_name": "PCD @ Kathmandu",
   "event_location": {
-    "address": "",
-    "plus_code": "7MV7M8M3+J4"
+    "address": "Jhamsikhel Road, Sanepa 44600",
+    "plus_code": "7MV7M8J5+VW"
   },
-  "event_date": "",
+  "event_date": "2026-07-25",
   "event_start_time": "",
   "event_end_time": "",
-  "event_short_description": "",
+  "event_short_description": "Creative coding with p5.js first time in Nepal.",
   "event_activities": [
-    "Live coding"
+    "Live coding",
+    "Beginner introductions to Processing or p5.js",
+    "Creative coding jams or hack sessions"
   ],
-  "event_page_url": "",
+  "event_page_url": "https://discourse.processing.org/t/pcd-kathmandu-nepal-2026/48872",
   "forum_thread_url": "https://discourse.processing.org/t/pcd-kathmandu-nepal-2026/48872",
   "city": "Kathmandu",
   "country": "Nepal",
