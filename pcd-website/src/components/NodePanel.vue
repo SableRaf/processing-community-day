@@ -812,13 +812,13 @@ const calLinks = computed(() => props.node && !props.node.date_tbd ? calendarLin
 }
 
 .panel-inline-md :deep(a) {
-  color: var(--color-link);
+  color: inherit;
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 
 .panel-inline-md :deep(a:hover) {
-  color: var(--color-link-hover);
+  color: inherit;
 }
 
 .panel-inline-md :deep(code) {
@@ -1141,13 +1141,13 @@ const calLinks = computed(() => props.node && !props.node.date_tbd ? calendarLin
 }
 
 .panel-description-content :deep(a) {
-  color: var(--color-link);
+  color: var(--color-text);
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 
 .panel-description-content :deep(a:hover) {
-  color: var(--color-link-hover);
+  color: var(--color-text);
 }
 
 .panel-description-content :deep(h1),
