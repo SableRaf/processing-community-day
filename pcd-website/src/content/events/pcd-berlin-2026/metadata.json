@@ -27,8 +27,8 @@
   ],
   "event_page_url": "",
   "forum_thread_url": "https://discourse.processing.org/t/pcd-berlin-2026/48870",
-  "city": "",
-  "country": "",
+  "city": "Berlin",
+  "country": "Germany",
   "placeholder": false,
   "intake": {
     "issue_number": 117,
