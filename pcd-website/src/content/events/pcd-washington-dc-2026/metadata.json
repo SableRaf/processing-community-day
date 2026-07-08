@@ -27,8 +27,8 @@
   "event_activities": [],
   "event_page_url": "",
   "forum_thread_url": "https://discourse.processing.org/t/pcd-washington-dc-2026/48815",
-  "city": "",
-  "country": "",
+  "city": "Washington, DC",
+  "country": "United States",
   "placeholder": false,
   "intake": {
     "issue_number": 99,
