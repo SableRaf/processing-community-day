@@ -17,13 +17,13 @@
   "event_url": "",
   "event_name": "PCD @ Washington, DC",
   "event_location": {
-    "address": "",
-    "plus_code": "87C4WX54+VJ"
+    "address": "1506 19th St NW, Washington, DC 20036",
+    "plus_code": "87C4WX64+6G"
   },
-  "event_date": "",
-  "event_start_time": "",
-  "event_end_time": "",
-  "event_short_description": "",
+  "event_date": "2026-10-11",
+  "event_start_time": "13:00",
+  "event_end_time": "17:00",
+  "event_short_description": "Meet other creative coders from the DC area and participate in workshops about Processing!",
   "event_activities": [],
   "event_page_url": "",
   "forum_thread_url": "https://discourse.processing.org/t/pcd-washington-dc-2026/48815",
