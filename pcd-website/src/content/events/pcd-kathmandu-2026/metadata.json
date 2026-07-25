@@ -4,6 +4,9 @@
   "organizers": [
     {
       "name": "Aashish Panthi"
+    },
+    {
+      "name": "Bibek Bhandari"
     }
   ],
   "primary_contact": {
@@ -17,19 +20,20 @@
   "event_url": "",
   "event_name": "PCD @ Kathmandu",
   "event_location": {
-    "address": "Jhamsikhel Road, Sanepa 44600",
-    "plus_code": "7MV7M8J5+VW"
+    "address": "Thapathali Road, Kathmandu 44600",
+    "plus_code": "7MV7M8V9+8H"
   },
   "event_date": "2026-07-25",
   "event_start_time": "",
   "event_end_time": "",
-  "event_short_description": "Creative coding with p5.js first time in Nepal.",
+  "event_short_description": "Creative coding with p5.js for the first time in Nepal.",
   "event_activities": [
+    "Hands-on workshops",
     "Live coding",
-    "Beginner introductions to Processing or p5.js",
-    "Creative coding jams or hack sessions"
+    "Creative coding jams or hack sessions",
+    "Student project presentations"
   ],
-  "event_page_url": "https://discourse.processing.org/t/pcd-kathmandu-nepal-2026/48872",
+  "event_page_url": "https://blog.cosognepal.org/processing-community-day-in-kathmandu",
   "forum_thread_url": "https://discourse.processing.org/t/pcd-kathmandu-nepal-2026/48872",
   "city": "Kathmandu",
   "country": "Nepal",
