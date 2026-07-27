@@ -1,0 +1,55 @@
+{
+  "id": "pcd-dortmund-2026",
+  "uid": "99ae06d",
+  "organizers": [
+    {
+      "name": "Camilla Scholz"
+    },
+    {
+      "name": "Fabian Bentrup"
+    },
+    {
+      "name": "Michael Michael Nguyen"
+    },
+    {
+      "name": "Flor de Fuego"
+    }
+  ],
+  "primary_contact": {
+    "name": "Flor de Fuego",
+    "email": "floralonsoflor@gmail.com"
+  },
+  "organization_name": "Digitale Kultur und Koproduktionslabor - Dortmunder U",
+  "organization_url": "",
+  "organization_type": "Museum, gallery, media arts center",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "Dortmund",
+  "event_location": {
+    "address": "Leonie-Reygers-Terrasse 2, 44137 Dortmund",
+    "plus_code": "9F39GF73+XC"
+  },
+  "event_date": "",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "PCD in Dortmund - Talks, Workshops, Meetup",
+  "event_activities": [
+    "Show-and-tell",
+    "Hands-on workshops",
+    "Live coding",
+    "Panel discussions",
+    "Creative coding jams or hack sessions",
+    "Other"
+  ],
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-dortmund-2026/49056",
+  "city": "Dortmund",
+  "country": "Germany",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 167,
+    "submitted_by_github": "flordefuego",
+    "submitted_date": "2026-07-27",
+    "maintainer_notes": ""
+  }
+}
