@@ -1,0 +1,43 @@
+{
+  "id": "pcd-toronto-2026",
+  "uid": "8c9672d",
+  "organizers": [
+    {
+      "name": "Stephen Boyd, @sspboyd"
+    }
+  ],
+  "primary_contact": {
+    "name": "Stephen Boyd",
+    "email": "stephen@sspboyd.ca"
+  },
+  "organization_name": "Stephen Boyd, Studio",
+  "organization_url": "http://sspboyd.ca",
+  "organization_type": "Studio, tech company, startup",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD @ Toronto",
+  "event_location": {
+    "address": "1475 Gerrard St E Studio, Lower Level, Toronto, ON M4L 2A1, Canada",
+    "plus_code": "87M2MMCH+XQ"
+  },
+  "event_date": "",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "We will be running a workshop on generative art using P5.js as well as hosting a talk about Stephen's 20+ years of making art with Processing.",
+  "event_activities": [
+    "Show-and-tell",
+    "Hands-on workshops",
+    "Exhibition"
+  ],
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-toronto-2026/48865",
+  "city": "Toronto",
+  "country": "Canada",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 163,
+    "submitted_by_github": "sspboyd",
+    "submitted_date": "2026-07-27",
+    "maintainer_notes": "Hey there. Here's my thinking for the PCD Toronto event so far:\n\n1. A hands-on p5.js workshop, “Rules, Randomness, Repeatability,” during the first two weeks of October. The workshop will be targeted for beginner to intermediate level of Processing knowledge.\n2. A talk and open studio at GAS, with generative work made using Processing on the walls as live examples of a 25-year generative practice.\n\nI have a gallery to host the workshop at and we can do the talk there as well. The gallery is called GAS (Gerrard Art Space) in Toronto. \n\nI know Nick Fox-Grieg is also interested in helping out so we might add to the events if he's up for something else too."
+  }
+}
