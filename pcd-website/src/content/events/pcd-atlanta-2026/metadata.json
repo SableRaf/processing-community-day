@@ -17,14 +17,19 @@
   "event_url": "",
   "event_name": "PCD @ Atlanta",
   "event_location": {
-    "address": "",
-    "plus_code": "865QQJ35+6P3"
+    "address": "190 Marietta St NW, Atlanta, GA 30303",
+    "plus_code": "865QQJ54+43"
   },
-  "event_date": "",
-  "event_start_time": "",
-  "event_end_time": "",
+  "event_date": "2026-10-23",
+  "event_start_time": "10:00",
+  "event_end_time": "17:00",
   "event_short_description": "TBD PCD event in Atlanta, GA",
-  "event_activities": [],
+  "event_activities": [
+    "Hands-on workshops",
+    "Live coding",
+    "Panel discussions",
+    "Beginner introductions to Processing or p5.js"
+  ],
   "event_page_url": "",
   "forum_thread_url": "https://discourse.processing.org/t/pcd-atlanta-2026/48231",
   "city": "Atlanta",
