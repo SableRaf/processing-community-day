@@ -20,13 +20,13 @@
     "address": "",
     "plus_code": "7JP9W42H+926"
   },
-  "event_date": "",
+  "event_date": "2026-10-16",
   "event_start_time": "",
   "event_end_time": "",
-  "event_short_description": "",
+  "event_short_description": "Introduction to OpenProcessing",
   "event_activities": [
     "Hands-on workshops",
-    "Exhibition",
+    "Live coding",
     "Beginner introductions to Processing or p5.js",
     "Creative coding jams or hack sessions"
   ],
