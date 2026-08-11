@@ -4,6 +4,7 @@ import BaseLayout from './BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import DocsSidebar from '../components/DocsSidebar.astro';
+import DocsTableOfContents from '../components/DocsTableOfContents.astro';
 import { getKitNav } from '../config/organizer-kit-nav';
 import '../styles/base.css';
 import '../styles/docs.css';
@@ -34,13 +35,14 @@ const nav = await getKitNav();
       <button class="docs-nav-toggle btn-reset" type="button" aria-expanded="false" hidden>
         Organizer Kit contents
       </button>
-      <DocsSidebar nav={nav} currentPath={Astro.url.pathname} headings={headings} />
+      <DocsSidebar nav={nav} currentPath={Astro.url.pathname} />
     </aside>
 
     <main id="main" tabindex="-1" class="docs-shell__main">
       <article class="docs-prose">
         {eyebrow && <p class="prose__eyebrow">{eyebrow}</p>}
         <h1>{heading ?? title}</h1>
+        <DocsTableOfContents headings={headings} />
         <slot />
       </article>
     </main>

@@ -1,6 +1,0 @@
----
-import type { MarkdownHeading } from 'astro';
-interface Props { anchors: MarkdownHeading[] }
-const { anchors } = Astro.props;
----
-{anchors.length > 0 && <ul class="nav-list nav-list--anchors">{anchors.map((heading) => <li class="nav-list-item"><a class="nav-list-link" href={`#${heading.slug}`}>{heading.text}</a></li>)}</ul>}

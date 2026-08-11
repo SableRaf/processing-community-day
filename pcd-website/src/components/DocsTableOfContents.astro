@@ -1,0 +1,22 @@
+---
+import type { MarkdownHeading } from 'astro';
+
+interface Props {
+  headings: MarkdownHeading[];
+}
+
+/** Keep the page TOC concise; deeper headings make it harder to scan. */
+const { headings } = Astro.props;
+const anchors = headings.filter((heading) => heading.depth === 2);
+---
+
+{anchors.length > 0 && (
+  <nav class="docs-page-toc" aria-label="On this page">
+    <p class="docs-page-toc__title">On this page</p>
+    <ul>
+      {anchors.map((heading) => (
+        <li><a href={`#${heading.slug}`}>{heading.text}</a></li>
+      ))}
+    </ul>
+  </nav>
+)}
