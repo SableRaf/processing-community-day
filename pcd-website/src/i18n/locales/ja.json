@@ -3,11 +3,7 @@
         "aria_label": "PCD 2026 マップ"
     },
     "nav": {
-        "open_node_list": "イベントリストを開く",
-        "close_node_list": "イベントリストを閉じる",
         "submit_event": "イベントを登録",
-        "switch_to_light": "ライトモードに切り替え",
-        "switch_to_dark": "ダークモードに切り替え",
         "change_language": "言語を変更",
         "info_button_label": "Processing Community Dayとは",
         "info_modal_title": "Processing Community Day",

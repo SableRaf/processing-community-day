@@ -4,7 +4,6 @@ import { useI18n } from 'vue-i18n';
 import type { Node } from '../lib/nodes';
 import { makePopupContent } from '../lib/popup';
 import NodePanel from './NodePanel.vue';
-import NodeList from './NodeList.vue';
 import LanguageSwitcher from './LanguageSwitcher.vue';
 import InfoModal from './InfoModal.vue';
 import SubmitModal from './SubmitModal.vue';
@@ -21,7 +20,6 @@ const props = defineProps<{
 const { t } = useI18n();
 
 const selectedNode = ref<Node | null>(null);
-const listOpen = ref(false);
 
 const INFO_MODAL_SUPPRESS_KEY = 'pcd-info-modal-suppressed';
 const infoModalOpen = ref(false);
@@ -61,90 +59,28 @@ let slidingWindowHandler: ((e: FocusEvent) => void) | null = null;
 let pendingPopupMarker: import('leaflet').Marker | null = null;
 let teardownMarkerPopupListeners: (() => void) | null = null;
 
-// --- Tile style config ---
+// --- Tile layer config ---
 interface TileLayerConfig { url: string; options: Record<string, unknown>; }
-interface MapStyle { id: string; label: string; layers: TileLayerConfig[]; }
 
 const CARTO_ATTR = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>';
 
-const MAP_STYLES: MapStyle[] = [
+const LIGHT_LAYERS: TileLayerConfig[] = [
   {
-    id: 'dark',
-    label: 'Dark',
-    layers: [
-      {
-        url: 'https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png',
-        options: { attribution: CARTO_ATTR, subdomains: 'abcd', maxZoom: 20, detectRetina: true },
-      },
-      {
-        url: 'https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png',
-        options: { attribution: CARTO_ATTR, subdomains: 'abcd', maxZoom: 20, detectRetina: true, tileSize: 512, zoomOffset: -1 },
-      },
-    ],
+    url: 'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',
+    options: { attribution: CARTO_ATTR, subdomains: 'abcd', maxZoom: 20, detectRetina: true },
   },
   {
-    id: 'light',
-    label: 'Light',
-    layers: [
-      {
-        url: 'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',
-        options: { attribution: CARTO_ATTR, subdomains: 'abcd', maxZoom: 20, detectRetina: true },
-      },
-      {
-        url: 'https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png',
-        options: { attribution: CARTO_ATTR, subdomains: 'abcd', maxZoom: 20, detectRetina: true, tileSize: 512, zoomOffset: -1 },
-      },
-    ],
+    url: 'https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png',
+    options: { attribution: CARTO_ATTR, subdomains: 'abcd', maxZoom: 20, detectRetina: true, tileSize: 512, zoomOffset: -1 },
   },
 ];
 
-const STORAGE_KEY = 'pcd-map-style';
 const SLIDING_WINDOW_MARGIN = 0.28; // 28% dead zone inset from each edge
-let activeTileLayers: import('leaflet').TileLayer[] = [];
-let themeTransitionTimer: number | null = null;
 
-const currentStyle = ref<string>('');
-
-function getInitialStyle(): string {
-  const stored = localStorage.getItem(STORAGE_KEY);
-  if (stored && MAP_STYLES.find(s => s.id === stored)) return stored;
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-}
-
-function setMapStyle(styleId: string, map: import('leaflet').Map, L: typeof import('leaflet')) {
-  const style = MAP_STYLES.find(s => s.id === styleId);
-  if (!style) return;
-  activeTileLayers.forEach(layer => map.removeLayer(layer));
-  activeTileLayers = [];
-  style.layers.forEach(cfg => {
-    const layer = L.tileLayer(cfg.url, cfg.options);
-    layer.addTo(map);
-    activeTileLayers.push(layer);
+function setMapStyle(map: import('leaflet').Map, L: typeof import('leaflet')) {
+  LIGHT_LAYERS.forEach(cfg => {
+    L.tileLayer(cfg.url, cfg.options).addTo(map);
   });
-  currentStyle.value = styleId;
-  localStorage.setItem(STORAGE_KEY, styleId);
-  document.documentElement.dataset.theme = styleId === 'dark' ? 'dark' : 'light';
-}
-
-function animateThemeTransition() {
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const root = document.documentElement;
-  root.classList.add('theme-transition');
-  if (themeTransitionTimer !== null) {
-    window.clearTimeout(themeTransitionTimer);
-  }
-  themeTransitionTimer = window.setTimeout(() => {
-    root.classList.remove('theme-transition');
-    themeTransitionTimer = null;
-  }, 360);
-}
-
-function toggleTheme() {
-  const next = currentStyle.value === 'dark' ? 'light' : 'dark';
-  if (mapInstance && leafletRef) {
-    animateThemeTransition();
-    setMapStyle(next, mapInstance, leafletRef);
-  }
 }
 
 function setActiveMarker(nodeId: string | null) {
@@ -184,7 +120,6 @@ function focusNode(node: Node, { animate = false, zoom = 5 }: { animate?: boolea
 
 function openPanel(node: Node) {
   selectedNode.value = node;
-  listOpen.value = false;
   const marker = markerMap.get(node.id);
   marker?.closePopup();
   setActiveMarker(node.id);
@@ -193,15 +128,6 @@ function openPanel(node: Node) {
 function closePanel() {
   selectedNode.value = null;
   setActiveMarker(null);
-}
-
-function openList() {
-  listOpen.value = true;
-  selectedNode.value = null;
-}
-
-function closeList() {
-  listOpen.value = false;
 }
 
 function panToKeepInView(lat: number, lng: number): void {
@@ -233,15 +159,6 @@ function panToKeepInView(lat: number, lng: number): void {
   }
 }
 
-function onNodeSelect(node: Node) {
-  if (!mapInstance) return;
-  const marker = markerMap.get(node.id);
-  if (!marker) return;
-  closeList();
-  mapInstance.flyTo([node.lat, node.lng], 5, { duration: 1 });
-  mapInstance.once('moveend', () => marker.openPopup());
-}
-
 function handleKeydown(e: KeyboardEvent) {
   if (infoModalOpen.value || submitModalOpen.value) return;
 
@@ -252,8 +169,6 @@ function handleKeydown(e: KeyboardEvent) {
   if (e.key === 'Escape') {
     if (selectedNode.value) {
       closePanel();
-    } else if (listOpen.value) {
-      closeList();
     } else if (openPopupNodeId && mapInstance) {
       e.stopPropagation(); // prevent Leaflet from also handling this Escape
       const marker = markerMap.get(openPopupNodeId);
@@ -264,9 +179,6 @@ function handleKeydown(e: KeyboardEvent) {
       if (mapEl && mapEl.contains(document.activeElement) && document.activeElement !== mapEl) {
         e.preventDefault();
         mapEl.focus();
-      } else if (mapEl && document.activeElement === mapEl) {
-        e.preventDefault();
-        document.getElementById('burger-btn')?.focus();
       }
     }
     return;
@@ -290,10 +202,6 @@ function handleKeydown(e: KeyboardEvent) {
     e.preventDefault();
     e.stopPropagation();
     mapInstance?.zoomOut();
-  } else if (e.key === 'M' || e.key === 'm') {
-    e.preventDefault();
-    listOpen.value = !listOpen.value;
-    if (listOpen.value) selectedNode.value = null;
   } else if (e.key === 'L' || e.key === 'l') {
     e.preventDefault();
     document.getElementById('map')?.focus();
@@ -378,7 +286,7 @@ onMounted(async () => {
     }
   }
 
-  setMapStyle(getInitialStyle(), map, L);
+  setMapStyle(map, L);
 
   // Cluster group with Google Maps-style concentric circles
   const clusterGroup = (L as unknown as { markerClusterGroup: (opts?: object) => import('leaflet').LayerGroup }).markerClusterGroup({
@@ -678,10 +586,6 @@ onMounted(async () => {
 });
 
 onUnmounted(() => {
-  if (themeTransitionTimer !== null) {
-    window.clearTimeout(themeTransitionTimer);
-  }
-  document.documentElement.classList.remove('theme-transition');
   document.removeEventListener('keydown', handleKeydown);
   if (slidingWindowHandler && mapInstance) {
     mapInstance.getContainer().removeEventListener('focusin', slidingWindowHandler);
@@ -695,14 +599,6 @@ onUnmounted(() => {
 
 <template>
   <div role="banner">
-  <button
-    id="burger-btn"
-    :aria-expanded="listOpen"
-    :aria-label="listOpen ? t('nav.close_node_list') : t('nav.open_node_list')"
-    @click="listOpen ? closeList() : openList()"
-  >
-    ☰
-  </button>
   <div class="banner-controls-left">
     <LanguageSwitcher />
   </div>
@@ -720,39 +616,8 @@ onUnmounted(() => {
   </div>
   <InfoModal :open="infoModalOpen" :bannerImageUrl="props.bannerImageUrl" :autoOpened="infoModalAutoOpened" @close="infoModalOpen = false" @suppress="suppressInfoModal" />
   <SubmitModal :open="submitModalOpen" @close="submitModalOpen = false" />
-  <div class="banner-controls-right">
-    <button
-      id="theme-toggle"
-      role="switch"
-      :aria-checked="currentStyle === 'dark'"
-      :aria-label="currentStyle === 'dark' ? t('nav.switch_to_light') : t('nav.switch_to_dark')"
-      :title="currentStyle === 'dark' ? t('nav.switch_to_light') : t('nav.switch_to_dark')"
-      @click="toggleTheme"
-    >
-      <span class="theme-toggle__track" aria-hidden="true">
-        <span class="theme-toggle__thumb"></span>
-        <span class="theme-toggle__icon theme-toggle__icon--sun">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="4"/>
-            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
-          </svg>
-        </span>
-        <span class="theme-toggle__icon theme-toggle__icon--moon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-          </svg>
-        </span>
-      </span>
-    </button>
-  </div>
   </div>
   <NodePanel :node="selectedNode" @close="closePanel" />
-  <NodeList
-    :nodes="nodes"
-    :open="listOpen"
-    @close="closeList"
-    @select="onNodeSelect"
-  />
   <div id="map" tabindex="-1" :aria-label="t('map.aria_label')"></div>
 </template>
 
@@ -766,15 +631,6 @@ onUnmounted(() => {
   z-index: 0;
 }
 
-.banner-controls-right {
-  position: fixed;
-  top: 1rem;
-  right: 1rem;
-  z-index: var(--z-controls);
-  display: flex;
-  align-items: center;
-}
-
 .banner-controls-left {
   position: fixed;
   top: 1rem;
@@ -782,109 +638,6 @@ onUnmounted(() => {
   z-index: var(--z-controls);
   display: flex;
   align-items: center;
-}
-
-#theme-toggle {
-  width: 73px;
-  height: 40px;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: color-mix(in srgb, var(--color-bg-popup) 86%, transparent);
-  border: 2px solid var(--color-border);
-  border-radius: 999px;
-  cursor: pointer;
-  color: var(--color-text);
-  transition: background-color 0.28s ease, color 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease;
-  box-shadow: 0 10px 28px rgba(18, 19, 33, 0.18);
-  backdrop-filter: blur(14px);
-}
-
-#theme-toggle:hover {
-  background: var(--color-bg-popup-hover);
-}
-
-#theme-toggle:focus-visible {
-  outline: 2px solid var(--color-focus);
-  outline-offset: 2px;
-}
-
-.theme-toggle__track {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-items: center;
-  padding: 4px;
-  transform: translate(0, -1px);
-}
-
-.theme-toggle__thumb {
-  position: absolute;
-  top: 4px;
-  left: 4px;
-  width: 30px;
-  height: 30px;
-  border-radius: 999px;
-  background: linear-gradient(135deg, #f7d76d 0%, #f3c84d 48%, #ecaa2a 100%);
-  box-shadow: 0 8px 18px rgba(124, 79, 10, 0.32);
-  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1), background 0.32s ease, box-shadow 0.32s ease;
-}
-
-.theme-toggle__icon {
-  position: relative;
-  z-index: 1;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 30px;
-  justify-self: center;
-  color: var(--color-text-muted);
-  transition: color 0.24s ease, opacity 0.24s ease;
-}
-
-.theme-toggle__icon--sun {
-  transform: translateX(-1px);
-}
-
-.theme-toggle__icon--moon {
-  transform: translateX(3px);
-}
-
-#theme-toggle[aria-checked="false"] .theme-toggle__icon--sun,
-#theme-toggle[aria-checked="true"] .theme-toggle__icon--moon {
-  color: #241336;
-  opacity: 1;
-}
-
-#theme-toggle[aria-checked="false"] .theme-toggle__icon--moon,
-#theme-toggle[aria-checked="true"] .theme-toggle__icon--sun {
-  opacity: 0.68;
-}
-
-#theme-toggle[aria-checked="true"] .theme-toggle__thumb {
-  transform: translateX(33px);
-  background: linear-gradient(135deg, #d8b4fe 0%, #c084fc 44%, #9d4edd 100%);
-  box-shadow: 0 8px 18px rgba(88, 28, 135, 0.34);
-}
-
-#theme-toggle[aria-checked="true"] {
-  background: color-mix(in srgb, var(--color-bg-popup) 78%, #0b1024 22%);
-}
-
-#theme-toggle[aria-checked="true"]:hover {
-  background: color-mix(in srgb, var(--color-bg-popup-hover) 76%, #0b1024 24%);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  #theme-toggle,
-  .theme-toggle__thumb,
-  .theme-toggle__icon {
-    transition: none;
-  }
 }
 </style>
 

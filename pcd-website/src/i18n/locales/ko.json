@@ -3,11 +3,7 @@
         "aria_label": "PCD 2026 이벤트 세계 지도"
     },
     "nav": {
-        "open_node_list": "이벤트 목록 열기",
-        "close_node_list": "이벤트 목록 닫기",
         "submit_event": "이벤트 제출하기",
-        "switch_to_light": "라이트 모드로 전환",
-        "switch_to_dark": "다크 모드로 전환",
         "change_language": "언어 변경",
         "info_button_label": "Processing Community Day 소개",
         "info_modal_title": "Processing Community Day",

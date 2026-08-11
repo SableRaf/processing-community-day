@@ -83,11 +83,6 @@ const description = node.event_short_description || node.details_text.slice(0, 2
         />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
-        <script is:inline>
-          const stored = localStorage.getItem('pcd-map-style');
-          const isDark = stored === 'dark' || (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches);
-          document.documentElement.dataset.theme = isDark ? 'dark' : 'light';
-        </script>
       </>
     )}
   </head>

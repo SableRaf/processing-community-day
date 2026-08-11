@@ -76,16 +76,14 @@ Event data lives in `src/content/events/<event-id>/`:
 - **`open-location-code`** exports `{ OpenLocationCode }` as a named export — use `new OpenLocationCode()` (not static methods).
 - **`leaflet.markercluster`** causes a circular dependency warning, suppressed via `rollupOptions.onwarn` in `astro.config.mjs`.
 - **Deep linking:** `?event=<id-or-uid>` query param auto-opens the event detail panel. Both the slug `id` and the short `uid` are accepted.
-- **Map style preference** persisted in `localStorage`.
 - **Event UIDs:** Each event has a stable 7-char hex `uid` stored in both `metadata.json` and `content.md` frontmatter. UIDs never change after creation. Three static URL formats are generated per event: `/event/<slug>` (redirects to canonical), `/event/<slug>-<uid>` (canonical, has OG tags, redirects into SPA), and `/event/<uid>` (short form, redirects to canonical). The canonical URL is what the share button copies.
 
 ### Component roles
 
 | File | Role |
 |---|---|
-| `src/components/MapView.vue` | Leaflet map, marker clustering, keyboard shortcuts, tile layer switching |
+| `src/components/MapView.vue` | Leaflet map, marker clustering, keyboard shortcuts |
 | `src/components/NodePanel.vue` | Slide-in event detail panel with minimap, calendar links, share button |
-| `src/components/NodeList.vue` | Alphabetical event list overlay with map style switcher + dark mode toggle |
 | `src/components/LanguageSwitcher.vue` | Language selector dropdown in the top bar |
 | `src/lib/analytics.ts` | `trackEvent()` Fathom helper + `AnalyticsEvent` type + event-name constants |
 | `src/lib/nodes.ts` | `Node` interface + `loadNodes()` |
@@ -143,10 +141,7 @@ Use `src/config.ts` for static, non-secret values that are referenced across mul
 
 ## UI / Styling Rules
 
-- Always support both light and dark mode for any new or modified UI elements.
-- Dark mode is toggled via `[data-theme="dark"]` on `<html>` (set by `NodeList.vue`).
-- Dark mode uses CSS custom properties defined in `global.css` under `[data-theme="dark"]`.
-- **Vue scoped styles cannot target ancestor-based dark mode selectors** — put those overrides in `global.css`.
+- The site is light-mode only — there is no dark mode, no `[data-theme]` toggling, and no theme-related CSS. Do not reintroduce it without an explicit decision to do so.
 
 ## Accessibility
 

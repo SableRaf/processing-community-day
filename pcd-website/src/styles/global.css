@@ -69,28 +69,6 @@ body {
   line-height: 1.5;
 }
 
-html.theme-transition,
-html.theme-transition *,
-html.theme-transition *::before,
-html.theme-transition *::after {
-  transition:
-    background-color 0.28s ease,
-    border-color 0.28s ease,
-    color 0.28s ease,
-    fill 0.28s ease,
-    stroke 0.28s ease,
-    box-shadow 0.28s ease;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html.theme-transition,
-  html.theme-transition *,
-  html.theme-transition *::before,
-  html.theme-transition *::after {
-    transition: none;
-  }
-}
-
 /* ─── Skip Link ─────────────────────────────────────────────── */
 .skip-link {
   position: absolute;
@@ -164,11 +142,6 @@ html.theme-transition *::after {
 #host-btn:hover {
   background: var(--color-primary-dark);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-
-[data-theme="dark"] #host-btn:hover {
-  background: var(--color-link-hover);
-  color: #1a1a1a;
 }
 
 #info-btn {
@@ -278,72 +251,6 @@ html.theme-transition *::after {
   font-size: 0.875rem;
   line-height: 1.55;
   color: #2c4a63;
-}
-
-[data-theme="dark"] .submit-modal-recommendation {
-  border-color: #2a3f52;
-}
-
-[data-theme="dark"] .submit-modal-recommendation-titlebar {
-  background: #1c2d3c;
-  color: #b8cfe0;
-}
-
-[data-theme="dark"] .submit-modal-recommendation-body {
-  background: #2a3f52;
-  color: #e2ecf4;
-}
-
-/* ─── Info Modal dark mode ──────────────────────────────────── */
-[data-theme="dark"] .info-modal-info-box {
-  border-color: #2a3f52;
-}
-
-[data-theme="dark"] .info-modal-info-box-titlebar {
-  background: #1c2d3c;
-  color: #b8cfe0;
-}
-
-[data-theme="dark"] .info-modal-info-box-body {
-  background: #2a3f52;
-  color: #e2ecf4;
-}
-
-[data-theme="dark"] .info-modal-backdrop {
-  background: rgba(0, 0, 0, 0.65);
-}
-
-[data-theme="dark"] .info-modal {
-  background: var(--color-bg-panel);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
-}
-
-/* ─── Burger Button ─────────────────────────────────────────── */
-#burger-btn {
-  position: fixed;
-  top: var(--spacing-md);
-  left: var(--spacing-md);
-  z-index: var(--z-controls);
-  width: 40px;
-  height: 40px;
-  background: var(--color-bg-popup);
-  border: 2px solid var(--color-border);
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 1.25rem;
-  color: var(--color-text);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 10px 28px rgba(18, 19, 33, 0.18);
-  backdrop-filter: blur(14px);
-  transition: background-color 0.12s ease, color 0.12s ease, border-color 0.12s ease;
-}
-
-#burger-btn:hover {
-  background: var(--color-primary);
-  color: #fff;
-  border-color: var(--color-primary);
 }
 
 /* ─── Leaflet Popup Overrides ───────────────────────────────── */
@@ -573,78 +480,9 @@ html.theme-transition *::after {
   text-decoration: underline;
 }
 
-/* ─── Dark Mode Tokens ──────────────────────────────────────── */
-[data-theme="dark"] {
-  --color-focus: #79b8ff;
-  --color-link: #c97ed4;
-  --color-link-hover: #e0aae8;
-  --color-text: #e8e8e8;
-  --color-text-muted: #999;
-  --color-text-subtle: #999;
-  --color-bg: #1a1a1a;
-  --color-bg-panel: #242424;
-  --color-bg-popup: #303030;
-  --color-bg-popup-hover: #3a3a3a;
-  --color-border: #3a3a3a;
-  --color-border-light: #555;
-  --color-overlay: rgba(0, 0, 0, 0.6);
-  --color-callout-placeholder-bg: #2d2510;
-  --color-callout-placeholder-border: #7a5f18;
-  --color-callout-placeholder-text: #f0c96a;
-  --color-callout-unconfirmed-bg: #0f1e3a;
-  --color-callout-unconfirmed-border: #2c5099;
-  --color-callout-unconfirmed-text: #8ab4f8;
-  --color-online-badge-bg: #2a1a30;
-  --color-online-badge-border: #7a3d8a;
-  --color-online-badge-text: #d899e8;
-}
-
-/* ─── Panel Online Badge Dark Mode ─────────────────────────── */
-[data-theme="dark"] .panel-online-badge {
-  color: var(--color-online-badge-text) !important;
-  background: var(--color-online-badge-bg) !important;
-  border-color: var(--color-online-badge-border) !important;
-}
-
-[data-theme="dark"] .popup-content .popup-online-badge {
-  color: var(--color-online-badge-text);
-  background: var(--color-online-badge-bg);
-  border-color: var(--color-online-badge-border);
-}
-
-/* ─── Activity Tag Dark Mode ────────────────────────────────── */
-[data-theme="dark"] .popup-content .popup-activity-tag {
-  border-color: var(--color-border-light);
-}
-
-/* ─── Node List Hover Dark Mode ────────────────────────────── */
-[data-theme="dark"] .node-item:hover {
-  background: #2e2e2e !important;
-}
-
-[data-theme="dark"] .style-btn:hover {
-  background: #2e2e2e !important;
-}
-
-[data-theme="dark"] .style-btn--active:hover {
-  background: #7a20d8 !important;
-}
-
-/* ─── Node Panel Hover Dark Mode ───────────────────────────── */
-[data-theme="dark"] .quick-action-menu a:hover,
-[data-theme="dark"] .quick-action-menu button:hover {
-  background: #4a4a4a;
-}
-
-[data-theme="dark"] .quick-action-btn:hover {
-  background: var(--color-link);
-  border-color: var(--color-link);
-  color: #1a1a1a;
-}
-
 /* ─── Leaflet Zoom Controls ─────────────────────────────────── */
 .leaflet-top.leaflet-left {
-  top: calc(var(--spacing-md) + 40px + var(--spacing-sm));
+  top: var(--spacing-md);
   left: var(--spacing-md);
 }
 
@@ -675,56 +513,9 @@ html.theme-transition *::after {
   border-bottom: none !important;
 }
 
-/* ─── Leaflet Zoom Controls Dark Mode ───────────────────────── */
-[data-theme="dark"] .leaflet-bar a {
-  background-color: var(--color-bg-popup);
-  color: var(--color-text);
-}
-
-[data-theme="dark"] .leaflet-bar a:hover {
-  background-color: var(--color-bg-popup-hover);
-  color: var(--color-text);
-}
-
-/* ─── Leaflet Container Dark Mode ───────────────────────────── */
-[data-theme="dark"] .leaflet-container {
-  background-color: var(--color-bg);
-}
-
-/* ─── Leaflet Popup Dark Mode ───────────────────────────────── */
-[data-theme="dark"] {
-  .leaflet-popup-content-wrapper,
-  .leaflet-popup-tip {
-    background: var(--color-bg-popup);
-    color: var(--color-text);
-  }
-  .leaflet-popup-close-button {
-    color: var(--color-text-muted) !important;
-  }
-  .leaflet-popup-close-button:hover {
-    color: var(--color-text) !important;
-  }
-}
-
 /* ─── Marker Cluster Overrides ──────────────────────────────── */
 /* Custom clusters are rendered via iconCreateFunction in MapView.vue */
 .marker-cluster-custom {
   background: none !important;
   border: none !important;
-}
-
-/* ─── Loading Indicator ─────────────────────────────────────── */
-.map-loading {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: var(--color-bg);
-  padding: var(--spacing-md) var(--spacing-lg);
-  border-radius: 6px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-  font-size: 0.875rem;
-  color: var(--color-text-muted);
-  z-index: var(--z-overlay);
-  pointer-events: none;
 }

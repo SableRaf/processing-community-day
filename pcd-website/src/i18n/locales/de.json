@@ -3,11 +3,7 @@
         "aria_label": "Weltkarte der PCD-2026-Veranstaltungen"
     },
     "nav": {
-        "open_node_list": "Veranstaltungsliste öffnen",
-        "close_node_list": "Veranstaltungsliste schließen",
         "submit_event": "Veranstaltung einreichen",
-        "switch_to_light": "Zum hellen Modus wechseln",
-        "switch_to_dark": "Zum dunklen Modus wechseln",
         "change_language": "Sprache ändern",
         "info_button_label": "Über Processing Community Day",
         "info_modal_title": "Processing Community Day",

@@ -798,10 +798,6 @@ const calLinks = computed(() => props.node && !props.node.date_tbd ? calendarLin
   text-transform: capitalize;
 }
 
-[data-theme="dark"] .panel-activity-tag {
-  border-color: var(--color-border-light);
-}
-
 /* Inline markdown rendered via v-html (host/org names, disclaimer). */
 .panel-inline-md :deep(em) {
   font-style: italic;
@@ -1096,10 +1092,6 @@ const calLinks = computed(() => props.node && !props.node.date_tbd ? calendarLin
   text-decoration: none;
   font-family: var(--font-family);
   transition: background-color 0.12s ease, color 0.12s ease, border-color 0.12s ease;
-}
-
-[data-theme="dark"] .quick-action-btn {
-  border-color: var(--color-border-light);
 }
 
 .quick-action-btn:hover {

@@ -3,11 +3,7 @@
         "aria_label": "PCD 2026 活动世界地图"
     },
     "nav": {
-        "open_node_list": "打开活动列表",
-        "close_node_list": "关闭活动列表",
         "submit_event": "提交您的活动",
-        "switch_to_light": "切换至浅色模式",
-        "switch_to_dark": "切换至深色模式",
         "change_language": "更改语言",
         "info_button_label": "关于 Processing Community Day",
         "info_modal_title": "Processing Community Day",
