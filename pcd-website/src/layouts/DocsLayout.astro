@@ -1,0 +1,71 @@
+---
+import type { MarkdownHeading } from 'astro';
+import BaseLayout from './BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import DocsSidebar from '../components/DocsSidebar.astro';
+import { getKitNav } from '../config/organizer-kit-nav';
+import '../styles/base.css';
+import '../styles/prose.css';
+import '../styles/docs.css';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Rendered above the h1 as the section label. */
+  eyebrow?: string;
+  /** Page heading. Falls back to `title` when omitted. */
+  heading?: string;
+  headings?: MarkdownHeading[];
+}
+
+const { title, description, eyebrow, heading, headings = [] } = Astro.props;
+
+const nav = await getKitNav();
+---
+
+<BaseLayout
+  title={`${title} — Processing Community Day`}
+  description={description}
+  bodyClass="site-body"
+>
+  <Header />
+  <div class="docs-shell">
+    <!-- Ships `open` so the sidebar is present without JS (correct for desktop,
+         where CSS hides the summary). The script below collapses it on narrow
+         viewports, where an expanded list would push the article off-screen. -->
+    <details class="docs-shell__nav" open>
+      <summary class="docs-shell__nav-toggle">
+        <span>Organizer Kit contents</span>
+      </summary>
+      <DocsSidebar nav={nav} currentPath={Astro.url.pathname} headings={headings} />
+    </details>
+
+    <main id="main" tabindex="-1" class="docs-shell__main">
+      <article class="prose docs-prose">
+        {eyebrow && <p class="prose__eyebrow">{eyebrow}</p>}
+        <h1>{heading ?? title}</h1>
+        <slot />
+      </article>
+    </main>
+  </div>
+  <Footer />
+</BaseLayout>
+
+<script is:inline>
+  // Collapse the contents disclosure below the 900px breakpoint where the CSS
+  // switches to a single column. Runs inline before paint to avoid a flash of
+  // the expanded list. Above the breakpoint the summary is display:none, so
+  // the `open` state is not user-reachable and stays put.
+  (() => {
+    const nav = document.querySelector('.docs-shell__nav');
+    if (!nav) return;
+    const narrow = window.matchMedia('(max-width: 899px)');
+    const sync = () => {
+      if (narrow.matches) nav.removeAttribute('open');
+      else nav.setAttribute('open', '');
+    };
+    sync();
+    narrow.addEventListener('change', sync);
+  })();
+</script>

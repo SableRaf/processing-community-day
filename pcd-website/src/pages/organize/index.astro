@@ -1,11 +1,54 @@
 ---
-import SiteLayout from '../../layouts/SiteLayout.astro';
+import DocsLayout from '../../layouts/DocsLayout.astro';
+import { getKitNav } from '../../config/organizer-kit-nav';
+
+const nav = await getKitNav();
 ---
 
-<SiteLayout title="Organize — Processing Community Day" description="Resources for organizing a Processing Community Day event in your city.">
-  <div class="prose">
-    <p class="prose__eyebrow">Organizer Kit</p>
-    <h1>Organize a Processing Community Day</h1>
-    <div class="placeholder-note">Content coming soon.</div>
+<DocsLayout
+  title="Organizer's Kit"
+  heading="Organizer's Kit"
+  description="Everything you need to organize a Processing Community Day in your city, from the simplest possible event to a full day of workshops and talks."
+  eyebrow="Organize"
+>
+  <p class="lead">
+    Thank you for registering to organize Processing Community Day. We understand that it can take
+    enormous physical and emotional effort to organize a community event, therefore we have compiled
+    this Organizer's Kit to help you get things started.
+  </p>
+
+  <p>
+    Think of it as an inspiration rather than a set of instructions to follow like a rule book. If
+    this is your first time, start with the <a href="/organize/start-here/minimum-viable-pcd/"
+      >Minimum Viable PCD</a
+    >.
+  </p>
+
+  <h2 id="contents">Contents</h2>
+
+  <ul class="docs-toc">
+    {nav.map((node) =>
+      node.kind === 'page' ? (
+        <li><a href={node.page.href}>{node.page.title}</a></li>
+      ) : (
+        <li>
+          <span class="docs-toc__group">{node.title}</span>
+          <ul>
+            {node.pages.map((page) => (
+              <li><a href={page.href}>{page.title}</a></li>
+            ))}
+          </ul>
+        </li>
+      ),
+    )}
+  </ul>
+
+  <div class="callout">
+    <p>
+      This kit is licensed under a
+      <a href="https://creativecommons.org/licenses/by/4.0/deed.en"
+        >Creative Commons Attribution 4.0 International License</a
+      >.
+    </p>
   </div>
-</SiteLayout>
+</DocsLayout>

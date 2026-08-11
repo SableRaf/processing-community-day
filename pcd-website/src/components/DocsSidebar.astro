@@ -1,0 +1,78 @@
+---
+import type { MarkdownHeading } from 'astro';
+import { KIT_BASE, type KitNavNode } from '../config/organizer-kit-nav';
+
+interface Props {
+  nav: KitNavNode[];
+  /** Path of the page being rendered, used to mark the current link. */
+  currentPath: string;
+  /** h2 headings of the current page, rendered as nested anchor links. */
+  headings?: MarkdownHeading[];
+}
+
+const { nav, currentPath, headings = [] } = Astro.props;
+
+const normalize = (path: string) => (path.endsWith('/') ? path : `${path}/`);
+const current = normalize(currentPath);
+const isCurrent = (href: string) => normalize(href) === current;
+
+/** Only h2s become sidebar anchors; h3s would make the tree too deep to scan. */
+const anchors = headings.filter((h) => h.depth === 2);
+---
+
+<nav class="docs-sidebar" aria-label="Organizer Kit">
+  <a class="docs-sidebar__home" href={`${KIT_BASE}/`} aria-current={isCurrent(`${KIT_BASE}/`) ? 'page' : undefined}>
+    Organizer Kit
+  </a>
+
+  <ul class="docs-sidebar__list">
+    {nav.map((node) =>
+      node.kind === 'page' ? (
+        <li>
+          <a
+            class="docs-sidebar__link"
+            href={node.page.href}
+            aria-current={isCurrent(node.page.href) ? 'page' : undefined}
+          >
+            {node.page.title}
+          </a>
+          {isCurrent(node.page.href) && anchors.length > 0 && (
+            <ul class="docs-sidebar__anchors">
+              {anchors.map((heading) => (
+                <li>
+                  <a class="docs-sidebar__anchor" href={`#${heading.slug}`}>{heading.text}</a>
+                </li>
+              ))}
+            </ul>
+          )}
+        </li>
+      ) : (
+        <li class="docs-sidebar__group">
+          <span class="docs-sidebar__group-title">{node.title}</span>
+          <ul class="docs-sidebar__sublist">
+            {node.pages.map((page) => (
+              <li>
+                <a
+                  class="docs-sidebar__link"
+                  href={page.href}
+                  aria-current={isCurrent(page.href) ? 'page' : undefined}
+                >
+                  {page.title}
+                </a>
+                {isCurrent(page.href) && anchors.length > 0 && (
+                  <ul class="docs-sidebar__anchors">
+                    {anchors.map((heading) => (
+                      <li>
+                        <a class="docs-sidebar__anchor" href={`#${heading.slug}`}>{heading.text}</a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+            ))}
+          </ul>
+        </li>
+      ),
+    )}
+  </ul>
+</nav>
