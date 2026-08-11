@@ -1,6 +1,7 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
 import '../styles/base.css';
 import '../styles/prose.css';
 
@@ -20,6 +21,7 @@ const { title, description, ogImage, canonical, noindex = false } = Astro.props;
   <main id="main" tabindex="-1">
     <slot />
   </main>
+  <Footer />
 </BaseLayout>
 
 <style is:global>

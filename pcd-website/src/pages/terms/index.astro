@@ -1,0 +1,16 @@
+---
+import { getEntry, render } from 'astro:content';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+
+const entry = await getEntry('legal', 'terms-of-service');
+if (!entry) throw new Error('Missing legal/terms-of-service content entry');
+const { Content } = await render(entry);
+---
+
+<SiteLayout title={`${entry.data.title} — Processing Community Day`} description="Terms for using this site and submitting events.">
+  <div class="prose">
+    <p class="prose__eyebrow">Legal</p>
+    <h1>{entry.data.title}</h1>
+    <Content />
+  </div>
+</SiteLayout>

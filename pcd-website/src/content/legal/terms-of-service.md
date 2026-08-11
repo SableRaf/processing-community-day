@@ -1,4 +1,6 @@
-# Terms of Service
+---
+title: Terms of Service
+---
 
 **Last updated: 2 July 2026**
 
@@ -21,11 +23,11 @@ When you submit an event for listing, you agree that:
 - You have obtained consent from any co-organizers whose names or details you include;
 - Your event and its content will comply with the Processing Foundation's [Code of Conduct](https://processingfoundation.org) and will be welcoming, inclusive, and free of discrimination, harassment, or unlawful activity.
 
-**Public submission.** Event submissions are made through our public [GitHub repository](https://github.com/processing/processing-community-day) and/or the public [Processing Discourse forum](https://discourse.processing.org). Information you submit is **public** and will be displayed on the Site, including the primary contact email address. See our [Privacy Policy](./privacy-policy.md) for details on how this data is handled.
+**Public submission.** Event submissions are made through our public [GitHub repository](https://github.com/processing/processing-community-day) and/or the public [Processing Discourse forum](https://discourse.processing.org). Information you submit is **public** and will be displayed on the Site, including the primary contact email address. See our [Privacy Policy](/privacy/) for details on how this data is handled.
 
 ## 4. Content and licensing
 
-- **Your submissions.** You retain ownership of the content you submit. By submitting, you grant the Processing Foundation a non-exclusive, worldwide, royalty-free license to publish, display, reproduce, and distribute that content on and in connection with the Site and PCD-related communications. You may request removal of your listing at any time (see the [Privacy Policy](./privacy-policy.md)).
+- **Your submissions.** You retain ownership of the content you submit. By submitting, you grant the Processing Foundation a non-exclusive, worldwide, royalty-free license to publish, display, reproduce, and distribute that content on and in connection with the Site and PCD-related communications. You may request removal of your listing at any time (see the [Privacy Policy](/privacy/)).
 - **Our content.** Except where otherwise noted, the Site's original content, design, and code are made available by the Processing Foundation under the licenses stated in the project repository. Processing, p5.js, and related marks are the property of their respective owners.
 - **Map data** is © OpenStreetMap contributors and provided via CARTO, subject to their respective licenses and attributions.
 
@@ -73,4 +75,4 @@ These Terms are governed by the laws applicable to the Processing Foundation's p
 
 Questions about these Terms:
 
-**Processing Foundation** — [day@processingfoundation.org](mailto:day@processingfoundation.org)
+**Processing Foundation** — [day@processing.org](mailto:day@processing.org)

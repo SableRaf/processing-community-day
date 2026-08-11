@@ -1,4 +1,6 @@
-# Privacy Policy
+---
+title: Privacy Policy
+---
 
 **Last updated: 2 July 2026**
 
@@ -9,7 +11,7 @@ This Privacy Policy explains how the Processing Foundation ("we", "us", "our") c
 The data controller responsible for your personal data is:
 
 **Processing Foundation**
-Email: [day@processingfoundation.org](mailto:day@processingfoundation.org)
+Email: [day@processing.org](mailto:day@processing.org)
 
 For any privacy-related question or to exercise your rights, contact us at the address above.
 
@@ -88,7 +90,7 @@ Depending on where you live, you have rights over your personal data, including 
 
 Under the CCPA/CPRA, California residents also have the right to know what personal information is collected and to request its deletion. We do **not** sell or "share" personal information as defined by the CCPA.
 
-To exercise any of these rights, email us at [day@processingfoundation.org](mailto:day@processingfoundation.org). To remove or edit an event listing, you may also open a request in our [GitHub repository](https://github.com/processing/processing-community-day). We will respond within the timeframe required by applicable law (generally within 30 days).
+To exercise any of these rights, email us at [day@processing.org](mailto:day@processing.org). To remove or edit an event listing, you may also open a request in our [GitHub repository](https://github.com/processing/processing-community-day). We will respond within the timeframe required by applicable law (generally within 30 days).
 
 ## 7. Children's privacy
 
@@ -106,4 +108,4 @@ We may update this Privacy Policy from time to time. Material changes will be re
 
 Questions about this Privacy Policy or our data practices:
 
-**Processing Foundation** — [day@processingfoundation.org](mailto:day@processingfoundation.org)
+**Processing Foundation** — [day@processing.org](mailto:day@processing.org)

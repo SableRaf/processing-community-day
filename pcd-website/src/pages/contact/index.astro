@@ -1,0 +1,13 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import { PCD_EMAIL } from '../../config';
+---
+
+<SiteLayout title="Contact — Processing Community Day" description="How to get in touch with the Processing Community Day team.">
+  <div class="prose">
+    <p class="prose__eyebrow">Contact</p>
+    <h1>Contact</h1>
+    <p>Write to <a href={`mailto:${PCD_EMAIL}`}>{PCD_EMAIL}</a>.</p>
+    <div class="placeholder-note">Content coming soon.</div>
+  </div>
+</SiteLayout>
