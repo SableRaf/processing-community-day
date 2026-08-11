@@ -1,7 +1,7 @@
 ---
 import { loadNodes } from '../lib/nodes';
 import MapView from '../components/MapView.vue';
-import '../styles/map.css';
+import MapLayout from '../layouts/MapLayout.astro';
 import { getImage } from 'astro:assets';
 import ogImageSrc from '../images/PCD2026_og-image_tinyfied.png';
 
@@ -11,52 +11,15 @@ const siteUrl = Astro.site ? Astro.site.href.replace(/\/$/, '') : '';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const bannerImage = await getImage({ src: ogImageSrc, format: 'webp', quality: 80, width: 960 });
 const ogImageUrl = `${siteUrl}${base}/og-image.png`;
-const pageUrl = Astro.url.href;
 ---
 
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Processing Community Day 2026</title>
-    <meta name="description" content="Processing Community Day 2026 | Discover the global celebration of creativity and coding! Explore events worldwide, connect with local communities, and join the fun. Find an event near you or start your own PCD today!" />
-    <meta property="og:title" content="Processing Community Day 2026 | Join the global celebration of creativity and coding!" />
-    <meta property="og:description" content="Explore events worldwide, connect with local communities, and join the fun. Find an event near you or start your own PCD today!" />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content={pageUrl} />
-    <meta property="og:image" content={ogImageUrl} />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Processing Community Day 2026 | Join the global celebration of creativity and coding!" />
-    <meta name="twitter:description" content="Explore events worldwide, connect with local communities, and join the fun. Find an event near you or start your own PCD today!" />
-    <meta name="twitter:image" content={ogImageUrl} />
-    <link rel="icon" type="image/x-icon" href={`${import.meta.env.BASE_URL}/favicon.ico`} />
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-      crossorigin=""
-    />
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"
-      crossorigin=""
-    />
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"
-      crossorigin=""
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
-    <!-- Fathom - beautiful, simple website analytics -->
-    <script src="https://cdn.usefathom.com/script.js" data-site="FKXYYJDU" defer></script>
-    <!-- / Fathom -->
-  </head>
-  <body>
-    <a href="#map" class="skip-link" id="skip-link">Skip to map</a>
-    <MapView nodes={nodes} bannerImageUrl={bannerImage.src} client:only="vue" />
-  </body>
-</html>
+<MapLayout
+  title="Processing Community Day 2026"
+  description="Processing Community Day 2026 | Discover the global celebration of creativity and coding! Explore events worldwide, connect with local communities, and join the fun. Find an event near you or start your own PCD today!"
+  ogTitle="Processing Community Day 2026 | Join the global celebration of creativity and coding!"
+  ogDescription="Explore events worldwide, connect with local communities, and join the fun. Find an event near you or start your own PCD today!"
+  ogImage={ogImageUrl}
+>
+  <a href="#main" class="skip-link" id="skip-link">Skip to map</a>
+  <MapView nodes={nodes} bannerImageUrl={bannerImage.src} client:only="vue" />
+</MapLayout>
