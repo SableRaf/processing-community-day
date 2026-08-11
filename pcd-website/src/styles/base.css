@@ -35,6 +35,8 @@
   --popup-info-venue-address-size: 0.8125rem;
   --popup-info-time-size: 0.75rem;
 
+  --header-height: 64px;
+
   --z-map: 0;
   --z-controls: 1000;
   --z-overlay: 1100;

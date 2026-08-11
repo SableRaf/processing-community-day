@@ -164,7 +164,8 @@ function handleKeydown(e: KeyboardEvent) {
 
   const tag = (document.activeElement as HTMLElement)?.tagName?.toLowerCase();
   const isTextInput = tag === 'input' || tag === 'textarea' ||
-    (document.activeElement as HTMLElement)?.isContentEditable;
+    (document.activeElement as HTMLElement)?.isContentEditable ||
+    !!(document.activeElement as HTMLElement)?.closest?.('header[data-site-header]');
 
   if (e.key === 'Escape') {
     if (selectedNode.value) {
@@ -598,7 +599,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div role="banner">
+  <div class="map-chrome">
   <div class="banner-controls-left">
     <LanguageSwitcher />
   </div>
@@ -624,17 +625,17 @@ onUnmounted(() => {
 <style scoped>
 #map {
   position: fixed;
-  top: 0;
+  top: var(--header-height);
   left: 0;
   width: 100vw;
-  height: 100vh;
+  height: calc(100vh - var(--header-height));
   z-index: 0;
 }
 
 .banner-controls-left {
   position: fixed;
-  top: 1rem;
-  left: calc(1rem + 44px + 0.5rem);
+  top: calc(var(--header-height) + var(--spacing-md));
+  left: calc(36px + var(--spacing-md) + var(--spacing-sm));
   z-index: var(--z-controls);
   display: flex;
   align-items: center;

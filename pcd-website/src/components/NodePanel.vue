@@ -579,9 +579,9 @@ const calLinks = computed(() => props.node && !props.node.date_tbd ? calendarLin
 <style scoped>
 .node-panel {
   position: fixed;
-  top: 0;
+  top: var(--header-height);
   right: 0;
-  height: 100%;
+  height: calc(100% - var(--header-height));
   width: clamp(320px, 40vw, 520px);
   background: transparent;
   filter: drop-shadow(-4px 0 16px rgba(0, 0, 0, 0.18));
