@@ -2,7 +2,7 @@
 import { loadNodes, canonicalEventId } from '../../lib/nodes';
 import type { Node } from '../../lib/nodes';
 import MapView from '../../components/MapView.vue';
-import '../../styles/global.css';
+import '../../styles/map.css';
 
 export async function getStaticPaths() {
   const nodes = await loadNodes();
