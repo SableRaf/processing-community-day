@@ -1,6 +1,8 @@
 ---
 import type { MarkdownHeading } from 'astro';
-import { KIT_BASE, type KitNavNode } from '../config/organizer-kit-nav';
+import { KIT_BASE, type KitNavNode, type KitPage } from '../config/organizer-kit-nav';
+import NavExpanderIcon from './NavExpanderIcon.astro';
+import DocsNavAnchors from './DocsNavAnchors.astro';
 
 interface Props {
   nav: KitNavNode[];
@@ -18,61 +20,62 @@ const isCurrent = (href: string) => normalize(href) === current;
 
 /** Only h2s become sidebar anchors; h3s would make the tree too deep to scan. */
 const anchors = headings.filter((h) => h.depth === 2);
+const isGroupActive = (pages: KitPage[]) => pages.some((page) => isCurrent(page.href));
 ---
 
-<nav class="docs-sidebar" aria-label="Organizer Kit">
-  <a class="docs-sidebar__home" href={`${KIT_BASE}/`} aria-current={isCurrent(`${KIT_BASE}/`) ? 'page' : undefined}>
+<nav id="docs-nav" class="docs-nav" aria-label="Organizer Kit">
+  <a class="nav-list-link nav-list-link--home" href={`${KIT_BASE}/`} aria-current={isCurrent(`${KIT_BASE}/`) ? 'page' : undefined}>
     Organizer Kit
   </a>
 
-  <ul class="docs-sidebar__list">
-    {nav.map((node) =>
-      node.kind === 'page' ? (
-        <li>
+  <ul class="nav-list">
+    {nav.map((node) => {
+      if (node.kind === 'page') {
+        const active = isCurrent(node.page.href);
+        return <li class:list={['nav-list-item', { active }]}>
           <a
-            class="docs-sidebar__link"
+            class:list={['nav-list-link', { active }]}
             href={node.page.href}
-            aria-current={isCurrent(node.page.href) ? 'page' : undefined}
+            aria-current={active ? 'page' : undefined}
           >
             {node.page.title}
           </a>
-          {isCurrent(node.page.href) && anchors.length > 0 && (
-            <ul class="docs-sidebar__anchors">
-              {anchors.map((heading) => (
-                <li>
-                  <a class="docs-sidebar__anchor" href={`#${heading.slug}`}>{heading.text}</a>
-                </li>
-              ))}
-            </ul>
-          )}
-        </li>
-      ) : (
-        <li class="docs-sidebar__group">
-          <span class="docs-sidebar__group-title">{node.title}</span>
-          <ul class="docs-sidebar__sublist">
-            {node.pages.map((page) => (
-              <li>
-                <a
-                  class="docs-sidebar__link"
+          {active && <DocsNavAnchors anchors={anchors} />}
+        </li>;
+      }
+      const groupActive = isGroupActive(node.pages);
+      return <li class:list={['nav-list-item', { active: groupActive }]}>
+          <button class="nav-list-expander btn-reset" type="button" aria-label={`${node.title} submenu`} aria-expanded={groupActive ? 'true' : 'false'}><NavExpanderIcon /></button>
+          <span class="nav-list-link nav-list-link--static">{node.title}</span>
+          <ul class="nav-list">
+            {node.pages.map((page) => {
+              const active = isCurrent(page.href);
+              return <li class:list={['nav-list-item', { active }]}>
+                <a class:list={['nav-list-link', { active }]}
                   href={page.href}
-                  aria-current={isCurrent(page.href) ? 'page' : undefined}
+                  aria-current={active ? 'page' : undefined}
                 >
                   {page.title}
                 </a>
-                {isCurrent(page.href) && anchors.length > 0 && (
-                  <ul class="docs-sidebar__anchors">
-                    {anchors.map((heading) => (
-                      <li>
-                        <a class="docs-sidebar__anchor" href={`#${heading.slug}`}>{heading.text}</a>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </li>
-            ))}
+                {active && <DocsNavAnchors anchors={anchors} />}
+              </li>;
+            })}
           </ul>
-        </li>
-      ),
-    )}
+        </li>;
+    })}
   </ul>
 </nav>
+
+<script is:inline>
+  (() => {
+    const nav = document.getElementById('docs-nav');
+    if (!nav) return;
+    nav.addEventListener('click', (event) => {
+      let target = event.target;
+      while (target && !(target.classList && target.classList.contains('nav-list-expander'))) target = target.parentNode;
+      if (!target) return;
+      event.preventDefault();
+      target.setAttribute('aria-expanded', String(target.parentNode.classList.toggle('active')));
+    });
+  })();
+</script>

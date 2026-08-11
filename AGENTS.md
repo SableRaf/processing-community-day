@@ -66,6 +66,8 @@ Event data lives in `src/content/events/<event-id>/`:
 
 `src/lib/nodes.ts` loads all events at Astro build time using `import.meta.glob()` + `getCollection('events')`, validates plus codes with `OpenLocationCode`, decodes lat/lng, and returns a sorted `Node[]` array passed as props to `<MapView>`.
 
+The global Markdown pipeline runs `rehype-table-wrapper`, which wraps rendered tables in `.table-wrapper`. Scope its presentation styles to `.docs-prose`, since the plugin applies to all Markdown collections.
+
 **If a plus_code is invalid or too short, the build fails with a clear error — this is intentional.**
 
 **"Confirmed" events in data.json:** An event is included in the `/data.json` feed if it is present in `loadNodes()` and has no `placeholder: true` flag. There are currently no other event states (draft, hidden, etc.). If new states are added in future, the filter in `src/pages/data.json.ts` must be updated explicitly.
@@ -90,6 +92,8 @@ Event data lives in `src/content/events/<event-id>/`:
 | `src/lib/format.ts` | `formatDate()`, `formatDateRange()`, `calendarLinks()`, etc. |
 | `src/lib/popup.ts` | Leaflet popup HTML generation (`makePopupContent()`) |
 | `src/styles/global.css` | Design tokens (CSS custom properties), IBM Plex Sans, Leaflet overrides |
+| `src/styles/docs/*.css` | Organizer Kit's modular Just-the-Docs-derived tokens, layout, navigation, and Markdown presentation styles |
+| `src/lib/rehype-table-wrapper.mjs` | Markdown rehype plugin that wraps rendered tables for horizontal scrolling |
 | `src/pages/data.json.ts` | Static JSON feed of confirmed events, served at /data.json |
 | `src/content.config.ts` | Astro content collection Zod schema for events |
 | `src/config.ts` | Global static constants (contact email, etc.) |

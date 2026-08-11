@@ -6,7 +6,6 @@ import Footer from '../components/Footer.astro';
 import DocsSidebar from '../components/DocsSidebar.astro';
 import { getKitNav } from '../config/organizer-kit-nav';
 import '../styles/base.css';
-import '../styles/prose.css';
 import '../styles/docs.css';
 
 interface Props {
@@ -27,22 +26,19 @@ const nav = await getKitNav();
 <BaseLayout
   title={`${title} — Processing Community Day`}
   description={description}
-  bodyClass="site-body"
+  bodyClass="site-body docs-body"
 >
   <Header />
   <div class="docs-shell">
-    <!-- Ships `open` so the sidebar is present without JS (correct for desktop,
-         where CSS hides the summary). The script below collapses it on narrow
-         viewports, where an expanded list would push the article off-screen. -->
-    <details class="docs-shell__nav" open>
-      <summary class="docs-shell__nav-toggle">
-        <span>Organizer Kit contents</span>
-      </summary>
+    <aside class="docs-shell__nav">
+      <button class="docs-nav-toggle btn-reset" type="button" aria-expanded="false" hidden>
+        Organizer Kit contents
+      </button>
       <DocsSidebar nav={nav} currentPath={Astro.url.pathname} headings={headings} />
-    </details>
+    </aside>
 
     <main id="main" tabindex="-1" class="docs-shell__main">
-      <article class="prose docs-prose">
+      <article class="docs-prose">
         {eyebrow && <p class="prose__eyebrow">{eyebrow}</p>}
         <h1>{heading ?? title}</h1>
         <slot />
@@ -53,19 +49,15 @@ const nav = await getKitNav();
 </BaseLayout>
 
 <script is:inline>
-  // Collapse the contents disclosure below the 900px breakpoint where the CSS
-  // switches to a single column. Runs inline before paint to avoid a flash of
-  // the expanded list. Above the breakpoint the summary is display:none, so
-  // the `open` state is not user-reachable and stays put.
   (() => {
-    const nav = document.querySelector('.docs-shell__nav');
-    if (!nav) return;
-    const narrow = window.matchMedia('(max-width: 899px)');
-    const sync = () => {
-      if (narrow.matches) nav.removeAttribute('open');
-      else nav.setAttribute('open', '');
-    };
-    sync();
-    narrow.addEventListener('change', sync);
+    const toggle = document.querySelector('.docs-nav-toggle');
+    const nav = document.getElementById('docs-nav');
+    if (!toggle || !nav) return;
+    toggle.hidden = false;
+    document.documentElement.classList.add('docs-nav-collapsible');
+    toggle.addEventListener('click', () => {
+      const open = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', String(!open));
+    });
   })();
 </script>
