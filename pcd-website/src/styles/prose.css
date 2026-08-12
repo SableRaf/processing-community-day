@@ -67,12 +67,14 @@
 
 .prose a {
   color: var(--color-link);
-  text-decoration-thickness: 1px;
+  text-decoration-line: underline;
+  text-decoration-color: var(--color-link-underline);
+  text-decoration-thickness: 2px;
   text-underline-offset: 2px;
 }
 
 .prose a:hover {
-  color: var(--color-link-hover);
+  text-decoration-color: var(--color-link-underline-hover);
 }
 
 .prose hr {

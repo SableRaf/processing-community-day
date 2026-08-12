@@ -5,8 +5,10 @@
 :root {
   --color-primary: #800f8d;
   --color-primary-dark: #500f67;
-  --color-link: #800f8d;
-  --color-link-hover: #500f67;
+  --color-link: #7253ed;
+  --color-link-hover: #5e40b7;
+  --color-link-underline: rgb(238, 235, 238);
+  --color-link-underline-hover: rgba(114, 83, 237, 0.45);
   --color-focus: #005fcc;
   --color-text: #1a1a1a;
   --color-text-muted: #555;
