@@ -15,8 +15,8 @@ export const PCD_FORUM_NEW_TOPIC_URL =
     category: "community",
     tags: "pcd",
   }).toString();
-// TODO: replace with the real Processing Community invite link.
-export const PCD_DISCORD_URL = "https://discord.gg/TODO-pcd";
+
+export const PCD_DISCORD_URL = "https://discord.gg/q5NksnwGsY";
 
 export interface SocialLink {
   label: string;
