@@ -14,7 +14,7 @@ Hosting a PCD is easier (and more fun!) when shared with others. You don't need 
 * Tech Lead
   * Supports any technical needs like setting up projectors, sound, wifi, livestreaming, and thinking through tech needs to help facilitators prepare.
 * Volunteer Coordinator
-  * Recruits and support volunteers. Helps assign roles for the day-of (registration, setup, wayfinding, parking, etc) and makes sure everyone knows what to do.
+  * Recruits and supports volunteers. Helps assign roles for the day-of (registration, setup, wayfinding, parking, etc) and makes sure everyone knows what to do.
 * Safety Team
   * Helps create a welcoming and respectful environment. Familiar with the Code of Conduct and available to support participants if issues arise.
 * Timekeeper

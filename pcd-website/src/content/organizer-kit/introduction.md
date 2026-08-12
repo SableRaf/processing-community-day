@@ -54,11 +54,21 @@ Processing Community Day is coordinated by [the Processing Foundation](https://p
 
 ### Processing Community Day Committee
 
-| ![][image1] | Mathura M. Govindarajan Mathura Govindarajan is a creative technologist, educator, and founder of Paper Crane Lab, a nonprofit makerspace in Bengaluru that believes making and tinkering is for everyone. She also teaches new media as an adjunct faculty at NYU, Srishti, NID, and other institutions. When she's not working, she paints walls, drinks coffee, and hangs out with cats.  |
-| :---- | :---- |
-| **![][image2]** | **Raphaël de Courville** Raphaël de Courville (he/him) is a generative artist, designer, and educator from Paris. He currently serves as the Community Lead for the Processing project and is the worldwide coordinator for Processing Community Day. In 2012, he co-founded Creative Code Berlin, an initiative that fosters collaboration between artists and coders through monthly events. He lives and works in Berlin. |
-| **![][image3]** | **Roxana Hadad** Roxana Hadad, PhD (she/her) has spent her career researching and developing equity-focused educational environments in computing. As a Latina and artist who knows firsthand the transformative impact of computing opportunities, Roxana is committed to expanding access to quality computing education for all learners. She is Co-Executive Director at the Processing Foundation. |
-| **![][image4]** | **Xin Xin** Xin Xin (they/them) is a Taiwanese-American cultural producer exploring community-driven technology in creative and educational spaces. Xin advocates for liberatory software culture through the reclamation and subversion of power dynamics embedded within digital systems. Xin is Co-Executive Director at the Processing Foundation. |
+#### Mathura M. Govindarajan
+
+Mathura Govindarajan is a creative technologist, educator, and founder of Paper Crane Lab, a nonprofit makerspace in Bengaluru that believes making and tinkering is for everyone. She also teaches new media as an adjunct faculty at NYU, Srishti, NID, and other institutions. When she's not working, she paints walls, drinks coffee, and hangs out with cats.
+
+#### Raphaël de Courville
+
+Raphaël de Courville (he/him) is a generative artist, designer, and educator from Paris. He currently serves as the Community Lead for the Processing project and is the worldwide coordinator for Processing Community Day. In 2012, he co-founded Creative Code Berlin, an initiative that fosters collaboration between artists and coders through monthly events. He lives and works in Berlin.
+
+#### Roxana Hadad
+
+Roxana Hadad, PhD (she/her) has spent her career researching and developing equity-focused educational environments in computing. As a Latina and artist who knows firsthand the transformative impact of computing opportunities, Roxana is committed to expanding access to quality computing education for all learners. She is Co-Executive Director at the Processing Foundation.
+
+#### Xin Xin
+
+Xin Xin (they/them) is a Taiwanese-American cultural producer exploring community-driven technology in creative and educational spaces. Xin advocates for liberatory software culture through the reclamation and subversion of power dynamics embedded within digital systems. Xin is Co-Executive Director at the Processing Foundation.
 
 Contact email: [day@processing.org](mailto:day@processing.org)
 

@@ -30,7 +30,7 @@ Use your goals to shape everything else: format, scale, venue, and program.
 
 **Post a local thread** as `PCD @ City Name 2026` [in the Community category](https://discourse.processing.org/new-topic?title=PCD+%40+%5BYour+City%5D+2026&body=Hi%21+I%27m+organizing+a+Processing+Community+Day+2026+event+in+%5BCity%2C+Country%5D.%0A%0AI%27ll+update+this+thread+with+more+details+as+planning+progresses.&category=community&tags=pcd).
 
-**Add your event to the map**: open an [issue on GitHub](https://github.com/processing/processing-community-day/issues/new?template=new-event.yml). After a review, it will appear on [the PCD map](https://day.processing.org/).
+**Add your event to the map**: open an [issue on GitHub](https://github.com/processing/processing-community-day/issues/new?template=01-new-event.yml). After a review, it will appear on [the PCD map](https://day.processing.org/).
 
 Don't worry if the details are not finalized yet, you can update the info for your event later via a pull request (or by asking in the [main thread](https://discourse.processing.org/t/pcd-worldwide-2026-call-for-organizers/48081/) on the forum)
 
@@ -46,7 +46,7 @@ For real-time communication, consider creating a dedicated group on Matrix. See:
 
 Look for a space that is accessible and appropriate for your event format.
 
-Pay attention to the infrastructure and amenities of the space. Is the space accessible for disabled participants? Is there a projector, screen, or sound system? Are there gender-neutral bathrooms? Are there enough power outlets and/or extension chords? Is there enough room for your planned activities, including parallel sessions if applicable? Are acoustics and noise levels suitable for talks and discussions? See our venue checklist for a detailed list.
+Pay attention to the infrastructure and amenities of the space. Is the space accessible for disabled participants? Is there a projector, screen, or sound system? Are there gender-neutral bathrooms? Are there enough power outlets and/or extension cords? Is there enough room for your planned activities, including parallel sessions if applicable? Are acoustics and noise levels suitable for talks and discussions? See our venue checklist for a detailed list.
 
 We recommend this accessibility checklist: [https://accessibility.cornell.edu/event-planning/accessible-meeting-and-event-checklist/](https://accessibility.cornell.edu/event-planning/accessible-meeting-and-event-checklist/)
 

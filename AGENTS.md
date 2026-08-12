@@ -54,8 +54,8 @@ No install needed — `open-location-code` is already available at `pcd-website/
 
 ### Astro + Vue split
 
-- **Astro** (`src/pages/index.astro`) is the single entry point — a static HTML shell with `<head>`, font/CSS links, and BASE_URL injection. No new Astro pages should be added.
-- **Vue** handles all interactive UI as `client:only="vue"` island components. New UI features go in Vue components, not Astro pages.
+- **Astro** owns routing, layouts, metadata, and static content pages. `src/layouts/BaseLayout.astro` provides the document shell; `MapLayout.astro`, `SiteLayout.astro`, and `DocsLayout.astro` provide the map, standard content, and Organizer Kit shells respectively.
+- **Vue** handles the interactive map UI as `client:only="vue"` island components. Map-specific interactive features belong in Vue; static site and Organizer Kit pages belong in Astro and Markdown content collections.
 
 ### Data loading at build time
 
@@ -74,7 +74,7 @@ The global Markdown pipeline runs `rehype-table-wrapper`, which wraps rendered t
 
 ### Key implementation details
 
-- **Leaflet CSS** is loaded via `<link>` tags in `index.astro`, NOT via JS imports — avoids SSR issues since MapView is `client:only="vue"`.
+- **Leaflet CSS** is loaded via `<link>` tags in `MapLayout.astro`, NOT via JS imports — avoids SSR issues since MapView is `client:only="vue"`.
 - **`open-location-code`** exports `{ OpenLocationCode }` as a named export — use `new OpenLocationCode()` (not static methods).
 - **`leaflet.markercluster`** causes a circular dependency warning, suppressed via `rollupOptions.onwarn` in `astro.config.mjs`.
 - **Deep linking:** `?event=<id-or-uid>` query param auto-opens the event detail panel. Both the slug `id` and the short `uid` are accepted.
@@ -87,11 +87,19 @@ The global Markdown pipeline runs `rehype-table-wrapper`, which wraps rendered t
 | `src/components/MapView.vue` | Leaflet map, marker clustering, keyboard shortcuts |
 | `src/components/NodePanel.vue` | Slide-in event detail panel with minimap, calendar links, share button |
 | `src/components/LanguageSwitcher.vue` | Language selector dropdown in the top bar |
+| `src/components/Header.astro` | Shared fixed site header and primary navigation |
+| `src/components/Footer.astro` | Shared site footer, policy links, community links, and sponsors |
+| `src/layouts/BaseLayout.astro` | Shared HTML document shell and metadata |
+| `src/layouts/MapLayout.astro` | Map-page shell and Leaflet stylesheet links |
+| `src/layouts/SiteLayout.astro` | Standard static content-page shell |
+| `src/layouts/DocsLayout.astro` | Organizer Kit shell with sidebar, page TOC, and footer |
 | `src/lib/analytics.ts` | `trackEvent()` Fathom helper + `AnalyticsEvent` type + event-name constants |
 | `src/lib/nodes.ts` | `Node` interface + `loadNodes()` |
 | `src/lib/format.ts` | `formatDate()`, `formatDateRange()`, `calendarLinks()`, etc. |
 | `src/lib/popup.ts` | Leaflet popup HTML generation (`makePopupContent()`) |
-| `src/styles/global.css` | Design tokens (CSS custom properties), IBM Plex Sans, Leaflet overrides |
+| `src/styles/base.css` | Shared design tokens, reset, typography, focus, and skip-link styles |
+| `src/styles/map.css` | Map layout, controls, popup styling, and Leaflet overrides |
+| `src/styles/prose.css` | Standard static content-page presentation styles |
 | `src/styles/docs/*.css` | Organizer Kit's modular Just-the-Docs-derived tokens, layout, navigation, and Markdown presentation styles |
 | `src/lib/rehype-table-wrapper.mjs` | Markdown rehype plugin that wraps rendered tables for horizontal scrolling |
 | `src/pages/data.json.ts` | Static JSON feed of confirmed events, served at /data.json |
