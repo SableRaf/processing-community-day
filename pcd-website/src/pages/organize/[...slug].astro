@@ -22,6 +22,8 @@ const ordered = flattenKitNav(nav);
 const position = ordered.findIndex((page) => page.id === entry.id);
 const prev = position > 0 ? ordered[position - 1] : undefined;
 const next = position >= 0 && position < ordered.length - 1 ? ordered[position + 1] : undefined;
+
+const editHref = `https://github.com/processing/processing-community-day/edit/main/pcd-website/src/content/organizer-kit/${entry.id}.md`;
 ---
 
 <DocsLayout
@@ -31,6 +33,8 @@ const next = position >= 0 && position < ordered.length - 1 ? ordered[position +
   headings={headings}
 >
   <Content />
+
+  <a class="docs-back-to-top" href="#main">↑ Back to top</a>
 
   {(prev || next) && (
     <nav class="docs-pager" aria-label="Organizer Kit pages">
@@ -50,4 +54,10 @@ const next = position >= 0 && position < ordered.length - 1 ? ordered[position +
       )}
     </nav>
   )}
+
+  <div class="docs-page-footer">
+    <a class="docs-page-footer__link" href={editHref} target="_blank" rel="noopener noreferrer">
+      Edit this page on GitHub
+    </a>
+  </div>
 </DocsLayout>
