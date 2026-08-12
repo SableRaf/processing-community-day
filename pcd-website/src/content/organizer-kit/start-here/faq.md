@@ -53,11 +53,9 @@ If there is already a PCD nearby, consider joining or supporting that event inst
 
 ## How to fund my PCD?
 
-Many PCDs run with little or no budget. Start by planning something that works with the resources you already have. Look for free or low-cost venues.
+Though the Processing Foundation is not currently able to provide financial assistance for local events, many PCDs run with little or no budget, and we encourage you to plan something that works with the resources you already have.
 
-If you need funding, small sponsorships from schools, cultural institutions, or local companies can go a long way. In return, you can offer visibility, such as adding their logo to your event page and posters, mentioning them in your opening remarks, including them in social media posts, or giving them a small table or space during the event.
-
-If you are hoping to organize a larger event, are there any organizations, institutions, or companies you might seek support from? How might receiving funding from a company affect the content of your event? Can you use an organization's help to create a more accessible and inclusive space?
+Look for free or low-cost venues (such as community centers, schools, libraries, or cafes), and consider asking local businesses or institutions to sponsor food, drinks, or materials. In return, you can offer visibility, such as adding their logo to your event page and posters, mentioning them in your opening remarks, including them in social media posts, or giving them a small table or space during the event. You can also ask participants to bring their own laptops, hardware, or snacks.
 
 You can also set an entry fee (see "ticketing" section below) or suggest a voluntary contribution when people register or arrive.
 
@@ -71,9 +69,9 @@ We do not manage or distribute tickets on behalf of local node events. As an org
 
 PCD is a social event, and in some cases drinks may be shared during breaks or meals. If alcohol is present, we encourage everyone to consume it responsibly. Please note that some venues may not allow alcohol at all. If you are driving, avoid drinking or keep your consumption very limited, and within the limits imposed by local laws.
 
-## What kind of support does the Processing Foundation offer?
+## Will the Processing Foundation help promote my PCD?
 
-While we are not currently able to provide financial assistance for local events, we will promote your event through our social media, and on the [interactive map](http://day.processing.org/). Please tag Processing Foundation when posting on social media so that we can help promote your PCD.
+We will promote your event through our social media, and on the [interactive map](http://day.processing.org/). Please tag Processing Foundation when posting on social media so that we can help promote your PCD.
 
 * Instagram: [https://www.instagram.com/processingorg/](https://www.instagram.com/processingorg/)
 * Mastodon: [https://mastodon.social/@processingOrg](https://mastodon.social/@processingOrg)
