@@ -65,10 +65,6 @@ Be transparent about how funds are used. This helps build trust with both partic
 
 We do not manage or distribute tickets on behalf of local node events. As an organizer, you will determine whether ticketing is a preferable option for your event. We encourage all organizers who are planning to charge a fee for the event to provide affordable options for accessibility and inclusivity.
 
-## Can alcohol be served at PCD?
-
-PCD is a social event, and in some cases drinks may be shared during breaks or meals. If alcohol is present, we encourage everyone to consume it responsibly. Please note that some venues may not allow alcohol at all. If you are driving, avoid drinking or keep your consumption very limited, and within the limits imposed by local laws.
-
 ## Will the Processing Foundation help promote my PCD?
 
 We will promote your event through our social media, and on the [interactive map](http://day.processing.org/). Please tag Processing Foundation when posting on social media so that we can help promote your PCD.
@@ -80,6 +76,10 @@ When mentioning PCD or the Processing Foundation, please include the following w
 
 * *Processing Community Day is a global initiative of the Processing Foundation.*
 * *PCD @ {{Your City Name}} is organized independently by {{organizer(s) / organization}} and is not affiliated with the Processing Foundation.*
+
+## Can alcohol be served at PCD?
+
+PCD is a social event, and in some cases drinks may be shared during breaks or meals. If alcohol is present, we encourage everyone to consume it responsibly. Please note that some venues may not allow alcohol at all. If you are driving, avoid drinking or keep your consumption very limited, and within the limits imposed by local laws.
 
 ## How to promote my PCD?
 
