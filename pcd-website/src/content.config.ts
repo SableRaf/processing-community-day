@@ -30,6 +30,9 @@ const organizerKit = defineCollection({
     section: z.string().optional(),
     order: z.number().default(0),
     description: z.string().optional(),
+    // Excludes the page from the sidebar and from build output entirely, for
+    // TBD pages that shouldn't be publicly reachable yet.
+    draft: z.boolean().default(false),
   }),
 });
 

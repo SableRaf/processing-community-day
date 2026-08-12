@@ -3,6 +3,7 @@ title: Common Pitfalls
 section: Planning Your Event
 order: 5
 description: Things organizers wish they had known before their first PCD.
+draft: true
 ---
 
 TBD

@@ -51,7 +51,9 @@ function toPage(entry: KitEntry): KitPage {
  * silently producing an unreachable page.
  */
 export async function getKitNav(): Promise<KitNavNode[]> {
-  const entries = await getCollection('organizerKit');
+  const allEntries = await getCollection('organizerKit');
+  const entries = allEntries.filter((entry) => !entry.data.draft);
+  const allIds = new Set(allEntries.map((entry) => entry.id));
 
   const byId = new Map(entries.map((entry) => [entry.id, entry]));
   const bySection = new Map<string, KitEntry[]>();
@@ -81,6 +83,7 @@ export async function getKitNav(): Promise<KitNavNode[]> {
     } else {
       const entry = byId.get(slot.page);
       if (!entry) {
+        if (allIds.has(slot.page)) continue; // draft — omit from the sidebar
         throw new Error(
           `Organizer Kit page "${slot.page}" is listed in TOP_LEVEL but src/content/organizer-kit/${slot.page}.md does not exist.`,
         );

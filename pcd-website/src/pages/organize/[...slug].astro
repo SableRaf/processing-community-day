@@ -5,7 +5,7 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
 import { flattenKitNav, getKitNav } from '../../config/organizer-kit-nav';
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const entries = await getCollection('organizerKit');
+  const entries = await getCollection('organizerKit', (entry) => !entry.data.draft);
   return entries.map((entry) => ({
     params: { slug: entry.id },
     props: { entry },

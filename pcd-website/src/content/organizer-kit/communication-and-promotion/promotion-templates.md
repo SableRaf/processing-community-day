@@ -3,6 +3,7 @@ title: Promotion Templates
 section: Communication & Promotion
 order: 4
 description: Press release, announcement, event page, and visual assets.
+draft: true
 ---
 
 TBD
