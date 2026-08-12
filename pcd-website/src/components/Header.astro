@@ -12,7 +12,20 @@ const currentPath = normalize(Astro.url.pathname);
 
 <header data-site-header>
   <a class="logo" href="/">Processing Community Day</a>
-  <nav aria-label="Main">
+  <button
+    class="menu-toggle"
+    type="button"
+    aria-expanded="false"
+    aria-controls="main-navigation"
+  >
+    <span class="visually-hidden">Toggle main navigation</span>
+    <span class="menu-toggle-icon" aria-hidden="true">
+      <span></span>
+      <span></span>
+      <span></span>
+    </span>
+  </button>
+  <nav id="main-navigation" aria-label="Main">
     <ul>
       {NAV_ITEMS.map((item) => {
         const isCurrent = normalize(item.href) === currentPath;
@@ -56,6 +69,22 @@ const currentPath = normalize(Astro.url.pathname);
     text-decoration: underline;
   }
 
+  .menu-toggle {
+    display: none;
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
   nav ul {
     display: flex;
     align-items: center;
@@ -82,17 +111,142 @@ const currentPath = normalize(Astro.url.pathname);
     border-bottom-color: #fff;
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 640px) {
+    header {
+      gap: var(--spacing-sm);
+      padding: 0 var(--spacing-md);
+    }
+
+    header.menu-open {
+      z-index: calc(var(--z-panel) + 1);
+    }
+
     .logo {
       font-size: 0.875rem;
     }
 
+    .menu-toggle {
+      display: grid;
+      flex: 0 0 44px;
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      color: #fff;
+      background: transparent;
+      border: 0;
+      border-radius: 4px;
+      cursor: pointer;
+      place-items: center;
+    }
+
+    .menu-toggle:hover {
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .menu-toggle:focus-visible {
+      outline-color: #fff;
+    }
+
+    .menu-toggle-icon {
+      display: flex;
+      width: 22px;
+      height: 18px;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .menu-toggle-icon span {
+      width: 100%;
+      height: 2px;
+      background: currentColor;
+      border-radius: 1px;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    .menu-toggle[aria-expanded='true'] .menu-toggle-icon span:first-child {
+      transform: translateY(8px) rotate(45deg);
+    }
+
+    .menu-toggle[aria-expanded='true'] .menu-toggle-icon span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .menu-toggle[aria-expanded='true'] .menu-toggle-icon span:last-child {
+      transform: translateY(-8px) rotate(-45deg);
+    }
+
+    nav {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      left: 0;
+      display: none;
+      padding: var(--spacing-sm) var(--spacing-md) var(--spacing-md);
+      background: var(--color-primary);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.18);
+    }
+
+    header.menu-open nav {
+      display: block;
+    }
+
     nav ul {
-      gap: var(--spacing-md);
+      align-items: stretch;
+      flex-direction: column;
+      gap: 0;
     }
 
     nav a {
-      font-size: 0.8125rem;
+      display: block;
+      min-height: 44px;
+      padding: 0.6875rem var(--spacing-sm);
+      font-size: 0.9375rem;
+      border-bottom: 0;
+      border-left: 3px solid transparent;
+    }
+
+    nav a:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-bottom-color: transparent;
+    }
+
+    nav a[aria-current='page'] {
+      border-bottom-color: transparent;
+      border-left-color: #fff;
     }
   }
 </style>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-site-header]');
+  const menuToggle = header?.querySelector<HTMLButtonElement>('.menu-toggle');
+
+  const closeMenu = (restoreFocus = false) => {
+    if (!header || !menuToggle) return;
+    header.classList.remove('menu-open');
+    menuToggle.setAttribute('aria-expanded', 'false');
+    if (restoreFocus) menuToggle.focus();
+  };
+
+  menuToggle?.addEventListener('click', () => {
+    if (!header) return;
+    const isOpen = header.classList.toggle('menu-open');
+    menuToggle.setAttribute('aria-expanded', String(isOpen));
+  });
+
+  header?.querySelector('nav')?.addEventListener('click', (event) => {
+    if ((event.target as HTMLElement).closest('a')) closeMenu();
+  });
+
+  document.addEventListener('click', (event) => {
+    if (header && !header.contains(event.target as Node)) closeMenu();
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && header?.classList.contains('menu-open')) {
+      closeMenu(true);
+    }
+  });
+
+  window.matchMedia('(min-width: 641px)').addEventListener('change', () => closeMenu());
+</script>
