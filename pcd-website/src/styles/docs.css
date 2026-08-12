@@ -1,3 +1,10 @@
+/*
+ * Organizer Kit documentation theme.
+ *
+ * Adapted from Just the Docs (https://github.com/just-the-docs/just-the-docs),
+ * Copyright (c) 2016 Patrick Marsceill, licensed under the MIT License.
+ */
+
 @import './docs/tokens.css';
 @import './docs/typography.css';
 @import './docs/layout.css';

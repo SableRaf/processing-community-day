@@ -47,6 +47,7 @@ A new pull request will be automatically created with the updates. A maintainer 
 - **[leaflet.markercluster](https://github.com/Leaflet/Leaflet.markercluster)** — for clustering map markers
 - **[Open Location Code](https://github.com/google/open-location-code)** — for geocoding plus codes to lat/lng
 - **[GitHub Workflows](https://github.com/features/actions)** — for event submission, review, and data management
+- **[Just the Docs](https://github.com/just-the-docs/just-the-docs)** — the Organizer Kit theme is adapted from it
 
 ## Developing
 
@@ -73,6 +74,10 @@ Large parts of this project's code and documentation were written or edited with
 LLMs can be useful, but they also make mistakes and should be treated with caution. That being said, this repository would likely not exist without these generative tools, as I simply did not have the time to write everything from scratch myself. I believe it is possible and important to be critical of the more problematic aspects of these tools while also acknowledging their occasional usefulness.
 
 If you notice issues, bugs, factual mistakes, or anything else that could be improved, please feel free to open an issue or suggest changes. Contributions and corrections are always welcome.
+
+## Credits
+
+The Organizer Kit documentation theme (see [`src/styles/docs/`](./pcd-website/src/styles/docs/)) is adapted from [Just the Docs](https://github.com/just-the-docs/just-the-docs), Copyright (c) 2016 Patrick Marsceill, used under the MIT License.
 
 ## License
 
