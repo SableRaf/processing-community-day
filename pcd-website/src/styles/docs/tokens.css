@@ -1,10 +1,54 @@
 :root {
-  --fs-1: .5625rem; --fs-2: .6875rem; --fs-3: .75rem; --fs-4: .875rem; --fs-5: 1rem;
-  --fs-6: 1.125rem; --fs-7: 1.5rem; --fs-8: 2rem; --fs-9: 2.25rem; --fs-10: 2.625rem;
-  --step-1: var(--fs-1); --step-2: var(--fs-2); --step-3: var(--fs-3); --step-4: var(--fs-4); --step-5: var(--fs-5); --step-6: var(--fs-6); --step-7: var(--fs-7); --step-8: var(--fs-8); --step-9: var(--fs-9); --step-10: var(--fs-10);
+  --fs-1: 0.5625rem;
+  --fs-2: 0.6875rem;
+  --fs-3: 0.75rem;
+  --fs-4: 0.875rem;
+  --fs-5: 1rem;
+  --fs-6: 1.125rem;
+  --fs-7: 1.5rem;
+  --fs-8: 2rem;
+  --fs-9: 2.25rem;
+  --fs-10: 2.625rem;
+  --step-1: var(--fs-1);
+  --step-2: var(--fs-2);
+  --step-3: var(--fs-3);
+  --step-4: var(--fs-4);
+  --step-5: var(--fs-5);
+  --step-6: var(--fs-6);
+  --step-7: var(--fs-7);
+  --step-8: var(--fs-8);
+  --step-9: var(--fs-9);
+  --step-10: var(--fs-10);
   /* Parallel to the site semantic spacing scale; --sp-4 equals --spacing-md. */
-  --sp-1: .25rem; --sp-2: .5rem; --sp-3: .75rem; --sp-4: 1rem; --sp-5: 1.25rem; --sp-6: 1.5rem; --sp-7: 2rem; --sp-8: 3rem; --sp-9: 3.5rem; --sp-10: 4rem;
-  --nav-width-md: 15.5rem; --nav-width: 16.5rem; --content-width: 50rem; --border-radius: .25rem;
-  --feedback-color: #f2eaf4; --docs-nav-heading-color: #333; --docs-nav-child-link-color: #555;
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.25rem;
+  --sp-6: 1.5rem;
+  --sp-7: 2rem;
+  --sp-8: 3rem;
+  --sp-9: 3.5rem;
+  --sp-10: 4rem;
+  --nav-width-md: 15.5rem;
+  --nav-width: 16.5rem;
+  --content-width: 50rem;
+  --border-radius: 0.25rem;
+  --feedback-color: #f2eaf4;
+  --docs-nav-heading-color: #333;
+  --docs-nav-child-link-color: #555;
 }
-@media (min-width: 31.25rem) { :root { --step-1: .625rem; --step-2: var(--fs-3); --step-3: var(--fs-4); --step-4: var(--fs-5); --step-5: var(--fs-6); --step-6: var(--fs-7); --step-7: var(--fs-8); --step-8: var(--fs-9); --step-9: var(--fs-10); --step-10: 3rem; } }
+@media (min-width: 31.25rem) {
+  :root {
+    --step-1: 0.625rem;
+    --step-2: var(--fs-3);
+    --step-3: var(--fs-4);
+    --step-4: var(--fs-5);
+    --step-5: var(--fs-6);
+    --step-6: var(--fs-7);
+    --step-7: var(--fs-8);
+    --step-8: var(--fs-9);
+    --step-9: var(--fs-10);
+    --step-10: 3rem;
+  }
+}

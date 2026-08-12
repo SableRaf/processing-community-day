@@ -1,1 +1,24 @@
-.docs-prose :not(pre) > code { padding: .2em .15em; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .9em; font-weight: 400; background: #f5f2f6; border: 1px solid var(--color-border); border-radius: var(--border-radius); }.docs-prose pre { overflow-x: auto; margin: 0 0 var(--sp-3); padding: var(--sp-3); font-size: var(--step-3); line-height: 1.5; background: #f5f2f6; border: 1px solid var(--color-border); border-radius: var(--border-radius); }.docs-prose pre code { padding: 0; border: 0; background: transparent; }
+.docs-prose :not(pre) > code {
+  padding: 0.2em 0.15em;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.9em;
+  font-weight: 400;
+  background: #f5f2f6;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+}
+.docs-prose pre {
+  overflow-x: auto;
+  margin: 0 0 var(--sp-3);
+  padding: var(--sp-3);
+  font-size: var(--step-3);
+  line-height: 1.5;
+  background: #f5f2f6;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+}
+.docs-prose pre code {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
