@@ -31,7 +31,7 @@ const TOP_LEVEL: ReadonlyArray<string | { page: string }> = [
   'Running Your Event',
   'Communication & Promotion',
   'After the Event',
-  { page: 'activity-guides' },
+  'Activity Guides',
   { page: 'peer-support-sessions' },
   { page: 'documents' },
 ];
