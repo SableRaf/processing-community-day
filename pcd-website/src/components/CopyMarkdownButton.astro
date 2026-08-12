@@ -1,0 +1,69 @@
+---
+import icons from '@iconify-json/bi/icons.json';
+
+interface Props {
+  markdown: string;
+}
+
+const { markdown } = Astro.props;
+const copyIcon = icons.icons.copy;
+---
+
+<button class="copy-markdown" type="button" data-copy-markdown={markdown}>
+  <svg
+    class="copy-markdown__icon"
+    width="1em"
+    height="1em"
+    viewBox="0 0 16 16"
+    aria-hidden="true"
+  >
+    <Fragment set:html={copyIcon.body} />
+  </svg>
+  <span class="copy-markdown__label" aria-live="polite">Copy as Markdown</span>
+</button>
+
+<script>
+  const fallbackCopy = (text: string) => {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.setAttribute('readonly', '');
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    document.body.append(textarea);
+    textarea.select();
+    const copied = document.execCommand('copy');
+    textarea.remove();
+    if (!copied) throw new Error('Copy command failed');
+  };
+
+  const copyText = async (text: string) => {
+    if (navigator.clipboard?.writeText) {
+      try {
+        await navigator.clipboard.writeText(text);
+        return;
+      } catch {
+        // The legacy command can still work when clipboard permissions are denied.
+      }
+    }
+    fallbackCopy(text);
+  };
+
+  document.querySelectorAll<HTMLButtonElement>('[data-copy-markdown]').forEach((button) => {
+    button.addEventListener('click', async () => {
+      const label = button.querySelector<HTMLElement>('.copy-markdown__label');
+      if (!label) return;
+
+      try {
+        const markdown = button.dataset.copyMarkdown ?? '';
+        await copyText(markdown);
+        label.textContent = 'Copied!';
+      } catch {
+        label.textContent = 'Could not copy';
+      }
+
+      window.setTimeout(() => {
+        label.textContent = 'Copy as Markdown';
+      }, 2000);
+    });
+  });
+</script>

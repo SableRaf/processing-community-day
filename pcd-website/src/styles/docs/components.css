@@ -37,6 +37,49 @@
 .docs-page-toc li {
   margin: 0;
 }
+.docs-title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3) var(--sp-5);
+  margin-bottom: var(--sp-4);
+}
+.docs-prose .docs-title-row h1 {
+  flex: 1 1 16rem;
+  margin-bottom: 0;
+}
+.copy-markdown {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  min-height: 2.25rem;
+  padding: 0.35rem 0.625rem;
+  color: var(--color-text-muted);
+  font: inherit;
+  font-size: var(--step-3);
+  font-weight: 400;
+  white-space: nowrap;
+  cursor: pointer;
+  background: var(--color-bg);
+  border: 1px solid #b8b8b8;
+  border-radius: var(--border-radius);
+}
+.copy-markdown:hover {
+  background: var(--docs-sidebar-color);
+  border-color: var(--color-text-muted);
+}
+.copy-markdown:active {
+  transform: translateY(1px);
+}
+.copy-markdown:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 3px;
+}
+.copy-markdown__icon {
+  flex: 0 0 auto;
+}
 .docs-page-toc a {
   display: inline-block;
   padding: var(--sp-1) 0;

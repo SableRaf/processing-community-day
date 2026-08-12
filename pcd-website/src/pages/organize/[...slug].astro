@@ -24,6 +24,7 @@ const prev = position > 0 ? ordered[position - 1] : undefined;
 const next = position >= 0 && position < ordered.length - 1 ? ordered[position + 1] : undefined;
 
 const editHref = `https://github.com/processing/processing-community-day/edit/main/pcd-website/src/content/organizer-kit/${entry.id}.md`;
+const markdown = `# ${entry.data.title}\n\n${entry.body?.trim() ?? ''}\n`;
 ---
 
 <DocsLayout
@@ -31,6 +32,7 @@ const editHref = `https://github.com/processing/processing-community-day/edit/ma
   description={entry.data.description ?? `${entry.data.title} — the Processing Community Day Organizer's Kit.`}
   eyebrow={entry.data.section ?? "Organizer's Kit"}
   headings={headings}
+  markdown={markdown}
 >
   <Content />
 

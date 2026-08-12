@@ -5,6 +5,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import DocsSidebar from '../components/DocsSidebar.astro';
 import DocsTableOfContents from '../components/DocsTableOfContents.astro';
+import CopyMarkdownButton from '../components/CopyMarkdownButton.astro';
 import { getKitNav } from '../config/organizer-kit-nav';
 import '../styles/base.css';
 import '../styles/docs.css';
@@ -17,9 +18,11 @@ interface Props {
   /** Page heading. Falls back to `title` when omitted. */
   heading?: string;
   headings?: MarkdownHeading[];
+  /** Page content, ready to copy as Markdown. */
+  markdown?: string;
 }
 
-const { title, description, eyebrow, heading, headings = [] } = Astro.props;
+const { title, description, eyebrow, heading, headings = [], markdown } = Astro.props;
 
 const nav = await getKitNav();
 ---
@@ -42,7 +45,10 @@ const nav = await getKitNav();
     <main id="main" tabindex="-1" class="docs-shell__main">
       <article class="docs-prose">
         {eyebrow && <p class="prose__eyebrow">{eyebrow}</p>}
-        <h1>{heading ?? title}</h1>
+        <div class="docs-title-row">
+          <h1>{heading ?? title}</h1>
+          {markdown && <CopyMarkdownButton markdown={markdown} />}
+        </div>
         <DocsTableOfContents headings={headings} />
         <slot />
       </article>

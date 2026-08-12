@@ -6,7 +6,8 @@
   .docs-pager,
   .docs-page-footer,
   .docs-page-credit,
-  .docs-back-to-top {
+  .docs-back-to-top,
+  .copy-markdown {
     display: none !important;
   }
   .docs-shell {

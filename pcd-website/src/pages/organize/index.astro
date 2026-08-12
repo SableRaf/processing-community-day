@@ -3,6 +3,25 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
 import { getKitNav } from '../../config/organizer-kit-nav';
 
 const nav = await getKitNav();
+const markdownContents = nav
+  .map((node) => {
+    if (node.kind === 'page') return `- [${node.page.title}](${node.page.href})`;
+    const pages = node.pages.map((page) => `  - [${page.title}](${page.href})`).join('\n');
+    return `- **${node.title}**\n${pages}`;
+  })
+  .join('\n');
+const markdown = `# Organizer's Kit
+
+Thank you for registering to organize Processing Community Day. We understand that it can take enormous physical and emotional effort to organize a community event, therefore we have compiled this Organizer's Kit to help you get things started.
+
+Think of it as an inspiration rather than a set of instructions to follow like a rule book. If this is your first time, start with the [Minimum Viable PCD](/organize/start-here/minimum-viable-pcd/).
+
+## Contents
+
+${markdownContents}
+
+This kit is licensed under a [Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/deed.en).
+`;
 ---
 
 <DocsLayout
@@ -10,6 +29,7 @@ const nav = await getKitNav();
   heading="Organizer's Kit"
   description="Everything you need to organize a Processing Community Day in your city, from the simplest possible event to a full day of workshops and talks."
   eyebrow="Organize"
+  markdown={markdown}
 >
   <p class="lead">
     Thank you for registering to organize Processing Community Day. We understand that it can take

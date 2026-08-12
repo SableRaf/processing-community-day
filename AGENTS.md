@@ -87,6 +87,7 @@ The global Markdown pipeline runs `rehype-table-wrapper`, which wraps rendered t
 | `src/components/MapView.vue` | Leaflet map, marker clustering, keyboard shortcuts |
 | `src/components/NodePanel.vue` | Slide-in event detail panel with minimap, calendar links, share button |
 | `src/components/LanguageSwitcher.vue` | Language selector dropdown in the top bar |
+| `src/components/CopyMarkdownButton.astro` | Copies an Organizer Kit page as Markdown with accessible success/error feedback |
 | `src/components/Header.astro` | Shared fixed site header and primary navigation |
 | `src/components/Footer.astro` | Shared site footer, policy links, community links, and sponsors |
 | `src/layouts/BaseLayout.astro` | Shared HTML document shell and metadata |
