@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config';
 import vue from '@astrojs/vue';
 import rehypeTableWrapper from './src/lib/rehype-table-wrapper.mjs';
+import rehypeHeadingAnchors from './src/lib/rehype-heading-anchors.mjs';
 
 // https://astro.build/config
 export default defineConfig({
@@ -10,7 +11,7 @@ export default defineConfig({
   base: '/',
   integrations: [vue({ appEntrypoint: '/src/i18n/vuePlugin' })],
   markdown: {
-    rehypePlugins: [rehypeTableWrapper],
+    rehypePlugins: [rehypeTableWrapper, rehypeHeadingAnchors],
   },
   vite: {
     build: {

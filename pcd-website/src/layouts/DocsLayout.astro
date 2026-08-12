@@ -63,3 +63,18 @@ const nav = await getKitNav();
     });
   })();
 </script>
+
+<script is:inline>
+  (() => {
+    document.querySelectorAll('.docs-heading-anchor').forEach((link) => {
+      link.addEventListener('click', (event) => {
+        event.preventDefault();
+        const url = new URL(link.getAttribute('href'), window.location.href).href;
+        history.replaceState(null, '', link.getAttribute('href'));
+        navigator.clipboard?.writeText(url);
+        link.classList.add('docs-heading-anchor--copied');
+        setTimeout(() => link.classList.remove('docs-heading-anchor--copied'), 1200);
+      });
+    });
+  })();
+</script>
