@@ -3,41 +3,45 @@
   "uid": "bcda01b",
   "organizers": [
     {
+      "name": "Dr Coral Manton"
+    },
+    {
       "name": "Dave Webb"
     },
     {
-      "name": "Coral Manton"
+      "name": "Nigel Fryatt"
     }
   ],
   "primary_contact": {
     "name": "Dave Webb",
     "email": "d.webb@bathspa.ac.uk"
   },
-  "organization_name": "",
-  "organization_url": "",
-  "organization_type": "",
+  "organization_name": "Centre for Creative Technology",
+  "organization_url": "https://www.creativetechnology.uk/",
+  "organization_type": "School, university, library",
   "online_event": false,
   "event_url": "",
   "event_name": "PCD @ Bath",
   "event_location": {
-    "address": "Bath Spa University, Sion Hill campus",
+    "address": "Bath Spa University, Locksbrook Rd, Bath BA1 3EL",
     "plus_code": "9C3V9JJ6+VR"
   },
-  "event_date": "",
-  "event_start_time": "",
-  "event_end_time": "",
-  "event_short_description": "A set of easy access workshops, talks and networking for everyone curious about making art with technology",
+  "event_date": "2026-10-17",
+  "event_start_time": "10:00",
+  "event_end_time": "23:00",
+  "event_short_description": "A day of hand-making with technology, getting inspired and feeling confident to do more than you thought you could",
   "event_activities": [
     "Show-and-tell",
     "Hands-on workshops",
     "Live coding",
-    "Beginner introductions to Processing or p5.js",
-    "Screening"
+    "Exhibition",
+    "Panel discussions",
+    "Beginner introductions to Processing or p5.js"
   ],
-  "event_page_url": "",
+  "event_page_url": "https://www.creativetechnology.uk/processing-community-day-2026",
   "forum_thread_url": "https://discourse.processing.org/t/pcd-bath-2026/48139",
   "city": "Bath",
-  "country": "United Kingdom",
+  "country": "UK",
   "placeholder": false,
   "intake": {
     "issue_number": 32,
