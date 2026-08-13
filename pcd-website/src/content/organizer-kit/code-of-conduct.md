@@ -4,9 +4,13 @@ order: 7
 description: Setting expectations for behaviour at your event.
 ---
 
-With Processing Community Day (PCD), we strive to provide a harassment-free event experience for everyone, regardless of race, ethnicity, gender, gender identity and expression, sexual orientation, disability, physical appearance, body size, age, religion, nationality, marital status, or any other vector of identity. All PCD organizers and partners share a responsibility to create brave spaces where everyone can participate.
+All participants in Processing Community Day (PCD), including, but not limited to the PCD online forum are required to agree to the following Code of Conduct.
 
-That means PCD events are spaces where we agree to work together to break down our implicit and explicit biases, not only in the technologies and communities we build, but also in our interactions with one another. It also means holding ourselves and others accountable for the ways we contribute to, or subtract from, safe and brave spaces. We point out harm when we see it, and we work within our communities to speak up when participants experience microaggressions, unfair or biased treatment, harassment, or inequitable exclusion. Creating a brave space is an ongoing collective practice, not something we can assume simply because everyone means well.
+This includes all attendees, speakers, performers, workshop leaders, patrons (sponsors), volunteers, and staff.
+
+The PCD team is dedicated to providing a harassment-free experience for everyone, regardless of race, ethnicity, gender, gender identity and expression, sexual orientation, disability, physical appearance, body size, age, religion, nationality, marital status, or any other vector of identity. All PCD organizers and participants share a responsibility to create brave spaces where everyone can participate.
+
+Anyone participant who violates this Code of Conduct may be sanctioned or expelled from PCD at the discretion of the PCD organizers.
 
 > This policy is largely based on the Art+Feminism Safe Space, Brave Space Policy. See the [Acknowledgement](#acknowledgement) section for more information.
 
