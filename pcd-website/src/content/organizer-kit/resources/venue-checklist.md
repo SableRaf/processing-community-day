@@ -1,7 +1,7 @@
 ---
 title: Venue Checklist
-section: Planning Your Event
-order: 4
+section: Resources
+order: 2
 description: Questions to ask about a space before you commit to it.
 ---
 

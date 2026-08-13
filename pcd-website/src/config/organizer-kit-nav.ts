@@ -25,15 +25,18 @@ export const KIT_BASE = '/organize';
  * sorts it *within* its section.
  */
 const TOP_LEVEL: ReadonlyArray<string | { page: string }> = [
-  { page: 'introduction' },
-  'Start Here',
-  'Planning Your Event',
-  'Running Your Event',
-  'Communication & Promotion',
-  'After the Event',
+  'Getting Started',
+  'Organizing Your Event',
   'Activity Guides',
   { page: 'peer-support-sessions' },
+  'Resources',
+  { page: 'code-of-conduct' },
+  { page: 'faq' },
+  { page: 'about-processing-foundation' },
+  { page: 'contact' },
   { page: 'documents' },
+  { page: 'drafts-program-planning' },
+  { page: 'drafts-promotion-templates' },
 ];
 
 export function kitHref(id: string): string {

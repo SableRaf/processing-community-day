@@ -1,6 +1,6 @@
 ---
 title: Suggested Timeline
-section: Planning Your Event
+section: Organizing Your Event
 order: 1
 description: A possible path for how a PCD comes together, from first idea to follow-up.
 ---

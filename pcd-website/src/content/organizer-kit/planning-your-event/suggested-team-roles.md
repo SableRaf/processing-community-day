@@ -1,6 +1,6 @@
 ---
 title: Suggested Team Roles
-section: Planning Your Event
+section: Organizing Your Event
 order: 2
 description: Common areas of responsibility when sharing the work of hosting a PCD.
 ---

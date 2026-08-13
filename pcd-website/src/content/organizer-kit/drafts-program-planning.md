@@ -1,7 +1,6 @@
 ---
 title: Program Planning
-section: Running Your Event
-order: 1
+order: 99
 description: Run of show and session formats for small, medium, and large events.
 draft: true
 ---

@@ -1,7 +1,6 @@
 ---
 title: Contact
-section: After the Event
-order: 4
+order: 11
 description: Where to ask questions about organizing a PCD.
 ---
 

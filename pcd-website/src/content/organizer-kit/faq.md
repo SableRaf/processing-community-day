@@ -1,7 +1,6 @@
 ---
 title: FAQ
-section: Start Here
-order: 2
+order: 9
 description: Common questions about registering, scheduling, funding, and running a PCD.
 ---
 

@@ -1,7 +1,7 @@
 ---
-title: Using the Forum
-section: Communication & Promotion
-order: 2
+title: About the Forum
+section: Resources
+order: 3
 description: Introducing yourself and coordinating in the open on the Processing forum.
 ---
 

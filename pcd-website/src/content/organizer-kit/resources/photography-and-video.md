@@ -1,7 +1,7 @@
 ---
 title: Photography and Video Guidelines
-section: Running Your Event
-order: 4
+section: Resources
+order: 6
 description: Consent, tips, and who should be behind the camera.
 ---
 

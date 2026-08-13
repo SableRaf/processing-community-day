@@ -1,7 +1,6 @@
 ---
-title: Code of Conduct / Safe Space Policy
-section: Running Your Event
-order: 3
+title: Safe Space Policy
+order: 7
 description: Setting expectations for behaviour at your event.
 ---
 

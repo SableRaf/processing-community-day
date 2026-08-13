@@ -1,9 +1,35 @@
 ---
-title: Recaps
-section: After the Event
-order: 3
-description: Writing up your event and sharing it back with the community.
+title: After the Event
+section: Organizing Your Event
+order: 4
+description: Collecting feedback, thanking contributors, and sharing your recap with the community.
 ---
+
+## Exit Survey
+
+TBD
+
+### What to measure
+
+TBD
+*(attendance, diversity, engagement)*
+
+### Running a survey
+
+TBD
+
+## Follow-up
+
+Thank contributors, share your recap, and stay connected with participants if you can.
+
+* Thank you messages (speakers, volunteers, partners)
+* Share documentation
+* Share recap on the forum
+* Keep the community going (next meetup, Discord, etc.)
+
+Take photos, collect notes, or capture reflections. This helps share your work and inspire others. See also the [Photography and Video Guidelines](/organize/resources/photography-and-video/).
+
+## Recaps
 
 Write a recap post (on a blog, website, or platform like Medium) and share it on the forum.
 
@@ -16,3 +42,15 @@ For inspiration, here are recaps from past events:
 * [PCD Quito](https://medium.com/@montoyamoraga/processing-community-day-quito-2019-e0beed996592) by [Aarón Montaya-Moraga](http://montoyamoraga.io/)
 * [PCD NYC](https://medium.com/@leeto/how-we-organized-processing-community-day-nyc-2019-162260f2340a) by [Lee Tusman](http://leetusman.com/)
 * [PCD Bangalore](https://medium.com/@mathuramgovindarajan/processing-day-bangalore-2019-9a6d4650158b) by [Mathura M Govindarajan](http://mathuramg.com/)
+
+## Acknowledgement
+
+The original 2019 Organizer's Kit was created by Xin Xin, with guidance and support from Lauren McCarthy, Casey Reas, Dorothy Santos, Johanna Hedva, and Daniel Shiffman.
+
+The 2026 Organizer's Kit was created by Raphaël de Courville and Amy B. Woodman, with support from the Processing Foundation team, and the global Processing community.
+
+Some of this guide is inspired by [https://artandfeminism.org/](https://artandfeminism.org/)
+
+---
+
+*This Organizer's Kit is licensed under a [Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/deed.en).*

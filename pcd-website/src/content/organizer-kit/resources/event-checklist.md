@@ -1,7 +1,7 @@
 ---
 title: Event Checklist
-section: Planning Your Event
-order: 3
+section: Resources
+order: 1
 description: Setup, communications, logistics, accessibility, and day-of checklists.
 ---
 
