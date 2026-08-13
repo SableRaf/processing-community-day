@@ -1,13 +1,22 @@
 ---
 import { PCD_EMAIL, PCD_FORUM_THREAD_URL, PCD_DISCORD_URL, SOCIAL_LINKS } from '../config';
 import { SPONSORS } from '../config/sponsors';
+import ExternalLinkIcon from './ExternalLinkIcon.astro';
 
 const UTILITY_LINKS = [
-  { label: 'Press Kit', href: '/press-kit/' },
+  {
+    label: 'Press Kit',
+    href: 'https://drive.google.com/drive/folders/13p3OATRze7v5Vwo0TfLsdxTSyc1VOVk_?usp=drive_link',
+    external: true,
+  },
   { label: 'Terms & Conditions', href: '/terms/' },
   { label: 'Privacy Policy', href: '/privacy/' },
   { label: 'Trademark', href: '/trademark/' },
-  { label: 'Newsletter', href: '/newsletter/' },
+  {
+    label: 'Newsletter',
+    href: 'https://processingfoundation.myflodesk.com/newslettersubscription',
+    external: true,
+  },
   { label: 'Code of Conduct', href: '/code-of-conduct/' },
   { label: 'Contact', href: '/contact/' },
 ];
@@ -46,7 +55,12 @@ const UTILITY_LINKS = [
       <h2>More</h2>
       <ul>
         {UTILITY_LINKS.map((link) => (
-          <li><a href={link.href}>{link.label}</a></li>
+          <li>
+            <a href={link.href} {...(link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
+              {link.label}
+              {link.external && <ExternalLinkIcon />}
+            </a>
+          </li>
         ))}
       </ul>
     </nav>
@@ -130,6 +144,13 @@ const UTILITY_LINKS = [
     color: var(--color-text-muted);
     text-decoration: none;
     font-size: 0.875rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3em;
+  }
+
+  .footer-col a svg {
+    flex-shrink: 0;
   }
 
   .footer-col a:hover {
