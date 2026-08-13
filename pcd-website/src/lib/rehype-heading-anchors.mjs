@@ -1,7 +1,8 @@
 import { visit } from 'unist-util-visit';
 import Slugger from 'github-slugger';
 
-const HEADING_TAGS = new Set(['h2', 'h3', 'h4', 'h5', 'h6']);
+const HEADING_TAGS = new Set(['h1', 'h2', 'h3', 'h4', 'h5', 'h6']);
+const ANCHORED_HEADING_TAGS = new Set(['h2', 'h3', 'h4', 'h5', 'h6']);
 const rawNodeTypes = new Set(['text', 'raw', 'mdxTextExpression']);
 
 // bi:link-45deg (Bootstrap Icons), inlined so the anchor needs no icon font/JS framework.
@@ -26,6 +27,11 @@ export default function rehypeHeadingAnchors() {
       });
       let slug = slugger.slug(text);
       if (slug.endsWith('-')) slug = slug.slice(0, -1);
+
+      // Reserve the h1 slug so subsequent ids stay aligned with Astro's
+      // own slugger, but don't add a permalink to the h1 itself.
+      if (!ANCHORED_HEADING_TAGS.has(node.tagName)) return;
+
       node.children.unshift({
         type: 'element',
         tagName: 'a',
