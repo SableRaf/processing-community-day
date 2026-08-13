@@ -13,7 +13,7 @@ A minimum viable PCD might look like:
 
 * 1-2 organizers
 * 1 space (a room, studio, classroom, coffee shop, or online)
-* 1 simple activity (a workshop, talk, screening, or collaborative coding session)
+* 1 simple activity (a small workshop, talk, book club session, screening, or collaborative coding session)
 * A small group of participants (even 5-15 people is enough)
 * A few photos or a short recap to share back with the community
 
@@ -25,3 +25,5 @@ If you're feeling overwhelmed, ask yourself:
 * What type of events do people show up for in my community?
 * Which spaces are available and how many people will fit there?
 * What can I organize with the time and energy I have?
+
+If you need inspiration for activities to run at your PCD, check out the [Zine Library](/organize/activity-guides/zine-library/) which contains a collection of ready-to-run workshops and activities created by the community. You are also welcome to create your own activity guide and share it with the community. See [Contribute an Activity Guide](/organize/activity-guides/contribute-a-guide/) for more information.
