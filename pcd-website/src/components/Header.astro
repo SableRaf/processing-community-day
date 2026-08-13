@@ -34,10 +34,14 @@ const currentPath = normalize(Astro.url.pathname);
   <nav id="main-navigation" aria-label="Main">
     <ul>
       {NAV_ITEMS.map((item) => {
-        const isCurrent = normalize(item.href) === currentPath;
+        const itemPath = normalize(item.href);
+        const isExact = itemPath === currentPath;
+        // Root only matches exactly; section links stay active for their sub-pages.
+        const inSection = itemPath !== '/' && currentPath.startsWith(itemPath);
+        const current = isExact ? 'page' : inSection ? 'true' : undefined;
         return (
           <li>
-            <a href={item.href} aria-current={isCurrent ? 'page' : undefined}>
+            <a href={item.href} aria-current={current}>
               {item.label}
             </a>
           </li>
@@ -122,7 +126,7 @@ const currentPath = normalize(Astro.url.pathname);
     border-bottom-color: rgba(255, 255, 255, 0.6);
   }
 
-  nav a[aria-current='page'] {
+  nav a[aria-current] {
     border-bottom-color: #fff;
   }
 
@@ -235,7 +239,7 @@ const currentPath = normalize(Astro.url.pathname);
       border-bottom-color: transparent;
     }
 
-    nav a[aria-current='page'] {
+    nav a[aria-current] {
       border-bottom-color: transparent;
       border-left-color: #fff;
     }
