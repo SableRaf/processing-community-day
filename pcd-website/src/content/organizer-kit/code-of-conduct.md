@@ -4,12 +4,6 @@ order: 7
 description: Setting expectations for behaviour at your event.
 ---
 
-This policy is inspired largely by the Art+Feminism [Safe Space, Brave Space Policy](https://meta.wikimedia.org/wiki/Art%2BFeminism_User_Group/Safe,_Brave_Space_Policy), whose language and principles strongly inform this document. It was adapted for Processing Community Day (PCD) by the PCD organizers and community members.
-
-Any inaccuracies or omissions introduced in the adaptation process are to be solely attributed to this document's contributors, and not to the Art+Feminism authors, who generously shared their work with the wider community.
-
-# PCD Safe Space Policy
-
 With Processing Community Day (PCD), we strive to provide a harassment-free event experience for everyone, regardless of race, ethnicity, gender, gender identity and expression, sexual orientation, disability, physical appearance, body size, age, religion, nationality, marital status, or any other vector of identity. All PCD organizers and partners share a responsibility to create brave spaces where everyone can participate.
 
 That means PCD events are spaces where we agree to work together to break down our implicit and explicit biases, not only in the technologies and communities we build, but also in our interactions with one another. It also means holding ourselves and others accountable for the ways we contribute to, or subtract from, safe and brave spaces. We point out harm when we see it, and we work within our communities to speak up when participants experience microaggressions, unfair or biased treatment, harassment, or inequitable exclusion. Creating a brave space is an ongoing collective practice, not something we can assume simply because everyone means well.
@@ -98,11 +92,11 @@ PCD events are independently organized, so organizers should tell participants b
 
 In an emergency, contact the appropriate local emergency services or venue staff.
 
-## Credit
+## Acknowledgement
 
-These guidelines are adapted for PCD from the Art+Feminism [Safe Space, Brave Space Policy](https://meta.wikimedia.org/wiki/Art%2BFeminism_User_Group/Safe,_Brave_Space_Policy).
+This policy is largely based on the Art+Feminism [Safe Space, Brave Space Policy](https://meta.wikimedia.org/wiki/Art%2BFeminism_User_Group/Safe,_Brave_Space_Policy). Any inaccuracies or omissions introduced in the adaptation process are to be solely attributed to this document's contributors, and not to the Art+Feminism leadership collective, who generously shared their work with the wider community.
 
-We reproduce the following statement from the original document here for context:
+We reproduce the following statement from the original authors here for context:
 
 > This Art+Feminism leadership collective, consisting of over a dozen of ambassadors, organizers, and project founders around the world stand by this agreement. In developing our community agreement we looked to organizations/organizers who inspire us and also share powerful anti-oppressive frameworks with their communities, including: FemTechNet, Allied Media Projects, Emergent Strategy, Movement Killing Behaviors by Njimie Dzurinko, Rooted in Rights, Ideas For Ears, and The Queer Futures Collective. This Brave Space policy is a collective effort based on our informed experiences across various intersections of identity. We wish to acknowledge that we do this work in solidarity with a wide-reaching feminist network. We welcome continuing discussion to make it even more comprehensive, inclusive, and brave.
 
