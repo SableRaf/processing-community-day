@@ -1,5 +1,7 @@
 ---
 import { NAV_ITEMS } from '../config/navigation';
+import logoLine from '../images/PCD_2026_Logo_Line_White.svg?url';
+import logoMini from '../images/PCD_2026_Logo_Mini_White.svg?url';
 
 const normalize = (pathname: string) => {
   const base = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -11,7 +13,11 @@ const currentPath = normalize(Astro.url.pathname);
 ---
 
 <header data-site-header>
-  <a class="logo" href="/">Processing Community Day</a>
+  <a class="logo" href="/">
+    <span class="visually-hidden">Processing Community Day</span>
+    <img class="logo-line" src={logoLine} alt="" width="5987" height="446" aria-hidden="true" />
+    <img class="logo-mini" src={logoMini} alt="" width="1818" height="446" aria-hidden="true" />
+  </a>
   <button
     class="menu-toggle"
     type="button"
@@ -58,15 +64,24 @@ const currentPath = normalize(Astro.url.pathname);
   }
 
   .logo {
-    color: #fff;
-    font-weight: 600;
+    display: flex;
+    align-items: center;
+    flex: 0 0 auto;
     text-decoration: none;
-    white-space: nowrap;
-    font-size: 1rem;
   }
 
-  .logo:hover {
-    text-decoration: underline;
+  .logo img {
+    display: block;
+    width: auto;
+    height: 32px;
+  }
+
+  .logo img.logo-mini {
+    display: none;
+  }
+
+  .logo:hover img {
+    opacity: 0.85;
   }
 
   .menu-toggle {
@@ -111,6 +126,16 @@ const currentPath = normalize(Astro.url.pathname);
     border-bottom-color: #fff;
   }
 
+  @media (max-width: 900px) {
+    .logo img.logo-line {
+      display: none;
+    }
+
+    .logo img.logo-mini {
+      display: block;
+    }
+  }
+
   @media (max-width: 640px) {
     header {
       gap: var(--spacing-sm);
@@ -121,8 +146,8 @@ const currentPath = normalize(Astro.url.pathname);
       z-index: calc(var(--z-panel) + 1);
     }
 
-    .logo {
-      font-size: 0.875rem;
+    .logo img {
+      height: 28px;
     }
 
     .menu-toggle {
