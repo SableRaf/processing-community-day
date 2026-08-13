@@ -1,5 +1,5 @@
 ---
-title: FAQ
+title: Frequently Asked Questions
 order: 9
 description: Common questions about registering, scheduling, funding, and running a PCD.
 ---
