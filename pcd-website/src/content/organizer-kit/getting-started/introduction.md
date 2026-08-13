@@ -1,25 +1,23 @@
 ---
 title: Introduction
 section: Getting Started
-order: 1
+order: 2
 description: Why organize a Processing Community Day, what happens at one, and who coordinates it.
 ---
 
 Thank you for registering to organize Processing Community Day.
 
+Processing Community Day (PCD) is a day picked between October 1 and October 31, 2026 to celebrate art, code, and diversity around the world.
+
 We understand that it can take enormous physical and emotional effort to organize a community event, therefore we have compiled this Organizer's Kit to help you get things started.
 
-Think of it as an inspiration rather than a set of instructions to follow like a rule book.
+Although we are providing a step-by-step guide to lead a PCD in this kit, keep in mind that as PCD organizers, you are welcome to define the format of your event in any way that serves your local communities.
 
 The kit is licensed under a [Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/deed.en).
 
-## Why organize a PCD?
-
-Organizing an event can feel intimidating, especially if it's your first time. We want you to feel empowered to host a PCD even if you have never ran a public event before. To keep things manageable, start small and ask for help when you need it. You can always organize a more ambitious PCD next year if you want to!
-
 ## What happens at a PCD?
 
-That's up to you! Processing Community Day can be as simple as a two-hour Processing or p5.js tutorial, or as ambitious as an all-day conference-style event with workshops, talks, performances, an exhibition, or roundtables on software art.
+That's up to you! A PCD can take many forms. Aside from the conventional lecture / demo format, your PCD can be a show & tell session, a zine-making session, an audio-visual performance, a DIY art show, a game jam, or even a group discussion on software art.
 
 To get a better sense of what a PCD can look like, you can read past event recaps:
 
@@ -31,7 +29,7 @@ To get a better sense of what a PCD can look like, you can read past event recap
 * [PCD NYC](https://medium.com/@leeto/how-we-organized-processing-community-day-nyc-2019-162260f2340a) by [Lee Tusman](http://leetusman.com/)
 * [PCD Bangalore](https://medium.com/@mathuramgovindarajan/processing-day-bangalore-2019-9a6d4650158b) by [Mathura M Govindarajan](http://mathuramg.com/)
 
-We also hosted two info sessions for interested organizers (links below). Both sessions cover similar ground, but each includes different former organizers sharing their experience. We recommend starting with the second session, then watching the discussion part of the first.
+We hosted two info sessions for interested organizers (links below). Both sessions cover similar ground, but each includes different former organizers sharing their experience. We recommend starting with the second session, then watching the discussion part of the first.
 
 PCD Info Session #1: [Watch the recording](https://us06web.zoom.us/rec/share/1WLi_Ztv6uwhUNBQWooIGGVXUfu37kRJ1g5zWQfBSAzc5tYSm9zbzUoZFJq3e-sf.b3j__DRYl1C4qsyx) (passcode: `*L%54Ah!`) or [GDrive link](https://drive.google.com/file/d/1eBGYfp8IT7k2f_pxqX7xNa_wCe6gjrYf/view)
 

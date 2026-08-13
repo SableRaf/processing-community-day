@@ -1,7 +1,7 @@
 ---
 title: Minimum Viable PCD
 section: Getting Started
-order: 2
+order: 3
 description: The simplest version of a Processing Community Day you can realistically host.
 ---
 
