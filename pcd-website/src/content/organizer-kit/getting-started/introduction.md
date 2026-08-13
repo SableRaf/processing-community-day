@@ -51,4 +51,16 @@ Read about the history of Processing and p5.js:
 
 Processing Community Day is coordinated by [the Processing Foundation](https://processingfoundation.org/people), with support from contributors and volunteers across the Processing and p5.js community. See [About Processing Foundation](/organize/about-processing-foundation/) for more information about the organization and its mission.
 
-Contact email: [day@processing.org](mailto:day@processing.org)
+To contact us, email [day@processing.org](mailto:day@processing.org)
+
+## Acknowledgement
+
+The original 2019 Organizer's Kit was created by Xin Xin, with guidance and support from Lauren McCarthy, Casey Reas, Dorothy Santos, Johanna Hedva, and Daniel Shiffman.
+
+The 2026 Organizer's Kit was created by Raphaël de Courville and Amy B. Woodman, with support from the Processing Foundation team, and the global Processing community. Special thanks to Roopa Vasudevan, Mathura M. Govindarajan, Xin Xin, and Roxana Hadad for their feedback and contributions.
+
+Some of this guide is inspired by [https://artandfeminism.org/](https://artandfeminism.org/).
+
+---
+
+*This Organizer's Kit is licensed under a [Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/deed.en).*
