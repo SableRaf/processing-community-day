@@ -1,23 +1,38 @@
 ---
-title: Suggested Team Roles
+title: Roles and Responsibilities
 section: Organizing Your Event
 order: 2
 description: Common areas of responsibility when sharing the work of hosting a PCD.
 ---
 
-Hosting a PCD is easier (and more fun!) when shared with others. You don't need to fill every role, as many organizers wear multiple hats, but these are some common areas of responsibility:
+This list is mostly there as a way to map out common responsibilities, and help you divide the work of hosting a PCD. Feel free to adapt it to your event concept and the size of your team.
 
-* Lead Organizer
-  * Holds the overall vision and keeps things moving. Coordinates across the team, tracks progress, and makes sure key decisions are made.
-* Program Curator
-  * Shapes the content of the event. This could include inviting speakers, organizing workshops, and designing the experience flow of the day.
-* Tech Lead
-  * Supports any technical needs like setting up projectors, sound, wifi, livestreaming, and thinking through tech needs to help facilitators prepare.
-* Volunteer Coordinator
-  * Recruits and supports volunteers. Helps assign roles for the day-of (registration, setup, wayfinding, parking, etc) and makes sure everyone knows what to do.
-* Safety Team
-  * Helps create a welcoming and respectful environment. Familiar with the Code of Conduct and available to support participants if issues arise.
-* Timekeeper
-  * Keeps the event running on schedule. Supports speakers and facilitators in staying on time so the day flows smoothly.
-* Comms / Promotion
-  * Shares the event with the community. This might include social media, local outreach, partnerships, creating the event page, and managing ticketing.
+You do not need one person for each responsibility. In fact, most PCDs do not have that many organizers. One person might take on several responsibilities, or several people might share one. 
+
+### Overall Coordination
+
+Keep track of the overall event and help things move forward. Coordinate across the team, track progress, and make sure key decisions are made.
+
+### Program
+
+Shape the content of the event. This could include inviting speakers, organizing workshops, and creating the schedule for the day.
+
+### Technical Support
+
+Take care of technical needs such as projectors, sound, Wi-Fi, and livestreaming. Work with speakers and facilitators ahead of time to understand what they need.
+
+### Volunteer Coordination
+
+Recruit and support volunteers. Assign day-of responsibilities such as registration, setup, wayfinding, and parking, and make sure everyone knows what they need to do.
+
+### Safety and Participant Support
+
+Help create a welcoming and respectful environment. Be familiar with the Code of Conduct and available to support participants if issues arise.
+
+### Timekeeping
+
+Help the event stay on schedule. Support speakers and facilitators in keeping to their allotted time so the day runs smoothly.
+
+### Communication and Promotion
+
+Share the event with the community. This could include social media, local outreach, partnerships, creating the event page, and managing ticketing.
