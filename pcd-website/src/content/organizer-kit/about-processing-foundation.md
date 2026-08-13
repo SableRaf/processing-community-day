@@ -8,6 +8,18 @@ Processing Community Day is coordinated by [the Processing Foundation](https://p
 
 More about the work of the Processing Foundation: [https://processingfoundation.report/](https://processingfoundation.report/)
 
+## About the Processing Foundation
+
+The Processing Foundation is a non-profit organization established in 2012. Our mission is to promote software learning within the arts, artistic learning within technology-related fields, and to celebrate the diverse communities that make these fields vibrant, liberatory, and innovative. 
+
+The Processing Foundation is specifically invested in expanding the communities of technology and the arts to support those who have not had equal access because of their race, gender, class, sexuality, immigration/documentation status, age, geographical location, and disability.
+
+We work toward our goals by developing and distributing a group of related software projects, which includes Processing and p5.js, and run programs and initiatives that support the communities around these projects. We also provide resources for educators, students, and artists to learn and teach creative coding.
+
+To read more about our mission, visit [processingfoundation.org](http://processingfoundation.org/). To learn about our activities, go to [processingfoundation.report](https://processingfoundation.report/).
+
+Consider joining our [mailing list](https://processingfoundation.myflodesk.com/newslettersubscription) to be informed of our activities.
+
 ## Processing Community Day Committee
 
 ### Mathura M. Govindarajan
@@ -28,6 +40,8 @@ Xin Xin (they/them) is a Taiwanese-American cultural producer exploring communit
 
 ## Disclaimer
 
-Each PCD is independently organized by a local team. The Processing Foundation is not responsible for the planning, execution, or safety of individual events. Organizers are solely responsible for their event and must ensure it complies with local laws, venue requirements, and safety standards.
+The Processing Foundation is not responsible for the planning, execution, or safety of individual events. Local organizers operate independently, and are solely responsible for their event. They must ensure it complies with local laws, venue requirements, and safety standards, and they must ensure that their event conforms to our [Safe Space Policy](/organize/code-of-conduct/).
+
+The Processing Foundation is not liable for any damages, losses, or injuries that may occur during a PCD event. Organizers are encouraged to obtain appropriate insurance coverage and take necessary precautions to ensure the safety and well-being of all participants.
 
 See also [Mentioning Processing Foundation](/organize/planning-your-event/promoting-your-event/#mentioning-processing-foundation) for the wording to use when you refer to PCD or the Foundation.
