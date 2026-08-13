@@ -5,13 +5,12 @@
  * Copyright (c) 2016 Patrick Marsceill, licensed under the MIT License.
  */
 
+@import "./prose.css";
 @import "./docs/tokens.css";
 @import "./docs/typography.css";
 @import "./docs/layout.css";
 @import "./docs/nav.css";
 @import "./docs/content.css";
-@import "./docs/code.css";
-@import "./docs/tables.css";
 @import "./docs/callouts.css";
 @import "./docs/components.css";
 @import "./docs/print.css";

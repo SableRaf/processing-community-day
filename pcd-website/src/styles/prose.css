@@ -1,3 +1,7 @@
+:where(.prose, .docs-prose) {
+  line-height: 1.5;
+}
+
 .prose {
   max-width: 68ch;
   margin: 0 auto;
@@ -32,20 +36,21 @@
   line-height: 1.25;
   letter-spacing: -0.01em;
   text-wrap: balance;
-  margin: var(--spacing-xl) 0 var(--spacing-sm);
+  margin-top: var(--spacing-xl);
+  margin-bottom: var(--spacing-sm);
 }
 
 .prose h3 {
   font-size: 1.0625rem;
-  margin: var(--spacing-lg) 0 var(--spacing-xs);
+  margin-top: var(--spacing-lg);
+  margin-bottom: var(--spacing-xs);
 }
 
-.prose p,
-.prose li {
+:where(.prose, .docs-prose) :is(p, li) {
   color: var(--color-text-muted);
 }
 
-.prose p {
+:where(.prose, .docs-prose) p {
   margin: 0 0 var(--spacing-md);
 }
 
@@ -61,11 +66,11 @@
   padding-left: 1.25rem;
 }
 
-.prose li {
+:where(.prose, .docs-prose) li {
   margin-bottom: var(--spacing-xs);
 }
 
-.prose a {
+:where(.prose, .docs-prose) a {
   color: var(--color-link);
   text-decoration-line: underline;
   text-decoration-color: var(--color-link-underline);
@@ -73,30 +78,152 @@
   text-underline-offset: 2px;
 }
 
-.prose a:hover {
+:where(.prose, .docs-prose) a:hover {
   text-decoration-color: var(--color-link-underline-hover);
 }
 
-.prose hr {
+:where(.prose, .docs-prose) hr {
   border: none;
   border-top: 1px solid var(--color-border);
   margin: var(--spacing-xl) 0;
 }
 
-.callout {
+:where(.prose, .docs-prose) blockquote {
+  margin: var(--spacing-md) 0;
+  padding: var(--sp-3, 0.75rem) var(--sp-5, 1.25rem);
+  color: var(--color-text-muted);
+  border-left: 0.25rem solid var(--color-primary);
+  background: var(--docs-sidebar-color);
+}
+
+:where(.prose, .docs-prose) blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+:where(.prose, .docs-prose) img {
+  max-width: 100%;
+  height: auto;
+}
+
+:where(.prose, .docs-prose) :not(pre) > code {
+  padding: 0.2em 0.15em;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.9em;
+  font-weight: 400;
+  background: #f5f2f6;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius, 0.25rem);
+}
+
+:where(.prose, .docs-prose) pre {
+  overflow-x: auto;
+  margin: 0 0 var(--sp-3, 0.75rem);
+  padding: var(--sp-3, 0.75rem);
+  font-size: var(--step-3, 0.875rem);
+  line-height: 1.5;
+  background: #f5f2f6;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius, 0.25rem);
+}
+
+:where(.prose, .docs-prose) pre code {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+:where(.prose, .docs-prose) .table-wrapper {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  margin: 0.5em 0 var(--sp-5, 1.25rem);
+  overflow-x: auto;
+  border-radius: var(--border-radius, 0.25rem);
+  box-shadow:
+    0 1px 2px rgb(0 0 0 / 0.12),
+    0 3px 10px rgb(0 0 0 / 0.08);
+}
+
+:where(.prose, .docs-prose) table {
+  display: table;
+  min-width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+:where(.prose, .docs-prose) :is(th, td) {
+  min-width: 7.5rem;
+  padding: var(--spacing-sm) var(--sp-3, 0.75rem);
+  font-size: var(--step-3, 0.875rem);
+  text-align: left;
+  background: var(--color-bg);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-border) 50%, transparent);
+  border-left: 1px solid var(--color-border);
+}
+
+:where(.prose, .docs-prose) :is(th, td):first-child {
+  border-left: 0;
+}
+
+:where(.prose, .docs-prose) tbody tr:last-child :is(th, td) {
+  border-bottom: 0;
+}
+
+:where(.prose, .docs-prose) :is(h2, h3, h4, h5, h6) {
+  position: relative;
+  margin-left: -1.4em;
+  padding-left: 1.4em;
+}
+
+:where(.prose, .docs-prose) .docs-heading-anchor {
+  position: absolute;
+  top: 0.15em;
+  left: 0.2em;
+  display: inline-flex;
+  align-items: center;
+  height: 1em;
+  opacity: 0;
+  color: var(--color-primary);
+  text-decoration: none;
+  pointer-events: none;
+}
+
+:where(.prose, .docs-prose) :is(h2, h3, h4, h5, h6):hover .docs-heading-anchor,
+:where(.prose, .docs-prose) .docs-heading-anchor:focus-visible,
+:where(.prose, .docs-prose) .docs-heading-anchor--copied {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+:where(.prose, .docs-prose) .docs-heading-anchor--copied {
+  color: var(--color-text);
+}
+
+@media (max-width: 30rem) {
+  :where(.prose, .docs-prose) :is(h2, h3, h4, h5, h6) {
+    margin-left: 0;
+    padding-left: 0;
+  }
+
+  :where(.prose, .docs-prose) .docs-heading-anchor {
+    display: none;
+  }
+}
+
+:where(.prose, .docs-prose) .callout {
   border: 1px solid var(--color-border);
   border-left: 3px solid var(--color-primary);
-  background: #faf7fb;
+  background: var(--docs-sidebar-color);
   padding: var(--spacing-md);
   margin: var(--spacing-lg) 0;
   font-size: 0.9375rem;
 }
 
-.callout p:last-child {
+:where(.prose, .docs-prose) .callout p:last-child {
   margin-bottom: 0;
 }
 
-.callout strong {
+:where(.prose, .docs-prose) .callout strong {
   color: var(--color-text);
 }
 

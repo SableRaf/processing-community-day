@@ -66,7 +66,7 @@ Event data lives in `src/content/events/<event-id>/`:
 
 `src/lib/nodes.ts` loads all events at Astro build time using `import.meta.glob()` + `getCollection('events')`, validates plus codes with `OpenLocationCode`, decodes lat/lng, and returns a sorted `Node[]` array passed as props to `<MapView>`.
 
-The global Markdown pipeline runs `rehype-table-wrapper`, which wraps rendered tables in `.table-wrapper`. Scope its presentation styles to `.docs-prose`, since the plugin applies to all Markdown collections.
+The global Markdown pipeline runs `rehype-table-wrapper` and `rehype-heading-anchors`, which respectively wrap rendered tables in `.table-wrapper` and add permalink anchors to h2–h6. Their presentation styles live in the shared `prose.css` layer, scoped to both `.prose` and `.docs-prose`, because both plugins apply to all Markdown collections.
 
 **If a plus_code is invalid or too short, the build fails with a clear error — this is intentional.**
 

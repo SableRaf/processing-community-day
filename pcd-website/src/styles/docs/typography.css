@@ -1,37 +1,11 @@
 .docs-prose {
   padding: var(--sp-7) 0 var(--sp-10);
-  line-height: 1.5;
 }
 /* Heading line-height is shared here; upstream also sets it in fs-6+ but that is redundant for our heading-only consumers. */
 .docs-prose :is(h1, h2, h3, h4, h5, h6) {
   line-height: 1.25;
   color: var(--color-text);
   text-wrap: balance;
-}
-.docs-prose :is(h2, h3, h4, h5, h6) {
-  position: relative;
-  scroll-margin-top: var(--sp-6);
-}
-.docs-heading-anchor {
-  position: absolute;
-  left: 0.2em;
-  display: inline-flex;
-  align-items: center;
-  height: 1em;
-  top: 0.15em;
-  opacity: 0;
-  text-decoration: none;
-  color: var(--color-primary);
-  pointer-events: none;
-}
-.docs-prose :is(h2, h3, h4, h5, h6):hover .docs-heading-anchor,
-.docs-heading-anchor:focus-visible,
-.docs-heading-anchor--copied {
-  opacity: 1;
-  pointer-events: auto;
-}
-.docs-heading-anchor--copied {
-  color: var(--color-text);
 }
 .docs-prose h1 {
   font-size: var(--step-8);
@@ -41,18 +15,21 @@
 }
 .docs-prose h2 {
   font-size: var(--step-6);
-  margin: 1.5em 0 0.25em;
+  margin-top: 1.5em;
+  margin-bottom: 0.25em;
 }
 .docs-prose h3 {
   font-size: var(--step-5);
-  margin: 1.5em 0 0.25em;
+  margin-top: 1.5em;
+  margin-bottom: 0.25em;
 }
 .docs-prose h4 {
   font-size: var(--step-2);
   font-weight: 400;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  margin: 1.5em 0 0.25em;
+  margin-top: 1.5em;
+  margin-bottom: 0.25em;
 }
 .docs-prose h4 code {
   text-transform: none;
@@ -62,10 +39,6 @@
 }
 .docs-prose h6 {
   font-size: var(--step-2);
-}
-.docs-prose :is(h2, h3, h4, h5, h6) {
-  margin-left: -1.4em;
-  padding-left: 1.4em;
 }
 .docs-prose .prose__eyebrow {
   font-size: var(--step-2);
@@ -85,7 +58,7 @@
   border-radius: var(--border-radius);
   padding: var(--sp-6);
   text-align: center;
-  color: #6b6b6b;
+  color: var(--color-text-subtle);
   font-size: var(--step-4);
   margin: var(--sp-6) 0;
 }

@@ -6,33 +6,12 @@
 .docs-prose :is(h1, h2, h3, h4, h5, h6) {
   scroll-margin-top: calc(var(--header-height) + var(--sp-4));
 }
-.docs-prose p {
-  margin: 0 0 var(--sp-4);
-  color: var(--color-text-muted);
-}
-.docs-prose a:not(.docs-pager__link) {
-  color: var(--color-link);
-  text-decoration-line: underline;
-  text-decoration-color: var(--color-link-underline);
-  text-decoration-thickness: 2px;
-  text-underline-offset: 2px;
-}
-.docs-prose a:not(.docs-pager__link):hover {
-  text-decoration-color: var(--color-link-underline-hover);
-}
-.docs-prose hr {
-  border: 0;
-  border-top: 1px solid var(--color-border);
-  margin: var(--sp-7) 0;
-}
 .docs-prose :is(ol, ul) {
   margin: 0.5em 0 var(--sp-4);
   padding-left: 1.5em;
 }
 .docs-prose li {
   position: relative;
-  margin-bottom: var(--sp-1);
-  color: var(--color-text-muted);
 }
 .docs-prose ol {
   list-style: none;
@@ -66,20 +45,6 @@
 .docs-prose .task-list-item::before,
 .docs-prose .docs-page-toc li::before {
   content: none;
-}
-.docs-prose blockquote {
-  margin: var(--sp-4) 0;
-  padding: var(--sp-3) var(--sp-5);
-  color: var(--color-text-muted);
-  border-left: 0.25rem solid var(--color-primary);
-  background: var(--docs-sidebar-color);
-}
-.docs-prose blockquote > :last-child {
-  margin-bottom: 0;
-}
-.docs-prose img {
-  max-width: 100%;
-  height: auto;
 }
 .docs-prose :is(h1, h2, h3, h4, h5, h6) + p {
   margin-top: 0;

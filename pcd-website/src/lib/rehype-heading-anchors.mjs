@@ -1,7 +1,7 @@
 import { visit } from 'unist-util-visit';
 import Slugger from 'github-slugger';
 
-const HEADING_TAGS = new Set(['h1', 'h2', 'h3', 'h4', 'h5', 'h6']);
+const HEADING_TAGS = new Set(['h2', 'h3', 'h4', 'h5', 'h6']);
 const rawNodeTypes = new Set(['text', 'raw', 'mdxTextExpression']);
 
 // bi:link-45deg (Bootstrap Icons), inlined so the anchor needs no icon font/JS framework.
