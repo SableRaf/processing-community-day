@@ -29,11 +29,7 @@ To get a better sense of what a PCD can look like, you can read past event recap
 * [PCD NYC](https://medium.com/@leeto/how-we-organized-processing-community-day-nyc-2019-162260f2340a) by [Lee Tusman](http://leetusman.com/)
 * [PCD Bangalore](https://medium.com/@mathuramgovindarajan/processing-day-bangalore-2019-9a6d4650158b) by [Mathura M Govindarajan](http://mathuramg.com/)
 
-We hosted two info sessions for interested organizers (links below). Both sessions cover similar ground, but each includes different former organizers sharing their experience. We recommend starting with the second session, then watching the discussion part of the first.
-
-PCD Info Session #1: [Watch the recording](https://us06web.zoom.us/rec/share/1WLi_Ztv6uwhUNBQWooIGGVXUfu37kRJ1g5zWQfBSAzc5tYSm9zbzUoZFJq3e-sf.b3j__DRYl1C4qsyx) (passcode: `*L%54Ah!`) or [GDrive link](https://drive.google.com/file/d/1eBGYfp8IT7k2f_pxqX7xNa_wCe6gjrYf/view)
-
-PCD Info Session #2: [Watch the recording](https://us06web.zoom.us/rec/share/RmtWwMjCPn-8yGeK3KPRhBXcb3ilBaYNbZQ-YC7kjMBZwAW1zl_awJrG0J1KR3CV.fICIcITlD4YWjk6W) (passcode: `W7Ki%rS+`) or [GDrive link](https://drive.google.com/file/d/1ePzIPl0zwiyCq9abdQ7huct00pvDA-RV/view?usp=drive_link)
+We hosted two info sessions for interested organizers. See the recordings on the [Info Sessions](/organize/resources/info-sessions/) page.
 
 ## What makes PCD 2026 special?
 

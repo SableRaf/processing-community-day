@@ -1,7 +1,7 @@
 ---
 title: Roles and Responsibilities
 section: Organizing Your Event
-order: 2
+order: 3
 description: Common areas of responsibility when sharing the work of hosting a PCD.
 ---
 

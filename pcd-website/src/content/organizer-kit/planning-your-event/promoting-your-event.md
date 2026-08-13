@@ -1,24 +1,19 @@
 ---
 title: Promoting Your Event
 section: Organizing Your Event
-order: 3
+order: 4
 description: Getting the word out, using PCD assets, and how to describe your event's relationship to the Processing Foundation.
 ---
 
 ## How to Promote Your PCD
 
-TBD
+You are welcome to promote your PCD event in any way that works for you and your local community. We recommend creating a social media presence and a website or event page to share information about your event. 
 
-* Press release
-* Announcement
-* Event page
-* Visual assets (logo, backgrounds, social templates)
-  * See the [Press Kit](https://drive.google.com/drive/folders/13p3OATRze7v5Vwo0TfLsdxTSyc1VOVk_?usp=drive_link)
+When posting, please tag Processing Foundation when posting on social media so that we can help promote your PCD.
 
-We will promote your event through our social media, and on the [interactive map](http://day.processing.org/). Please tag Processing Foundation when posting on social media so that we can help promote your PCD.
-
-* Instagram: [https://www.instagram.com/processingorg/](https://www.instagram.com/processingorg/)
-* Mastodon: [https://mastodon.social/@processingOrg](https://mastodon.social/@processingOrg)
+* Instagram: [@processingorg](https://www.instagram.com/processingorg/)
+* Mastodon: [@processingorg@mastodon.social](https://mastodon.social/@processingOrg)
+* LinkedIn: [Processing Foundation](https://www.linkedin.com/company/processing-foundation/)
 
 ## Logo Usage
 
@@ -28,5 +23,6 @@ Processing Community Day (PCD) [assets](https://drive.google.com/drive/folders/1
 
 When mentioning PCD or the Processing Foundation, please include the following wording:
 
-* *Processing Community Day is a global initiative of the Processing Foundation.*
-* *PCD @ {{Your City Name}} is organized independently by {{organizer(s) / organization}} and is not affiliated with the Processing Foundation.*
+> Processing Community Day is a global initiative of the Processing Foundation.
+
+> PCD @ {{Your City Name}} is organized independently by {{organizer(s) / organization}} and is not affiliated with the Processing Foundation.
