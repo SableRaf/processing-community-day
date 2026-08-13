@@ -1,15 +1,13 @@
 ---
-title: Photography and Video Guidelines
+title: Taking Photos
 section: Resources
 order: 6
 description: Consent, tips, and who should be behind the camera.
 ---
 
-You do not need to be a photographer to take good photos of your Processing Community Day (PCD). This guide is for organizers, volunteers, or participants who may end up taking photos with whatever camera or phone they have available.
+You do not need to be a photographer to take good photos of your Processing Community Day. The goal is simply to capture a record of the event to share the wider community. It doesn't need to be perfect!
 
-The goal is simply to capture a record of the event and to share with the Processing Foundation and the wider community. It doesn't need to be perfect!
-
-Using the tips below will help you get better results without needing much photography experience.
+This guide is for organizers, volunteers, or participants who may end up taking photos with whatever camera or phone they have available. Using the tips below will help you get better results without needing much photography experience.
 
 ## In brief
 
