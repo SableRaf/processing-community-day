@@ -9,7 +9,7 @@ description: Getting the word out, using PCD assets, and how to describe your ev
 
 You are welcome to promote your PCD event in any way that works for you and your local community. We recommend creating a social media presence and a website or event page to share information about your event. 
 
-When posting, please tag Processing Foundation when posting on social media so that we can help promote your PCD.
+When posting, consider tagging Processing Foundation when posting on social media so that we can help promote your PCD.
 
 * Instagram: [@processingorg](https://www.instagram.com/processingorg/)
 * Mastodon: [@processingorg@mastodon.social](https://mastodon.social/@processingOrg)
@@ -17,7 +17,7 @@ When posting, please tag Processing Foundation when posting on social media so t
 
 ## Logo Usage
 
-Processing Community Day (PCD) [assets](https://drive.google.com/drive/folders/13p3OATRze7v5Vwo0TfLsdxTSyc1VOVk_?usp=drive_link), including the [PCD 2026 logo](https://drive.google.com/drive/folders/1kOE-ay0xYna90KHVXsFskinQiPu5DfoJ?usp=drive_link), may be used to promote and document approved PCD events and related community activities. Please do not use the Processing Foundation name, logos, or trademarks in ways that could suggest an official partnership or endorsement without prior agreement.
+Processing Community Day (PCD) [assets](https://drive.google.com/drive/folders/13p3OATRze7v5Vwo0TfLsdxTSyc1VOVk_?usp=drive_link), including the [PCD 2026 logo](https://drive.google.com/drive/folders/1kOE-ay0xYna90KHVXsFskinQiPu5DfoJ?usp=drive_link), may be used to promote and document approved PCD events and related community activities. See the [Trademark policy](/trademark/) for how the Processing Foundation name, logos, and trademarks may be used.
 
 ## Mentioning Processing Foundation
 
@@ -26,3 +26,5 @@ When mentioning PCD or the Processing Foundation, please include the following w
 > Processing Community Day is a global initiative of the Processing Foundation.
 
 > PCD @ {{Your City Name}} is organized independently by {{organizer(s) / organization}} and is not affiliated with the Processing Foundation.
+
+We also appreciate an @ mention or link back to the [Processing Foundation website](https://processingfoundation.org) in your social media posts, website, or event materials, but this is not required.
