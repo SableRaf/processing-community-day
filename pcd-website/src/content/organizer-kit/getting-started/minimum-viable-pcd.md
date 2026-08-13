@@ -26,4 +26,4 @@ If you're feeling overwhelmed, ask yourself:
 * Which spaces are available and how many people will fit there?
 * What can I organize with the time and energy I have?
 
-If you need inspiration for activities to run at your PCD, check out the [Zine Library](/organize/activity-guides/zine-library/) which contains a collection of ready-to-run workshops and activities created by the community. You are also welcome to create your own activity guide and share it with the community. See [Contribute an Activity Guide](/organize/activity-guides/contribute-a-guide/) for more information.
+If you need inspiration for activities to run at your PCD, check out the [Activity Guides Library](/organize/activity-guides/zine-library/) which contains a collection of ready-to-run workshops and activities created by the community. You are also welcome to create your own activity guide and share it with the community. See [Contribute an Activity Guide](/organize/activity-guides/contribute-a-guide/) for more information.
