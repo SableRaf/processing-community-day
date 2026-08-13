@@ -5,8 +5,6 @@ order: 1
 description: Why organize a Processing Community Day, what happens at one, and who coordinates it.
 ---
 
-## Hello!
-
 Thank you for registering to organize Processing Community Day.
 
 We understand that it can take enormous physical and emotional effort to organize a community event, therefore we have compiled this Organizer's Kit to help you get things started.
@@ -51,6 +49,6 @@ Read about the history of Processing and p5.js:
 
 ## Who we are
 
-Processing Community Day is coordinated by [the Processing Foundation](https://processingfoundation.org/people), with support from contributors and volunteers across the Processing and p5.js community. See [About Processing Foundation](/organize/about-processing-foundation/) for the PCD Committee and the Foundation's role.
+Processing Community Day is coordinated by [the Processing Foundation](https://processingfoundation.org/people), with support from contributors and volunteers across the Processing and p5.js community. See [About Processing Foundation](/organize/about-processing-foundation/) for more information about the organization and its mission.
 
 Contact email: [day@processing.org](mailto:day@processing.org)
