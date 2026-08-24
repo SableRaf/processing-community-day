@@ -66,24 +66,12 @@ We do not manage or distribute tickets on behalf of local node events. As an org
 
 ## Will the Processing Foundation help promote my PCD?
 
-We will promote your event through our social media, and on the [interactive map](http://day.processing.org/). Please tag Processing Foundation when posting on social media so that we can help promote your PCD.
-
-* Instagram: [https://www.instagram.com/processingorg/](https://www.instagram.com/processingorg/)
-* Mastodon: [https://mastodon.social/@processingOrg](https://mastodon.social/@processingOrg)
-
-When mentioning PCD or the Processing Foundation, please include the following wording:
-
-* *Processing Community Day is a global initiative of the Processing Foundation.*
-* *PCD @ {{Your City Name}} is organized independently by {{organizer(s) / organization}} and is not affiliated with the Processing Foundation.*
+We will promote your event through our social media, and on the [interactive map](http://day.processing.org/). Please tag Processing Foundation when posting on social media so that we can help promote your PCD. For more information see [Promoting Your Event](/organize/planning-your-event/promoting-your-event/).
 
 ## Can alcohol be served at PCD?
 
 PCD is a social event, and in some cases drinks may be shared during breaks or meals. If alcohol is present, we encourage everyone to consume it responsibly. Please note that some venues may not allow alcohol at all. If you are driving, avoid drinking or keep your consumption very limited, and within the limits imposed by local laws.
 
-## How to promote my PCD?
-
-See the dedicated page on [Promoting Your Event](/organize/planning-your-event/promoting-your-event/).
-
 ## What if I have more questions?
 
-Ask questions on the [Processing Foundation forum](https://forum.processing.org/two/) or email us at [day@processing.org](mailto:day@processing.org).
+See the [Contact](/organize/contact/) page.
