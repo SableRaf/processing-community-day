@@ -1,0 +1,77 @@
+---
+import { Image } from 'astro:assets';
+import { render, type GetStaticPaths } from 'astro:content';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import ExternalLinkIcon from '../../components/ExternalLinkIcon.astro';
+import { LICENSE_URLS } from '../../lib/zine-metadata.js';
+import { loadZines, type Zine } from '../../lib/zines';
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const zines = await loadZines();
+  return zines.map((zine) => ({ params: { id: zine.id }, props: { zine } }));
+};
+
+const { zine } = Astro.props as { zine: Zine };
+const { Content } = await render(zine.entry);
+---
+
+<SiteLayout title={`${zine.title} — Processing Community Day`} description={zine.summary}>
+  <article class="prose activity-guide">
+    <p class="prose__eyebrow">Activity Guide</p>
+    <h1>{zine.title}</h1>
+    <Image class="activity-guide__cover" src={zine.cover} alt="" />
+
+    <dl class="activity-guide__metadata">
+      <div><dt>Topic</dt><dd>{zine.topic}</dd></div>
+      <div><dt>Created by</dt><dd>{zine.created_by}</dd></div>
+      {zine.format && <div><dt>Format</dt><dd>{zine.format}</dd></div>}
+      {zine.duration && <div><dt>Duration</dt><dd>{zine.duration}</dd></div>}
+      {zine.materials && <div><dt>Materials</dt><dd>{zine.materials}</dd></div>}
+    </dl>
+
+    <Content />
+
+    <h2>Downloads</h2>
+    <ul>
+      {zine.pdfs.map((pdf) => <li><a href={pdf.url}>{pdf.label}</a></li>)}
+    </ul>
+
+    <h2>Licence and attribution</h2>
+    <p>This guide is available under the <a href={LICENSE_URLS[zine.license]}>{zine.license} License</a>.</p>
+    {zine.attribution && <p><strong>Preferred attribution:</strong> {zine.attribution}</p>}
+
+    {zine.source_url && (
+      <p>
+        <a href={zine.source_url} target="_blank" rel="noopener noreferrer">
+          View the original submission <ExternalLinkIcon />
+        </a>
+      </p>
+    )}
+
+    <p><a href="/organize/activity-guides/library/">Back to the Activity Guide Library</a></p>
+  </article>
+</SiteLayout>
+
+<style>
+  .activity-guide__cover {
+    display: block;
+    width: 100%;
+    margin: 0 0 var(--spacing-lg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+  }
+
+  .activity-guide__metadata {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    gap: var(--spacing-sm) var(--spacing-lg);
+    margin: 0 0 var(--spacing-lg);
+    padding: var(--spacing-md);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+  }
+
+  .activity-guide__metadata div { min-width: 0; }
+  .activity-guide__metadata dt { font-size: 0.8125rem; font-weight: 600; color: var(--color-text-subtle); }
+  .activity-guide__metadata dd { margin: 0; color: var(--color-text); }
+</style>

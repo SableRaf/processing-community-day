@@ -34,12 +34,14 @@ node --test .github/scripts/event-issue-helpers.test.mjs
 node --test .github/scripts/process-new-event-issue.test.mjs
 node --test .github/scripts/process-edit-event-issue.test.mjs
 node --test .github/scripts/plus-code.test.mjs
+node --test .github/scripts/zines.test.mjs
+node --test .github/scripts/zine-build.test.mjs
 
 # Requires npm run build from pcd-website/ first:
 node --test .github/scripts/data-json.test.mjs
 ```
 
-Need to run the tests end-to-end? `./scripts/run-tests.sh` executes the helper, intake, and plus-code suites, builds the Astro site via `npm --prefix pcd-website run build`, and then runs `data-json.test.mjs` in sequence. Run this script from the repo root after installing dependencies so you get the full battery of checks in one shot.
+Need to run the tests end-to-end? `./scripts/run-tests.sh` executes the helper, intake, plus-code, and zine metadata suites; runs the zine fixture build; builds the Astro site via `npm --prefix pcd-website run build`; and then runs `data-json.test.mjs` in sequence. Run this script from the repo root after installing dependencies so you get the full battery of checks in one shot.
 
 No install needed — `open-location-code` is already available at `pcd-website/node_modules/`.
 
@@ -65,6 +67,10 @@ Event data lives in `src/content/events/<event-id>/`:
   - `uid:` values in frontmatter **must always be quoted** (`uid: "abc1234"`) because unquoted hex strings like `1e46977` are parsed as scientific notation by YAML, destroying the value.
 
 `src/lib/nodes.ts` loads all events at Astro build time using `import.meta.glob()` + `getCollection('events')`, validates plus codes with `OpenLocationCode`, decodes lat/lng, and returns a sorted `Node[]` array passed as props to `<MapView>`.
+
+Activity Guide zines live in `src/content/zines/<slug>/`, with `metadata.json`, `index.md`, a cover image, and one or more PDFs together in the same folder. `src/lib/zines.ts` joins the Astro collection, metadata, and assets at build time; `src/lib/zine-metadata.js` owns the strict schema and pure validation. Unlike events, zines must use `index.md` (not `content.md`) so Astro's glob loader makes the entry id equal to the folder slug. A zine may claim only one of the fixed topic slots, and no two zines may claim the same topic; violations fail the build.
+
+Zine PDFs are emitted from `src/` assets using `?url&no-inline`, so even small downloads become real files in `dist/`. `src/content/zines/` contains publishable zines only: it deliberately has no `draft` field because eager asset imports would make draft files public. Keep unfinished zines in `src/content/zines-drafts/`. Review PDFs for selectable text, logical reading order, document title and language, tagged headings where possible, alt text, and at least one screen-reader-friendly reading-order version.
 
 The global Markdown pipeline runs `rehype-table-wrapper` and `rehype-heading-anchors`, which respectively wrap rendered tables in `.table-wrapper` and add permalink anchors to h2–h6. Their presentation styles live in the shared `prose.css` layer, scoped to both `.prose` and `.docs-prose`, because both plugins apply to all Markdown collections.
 
@@ -104,7 +110,10 @@ The global Markdown pipeline runs `rehype-table-wrapper` and `rehype-heading-anc
 | `src/styles/docs/*.css` | Organizer Kit's modular Just-the-Docs-derived tokens, layout, navigation, and Markdown presentation styles |
 | `src/lib/rehype-table-wrapper.mjs` | Markdown rehype plugin that wraps rendered tables for horizontal scrolling |
 | `src/pages/data.json.ts` | Static JSON feed of confirmed events, served at /data.json |
-| `src/content.config.ts` | Astro content collection Zod schema for events |
+| `src/pages/activity-guide/[id].astro` | Standalone per-zine Activity Guide pages |
+| `src/lib/zines.ts` | Build-time zine loader and topic-slot mapping |
+| `src/lib/zine-metadata.js` | Zine schema and pure metadata/asset validation |
+| `src/content.config.ts` | Astro content collection Zod schemas for events, legal pages, Organizer Kit, and zines |
 | `src/config.ts` | Global static constants (contact email, etc.) |
 | `src/i18n/index.ts` | Creates the `vue-i18n` instance and exports `syncLocale()` |
 | `src/i18n/localeState.ts` | Reactive `currentLocale` ref, browser detection, localStorage persistence |

@@ -1,0 +1,18 @@
+{
+  "id": "zine-integration-test-fixture",
+  "title": "Loops with Shapes",
+  "topic": "Loops",
+  "created_by": "Integration Test Author",
+  "attribution": "Integration Test Author, CC BY-SA 4.0",
+  "format": "workshop",
+  "duration": "2 hours",
+  "materials": "Laptop and p5.js editor",
+  "summary": "A compact guide to making patterns with repeated shapes.",
+  "cover": "cover.png",
+  "pdfs": [
+    { "file": "guide-small.pdf", "label": "Read on screen" },
+    { "file": "guide-print.pdf", "label": "Print and fold" }
+  ],
+  "license": "CC BY-SA 4.0",
+  "source_url": "https://discourse.processing.org/t/activity-guide-integration-test/1"
+}

@@ -16,6 +16,32 @@ export const PCD_FORUM_NEW_TOPIC_URL =
     tags: "pcd",
   }).toString();
 
+export const ACTIVITY_GUIDE_SUBMISSION_TEMPLATE = `**Activity Title:**
+**Created by:**
+
+**Activity Format:** [workshop, discussion, creative exercise, group project, etc]
+
+**Topic:** [what does the activity explore?]
+**About the Activity:** [In 1-2 sentences, explain what participants will do and why a PCD organizer might choose this activity]
+
+**Duration:** [1 hour / 2 hours / 3 hours]
+**Tools or Materials needed:**
+
+**Link to Activity:**
+
+**License:** I confirm that I own or have permission to license this material, and I agree to publish my original contribution under the [CC BY-SA 4.0 License](https://creativecommons.org/licenses/by-sa/4.0/). I have identified any third-party material that is not covered by this license.
+
+**Preferred Attribution:**`;
+
+export const ACTIVITY_GUIDE_SUBMIT_URL =
+  "https://discourse.processing.org/new-topic?" +
+  new URLSearchParams({
+    title: 'Activity Guide Submission: [Title of your Activity]',
+    body: ACTIVITY_GUIDE_SUBMISSION_TEMPLATE,
+    category: 'community',
+    tags: 'pcd,zine',
+  }).toString();
+
 export const PCD_DISCORD_URL = "https://discord.gg/q5NksnwGsY";
 
 export interface SocialLink {

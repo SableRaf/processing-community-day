@@ -230,3 +230,102 @@
 .docs-prose .docs-page-credit a:hover {
   text-decoration-color: var(--color-link-underline-hover);
 }
+
+.docs-prose .guide-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-4);
+  margin: var(--sp-6) 0;
+  padding: 0;
+  list-style: none;
+}
+.docs-prose .guide-grid > li::before { content: none; }
+.docs-prose .guide-grid > li {
+  display: flex;
+  min-width: 0;
+  margin: 0;
+}
+.docs-prose .guide-grid .guide-card { width: 100%; }
+.guide-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 5.5rem;
+  overflow: hidden;
+  color: var(--color-text);
+  text-align: center;
+  text-decoration: none;
+  border-radius: var(--border-radius);
+}
+.guide-card--empty {
+  gap: var(--sp-1);
+  padding: var(--sp-4);
+  color: var(--color-text-subtle);
+  border: 1px dashed var(--color-border);
+}
+.guide-card--empty span,
+.guide-card__topic {
+  font-size: var(--step-2);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.guide-card--zine {
+  align-items: stretch;
+  border: 1px solid var(--color-border);
+}
+.guide-card--zine:hover {
+  border-color: var(--color-primary);
+  background: var(--docs-sidebar-color);
+}
+.guide-card--zine:focus-visible,
+.guide-card--add:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 3px;
+}
+.guide-card--zine img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+.guide-card__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-1);
+  padding: var(--sp-3);
+}
+.guide-card__summary {
+  color: var(--color-text-muted);
+  font-size: var(--step-2);
+}
+.guide-card--add {
+  flex-direction: row;
+  gap: var(--sp-2);
+  padding: var(--sp-4);
+  color: var(--color-link);
+  font-weight: 600;
+  border: 1px dashed var(--color-border);
+}
+.guide-card--add:hover {
+  border-color: var(--color-primary);
+  background: var(--docs-sidebar-color);
+}
+.guide-card__plus {
+  font-size: var(--step-7);
+  font-weight: 300;
+  line-height: 1;
+}
+.guide-card--add svg { flex: 0 0 auto; }
+.activity-guide-submit { margin-top: var(--sp-5); }
+.activity-guide-submit .btn { display: inline-flex; align-items: center; gap: var(--sp-2); }
+
+@media (min-width: 30rem) {
+  .docs-prose .guide-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (min-width: 66.5rem) {
+  .docs-prose .guide-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}

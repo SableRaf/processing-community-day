@@ -74,9 +74,22 @@ These tests cover the shared pure functions extracted into `event-issue-helpers.
 
 ---
 
+## Activity Guide zines
+
+**Files:** `.github/scripts/zines.test.mjs`, `.github/scripts/zine-build.test.mjs`
+**Run:** `node --test .github/scripts/zines.test.mjs` and `node --test .github/scripts/zine-build.test.mjs`
+**Requires:** The metadata suite uses the locally installed Astro dependency. The build suite owns a temporary fixture zine, builds the site, verifies emitted cover/PDF URLs and cleans up its fixture.
+
+| Suite | Cases |
+|---|---|
+| `zines.test.mjs` | Schema, URL safety, draft rejection, identity, topic/id uniqueness, and asset validation |
+| `zine-build.test.mjs` | Populated collection routes, labelled PDF downloads emitted as files, cover emission, source link, topic replacement, and stable 12-card grid |
+
+---
+
 ## Single-command test run
 
-Run `./scripts/run-tests.sh` from the repo root after installing dependencies (`pcd-website` already has `node_modules/` from `npm install`). The script executes the helper, intake, and plus-code suites, then builds the Astro site (`npm run build` inside `pcd-website/`) before running `data-json.test.mjs`. Use this single command whenever you want to verify the full test battery end to end.
+Run `./scripts/run-tests.sh` from the repo root after installing dependencies (`pcd-website` already has `node_modules/` from `npm install`). The script executes the helper, intake, plus-code, and zine metadata suites; runs the zine fixture build; then builds the Astro site (`npm run build` inside `pcd-website/`) before running `data-json.test.mjs`. Use this single command whenever you want to verify the full test battery end to end.
 
 ---
 

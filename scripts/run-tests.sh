@@ -10,12 +10,16 @@ tests=(
   ".github/scripts/process-new-event-issue.test.mjs"
   ".github/scripts/process-edit-event-issue.test.mjs"
   ".github/scripts/plus-code.test.mjs"
+  ".github/scripts/zines.test.mjs"
 )
 
 for test in "${tests[@]}"; do
   printf '\n=== %s ===\n' "$test"
   node --test "$test"
 done
+
+printf '\n=== .github/scripts/zine-build.test.mjs ===\n'
+node --test ".github/scripts/zine-build.test.mjs"
 
 printf '\n=== Build data.json dependencies ===\n'
 npm --prefix "${root_dir}/pcd-website" run build

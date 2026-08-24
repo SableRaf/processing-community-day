@@ -3,6 +3,9 @@ import { getCollection, render } from 'astro:content';
 import type { GetStaticPaths } from 'astro';
 import DocsLayout from '../../layouts/DocsLayout.astro';
 import { flattenKitNav, getKitNav } from '../../config/organizer-kit-nav';
+import { ACTIVITY_GUIDE_SUBMIT_URL } from '../../config';
+import ActivityGuideGrid from '../../components/ActivityGuideGrid.astro';
+import ActivityGuideSubmitButton from '../../components/ActivityGuideSubmitButton.astro';
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const entries = await getCollection('organizerKit', (entry) => !entry.data.draft);
@@ -24,7 +27,11 @@ const prev = position > 0 ? ordered[position - 1] : undefined;
 const next = position >= 0 && position < ordered.length - 1 ? ordered[position + 1] : undefined;
 
 const editHref = `https://github.com/processing/processing-community-day/edit/main/pcd-website/src/content/organizer-kit/${entry.id}.md`;
-const markdown = `# ${entry.data.title}\n\n${entry.body?.trim() ?? ''}\n`;
+const SUBMIT_PAGES = new Set(['activity-guides/library', 'activity-guides/contribute-a-guide']);
+const markdownSuffix = SUBMIT_PAGES.has(entry.id)
+  ? `\n\n[Submit an activity guide](${ACTIVITY_GUIDE_SUBMIT_URL})\n`
+  : '';
+const markdown = `# ${entry.data.title}\n\n${entry.body?.trim() ?? ''}\n${markdownSuffix}`;
 ---
 
 <DocsLayout
@@ -35,6 +42,8 @@ const markdown = `# ${entry.data.title}\n\n${entry.body?.trim() ?? ''}\n`;
   markdown={markdown}
 >
   <Content />
+  {entry.id === 'activity-guides/library' && <ActivityGuideGrid />}
+  {entry.id === 'activity-guides/contribute-a-guide' && <ActivityGuideSubmitButton />}
 
   <a class="docs-back-to-top" href="#main">↑ Back to top</a>
 

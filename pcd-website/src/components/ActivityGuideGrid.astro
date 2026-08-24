@@ -1,0 +1,41 @@
+---
+import { Image } from 'astro:assets';
+import { ACTIVITY_GUIDE_SUBMIT_URL } from '../config';
+import { ZINE_TOPICS } from '../lib/zine-metadata.js';
+import { loadZinesByTopic } from '../lib/zines';
+import ExternalLinkIcon from './ExternalLinkIcon.astro';
+
+const zinesByTopic = await loadZinesByTopic();
+---
+
+<ul class="guide-grid">
+  {ZINE_TOPICS.map((topic) => {
+    const zine = zinesByTopic.get(topic);
+    return zine ? (
+      <li>
+        <a class="guide-card guide-card--zine" href={zine.href}>
+          <Image src={zine.cover} alt="" />
+          <span class="guide-card__body">
+            <strong>{zine.title}</strong>
+            <span class="guide-card__topic">{topic}</span>
+            <span class="guide-card__summary">{zine.summary}</span>
+          </span>
+        </a>
+      </li>
+    ) : (
+      <li>
+        <span class="guide-card guide-card--empty">
+          <strong>{topic}</strong>
+          <span>Guide wanted</span>
+        </span>
+      </li>
+    );
+  })}
+  <li>
+    <a class="guide-card guide-card--add" href={ACTIVITY_GUIDE_SUBMIT_URL} target="_blank" rel="noopener noreferrer">
+      <span class="guide-card__plus" aria-hidden="true">+</span>
+      <span>Submit a guide</span>
+      <ExternalLinkIcon />
+    </a>
+  </li>
+</ul>
