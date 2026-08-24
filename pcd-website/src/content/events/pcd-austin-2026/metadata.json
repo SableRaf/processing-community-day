@@ -1,14 +1,18 @@
 {
   "id": "pcd-austin-2026",
   "uid": "32a9f90",
-  "organizers": [],
+  "organizers": [
+    {
+      "name": "Cathryn Ploehn"
+    }
+  ],
   "primary_contact": {
     "name": "Cathryn Ploehn",
     "email": "cathryn.ploehn@utexas.edu"
   },
-  "organization_name": "",
+  "organization_name": "The University of Texas at Austin, Department of Design",
   "organization_url": "",
-  "organization_type": "",
+  "organization_type": "School, university, library",
   "online_event": false,
   "event_url": "",
   "event_name": "PCD @ Austin",
@@ -16,7 +20,8 @@
     "address": "",
     "plus_code": "862477Q6+GW5"
   },
-  "event_date": "",
+  "event_date": "2026-10-17",
+  "event_end_date": "2026-10-17",
   "event_start_time": "",
   "event_end_time": "",
   "event_short_description": "",
