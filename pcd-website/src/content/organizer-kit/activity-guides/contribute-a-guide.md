@@ -3,6 +3,7 @@ title: Contribute an Activity Guide
 section: Activity Guides
 order: 2
 description: Instructions for creating and submitting a zine to the PCD Activity Guide Library.
+draft: true
 ---
 
 ## Contribute an Activity Guide

@@ -9,4 +9,4 @@ Activity Guides are community-created zines that you can use to facilitate a ses
 
 An Activity Guide may lead a hands-on workshop, creative exercise, discussion, collaborative experiment, or another kind of group or individual activity. Each zine is self-contained and designed for a 1-3 hour session.
 
-Browse the collection and choose a guide that fits your community’s interest, the amount of time available, and your participants’ experience levels. You can use a guide exactly as written or adapt it for your local context, as permitted by its [CC BY-SA 4.0 License](https://creativecommons.org/licenses/by-sa/4.0/).
+*Coming soon, we will have a library of Activity Guides that you can browse, and contribute to. Please check back for updates.*
