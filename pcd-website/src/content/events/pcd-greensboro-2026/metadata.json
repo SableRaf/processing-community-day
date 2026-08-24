@@ -1,26 +1,35 @@
 {
   "id": "pcd-greensboro-2026",
   "uid": "769687e",
-  "organizers": [],
+  "organizers": [
+    {
+      "name": "Leilei Xia"
+    }
+  ],
   "primary_contact": {
     "name": "Leilei Xia",
     "email": "leileixiawork@gmail.com"
   },
-  "organization_name": "",
+  "organization_name": "University of North Carolina Greensboro",
   "organization_url": "",
   "organization_type": "",
   "online_event": false,
   "event_url": "",
   "event_name": "PCD @ Greensboro",
   "event_location": {
-    "address": "",
-    "plus_code": "8782358V+56"
+    "address": "The Jeanne Tannenbaum Center for Creative Practice,\n842 W Gate City Blvd, Greensboro, NC",
+    "plus_code": "8782357W+H3"
   },
-  "event_date": "",
-  "event_start_time": "",
-  "event_end_time": "",
+  "event_date": "2026-11-06",
+  "event_end_date": "2026-11-06",
+  "event_start_time": "15:00",
+  "event_end_time": "18:00",
   "event_short_description": "",
-  "event_activities": [],
+  "event_activities": [
+    "Hands-on workshops",
+    "Creative coding jams or hack sessions",
+    "Student project presentations"
+  ],
   "event_page_url": "",
   "forum_thread_url": "https://discourse.processing.org/t/pcd-greensboro-2026/48142",
   "city": "Greensboro",
