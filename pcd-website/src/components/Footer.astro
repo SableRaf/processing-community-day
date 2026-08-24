@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import { PCD_EMAIL, PCD_FORUM_THREAD_URL, PCD_DISCORD_URL, SOCIAL_LINKS } from '../config';
 import { SPONSORS } from '../config/sponsors';
 import ExternalLinkIcon from './ExternalLinkIcon.astro';
@@ -46,7 +47,11 @@ const UTILITY_LINKS = [
       <h2>Sponsors</h2>
       <ul class="sponsor-list">
         {SPONSORS.map((sponsor) => (
-          <li><a class="sponsor-logo" href={sponsor.href}>{sponsor.name}</a></li>
+          <li>
+            <a class="sponsor-logo" href={sponsor.href} aria-label={sponsor.name}>
+              <Image src={sponsor.logo} alt={sponsor.name} />
+            </a>
+          </li>
         ))}
       </ul>
     </div>
@@ -182,15 +187,17 @@ const UTILITY_LINKS = [
   .sponsor-logo {
     display: inline-flex;
     align-items: center;
-    height: 30px;
-    padding: 0 0.625rem;
+    padding: 0.5rem 0.625rem;
     border: 1px solid var(--color-border);
     border-radius: 4px;
     background: #fff;
-    font-size: 0.8125rem;
-    font-weight: 600;
-    color: var(--color-text-muted);
-    letter-spacing: 0.01em;
+  }
+
+  .sponsor-logo img {
+    display: block;
+    width: 200px;
+    max-width: 100%;
+    height: auto;
   }
 
   .sponsor-logo:hover {
