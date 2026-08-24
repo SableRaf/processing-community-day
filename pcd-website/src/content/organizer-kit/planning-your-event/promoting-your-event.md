@@ -28,3 +28,7 @@ When mentioning PCD or the Processing Foundation, please include the following w
 > PCD @ {{Your City Name}} is organized independently by {{organizer(s) / organization}} and is not affiliated with the Processing Foundation.
 
 We also appreciate an @ mention or link back to the [Processing Foundation website](https://processingfoundation.org) in your social media posts, website, or event materials, but this is not required.
+
+## Showcase The Work of Your Community
+
+PCD is also an opportunity to highlight the work being made with Processing and p5.js in your local community. You can add projects from your community to the Processing Foundation’s [Powered by Processing Java](https://www.are.na/processing-foundation-49e0uryu3lq/powered-by-processing-java) and [Powered by p5.js](https://www.are.na/processing-foundation-49e0uryu3lq/powered-by-p5-js) collections on Are.na.
