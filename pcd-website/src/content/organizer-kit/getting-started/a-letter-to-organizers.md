@@ -21,8 +21,8 @@ If you had told me back then, I would be part of the Processing Foundation, I wo
 
 Whether you are a seasoned organizer or this is your first time, I want to thank you for taking the time to organize a PCD in your community. Your efforts help bring new people into the world of creative coding, and make it more accessible to those who may not have had the opportunity to explore it otherwise. 
 
-I hope you enjoy the process of organizing your event, and that you find it as rewarding as I have.
+I hope you'll enjoy the process of organizing your event!
 
-Raphaël de Courville, 
-
-Processing Community Lead and PCD @ Worldwide Coordinator
+Cheers,<br>
+Raphaël de Courville<br>
+PCD @ Worldwide Coordinator
