@@ -82,8 +82,8 @@ PCD is a social event, and in some cases drinks may be shared during breaks or m
 
 ## How to promote my PCD?
 
-TBD
+See the dedicated page on [Promoting Your Event](/organize/planning-your-event/promoting-your-event/).
 
 ## What if I have more questions?
 
-*(forum thread or email)*
+Ask questions on the [Processing Foundation forum](https://forum.processing.org/two/) or email us at [day@processing.org](mailto:day@processing.org).
