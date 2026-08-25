@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import { ACTIVITY_GUIDE_SUBMIT_URL } from '../config';
+import { ACTIVITY_GUIDE_SUBMIT_URL, activityGuideSubmitUrl } from '../config';
 import { loadZineCards } from '../lib/zines';
 import ExternalLinkIcon from './ExternalLinkIcon.astro';
 
@@ -11,10 +11,17 @@ const cards = await loadZineCards();
   {cards.map((card) => {
     return card.placeholder ? (
       <li>
-        <span class="guide-card guide-card--empty">
-          <strong>{card.title}</strong>
-          <span>Guide wanted</span>
-        </span>
+        <div class="guide-card guide-card--empty">
+          <span class="guide-card__empty-title"><strong>{card.title}</strong></span>
+          <a
+            class="guide-card__submit"
+            href={activityGuideSubmitUrl(card.title)}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Submit a zine <ExternalLinkIcon />
+          </a>
+        </div>
       </li>
     ) : (
       <li>

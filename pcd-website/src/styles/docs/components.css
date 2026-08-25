@@ -251,6 +251,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  aspect-ratio: 210 / 297;
   min-height: 5.5rem;
   overflow: hidden;
   color: var(--color-text);
@@ -259,16 +260,24 @@
   border-radius: var(--border-radius);
 }
 .guide-card--empty {
-  gap: var(--sp-1);
+  justify-content: flex-start;
+  gap: var(--sp-3);
   padding: var(--sp-4);
   color: var(--color-text-subtle);
   border: 1px dashed var(--color-border);
 }
-.guide-card--empty span {
+.guide-card__empty-title {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+}
+.guide-card__submit {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
   font-size: var(--step-2);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  white-space: nowrap;
 }
 .guide-card--zine {
   align-items: stretch;

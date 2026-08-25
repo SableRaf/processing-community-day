@@ -66,7 +66,17 @@ test('a populated zine collection emits linked assets and renders entries in fro
       library.indexOf('<strong>Randomness</strong>') < library.indexOf(`/activity-guide/${SLUG}/`),
       'order 12 should render before order 13',
     );
-    assert.equal((library.match(/Guide wanted/g) ?? []).length, 11, 'each placeholder file should render a wanted card');
+    assert.equal((library.match(/Submit a zine/g) ?? []).length, 11, 'each placeholder should render a submission button');
+    assert.doesNotMatch(library, /Guide wanted/);
+    const variablesLink = library.match(/<strong>Variables<\/strong>[\s\S]*?<a[^>]+href="([^"]+)"/);
+    assert.ok(variablesLink, 'the Variables placeholder should have a submission link');
+    const variablesUrl = new URL(variablesLink[1].replaceAll('&amp;', '&'));
+    assert.equal(variablesUrl.searchParams.get('title'), 'Activity Guide Submission: Variables');
+    assert.match(
+      variablesUrl.searchParams.get('body') ?? '',
+      /\*\*Title:\*\* Variables/,
+      'a placeholder submission should pre-populate its topic in the submission body',
+    );
     assert.equal(existsSync(join(DIST, 'activity-guide/variables/index.html')), false, 'placeholders should not get detail pages');
     const grid = library.match(/<ul class="guide-grid">([\s\S]*?)<\/ul>/);
     assert.ok(grid, 'the library should render its grid');

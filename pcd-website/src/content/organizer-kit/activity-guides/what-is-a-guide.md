@@ -23,7 +23,7 @@ Your guide should include:
 
 For a tutorial-style activity, you may also want to include:
 - step-by-step instructions
-- example code or templates (can be links too)
+- example sketches or short code snippets
 - suggested exercises or challenges
 
 For a discussion or collaborative activity, you may also want to include:

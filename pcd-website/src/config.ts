@@ -39,14 +39,21 @@ export const ACTIVITY_GUIDE_SUBMISSION_TEMPLATE = `*This post uses the submissio
 
 
 
-export const ACTIVITY_GUIDE_SUBMIT_URL =
-  "https://discourse.processing.org/new-topic?" +
-  new URLSearchParams({
-    title: 'Activity Guide Submission: [Title of your Activity]',
-    body: ACTIVITY_GUIDE_SUBMISSION_TEMPLATE,
-    category: 'community',
-    tags: 'pcd,zine',
-  }).toString();
+export function activityGuideSubmitUrl(topic?: string): string {
+  return "https://discourse.processing.org/new-topic?" +
+    new URLSearchParams({
+      title: topic
+        ? `Activity Guide Submission: ${topic}`
+        : 'Activity Guide Submission: [Title of your Activity]',
+      body: topic
+        ? ACTIVITY_GUIDE_SUBMISSION_TEMPLATE.replace('**Title:**', `**Title:** ${topic}`)
+        : ACTIVITY_GUIDE_SUBMISSION_TEMPLATE,
+      category: 'community',
+      tags: 'pcd,zine',
+    }).toString();
+}
+
+export const ACTIVITY_GUIDE_SUBMIT_URL = activityGuideSubmitUrl();
 
 export const PCD_DISCORD_URL = "https://discord.gg/q5NksnwGsY";
 
