@@ -264,8 +264,7 @@
   color: var(--color-text-subtle);
   border: 1px dashed var(--color-border);
 }
-.guide-card--empty span,
-.guide-card__topic {
+.guide-card--empty span {
   font-size: var(--step-2);
   font-weight: 600;
   text-transform: uppercase;
@@ -289,6 +288,17 @@
   width: 100%;
   aspect-ratio: 4 / 3;
   object-fit: cover;
+}
+.guide-card__cover-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  padding: var(--sp-4);
+  color: var(--color-text-subtle);
+  font-weight: 600;
+  background: var(--color-border);
 }
 .guide-card__body {
   display: flex;

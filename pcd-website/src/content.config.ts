@@ -40,7 +40,15 @@ const zines = defineCollection({
   // One flat folder per zine. `index.md` makes the collection entry id the
   // folder slug; `content.md` would instead produce `<slug>/content`.
   loader: glob({ base: './src/content/zines', pattern: '*/index.md' }),
-  schema: z.object({ id: z.string() }),
+  schema: z.object({
+    id: z.string(),
+    order: z.number().int().nonnegative(),
+    placeholder: z.boolean().default(false),
+    title: z.string().trim().min(1).optional(),
+  }).refine((data) => !data.placeholder || Boolean(data.title), {
+    message: 'Placeholder zines require a title',
+    path: ['title'],
+  }),
 });
 
 export const collections = {

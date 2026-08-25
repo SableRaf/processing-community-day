@@ -2,7 +2,9 @@
 import { Image } from 'astro:assets';
 import { render, type GetStaticPaths } from 'astro:content';
 import SiteLayout from '../../layouts/SiteLayout.astro';
+import BackButton from '../../components/BackButton.astro';
 import ExternalLinkIcon from '../../components/ExternalLinkIcon.astro';
+import ZineDownloads from '../../components/ZineDownloads.astro';
 import { LICENSE_URLS } from '../../lib/zine-metadata.js';
 import { loadZines, type Zine } from '../../lib/zines';
 
@@ -17,9 +19,12 @@ const { Content } = await render(zine.entry);
 
 <SiteLayout title={`${zine.title} — Processing Community Day`} description={zine.summary}>
   <article class="prose activity-guide">
+    <BackButton href="/organize/activity-guides/library/" />
     <p class="prose__eyebrow">Activity Guide</p>
     <h1>{zine.title}</h1>
-    <Image class="activity-guide__cover" src={zine.cover} alt="" />
+    {zine.cover
+      ? <Image class="activity-guide__cover" src={zine.cover} alt="" />
+      : <div class="activity-guide__cover activity-guide__cover--placeholder" aria-hidden="true">{zine.title}</div>}
 
     <dl class="activity-guide__metadata">
       <div><dt>Topic</dt><dd>{zine.topic}</dd></div>
@@ -31,14 +36,15 @@ const { Content } = await render(zine.entry);
 
     <Content />
 
-    <h2>Downloads</h2>
-    <ul>
-      {zine.pdfs.map((pdf) => <li><a href={pdf.url}>{pdf.label}</a></li>)}
-    </ul>
+    <ZineDownloads downloads={zine.pdfs} />
 
-    <h2>Licence and attribution</h2>
-    <p>This guide is available under the <a href={LICENSE_URLS[zine.license]}>{zine.license} License</a>.</p>
-    {zine.attribution && <p><strong>Preferred attribution:</strong> {zine.attribution}</p>}
+    {(zine.license || zine.attribution) && (
+      <>
+        <h2>Licence and attribution</h2>
+        {zine.license && <p>This guide is available under the <a href={LICENSE_URLS[zine.license]}>{zine.license} License</a>.</p>}
+        {zine.attribution && <p><strong>Preferred attribution:</strong> {zine.attribution}</p>}
+      </>
+    )}
 
     {zine.source_url && (
       <p>
@@ -47,8 +53,6 @@ const { Content } = await render(zine.entry);
         </a>
       </p>
     )}
-
-    <p><a href="/organize/activity-guides/library/">Back to the Activity Guide Library</a></p>
   </article>
 </SiteLayout>
 
@@ -59,6 +63,19 @@ const { Content } = await render(zine.entry);
     margin: 0 0 var(--spacing-lg);
     border: 1px solid var(--color-border);
     border-radius: var(--border-radius);
+  }
+
+  .activity-guide__cover--placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 4 / 3;
+    padding: var(--spacing-lg);
+    color: var(--color-text-subtle);
+    font-size: clamp(1.5rem, 5vw, 3rem);
+    font-weight: 600;
+    text-align: center;
+    background: var(--color-border);
   }
 
   .activity-guide__metadata {

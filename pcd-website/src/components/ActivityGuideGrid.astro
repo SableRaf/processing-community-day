@@ -1,33 +1,32 @@
 ---
 import { Image } from 'astro:assets';
 import { ACTIVITY_GUIDE_SUBMIT_URL } from '../config';
-import { ZINE_TOPICS } from '../lib/zine-metadata.js';
-import { loadZinesByTopic } from '../lib/zines';
+import { loadZineCards } from '../lib/zines';
 import ExternalLinkIcon from './ExternalLinkIcon.astro';
 
-const zinesByTopic = await loadZinesByTopic();
+const cards = await loadZineCards();
 ---
 
 <ul class="guide-grid">
-  {ZINE_TOPICS.map((topic) => {
-    const zine = zinesByTopic.get(topic);
-    return zine ? (
+  {cards.map((card) => {
+    return card.placeholder ? (
       <li>
-        <a class="guide-card guide-card--zine" href={zine.href}>
-          <Image src={zine.cover} alt="" />
-          <span class="guide-card__body">
-            <strong>{zine.title}</strong>
-            <span class="guide-card__topic">{topic}</span>
-            <span class="guide-card__summary">{zine.summary}</span>
-          </span>
-        </a>
+        <span class="guide-card guide-card--empty">
+          <strong>{card.title}</strong>
+          <span>Guide wanted</span>
+        </span>
       </li>
     ) : (
       <li>
-        <span class="guide-card guide-card--empty">
-          <strong>{topic}</strong>
-          <span>Guide wanted</span>
+        <a class="guide-card guide-card--zine" href={card.href}>
+          {card.cover
+            ? <Image src={card.cover} alt="" />
+          : <span class="guide-card__cover-placeholder" aria-hidden="true">{card.title}</span>}
+        <span class="guide-card__body">
+          <strong>{card.title}</strong>
+          <span class="guide-card__summary">{card.summary}</span>
         </span>
+        </a>
       </li>
     );
   })}

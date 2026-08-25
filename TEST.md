@@ -82,8 +82,8 @@ These tests cover the shared pure functions extracted into `event-issue-helpers.
 
 | Suite | Cases |
 |---|---|
-| `zines.test.mjs` | Schema, URL safety, draft rejection, identity, topic/id uniqueness, and asset validation |
-| `zine-build.test.mjs` | Populated collection routes, labelled PDF downloads emitted as files, cover emission, source link, topic replacement, and stable 12-card grid |
+| `zines.test.mjs` | Schema, URL safety, draft rejection, identity/id uniqueness, optional covers, external downloads, and asset validation |
+| `zine-build.test.mjs` | Published and placeholder cards loaded from files, frontmatter ordering, placeholder route exclusion, download metadata, cover/fallback rendering, emitted local assets, and source links |
 
 ---
 

@@ -68,7 +68,7 @@ Event data lives in `src/content/events/<event-id>/`:
 
 `src/lib/nodes.ts` loads all events at Astro build time using `import.meta.glob()` + `getCollection('events')`, validates plus codes with `OpenLocationCode`, decodes lat/lng, and returns a sorted `Node[]` array passed as props to `<MapView>`.
 
-Activity Guide zines live in `src/content/zines/<slug>/`, with `metadata.json`, `index.md`, a cover image, and one or more PDFs together in the same folder. `src/lib/zines.ts` joins the Astro collection, metadata, and assets at build time; `src/lib/zine-metadata.js` owns the strict schema and pure validation. Unlike events, zines must use `index.md` (not `content.md`) so Astro's glob loader makes the entry id equal to the folder slug. A zine may claim only one of the fixed topic slots, and no two zines may claim the same topic; violations fail the build.
+Activity Guide cards live in `src/content/zines/<slug>/` and the library grid is built dynamically from every `*/index.md`, sorted by its required numeric `order` frontmatter. Published zines set `placeholder: false` implicitly and pair `index.md` with `metadata.json`, an optional cover image, and one or more PDF downloads. Downloads may be local sibling PDF assets or external http(s) URLs; metadata supplies the human-readable file size (and the filename for external files) used by the shared download rows. Placeholder topics contain only `index.md` with `title`, `order`, and `placeholder: true`; they render “Guide wanted” cards and do not generate detail pages. `src/lib/zines.ts` joins the Astro collection, metadata, and assets at build time; `src/lib/zine-metadata.js` owns the strict published-zine schema and pure validation. Zines must use `index.md` (not `content.md`) so Astro's glob loader makes the entry id equal to the folder slug. A published zine without a cover renders a grey title fallback in the library and on its detail page.
 
 Zine PDFs are emitted from `src/` assets using `?url&no-inline`, so even small downloads become real files in `dist/`. `src/content/zines/` contains publishable zines only: it deliberately has no `draft` field because eager asset imports would make draft files public. Keep unfinished zines in `src/content/zines-drafts/`. Review PDFs for selectable text, logical reading order, document title and language, tagged headings where possible, alt text, and at least one screen-reader-friendly reading-order version.
 
@@ -93,7 +93,9 @@ The global Markdown pipeline runs `rehype-table-wrapper` and `rehype-heading-anc
 | `src/components/MapView.vue` | Leaflet map, marker clustering, keyboard shortcuts |
 | `src/components/NodePanel.vue` | Slide-in event detail panel with minimap, calendar links, share button |
 | `src/components/LanguageSwitcher.vue` | Language selector dropdown in the top bar |
+| `src/components/BackButton.astro` | Reusable button-style link for navigating from a detail page back to its parent listing |
 | `src/components/CopyMarkdownButton.astro` | Copies an Organizer Kit page as Markdown with accessible success/error feedback |
+| `src/components/ZineDownloads.astro` | Renders zine download rows with a button, filename, and human-readable file size |
 | `src/components/Header.astro` | Shared fixed site header and primary navigation |
 | `src/components/Footer.astro` | Shared site footer, policy links, community links, and sponsors |
 | `src/layouts/BaseLayout.astro` | Shared HTML document shell and metadata |

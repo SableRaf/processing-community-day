@@ -1,29 +1,40 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import type { ImageMetadata } from 'astro';
 import {
-  assertIdentity, assertUniqueIds, assertUniqueTopics, parseZineMetadata,
-  resolveZineAssets, type ZineLicense, type ZineTopic,
+  assertIdentity, assertUniqueIds, parseZineMetadata,
+  resolveZineAssets, type ZineLicense,
 } from './zine-metadata.js';
 
 interface MetadataModule { default: unknown }
 
 export interface Zine {
   id: string;
+  order: number;
+  placeholder: false;
   title: string;
-  topic: ZineTopic;
+  topic: string;
   created_by: string;
   attribution?: string;
   format?: string;
   duration?: string;
   materials?: string;
   summary: string;
-  cover: ImageMetadata;
-  pdfs: { url: string; label: string }[];
-  license: ZineLicense;
+  cover?: ImageMetadata;
+  pdfs: { url: string; label: string; filename: string; fileSize: string }[];
+  license?: ZineLicense;
   source_url?: string;
   href: string;
   entry: CollectionEntry<'zines'>;
 }
+
+export interface ZinePlaceholder {
+  id: string;
+  order: number;
+  placeholder: true;
+  title: string;
+}
+
+export type ZineCard = Zine | ZinePlaceholder;
 
 function filename(path: string): string {
   return path.slice(path.lastIndexOf('/') + 1);
@@ -59,14 +70,25 @@ export async function loadZines(): Promise<Zine[]> {
   });
   if (!Object.keys(metadataModules).length && !Object.keys(indexFiles).length) return [];
   const entries = await getCollection('zines');
+  const publishedEntries = entries.filter((entry) => !entry.data.placeholder);
   const metadataBySlug = filesBySlug(metadataModules);
   const coversBySlug = filesBySlug(covers);
   const pdfsBySlug = filesBySlug(pdfs);
-  const entriesBySlug = new Map(entries.map((entry) => [entry.id, entry]));
+  const allEntriesBySlug = new Map(entries.map((entry) => [entry.id, entry]));
+  const entriesBySlug = new Map(publishedEntries.map((entry) => [entry.id, entry]));
 
   for (const slug of metadataBySlug.keys()) {
-    if (!entriesBySlug.has(slug)) {
+    const entry = allEntriesBySlug.get(slug);
+    if (!entry) {
       throw new Error(`Zine "${slug}" has metadata.json but no sibling index.md. Add src/content/zines/${slug}/index.md.`);
+    }
+    if (entry.data.placeholder) {
+      throw new Error(`Placeholder zine "${slug}" must not include metadata.json.`);
+    }
+  }
+  for (const entry of entries) {
+    if (entry.data.id !== entry.id) {
+      throw new Error(`Zine folder "${entry.id}" has frontmatter id "${entry.data.id}". Set id to "${entry.id}".`);
     }
   }
   for (const slug of entriesBySlug.keys()) {
@@ -86,27 +108,46 @@ export async function loadZines(): Promise<Zine[]> {
     return { slug, metadata, entry };
   });
 
-  assertUniqueTopics(parsed.map(({ metadata }) => metadata));
   assertUniqueIds(parsed.map(({ metadata }) => metadata));
 
   return parsed.map(({ slug, metadata, entry }) => {
-    const cover = coversBySlug.get(slug)?.get(metadata.cover);
-    if (!cover) throw new Error(`Zine "${slug}" cover "${metadata.cover}" could not be loaded.`);
+    const cover = metadata.cover ? coversBySlug.get(slug)?.get(metadata.cover) : undefined;
+    if (metadata.cover && !cover) throw new Error(`Zine "${slug}" cover "${metadata.cover}" could not be loaded.`);
     const pdfFiles = pdfsBySlug.get(slug);
     return {
       ...metadata,
+      order: entry.data.order,
+      placeholder: false as const,
       cover,
       pdfs: metadata.pdfs.map((pdf) => {
+        if ('url' in pdf) return {
+          url: pdf.url, label: pdf.label, filename: pdf.filename, fileSize: pdf.file_size,
+        };
         const url = pdfFiles?.get(pdf.file);
         if (!url) throw new Error(`Zine "${slug}" PDF "${pdf.file}" could not be loaded.`);
-        return { url, label: pdf.label };
+        return { url, label: pdf.label, filename: pdf.file, fileSize: pdf.file_size };
       }),
       href: `/activity-guide/${metadata.id}/`,
       entry,
     };
-  }).sort((a, b) => a.title.localeCompare(b.title));
+  }).sort((a, b) => a.order - b.order || a.title.localeCompare(b.title));
 }
 
-export async function loadZinesByTopic(): Promise<Map<ZineTopic, Zine>> {
-  return new Map((await loadZines()).map((zine) => [zine.topic, zine]));
+export async function loadZineCards(): Promise<ZineCard[]> {
+  const [entries, zines] = await Promise.all([getCollection('zines'), loadZines()]);
+  const zinesById = new Map(zines.map((zine) => [zine.id, zine]));
+
+  return entries.map((entry): ZineCard => {
+    if (entry.data.placeholder) {
+      return {
+        id: entry.id,
+        order: entry.data.order,
+        placeholder: true,
+        title: entry.data.title!,
+      };
+    }
+    const zine = zinesById.get(entry.id);
+    if (!zine) throw new Error(`Published zine "${entry.id}" could not be loaded.`);
+    return zine;
+  }).sort((a, b) => a.order - b.order || a.title.localeCompare(b.title));
 }

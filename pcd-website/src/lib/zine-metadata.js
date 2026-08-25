@@ -1,10 +1,5 @@
 import { z } from 'astro/zod';
 
-export const ZINE_TOPICS = [
-  'Variables', 'Conditionals', 'Loops', 'Functions', 'Arrays', 'Objects',
-  'Coordinates', 'Color', 'Interaction', 'Animation', 'Randomness',
-];
-
 export const LICENSE_URLS = {
   'CC BY-SA 4.0': 'https://creativecommons.org/licenses/by-sa/4.0/',
 };
@@ -20,19 +15,28 @@ function isHttpUrl(value) {
 export const zineMetadataSchema = z.object({
   id: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'must be lowercase kebab-case'),
   title: z.string().trim().min(1),
-  topic: z.enum(ZINE_TOPICS),
+  topic: z.string().trim().min(1),
   created_by: z.string().trim().min(1),
   attribution: z.string().trim().min(1).optional(),
   format: z.string().trim().min(1).optional(),
   duration: z.string().trim().min(1).optional(),
   materials: z.string().trim().min(1).optional(),
   summary: z.string().trim().min(1),
-  cover: z.string().regex(/\.(png|jpg|jpeg|webp)$/, 'cover must be a lowercase .png/.jpg/.jpeg/.webp'),
-  pdfs: z.array(z.object({
-    file: z.string().regex(/\.pdf$/, 'must be a lowercase .pdf'),
-    label: z.string().trim().min(1),
-  }).strict()).min(1, 'at least one PDF is required'),
-  license: z.literal('CC BY-SA 4.0'),
+  cover: z.string().regex(/\.(png|jpg|jpeg|webp)$/, 'cover must be a lowercase .png/.jpg/.jpeg/.webp').optional(),
+  pdfs: z.array(z.union([
+    z.object({
+      file: z.string().regex(/\.pdf$/, 'must be a lowercase .pdf'),
+      label: z.string().trim().min(1),
+      file_size: z.string().trim().min(1),
+    }).strict(),
+    z.object({
+      url: z.string().refine(isHttpUrl, 'must be an http(s) URL'),
+      label: z.string().trim().min(1),
+      filename: z.string().regex(/\.pdf$/, 'must be a lowercase .pdf'),
+      file_size: z.string().trim().min(1),
+    }).strict(),
+  ])).min(1, 'at least one PDF is required'),
+  license: z.literal('CC BY-SA 4.0').optional(),
   source_url: z.string().refine(isHttpUrl, 'must be an http(s) URL').optional(),
 }).strict();
 
@@ -67,15 +71,6 @@ export function assertIdentity({ slug, frontmatterId, metadataId }) {
   }
 }
 
-export function assertUniqueTopics(zines) {
-  const topics = new Map();
-  for (const zine of zines) {
-    const prior = topics.get(zine.topic);
-    if (prior) throw new Error(`Zines "${prior.id}" and "${zine.id}" both claim the "${zine.topic}" topic. One canonical zine is allowed per topic.`);
-    topics.set(zine.topic, zine);
-  }
-}
-
 export function assertUniqueIds(zines) {
   const ids = new Set();
   for (const zine of zines) {
@@ -86,7 +81,8 @@ export function assertUniqueIds(zines) {
 
 export function resolveZineAssets(slug, metadata, availableFiles) {
   const available = new Set(availableFiles);
-  const required = [metadata.cover, ...metadata.pdfs.map((pdf) => pdf.file)];
+  const localPdfs = metadata.pdfs.flatMap((pdf) => 'file' in pdf ? [pdf.file] : []);
+  const required = [...(metadata.cover ? [metadata.cover] : []), ...localPdfs];
   const missing = required.filter((file) => !available.has(file));
   if (missing.length) {
     throw new Error(
@@ -94,5 +90,5 @@ export function resolveZineAssets(slug, metadata, availableFiles) {
       `Available files in src/content/zines/${slug}/: ${availableFiles.join(', ') || '(none)'}.`,
     );
   }
-  return { cover: metadata.cover, pdfs: metadata.pdfs.map((pdf) => pdf.file) };
+  return { cover: metadata.cover, pdfs: localPdfs };
 }

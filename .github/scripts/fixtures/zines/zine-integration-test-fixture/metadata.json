@@ -10,8 +10,8 @@
   "summary": "A compact guide to making patterns with repeated shapes.",
   "cover": "cover.png",
   "pdfs": [
-    { "file": "guide-small.pdf", "label": "Read on screen" },
-    { "file": "guide-print.pdf", "label": "Print and fold" }
+    { "file": "guide-small.pdf", "label": "Read on screen", "file_size": "96 B" },
+    { "file": "guide-print.pdf", "label": "Print and fold", "file_size": "96 B" }
   ],
   "license": "CC BY-SA 4.0",
   "source_url": "https://discourse.processing.org/t/activity-guide-integration-test/1"
