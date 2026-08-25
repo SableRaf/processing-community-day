@@ -9,7 +9,7 @@ Dear Processing Community Day Organizers,
 
 I first encountered Processing in 2012 at a workshop in Paris. I had no idea what I was doing, but I was immediately hooked. 
 
-At the time, Processing’s tongue-in-cheek mission statement said *"Processing seeks to ruin the careers of talented designers by tempting them away from their usual tools and into the world of programming and computation."* You could say I was one of those designers whose career was "ruined" by Processing :)
+At the time, Processing’s tongue-in-cheek mission statement said *"Processing seeks to ruin the careers of talented designers by tempting them away from their usual tools and into the world of programming and computation."* You could say I was one of those designers, except I like to think Processing only enhanced my career.
 
 If you had told me back then that I would one day help make PCD happen, I would never have believed you. But here we are, and I'm so grateful to be part of this global community.
 
