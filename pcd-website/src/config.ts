@@ -16,22 +16,28 @@ export const PCD_FORUM_NEW_TOPIC_URL =
     tags: "pcd",
   }).toString();
 
-export const ACTIVITY_GUIDE_SUBMISSION_TEMPLATE = `**Activity Title:**
-**Created by:**
+export const ACTIVITY_GUIDE_SUBMISSION_TEMPLATE = `*This post uses the submission template for the Processing Community Day [Activity Guide Library](https://day.processing.org/organize/activity-guides/library/), a collection of activities for PCD events.*
 
-**Activity Format:** [workshop, discussion, creative exercise, group project, etc]
+---
 
-**Topic:** [what does the activity explore?]
-**About the Activity:** [In 1-2 sentences, explain what participants will do and why a PCD organizer might choose this activity]
+**Title:**
+**Author(s):**
 
-**Duration:** [1 hour / 2 hours / 3 hours]
-**Tools or Materials needed:**
+**Activity Format:** <!-- workshop, discussion, creative exercise, etc. -->
+**About the Activity:** <!-- Briefly explain what participants will do. -->
 
-**Link to Activity:**
+**Number of Pages:**
+**Duration:** <!-- 1 hour / 2 hours / 3 hours -->
 
-**License:** I confirm that I own or have permission to license this material, and I agree to publish my original contribution under the [CC BY-SA 4.0 License](https://creativecommons.org/licenses/by-sa/4.0/). I have identified any third-party material that is not covered by this license.
+<!-- Host your PDFs on a public file sharing service (e.g., Google Drive, Dropbox, etc.) and provide the links below. -->
+**PDF (individual pages):** 
+**PDF (printable version):**
 
-**Preferred Attribution:**`;
+**License:** I confirm that I own or have permission to license this material, and I agree to publish it under the [CC BY-SA 4.0 License](https://creativecommons.org/licenses/by-sa/4.0/).
+
+**Tags:** <!-- Processing, p5js, python, etc. Comma-separated. -->`
+
+
 
 export const ACTIVITY_GUIDE_SUBMIT_URL =
   "https://discourse.processing.org/new-topic?" +
