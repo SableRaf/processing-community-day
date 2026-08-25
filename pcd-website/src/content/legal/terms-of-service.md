@@ -21,7 +21,7 @@ When you submit an event for listing, you agree that:
 - The information you provide is accurate, lawful, and not misleading;
 - You have the right to share it, including any names, contact details, venue information, and links;
 - You have obtained consent from any co-organizers whose names or details you include;
-- Your event and its content will comply with the Processing Foundation's [Code of Conduct](https://processingfoundation.org) and will be welcoming, inclusive, and free of discrimination, harassment, or unlawful activity.
+- Your event and its content will comply with the Processing Community Day [Code of Conduct](/organize/code-of-conduct/) and will be welcoming, inclusive, and free of discrimination, harassment, or unlawful activity.
 
 **Public submission.** Event submissions are made through our public [GitHub repository](https://github.com/processing/processing-community-day) and/or the public [Processing Discourse forum](https://discourse.processing.org). Information you submit is **public** and will be displayed on the Site, including the primary contact email address. See our [Privacy Policy](/privacy/) for details on how this data is handled.
 

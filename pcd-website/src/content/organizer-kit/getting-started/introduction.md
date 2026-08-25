@@ -13,7 +13,7 @@ We understand that it can take enormous physical and emotional effort to organiz
 
 Although we are providing a step-by-step guide to lead a PCD in this kit, keep in mind that as PCD organizers, you are welcome to define the format of your event in any way that serves your local communities.
 
-The kit is licensed under a [Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/deed.en).
+Except where otherwise specified, the kit is licensed under a [Creative Commons Attribution-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by-sa/4.0/).
 
 ## What happens at a PCD?
 
@@ -57,4 +57,4 @@ Some of this guide is inspired by [https://artandfeminism.org/](https://artandfe
 
 ---
 
-*This Organizer's Kit is licensed under a [Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/deed.en).*
+*Except where otherwise specified, this Organizer's Kit is licensed under a [Creative Commons Attribution-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by-sa/4.0/).*
