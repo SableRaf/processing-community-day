@@ -2,27 +2,35 @@
 title: What are Activity Guides?
 section: Activity Guides
 order: 2
-description: Instructions for creating and submitting a zine to the PCD Activity Guide Library.
+description: Instructions for creating and submitting an activity guide to the PCD Activity Guide Library.
 ---
 
-Activity Guides are community-created zines (see ["What is a Zine?"](#what-is-a-zine)) that you can use to facilitate a session at your Processing Community Day. They are designed to be taken “off the shelf,” so you do not need to be an expert on the topic to use one.
+Activity Guides are community-created zines (see ["What is a Zine?"](#what-is-a-zine)) that you can use to facilitate or take part in an activity at your Processing Community Day. They are designed to be taken “off the shelf,” so you do not need to be an expert on the topic to use one.
 
-## How to Design an Activity Guide
+## How to Create an Activity Guide
 
-An Activity Guide is a practical, self-contained resource that helps someone facilitate an activity during PCD without too much preparation.
+An Activity Guide should be practical, self-contained, and easy to follow. It might contain instructions for a hands-on workshop, creative exercise, discussion, collaborative experiment, or another kind of group or individual activity.
 
-An Activity Guide can be used for a hands-on workshop, creative exercise, discussion, collaborative experiment, or another group or individual activity. Each guide should be designed for a session lasting between one and three hours.
+Each guide should be designed for a session lasting between one and three hours. The goal is to make it easy for someone to pick up the guide and use it successfully, either as a facilitator or as a participant.
 
 Your guide should include:
 
-- the purpose of the activity (what participants will learn or experience)
-- who the activity is for (for example, beginners, intermediate, or advanced participants)
-- the recommended duration. (1-3 hours)
+- the purpose of the activity and what participants will learn or experience
+- who the activity is for (beginners, intermediate, or advanced participants)
+- the recommended duration (between one and three hours)
 - any tools, materials, or preparation needed
-- clear, step-by-step instructions (for a tutorial, workshop, or exercise)
-- prompts or questions for participants (for a discussion or collaborative activity)
+- additional resources for further exploration
 
-There is no required visual format. Make it your own, but include enough information for someone unfamiliar with the activity or subject to prepare for and facilitate it successfully.
+For a tutorial-style activity, you may also want to include:
+- step-by-step instructions
+- example code or templates (can be links too)
+- suggested exercises or challenges
+
+For a discussion or collaborative activity, you may also want to include:
+- a list of discussion questions or prompts
+- suggested group exercises or collaborative tasks
+
+There is no required visual format. Make it your own, but include enough information for someone unfamiliar with the activity or subject to facilitate it or complete it independently.
 
 ## What is a Zine?
 
@@ -48,6 +56,6 @@ The US Library of Congress has a [Zine Making Guide (PDF)](https://guides.loc.go
 
 - [Tiny Tech Zines](https://tinytechzines.bigcartel.com/)
 
-## Submit Your Guide
+## Submit Your Zine
 
 Go to the [Activity Guide Library](/organize/activity-guides/library/) to submit your zine and explore the full collection. By submitting an Activity Guide, you agree to publish your original contribution under the [CC BY-SA 4.0 License](https://creativecommons.org/licenses/by-sa/4.0/).
