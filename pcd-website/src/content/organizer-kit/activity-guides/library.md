@@ -11,6 +11,12 @@ An Activity Guide may lead a hands-on workshop, creative exercise, discussion, c
 
 Browse the collection and choose a guide that fits your community's interest, the amount of time available, and your participants' experience levels. You can use a guide exactly as written or adapt it for your local context, as permitted by its [CC BY-SA 4.0 License](https://creativecommons.org/licenses/by-sa/4.0/).
 
+## Submit Your Guide
+
+You can also contribute your own Activity Guide to the library. There is no required visual format. Make it your own, but include enough information for someone unfamiliar with the activity to prepare for and facilitate it successfully. 
+
+By submitting to the Activity Guide Library, you agree to publish your original contribution under the [CC BY-SA 4.0 License](https://creativecommons.org/licenses/by-sa/4.0/).
+
 ## Guide Topics
 
 The collection includes Variables, Conditionals, Loops, Functions, Arrays, Objects, Coordinates, Color, Interaction, Animation, and Randomness. Topics without a guide are open for submissions.
