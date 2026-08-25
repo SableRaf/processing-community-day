@@ -3,11 +3,7 @@
         "aria_label": "World map of PCD 2026 nodes"
     },
     "nav": {
-        "open_node_list": "Open node list",
-        "close_node_list": "Close node list",
         "submit_event": "Submit your event",
-        "switch_to_light": "Switch to light mode",
-        "switch_to_dark": "Switch to dark mode",
         "change_language": "Change language",
         "info_button_label": "About Processing Community Day",
         "info_modal_title": "Processing Community Day",

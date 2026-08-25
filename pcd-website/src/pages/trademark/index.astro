@@ -1,0 +1,16 @@
+---
+import { getEntry, render } from 'astro:content';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+
+const entry = await getEntry('legal', 'trademark_policy');
+if (!entry) throw new Error('Missing legal/trademark_policy content entry');
+const { Content } = await render(entry);
+---
+
+<SiteLayout title={`${entry.data.title} — Processing Community Day`} description="How the Processing and PCD names and logos may be used.">
+  <div class="prose">
+    <p class="prose__eyebrow">Legal</p>
+    <h1>{entry.data.title}</h1>
+    <Content />
+  </div>
+</SiteLayout>

@@ -19,3 +19,8 @@ Thumbs.db
 .idea/
 *.swp
 *.tmp
+
+# Design scratch (throwaway click dummies, not part of the site)
+.click-dummy/
+
+.references

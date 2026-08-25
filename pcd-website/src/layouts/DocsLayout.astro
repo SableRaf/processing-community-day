@@ -1,0 +1,87 @@
+---
+import type { MarkdownHeading } from 'astro';
+import BaseLayout from './BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import DocsSidebar from '../components/DocsSidebar.astro';
+import DocsTableOfContents from '../components/DocsTableOfContents.astro';
+import CopyMarkdownButton from '../components/CopyMarkdownButton.astro';
+import { getKitNav } from '../config/organizer-kit-nav';
+import '../styles/base.css';
+import '../styles/docs.css';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Rendered above the h1 as the section label. */
+  eyebrow?: string;
+  /** Page heading. Falls back to `title` when omitted. */
+  heading?: string;
+  headings?: MarkdownHeading[];
+  /** Page content, ready to copy as Markdown. */
+  markdown?: string;
+}
+
+const { title, description, eyebrow, heading, headings = [], markdown } = Astro.props;
+
+const nav = await getKitNav();
+---
+
+<BaseLayout
+  title={`${title} — Processing Community Day`}
+  description={description}
+  bodyClass="site-body docs-body"
+>
+  <a href="#main" class="skip-link">Skip to main content</a>
+  <Header />
+  <div class="docs-shell">
+    <aside class="docs-shell__nav">
+      <button class="docs-nav-toggle btn-reset" type="button" aria-expanded="false" hidden>
+        Organizer Kit contents
+      </button>
+      <DocsSidebar nav={nav} currentPath={Astro.url.pathname} />
+    </aside>
+
+    <main id="main" tabindex="-1" class="docs-shell__main">
+      <article class="docs-prose">
+        {eyebrow && <p class="prose__eyebrow">{eyebrow}</p>}
+        <div class="docs-title-row">
+          <h1>{heading ?? title}</h1>
+          {markdown && <CopyMarkdownButton markdown={markdown} />}
+        </div>
+        <DocsTableOfContents headings={headings} />
+        <slot />
+      </article>
+    </main>
+  </div>
+  <Footer />
+</BaseLayout>
+
+<script is:inline>
+  (() => {
+    const toggle = document.querySelector('.docs-nav-toggle');
+    const nav = document.getElementById('docs-nav');
+    if (!toggle || !nav) return;
+    toggle.hidden = false;
+    document.documentElement.classList.add('docs-nav-collapsible');
+    toggle.addEventListener('click', () => {
+      const open = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', String(!open));
+    });
+  })();
+</script>
+
+<script is:inline>
+  (() => {
+    document.querySelectorAll('.docs-heading-anchor').forEach((link) => {
+      link.addEventListener('click', (event) => {
+        event.preventDefault();
+        const url = new URL(link.getAttribute('href'), window.location.href).href;
+        history.replaceState(null, '', link.getAttribute('href'));
+        navigator.clipboard?.writeText(url);
+        link.classList.add('docs-heading-anchor--copied');
+        setTimeout(() => link.classList.remove('docs-heading-anchor--copied'), 1200);
+      });
+    });
+  })();
+</script>

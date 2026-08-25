@@ -2,7 +2,7 @@ import { randomBytes } from 'node:crypto';
 
 export const YEAR = '2026';
 export const PCD_FORUM_THREAD_URL = 'https://discourse.processing.org/t/pcd-worldwide-2026-call-for-organizers/48081';
-export const PCD_CONTACT_EMAIL = 'day@processingfoundation.org';
+export const PCD_CONTACT_EMAIL = 'day@processing.org';
 
 export const VALID_ORG_TYPES = new Set([
   'School, university, library',

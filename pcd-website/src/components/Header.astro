@@ -1,0 +1,281 @@
+---
+import { NAV_ITEMS } from '../config/navigation';
+import logoLine from '../images/PCD_2026_Logo_Line_White.svg?url';
+import logoMini from '../images/PCD_2026_Logo_Mini_White.svg?url';
+
+const normalize = (pathname: string) => {
+  const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+  const stripped = base && pathname.startsWith(base) ? pathname.slice(base.length) : pathname;
+  return stripped.endsWith('/') || stripped === '' ? stripped : `${stripped}/`;
+};
+
+const currentPath = normalize(Astro.url.pathname);
+---
+
+<header data-site-header>
+  <a class="logo" href="/">
+    <span class="visually-hidden">Processing Community Day</span>
+    <img class="logo-line" src={logoLine} alt="" width="5987" height="446" aria-hidden="true" />
+    <img class="logo-mini" src={logoMini} alt="" width="1818" height="446" aria-hidden="true" />
+  </a>
+  <button
+    class="menu-toggle"
+    type="button"
+    aria-expanded="false"
+    aria-controls="main-navigation"
+  >
+    <span class="visually-hidden">Toggle main navigation</span>
+    <span class="menu-toggle-icon" aria-hidden="true">
+      <span></span>
+      <span></span>
+      <span></span>
+    </span>
+  </button>
+  <nav id="main-navigation" aria-label="Main">
+    <ul>
+      {NAV_ITEMS.map((item) => {
+        const itemPath = normalize(item.href);
+        const isExact = itemPath === currentPath;
+        // Root only matches exactly; section links stay active for their sub-pages.
+        const inSection = itemPath !== '/' && currentPath.startsWith(itemPath);
+        const current = isExact ? 'page' : inSection ? 'true' : undefined;
+        return (
+          <li>
+            <a href={item.href} aria-current={current}>
+              {item.label}
+            </a>
+          </li>
+        );
+      })}
+    </ul>
+  </nav>
+</header>
+
+<style>
+  header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--header-height);
+    z-index: var(--z-controls);
+    background-color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+    padding: 0 var(--spacing-lg);
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    flex: 0 0 auto;
+    text-decoration: none;
+  }
+
+  .logo img {
+    display: block;
+    width: auto;
+    height: 32px;
+  }
+
+  .logo img.logo-mini {
+    display: none;
+  }
+
+  .logo:hover img {
+    opacity: 0.85;
+  }
+
+  .menu-toggle {
+    display: none;
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  nav ul {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  nav a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9375rem;
+    padding: var(--spacing-xs) 0;
+    border-bottom: 2px solid transparent;
+  }
+
+  nav a:hover {
+    border-bottom-color: rgba(255, 255, 255, 0.6);
+  }
+
+  nav a[aria-current] {
+    border-bottom-color: #fff;
+  }
+
+  @media (max-width: 900px) {
+    .logo img.logo-line {
+      display: none;
+    }
+
+    .logo img.logo-mini {
+      display: block;
+    }
+  }
+
+  @media (max-width: 640px) {
+    header {
+      gap: var(--spacing-sm);
+      padding: 0 var(--spacing-md);
+    }
+
+    header.menu-open {
+      z-index: calc(var(--z-panel) + 1);
+    }
+
+    .logo img {
+      height: 28px;
+    }
+
+    .menu-toggle {
+      display: grid;
+      flex: 0 0 44px;
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      color: #fff;
+      background: transparent;
+      border: 0;
+      border-radius: 4px;
+      cursor: pointer;
+      place-items: center;
+    }
+
+    .menu-toggle:hover {
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .menu-toggle:focus-visible {
+      outline-color: #fff;
+    }
+
+    .menu-toggle-icon {
+      display: flex;
+      width: 22px;
+      height: 18px;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .menu-toggle-icon span {
+      width: 100%;
+      height: 2px;
+      background: currentColor;
+      border-radius: 1px;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    .menu-toggle[aria-expanded='true'] .menu-toggle-icon span:first-child {
+      transform: translateY(8px) rotate(45deg);
+    }
+
+    .menu-toggle[aria-expanded='true'] .menu-toggle-icon span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .menu-toggle[aria-expanded='true'] .menu-toggle-icon span:last-child {
+      transform: translateY(-8px) rotate(-45deg);
+    }
+
+    nav {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      left: 0;
+      display: none;
+      padding: var(--spacing-sm) var(--spacing-md) var(--spacing-md);
+      background: var(--color-primary);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.18);
+    }
+
+    header.menu-open nav {
+      display: block;
+    }
+
+    nav ul {
+      align-items: stretch;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    nav a {
+      display: block;
+      min-height: 44px;
+      padding: 0.6875rem var(--spacing-sm);
+      font-size: 0.9375rem;
+      border-bottom: 0;
+      border-left: 3px solid transparent;
+    }
+
+    nav a:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-bottom-color: transparent;
+    }
+
+    nav a[aria-current] {
+      border-bottom-color: transparent;
+      border-left-color: #fff;
+    }
+  }
+</style>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-site-header]');
+  const menuToggle = header?.querySelector<HTMLButtonElement>('.menu-toggle');
+
+  const closeMenu = (restoreFocus = false) => {
+    if (!header || !menuToggle) return;
+    header.classList.remove('menu-open');
+    menuToggle.setAttribute('aria-expanded', 'false');
+    if (restoreFocus) menuToggle.focus();
+  };
+
+  menuToggle?.addEventListener('click', () => {
+    if (!header) return;
+    const isOpen = header.classList.toggle('menu-open');
+    menuToggle.setAttribute('aria-expanded', String(isOpen));
+  });
+
+  header?.querySelector('nav')?.addEventListener('click', (event) => {
+    if ((event.target as HTMLElement).closest('a')) closeMenu();
+  });
+
+  document.addEventListener('click', (event) => {
+    if (header && !header.contains(event.target as Node)) closeMenu();
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && header?.classList.contains('menu-open')) {
+      closeMenu(true);
+    }
+  });
+
+  window.matchMedia('(min-width: 641px)').addEventListener('change', () => closeMenu());
+</script>

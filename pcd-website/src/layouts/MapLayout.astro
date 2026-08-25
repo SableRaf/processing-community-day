@@ -1,0 +1,71 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Header from '../components/Header.astro';
+import '../styles/map.css';
+
+interface Props {
+  title: string;
+  description: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImage?: string;
+  canonical?: string;
+  noindex?: boolean;
+  minimal?: boolean;
+}
+
+const {
+  title,
+  description,
+  ogTitle,
+  ogDescription,
+  ogImage,
+  canonical,
+  noindex = false,
+  minimal = false,
+} = Astro.props;
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  ogTitle={ogTitle}
+  ogDescription={ogDescription}
+  ogImage={ogImage}
+  canonical={canonical}
+  noindex={noindex}
+>
+  <Fragment slot="head">
+    {!minimal && (
+      <>
+        <link
+          rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin=""
+        />
+        <link
+          rel="stylesheet"
+          href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"
+          crossorigin=""
+        />
+        <link
+          rel="stylesheet"
+          href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"
+          crossorigin=""
+        />
+      </>
+    )}
+    <slot name="head" />
+  </Fragment>
+  {minimal ? (
+    <slot />
+  ) : (
+    <>
+      <Header />
+      <main id="main" tabindex="-1">
+        <slot />
+      </main>
+    </>
+  )}
+</BaseLayout>

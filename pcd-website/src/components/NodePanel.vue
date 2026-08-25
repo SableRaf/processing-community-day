@@ -579,9 +579,9 @@ const calLinks = computed(() => props.node && !props.node.date_tbd ? calendarLin
 <style scoped>
 .node-panel {
   position: fixed;
-  top: 0;
+  top: var(--header-height);
   right: 0;
-  height: 100%;
+  height: calc(100% - var(--header-height));
   width: clamp(320px, 40vw, 520px);
   background: transparent;
   filter: drop-shadow(-4px 0 16px rgba(0, 0, 0, 0.18));
@@ -796,10 +796,6 @@ const calLinks = computed(() => props.node && !props.node.date_tbd ? calendarLin
   background: var(--color-bg-panel);
   color: var(--color-text-subtle);
   text-transform: capitalize;
-}
-
-[data-theme="dark"] .panel-activity-tag {
-  border-color: var(--color-border-light);
 }
 
 /* Inline markdown rendered via v-html (host/org names, disclaimer). */
@@ -1096,10 +1092,6 @@ const calLinks = computed(() => props.node && !props.node.date_tbd ? calendarLin
   text-decoration: none;
   font-family: var(--font-family);
   transition: background-color 0.12s ease, color 0.12s ease, border-color 0.12s ease;
-}
-
-[data-theme="dark"] .quick-action-btn {
-  border-color: var(--color-border-light);
 }
 
 .quick-action-btn:hover {

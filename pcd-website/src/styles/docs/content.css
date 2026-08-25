@@ -1,0 +1,56 @@
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+.docs-prose :is(h1, h2, h3, h4, h5, h6) {
+  scroll-margin-top: calc(var(--header-height) + var(--sp-4));
+}
+.docs-prose :is(ol, ul) {
+  margin: 0.5em 0 var(--sp-4);
+  padding-left: 1.5em;
+}
+.docs-prose li {
+  position: relative;
+}
+.docs-prose ol {
+  list-style: none;
+  counter-reset: step-counter;
+}
+.docs-prose ol > li::before {
+  position: absolute;
+  top: 0.2em;
+  left: -1.6em;
+  color: var(--color-text);
+  content: counter(step-counter);
+  counter-increment: step-counter;
+  font-size: var(--step-3);
+}
+.docs-prose ol ol {
+  counter-reset: sub-counter;
+}
+.docs-prose ol ol > li::before {
+  content: counter(sub-counter, lower-alpha);
+  counter-increment: sub-counter;
+}
+.docs-prose ul {
+  list-style: none;
+}
+.docs-prose ul > li::before {
+  position: absolute;
+  margin-left: -1.4em;
+  color: var(--color-text);
+  content: "•";
+}
+.docs-prose .task-list-item::before,
+.docs-prose .docs-page-toc li::before {
+  content: none;
+}
+.docs-prose :is(h1, h2, h3, h4, h5, h6) + p {
+  margin-top: 0;
+}
+@media (max-width: 49.999rem) {
+  .docs-prose :is(h1, h2, h3, h4, h5, h6) {
+    scroll-margin-top: calc(var(--header-height) + var(--sp-8));
+  }
+}

@@ -1,4 +1,6 @@
-# Usage Policy for PCD Assets
+---
+title: Trademark & Asset Usage
+---
 
 Processing Community Day (PCD) assets, including the PCD 2026 logo and related materials, may be used to promote and document approved Processing Community Day events and related community activities.
 

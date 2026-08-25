@@ -1,0 +1,75 @@
+---
+import { KIT_BASE, type KitNavNode, type KitPage } from '../config/organizer-kit-nav';
+import NavExpanderIcon from './NavExpanderIcon.astro';
+
+interface Props {
+  nav: KitNavNode[];
+  /** Path of the page being rendered, used to mark the current link. */
+  currentPath: string;
+}
+
+const { nav, currentPath } = Astro.props;
+
+const normalize = (path: string) => (path.endsWith('/') ? path : `${path}/`);
+const current = normalize(currentPath);
+const isCurrent = (href: string) => normalize(href) === current;
+
+const isGroupActive = (pages: KitPage[]) => pages.some((page) => isCurrent(page.href));
+---
+
+<nav id="docs-nav" class="docs-nav" aria-label="Organizer Kit">
+  <a class="nav-list-link nav-list-link--home" href={`${KIT_BASE}/`} aria-current={isCurrent(`${KIT_BASE}/`) ? 'page' : undefined}>
+    Organizer Kit
+  </a>
+
+  <ul class="nav-list">
+    {nav.map((node) => {
+      if (node.kind === 'page') {
+        const active = isCurrent(node.page.href);
+        return <li class:list={['nav-list-item', { active }]}>
+          <a
+            class:list={['nav-list-link', { active }]}
+            href={node.page.href}
+            aria-current={active ? 'page' : undefined}
+          >
+            {node.page.title}
+          </a>
+        </li>;
+      }
+      const groupActive = isGroupActive(node.pages);
+      return <li class:list={['nav-list-item', { active: groupActive }]}>
+          <button class="nav-list-expander nav-list-toggle btn-reset" type="button" aria-label={`${node.title} submenu`} aria-expanded={groupActive ? 'true' : 'false'}><NavExpanderIcon /></button>
+          <button class="nav-list-link nav-list-link--static nav-list-group-toggle nav-list-toggle btn-reset" type="button" aria-expanded={groupActive ? 'true' : 'false'}>{node.title}</button>
+          <ul class="nav-list">
+            {node.pages.map((page) => {
+              const active = isCurrent(page.href);
+              return <li class:list={['nav-list-item', { active }]}>
+                <a class:list={['nav-list-link', { active }]}
+                  href={page.href}
+                  aria-current={active ? 'page' : undefined}
+                >
+                  {page.title}
+                </a>
+              </li>;
+            })}
+          </ul>
+        </li>;
+    })}
+  </ul>
+</nav>
+
+<script is:inline>
+  (() => {
+    const nav = document.getElementById('docs-nav');
+    if (!nav) return;
+    nav.addEventListener('click', (event) => {
+      let target = event.target;
+      while (target && !(target.classList && target.classList.contains('nav-list-toggle'))) target = target.parentNode;
+      if (!target) return;
+      event.preventDefault();
+      const item = target.parentNode;
+      const expanded = String(item.classList.toggle('active'));
+      item.querySelectorAll('.nav-list-toggle').forEach((toggle) => toggle.setAttribute('aria-expanded', expanded));
+    });
+  })();
+</script>

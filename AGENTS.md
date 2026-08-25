@@ -54,8 +54,8 @@ No install needed — `open-location-code` is already available at `pcd-website/
 
 ### Astro + Vue split
 
-- **Astro** (`src/pages/index.astro`) is the single entry point — a static HTML shell with `<head>`, font/CSS links, and BASE_URL injection. No new Astro pages should be added.
-- **Vue** handles all interactive UI as `client:only="vue"` island components. New UI features go in Vue components, not Astro pages.
+- **Astro** owns routing, layouts, metadata, and static content pages. `src/layouts/BaseLayout.astro` provides the document shell; `MapLayout.astro`, `SiteLayout.astro`, and `DocsLayout.astro` provide the map, standard content, and Organizer Kit shells respectively.
+- **Vue** handles the interactive map UI as `client:only="vue"` island components. Map-specific interactive features belong in Vue; static site and Organizer Kit pages belong in Astro and Markdown content collections.
 
 ### Data loading at build time
 
@@ -66,32 +66,43 @@ Event data lives in `src/content/events/<event-id>/`:
 
 `src/lib/nodes.ts` loads all events at Astro build time using `import.meta.glob()` + `getCollection('events')`, validates plus codes with `OpenLocationCode`, decodes lat/lng, and returns a sorted `Node[]` array passed as props to `<MapView>`.
 
+The global Markdown pipeline runs `rehype-table-wrapper` and `rehype-heading-anchors`, which respectively wrap rendered tables in `.table-wrapper` and add permalink anchors to h2–h6. Their presentation styles live in the shared `prose.css` layer, scoped to both `.prose` and `.docs-prose`, because both plugins apply to all Markdown collections.
+
 **If a plus_code is invalid or too short, the build fails with a clear error — this is intentional.**
 
 **"Confirmed" events in data.json:** An event is included in the `/data.json` feed if it is present in `loadNodes()` and has no `placeholder: true` flag. There are currently no other event states (draft, hidden, etc.). If new states are added in future, the filter in `src/pages/data.json.ts` must be updated explicitly.
 
 ### Key implementation details
 
-- **Leaflet CSS** is loaded via `<link>` tags in `index.astro`, NOT via JS imports — avoids SSR issues since MapView is `client:only="vue"`.
+- **Leaflet CSS** is loaded via `<link>` tags in `MapLayout.astro`, NOT via JS imports — avoids SSR issues since MapView is `client:only="vue"`.
 - **`open-location-code`** exports `{ OpenLocationCode }` as a named export — use `new OpenLocationCode()` (not static methods).
 - **`leaflet.markercluster`** causes a circular dependency warning, suppressed via `rollupOptions.onwarn` in `astro.config.mjs`.
 - **Deep linking:** `?event=<id-or-uid>` query param auto-opens the event detail panel. Both the slug `id` and the short `uid` are accepted.
-- **Map style preference** persisted in `localStorage`.
 - **Event UIDs:** Each event has a stable 7-char hex `uid` stored in both `metadata.json` and `content.md` frontmatter. UIDs never change after creation. Three static URL formats are generated per event: `/event/<slug>` (redirects to canonical), `/event/<slug>-<uid>` (canonical, has OG tags, redirects into SPA), and `/event/<uid>` (short form, redirects to canonical). The canonical URL is what the share button copies.
 
 ### Component roles
 
 | File | Role |
 |---|---|
-| `src/components/MapView.vue` | Leaflet map, marker clustering, keyboard shortcuts, tile layer switching |
+| `src/components/MapView.vue` | Leaflet map, marker clustering, keyboard shortcuts |
 | `src/components/NodePanel.vue` | Slide-in event detail panel with minimap, calendar links, share button |
-| `src/components/NodeList.vue` | Alphabetical event list overlay with map style switcher + dark mode toggle |
 | `src/components/LanguageSwitcher.vue` | Language selector dropdown in the top bar |
+| `src/components/CopyMarkdownButton.astro` | Copies an Organizer Kit page as Markdown with accessible success/error feedback |
+| `src/components/Header.astro` | Shared fixed site header and primary navigation |
+| `src/components/Footer.astro` | Shared site footer, policy links, community links, and sponsors |
+| `src/layouts/BaseLayout.astro` | Shared HTML document shell and metadata |
+| `src/layouts/MapLayout.astro` | Map-page shell and Leaflet stylesheet links |
+| `src/layouts/SiteLayout.astro` | Standard static content-page shell |
+| `src/layouts/DocsLayout.astro` | Organizer Kit shell with sidebar, page TOC, and footer |
 | `src/lib/analytics.ts` | `trackEvent()` Fathom helper + `AnalyticsEvent` type + event-name constants |
 | `src/lib/nodes.ts` | `Node` interface + `loadNodes()` |
 | `src/lib/format.ts` | `formatDate()`, `formatDateRange()`, `calendarLinks()`, etc. |
 | `src/lib/popup.ts` | Leaflet popup HTML generation (`makePopupContent()`) |
-| `src/styles/global.css` | Design tokens (CSS custom properties), IBM Plex Sans, Leaflet overrides |
+| `src/styles/base.css` | Shared design tokens, reset, typography, focus, and skip-link styles |
+| `src/styles/map.css` | Map layout, controls, popup styling, and Leaflet overrides |
+| `src/styles/prose.css` | Standard static content-page presentation styles |
+| `src/styles/docs/*.css` | Organizer Kit's modular Just-the-Docs-derived tokens, layout, navigation, and Markdown presentation styles |
+| `src/lib/rehype-table-wrapper.mjs` | Markdown rehype plugin that wraps rendered tables for horizontal scrolling |
 | `src/pages/data.json.ts` | Static JSON feed of confirmed events, served at /data.json |
 | `src/content.config.ts` | Astro content collection Zod schema for events |
 | `src/config.ts` | Global static constants (contact email, etc.) |
@@ -143,10 +154,7 @@ Use `src/config.ts` for static, non-secret values that are referenced across mul
 
 ## UI / Styling Rules
 
-- Always support both light and dark mode for any new or modified UI elements.
-- Dark mode is toggled via `[data-theme="dark"]` on `<html>` (set by `NodeList.vue`).
-- Dark mode uses CSS custom properties defined in `global.css` under `[data-theme="dark"]`.
-- **Vue scoped styles cannot target ancestor-based dark mode selectors** — put those overrides in `global.css`.
+- The site is light-mode only — there is no dark mode, no `[data-theme]` toggling, and no theme-related CSS. Do not reintroduce it without an explicit decision to do so.
 
 ## Accessibility
 

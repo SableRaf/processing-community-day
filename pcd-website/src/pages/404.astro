@@ -1,5 +1,6 @@
 ---
 import { loadNodes, canonicalEventId } from '../lib/nodes';
+import SiteLayout from '../layouts/SiteLayout.astro';
 
 const nodes = await loadNodes();
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -11,26 +12,21 @@ for (const node of nodes) {
 }
 ---
 
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Page not found — Processing Community Day 2026</title>
-  </head>
-  <body>
-    <script is:inline define:vars={{ uidMap, base }}>
-      // If the path looks like /event/<anything>-<uid>/, extract the uid
-      // and redirect to the canonical event URL.
-      const match = window.location.pathname.match(/\/event\/.*-([0-9a-f]{7})\/?$/);
-      if (match) {
-        const uid = match[1];
-        const target = uidMap[uid];
-        if (target) {
-          window.location.replace(target);
-        }
+<SiteLayout title="Page not found — Processing Community Day" description="Page not found." noindex>
+  <script is:inline define:vars={{ uidMap, base }}>
+    // If the path looks like /event/<anything>-<uid>/, extract the uid
+    // and redirect to the canonical event URL.
+    const match = window.location.pathname.match(/\/event\/.*-([0-9a-f]{7})\/?$/);
+    if (match) {
+      const uid = match[1];
+      const target = uidMap[uid];
+      if (target) {
+        window.location.replace(target);
       }
-    </script>
-    <p>Page not found. <a href={`${base}/`}>Go to the map</a>.</p>
-  </body>
-</html>
+    }
+  </script>
+  <div class="prose">
+    <h1>Page not found</h1>
+    <p><a href={`${base}/`}>Go to the map</a>.</p>
+  </div>
+</SiteLayout>

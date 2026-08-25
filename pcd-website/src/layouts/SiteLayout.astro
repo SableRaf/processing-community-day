@@ -1,0 +1,39 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/base.css';
+import '../styles/prose.css';
+
+interface Props {
+  title: string;
+  description: string;
+  ogImage?: string;
+  canonical?: string;
+  noindex?: boolean;
+}
+
+const { title, description, ogImage, canonical, noindex = false } = Astro.props;
+---
+
+<BaseLayout title={title} description={description} ogImage={ogImage} canonical={canonical} noindex={noindex} bodyClass="site-body">
+  <a href="#main" class="skip-link">Skip to main content</a>
+  <Header />
+  <main id="main" tabindex="-1">
+    <slot />
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style is:global>
+  .site-body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  .site-body main {
+    flex: 1;
+    padding-top: var(--header-height);
+  }
+</style>

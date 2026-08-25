@@ -1,0 +1,64 @@
+.docs-prose {
+  padding: var(--sp-7) 0 var(--sp-10);
+}
+/* Heading line-height is shared here; upstream also sets it in fs-6+ but that is redundant for our heading-only consumers. */
+.docs-prose :is(h1, h2, h3, h4, h5, h6) {
+  line-height: 1.25;
+  color: var(--color-text);
+  text-wrap: balance;
+}
+.docs-prose h1 {
+  font-size: var(--step-8);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  margin: var(--sp-2) 0 var(--sp-4);
+}
+.docs-prose h2 {
+  font-size: var(--step-6);
+  margin-top: 1.5em;
+  margin-bottom: 0.25em;
+}
+.docs-prose h3 {
+  font-size: var(--step-5);
+  margin-top: 1.5em;
+  margin-bottom: 0.25em;
+}
+.docs-prose h4 {
+  font-size: var(--step-2);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: 1.5em;
+  margin-bottom: 0.25em;
+}
+.docs-prose h4 code {
+  text-transform: none;
+}
+.docs-prose h5 {
+  font-size: var(--step-3);
+}
+.docs-prose h6 {
+  font-size: var(--step-2);
+}
+.docs-prose .prose__eyebrow {
+  font-size: var(--step-2);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-primary);
+  margin: 0 0 var(--sp-2);
+}
+.docs-prose .lead {
+  font-size: var(--step-5);
+  color: var(--color-text);
+  margin-bottom: var(--sp-6);
+}
+.docs-prose .placeholder-note {
+  border: 1px dashed var(--color-border);
+  border-radius: var(--border-radius);
+  padding: var(--sp-6);
+  text-align: center;
+  color: var(--color-text-subtle);
+  font-size: var(--step-4);
+  margin: var(--sp-6) 0;
+}

@@ -1,4 +1,4 @@
-export const PCD_EMAIL = "day@processingfoundation.org";
+export const PCD_EMAIL = "day@processing.org";
 export const SUBMIT_EVENT_URL =
   "https://github.com/processing/processing-community-day/issues/new?template=01-new-event.yml";
 export const GITHUB_EDIT_EVENT_URL =
@@ -15,3 +15,16 @@ export const PCD_FORUM_NEW_TOPIC_URL =
     category: "community",
     tags: "pcd",
   }).toString();
+
+export const PCD_DISCORD_URL = "https://discord.gg/q5NksnwGsY";
+
+export interface SocialLink {
+  label: string;
+  href: string;
+}
+
+export const SOCIAL_LINKS: SocialLink[] = [
+  { label: "Instagram", href: "https://instagram.com/processingorg" },
+  { label: "Medium", href: "https://medium.com/@ProcessingOrg" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/company/processing-foundation/" },
+];

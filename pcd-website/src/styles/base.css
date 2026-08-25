@@ -1,0 +1,117 @@
+/* IBM Plex Sans from Google Fonts */
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap");
+
+/* ─── Design Tokens ─────────────────────────────────────────── */
+:root {
+  --color-primary: #800f8d;
+  --color-primary-dark: #500f67;
+  --color-link: #7253ed;
+  --color-link-hover: #5e40b7;
+  --color-link-underline: rgb(238, 235, 238);
+  --color-link-underline-hover: rgba(114, 83, 237, 0.45);
+  --color-focus: #005fcc;
+  --color-text: #1a1a1a;
+  --color-text-muted: #555;
+  --color-text-subtle: #666;
+  --color-bg: #ffffff;
+  --color-bg-panel: #ffffff;
+  --color-bg-popup: #ffffff;
+  --color-bg-popup-hover: #f0f0f0;
+  --color-border: #e0e0e0;
+  --color-overlay: rgba(0, 0, 0, 0.4);
+  --color-callout-placeholder-bg: #fffbea;
+  --color-callout-placeholder-border: #e8b84b;
+  --color-callout-placeholder-text: #6b4c00;
+  --color-callout-unconfirmed-bg: #e8f0fe;
+  --color-callout-unconfirmed-border: #7baaf7;
+  --color-callout-unconfirmed-text: #1a3a6b;
+  --docs-sidebar-color: #faf7fb;
+
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --popup-block-spacing: 0.625rem;
+  --popup-info-date-size: 0.8125rem;
+  --popup-info-venue-name-size: 0.875rem;
+  --popup-info-venue-address-size: 0.8125rem;
+  --popup-info-time-size: 0.75rem;
+
+  --header-height: 64px;
+
+  --z-map: 0;
+  --z-controls: 1000;
+  --z-overlay: 1100;
+  --z-panel: 1200;
+
+  --font-family: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+  --transition-panel: transform 0.25s ease-in-out;
+}
+
+/* ─── CSS Reset ─────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+button,
+a[role="button"] {
+  user-select: none;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+body {
+  font-family: var(--font-family);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* ─── Skip Link ─────────────────────────────────────────────── */
+.skip-link {
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  background: var(--color-focus);
+  color: #fff;
+  padding: var(--spacing-sm) var(--spacing-md);
+  text-decoration: none;
+  font-weight: 600;
+  z-index: 9999;
+  border-radius: 0 0 4px 4px;
+}
+
+.skip-link:focus-visible {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: auto;
+  height: auto;
+  clip: auto;
+  clip-path: none;
+  overflow: visible;
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+/* ─── Focus Indicators (WCAG 2.2 SC 2.4.11) ─────────────────── */
+:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
