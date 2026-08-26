@@ -3,24 +3,23 @@
   "uid": "6e434d4",
   "organizers": [],
   "primary_contact": {
-    "name": "Raphaël de Courville",
-    "email": "raphael@processing.org"
+    "name": "Cécile Bucher",
+    "email": "cecbucher@gmail.com"
   },
   "organization_name": "Processing Foundation",
   "organization_url": "https://processingfoundation.org",
-  "organization_type": "Nonprofit, foundation, association",
+  "organization_type": "",
   "online_event": false,
   "event_url": "",
   "event_name": "PCD @ Linz",
   "event_location": {
-    "address": "",
-    "plus_code": "8FWP875M+VP"
+    "address": "Linzer Innovationshauptplatz, Pfarrgasse 3, 4020 Linz, Austria",
+    "plus_code": "8FWP874P+6V"
   },
-  "event_date": "2026-09-09",
-  "event_end_date": "2026-09-13",
-  "event_start_time": "",
-  "event_end_time": "",
-  "event_short_description": "This year, the Processing Foundation is invited by the Ars Electronica Festival to host a Processing Community Day and celebrate Processing’s 25th anniversary during the festival.",
+  "event_date": "2026-09-13",
+  "event_start_time": "13:00",
+  "event_end_time": "18:00",
+  "event_short_description": "Celebrate 25 years of Processing at a Creative Coding Open House for beginners, experienced users, and everyone in between.",
   "event_activities": [
     "Show-and-tell",
     "Hands-on workshops",
@@ -28,7 +27,7 @@
     "Beginner introductions to Processing or p5.js",
     "Other"
   ],
-  "event_page_url": "",
+  "event_page_url": "https://ars.electronica.art/negotiatinghumanity/en/view/creative-coding-open-house-sun-139-3a838ddb450c81c59d98ff44c33d4c4b/",
   "forum_thread_url": "https://discourse.processing.org/t/pcd-linz-2026/48218",
   "city": "Linz",
   "country": "Austria",
