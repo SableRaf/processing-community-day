@@ -1,7 +1,7 @@
 ---
-title: Activity Guide Library
+title: Zine Library
 section: Activity Guides
-order: 1
+order: 2
 description: Community-created zines you can use to facilitate a session at your PCD.
 ---
 

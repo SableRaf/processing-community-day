@@ -1,8 +1,8 @@
 ---
-title: What are Activity Guides?
+title: About Activity Guides
 section: Activity Guides
-order: 2
-description: Instructions for creating and submitting an activity guide to the PCD Activity Guide Library.
+order: 1
+description: Instructions for creating and submitting an activity guide to the PCD Zine Library.
 ---
 
 Activity Guides are community-created zines (see ["What is a Zine?"](#what-is-a-zine)) that you can use to facilitate or take part in an activity at your Processing Community Day. They are designed to be taken “off the shelf,” so you do not need to be an expert on the topic to use one.
@@ -58,4 +58,4 @@ The US Library of Congress has a [Zine Making Guide (PDF)](https://guides.loc.go
 
 ## Submit Your Zine
 
-Go to the [Activity Guide Library](/organize/activity-guides/library/) to submit your zine and explore the full collection. By submitting an Activity Guide, you agree to publish your original contribution under the [CC BY-SA 4.0 License](https://creativecommons.org/licenses/by-sa/4.0/).
+Go to the [Zine Library](/organize/activity-guides/library/) to submit your zine and explore the full collection. By submitting an Activity Guide, you agree to publish your original contribution under the [CC BY-SA 4.0 License](https://creativecommons.org/licenses/by-sa/4.0/).
