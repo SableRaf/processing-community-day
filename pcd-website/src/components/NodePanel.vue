@@ -7,6 +7,8 @@ import type { Node } from '../lib/nodes';
 import { formatDateRange, formatTimeRange, calendarLinks, onlinePlatformName } from '../lib/format';
 import { getOsmUrl } from '../lib/popup';
 import { GITHUB_EDIT_EVENT_URL, GITHUB_CONTENT_ISSUE_URL } from '../config';
+import { cartoTileUrl } from '../lib/carto';
+
 const props = defineProps<{
   node: Node | null;
 }>();
@@ -108,7 +110,7 @@ async function initMinimap(node: Node) {
     tap: false,
   } as L.MapOptions & { tap: boolean });
 
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+  L.tileLayer(cartoTileUrl('rastertiles/voyager'), {
     subdomains: 'abcd',
     maxZoom: 20,
   }).addTo(minimap);
