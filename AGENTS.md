@@ -103,6 +103,7 @@ The global Markdown pipeline runs `rehype-table-wrapper` and `rehype-heading-anc
 | `src/layouts/SiteLayout.astro` | Standard static content-page shell |
 | `src/layouts/DocsLayout.astro` | Organizer Kit shell with sidebar, page TOC, and footer |
 | `src/lib/analytics.ts` | `trackEvent()` Fathom helper + `AnalyticsEvent` type + event-name constants |
+| `src/lib/carto.ts` | Adds the optional local-development CARTO API key to basemap tile URLs |
 | `src/lib/nodes.ts` | `Node` interface + `loadNodes()` |
 | `src/lib/format.ts` | `formatDate()`, `formatDateRange()`, `calendarLinks()`, etc. |
 | `src/lib/popup.ts` | Leaflet popup HTML generation (`makePopupContent()`) |
@@ -162,6 +163,8 @@ Use `src/config.ts` for static, non-secret values that are referenced across mul
 - Environment-specific or secret values — use `.env` with `import.meta.env` for those
 - Anything already defined in `astro.config.mjs` (e.g. base path)
 - Component-local constants that aren't shared
+
+For local map development, `pcd-website/.env` may define `PUBLIC_CARTO_API_KEY`. During `npm run dev`, all CARTO raster tile URLs append it as the `key` query parameter; production builds do not embed it.
 
 ## UI / Styling Rules
 

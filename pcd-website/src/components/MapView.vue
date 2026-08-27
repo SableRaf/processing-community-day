@@ -9,6 +9,7 @@ import InfoModal from './InfoModal.vue';
 import SubmitModal from './SubmitModal.vue';
 import { currentLocale } from '../i18n/localeState';
 import { trackEvent, SUBMIT_EVENT_BUTTON_CLICK } from '../lib/analytics';
+import { cartoTileUrl } from '../lib/carto';
 import { i18n } from '../i18n/index';
 
 const props = defineProps<{
@@ -66,11 +67,11 @@ const CARTO_ATTR = '&copy; <a href="https://www.openstreetmap.org/copyright">Ope
 
 const LIGHT_LAYERS: TileLayerConfig[] = [
   {
-    url: 'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',
+    url: cartoTileUrl('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png'),
     options: { attribution: CARTO_ATTR, subdomains: 'abcd', maxZoom: 20, detectRetina: true },
   },
   {
-    url: 'https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png',
+    url: cartoTileUrl('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png'),
     options: { attribution: CARTO_ATTR, subdomains: 'abcd', maxZoom: 20, detectRetina: true, tileSize: 512, zoomOffset: -1 },
   },
 ];

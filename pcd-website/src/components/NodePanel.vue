@@ -5,6 +5,7 @@ import { createFocusTrap, type FocusTrap } from 'focus-trap';
 import { Icon } from '@iconify/vue';
 import type { Node } from '../lib/nodes';
 import { formatDateRange, formatTimeRange, calendarLinks, onlinePlatformName } from '../lib/format';
+import { cartoTileUrl } from '../lib/carto';
 import { getOsmUrl } from '../lib/popup';
 import { GITHUB_EDIT_EVENT_URL, GITHUB_CONTENT_ISSUE_URL } from '../config';
 const props = defineProps<{
@@ -108,7 +109,7 @@ async function initMinimap(node: Node) {
     tap: false,
   } as L.MapOptions & { tap: boolean });
 
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+  L.tileLayer(cartoTileUrl('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png'), {
     subdomains: 'abcd',
     maxZoom: 20,
   }).addTo(minimap);
