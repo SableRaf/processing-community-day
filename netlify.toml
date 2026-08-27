@@ -17,13 +17,13 @@
   status = 301
 
 [[redirects]]
-  from = "/organize/activity-guides/zine-library/*"
-  to = "/organize/activity-guides/library/"
+  from = "/organize/activity-guides/library/*"
+  to = "/organize/activity-guides/zine-library/"
   status = 301
 
 [[redirects]]
   from = "/organize/activity-guides/what-are-activity-guides/*"
-  to = "/organize/activity-guides/library/"
+  to = "/organize/activity-guides/zine-library/"
   status = 301
 
 [[headers]]

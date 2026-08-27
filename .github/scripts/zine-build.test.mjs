@@ -53,7 +53,7 @@ test('a populated zine collection emits linked assets and renders entries in fro
     );
     assert.match(noCoverPage, /download-list__size[^>]*>519 kB</);
 
-    const library = readFileSync(join(DIST, 'organize/activity-guides/library/index.html'), 'utf8');
+    const library = readFileSync(join(DIST, 'organize/activity-guides/zine-library/index.html'), 'utf8');
     assert.match(library, /<ul class="guide-grid">\s*<li>\s*<a class="guide-card guide-card--zine" href="\/activity-guide\/zine-making-kit\/"/);
     assert.match(library, /guide-card__cover-placeholder[^>]*>Zine Making Kit</);
     assert.match(library, new RegExp(`href="/activity-guide/${SLUG}/"`));

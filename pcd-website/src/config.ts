@@ -16,7 +16,7 @@ export const PCD_FORUM_NEW_TOPIC_URL =
     tags: "pcd",
   }).toString();
 
-export const ACTIVITY_GUIDE_SUBMISSION_TEMPLATE = `*This post uses the submission template for the Processing Community Day [Zine Library](https://day.processing.org/organize/activity-guides/library/), a collection of activities for PCD events.*
+export const ACTIVITY_GUIDE_SUBMISSION_TEMPLATE = `*This post uses the submission template for the Processing Community Day [Zine Library](https://day.processing.org/organize/activity-guides/zine-library/), a collection of activities for PCD events.*
 
 ---
 

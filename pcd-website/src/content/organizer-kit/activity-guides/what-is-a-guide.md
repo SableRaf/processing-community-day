@@ -5,7 +5,9 @@ order: 1
 description: Instructions for creating an activity guide for the PCD Zine Library.
 ---
 
-Activity Guides are community-created zines (see ["What is a Zine?"](/organize/activity-guides/making-a-zine/#what-is-a-zine)) that you can use to facilitate or take part in an activity at your Processing Community Day. They are designed to be taken “off the shelf,” so you do not need to be an expert on the topic to use one.
+Activity Guides are community-created resources that you can use to run or take part in a session at your Processing Community Day. An Activity Guide can be an online video, a workshop template, a project tutorial, a series of discussion questions, or any other kind of activity that can be completed in a group or individually. They are designed to be taken “off the shelf,” so you do not need to be an expert on the topic to use one.
+
+Some Activity Guides are published as zines and included in our community [zine library](/organize/activity-guides/zine-library/). We encourage you to print them out and use them at your Processing Community Day. If you would like to create a zine, see [Making a Zine](/organize/activity-guides/making-a-zine/).
 
 ## What should an Activity Guide include?
 
@@ -30,4 +32,4 @@ For a discussion or collaborative activity, you may also want to include:
 - a list of discussion questions or prompts
 - suggested group exercises or collaborative tasks
 
-There is no required visual format. Make it your own, but include enough information for someone unfamiliar with the activity or subject to facilitate it or complete it independently.
+There is no required format. Make it your own, but include enough information for someone unfamiliar with the activity or subject to facilitate it or complete it independently.
