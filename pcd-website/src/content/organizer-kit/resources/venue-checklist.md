@@ -1,6 +1,6 @@
 ---
 title: Venue Checklist
-section: Resources
+section: Event Resources
 order: 2
 description: Questions to ask about a space before you commit to it.
 ---

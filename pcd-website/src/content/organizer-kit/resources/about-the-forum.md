@@ -1,6 +1,6 @@
 ---
 title: About the Forum
-section: Resources
+section: Event Resources
 order: 3
 description: Introducing yourself and coordinating in the open on the Processing forum.
 draft: true

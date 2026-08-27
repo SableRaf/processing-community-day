@@ -1,6 +1,6 @@
 ---
 title: Taking Photos
-section: Resources
+section: Event Resources
 order: 6
 description: Consent, tips, and who should be behind the camera.
 ---

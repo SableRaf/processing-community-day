@@ -1,6 +1,6 @@
 ---
 title: About the PCD Map
-section: Resources
+section: Event Resources
 order: 4
 description: Getting your event onto day.processing.org, and editing it later.
 draft: true

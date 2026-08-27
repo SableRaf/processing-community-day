@@ -1,6 +1,6 @@
 ---
 title: Event Checklist
-section: Resources
+section: Event Resources
 order: 1
 description: Setup, communications, logistics, accessibility, and day-of checklists.
 ---

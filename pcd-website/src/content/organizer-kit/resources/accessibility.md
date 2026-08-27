@@ -1,6 +1,6 @@
 ---
 title: Accessibility
-section: Resources
+section: Event Resources
 order: 5
 description: Making your PCD welcoming and usable for disabled participants.
 ---
