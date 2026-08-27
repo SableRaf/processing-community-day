@@ -10,7 +10,7 @@ const { headings } = Astro.props;
 const anchors = headings.filter((heading) => heading.depth === 2);
 ---
 
-{anchors.length > 0 && (
+{anchors.length > 1 && (
   <nav class="docs-page-toc" aria-label="On this page">
     <p class="docs-page-toc__title">On this page</p>
     <ul>
