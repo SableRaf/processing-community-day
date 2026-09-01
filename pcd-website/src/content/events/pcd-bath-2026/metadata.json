@@ -33,12 +33,10 @@
   "event_activities": [
     "Show-and-tell",
     "Hands-on workshops",
-    "Live coding",
     "Exhibition",
-    "Panel discussions",
     "Beginner introductions to Processing or p5.js"
   ],
-  "event_page_url": "https://www.creativetechnology.uk/processing-community-day-2026",
+  "event_page_url": "https://www.creativetechnology.uk/events/processing-community-day-2026",
   "forum_thread_url": "https://discourse.processing.org/t/pcd-bath-2026/48139",
   "city": "Bath",
   "country": "UK",

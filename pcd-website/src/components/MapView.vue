@@ -67,11 +67,11 @@ const CARTO_ATTR = '&copy; <a href="https://www.openstreetmap.org/copyright">Ope
 
 const LIGHT_LAYERS: TileLayerConfig[] = [
   {
-    url: cartoTileUrl('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png'),
+    url: cartoTileUrl('light_nolabels'),
     options: { attribution: CARTO_ATTR, subdomains: 'abcd', maxZoom: 20, detectRetina: true },
   },
   {
-    url: cartoTileUrl('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png'),
+    url: cartoTileUrl('light_only_labels'),
     options: { attribution: CARTO_ATTR, subdomains: 'abcd', maxZoom: 20, detectRetina: true, tileSize: 512, zoomOffset: -1 },
   },
 ];

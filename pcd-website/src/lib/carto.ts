@@ -1,11 +1,9 @@
-const localDevApiKey = import.meta.env.DEV
-  ? import.meta.env.PUBLIC_CARTO_API_KEY?.trim()
-  : undefined;
+const CARTO_API_KEY = import.meta.env.PUBLIC_CARTO_API_KEY;
 
-/** Add the optional local-development API key to a CARTO basemap URL. */
-export function cartoTileUrl(url: string): string {
-  if (!localDevApiKey) return url;
-
-  const separator = url.includes('?') ? '&' : '?';
-  return `${url}${separator}key=${encodeURIComponent(localDevApiKey)}`;
+/** Build a CARTO raster tile URL, adding the public API key when configured. */
+export function cartoTileUrl(stylePath: string): string {
+  const baseUrl = `https://{s}.basemaps.cartocdn.com/${stylePath}/{z}/{x}/{y}{r}.png`;
+  return CARTO_API_KEY
+    ? `${baseUrl}?key=${encodeURIComponent(CARTO_API_KEY)}`
+    : baseUrl;
 }

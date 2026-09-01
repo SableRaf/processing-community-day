@@ -203,3 +203,9 @@ Intake scripts guard against running on the wrong template:
 ## Deployment
 
 Netlify, configured via `netlify.toml`. The site deploys to `https://day.processing.org/` on push to `main`.
+
+The browser-facing CARTO tile key is supplied at build time through
+`PUBLIC_CARTO_API_KEY`. Configure it as a Netlify environment variable with
+Builds scope; for local development it may be placed in `pcd-website/.env`.
+Never commit the key. Without it, the site falls back to unkeyed tile URLs for
+local development and may display CARTO's API-key watermark.
