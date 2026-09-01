@@ -10,7 +10,8 @@ export interface ZineCover {
 }
 export interface ZineMetadata {
   id: string; title: string; topic: string;
-  created_by: string; attribution?: string;
+  tags?: string[];
+  created_by: string; created_by_url?: string; attribution?: string;
   format?: string; duration?: string; materials?: string;
   summary: string; cover?: ZineCover; pdfs: ZinePdf[];
   license?: ZineLicense; source_url?: string;

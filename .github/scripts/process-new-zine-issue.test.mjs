@@ -13,9 +13,11 @@ const DRAFTS = path.join(ROOT, 'pcd-website/src/content/zines-drafts');
 const PUBLISHED = path.join(ROOT, 'pcd-website/src/content/zines');
 const created = new Set();
 
-function body({ title = 'Intake Test Zine 781', readerUrl = 'https://example.org/reader.pdf', printUrl = 'https://example.org/print.pdf', license = true, links = true, optional = false } = {}) {
+function body({ title = 'Intake Test Zine 781', tags = '', creatorUrl = '', readerUrl = 'https://example.org/reader.pdf', printUrl = 'https://example.org/print.pdf', license = true, links = true, optional = false } = {}) {
   return [
     '### Title', title, '', '### Topic', 'Creative coding', '', '### Creator(s)', 'Test Creator', '',
+    '### Tags', tags || (optional ? 'beginner, creative coding, beginner' : '_No response_'), '',
+    '### Creator URL', creatorUrl || '_No response_', '',
     '### Short summary', 'A concise test summary.', '', '### Full description', 'A full **test** description.', '',
     '### Reader-order PDF URL', readerUrl, '', '### Print-ready PDF URL', printUrl, '',
     '### Activity format', optional ? 'Workshop' : '_No response_', '', '### Duration', optional ? '90 minutes' : '_No response_', '',
@@ -54,7 +56,7 @@ describe('process-new-zine-issue', () => {
     assert.equal(outputs.branch, 'automation/new-zine-781');
     const submission = JSON.parse(await fs.readFile(path.join(DRAFTS, slug, 'submission.json'), 'utf8'));
     assert.deepEqual(submission, {
-      id: slug, title, topic: 'Creative coding', created_by: 'Test Creator', summary: 'A concise test summary.',
+      id: slug, title, topic: 'Creative coding', tags: ['beginner', 'creative coding'], created_by: 'Test Creator', summary: 'A concise test summary.',
       source_pdfs: [{ role: 'reader-order', url: 'https://example.org/reader.pdf' }, { role: 'print-ready', url: 'https://example.org/print.pdf' }],
       license: 'CC BY-SA 4.0', source_issue_url: 'https://github.com/processing/processing-community-day/issues/781',
       intake: { issue_number: 781, submitted_by_github: 'zine-tester', submitted_date: new Date().toISOString().slice(0, 10), maintainer_notes: 'Public maintainer note.' },
@@ -63,6 +65,7 @@ describe('process-new-zine-issue', () => {
     assert.equal(await fs.readFile(path.join(DRAFTS, slug, 'index.md'), 'utf8'), '---\nid: "intake-test-zine-781"\n---\n\nA full **test** description.\n');
     const prBody = await fs.readFile(outputs.pr_body_path, 'utf8');
     assert.match(prBody, /Reader-order PDF/);
+    assert.match(prBody, /\| Tags \| beginner, creative coding \|/);
     assert.match(prBody, /commit them as `reader-order.pdf` and `print-ready.pdf`/);
     await fs.rm(tmp, { recursive: true, force: true });
   });
@@ -75,6 +78,22 @@ describe('process-new-zine-issue', () => {
     const submission = JSON.parse(await fs.readFile(path.join(DRAFTS, slug, 'submission.json'), 'utf8'));
     assert.equal(submission.source_pdfs[0].url, 'https://example.org/updated-reader.pdf');
     await fs.rm(tmp, { recursive: true, force: true });
+  });
+
+  test('stages an optional creator URL and rejects an invalid one', async () => {
+    const slug = 'intake-test-zine-creator-url';
+    created.add(slug);
+    let result = await run(body({ title: 'Intake Test Zine Creator URL', creatorUrl: 'https://example.org/creator' }), { number: 785 });
+    assert.equal(result.outputs.valid, 'true');
+    const submission = JSON.parse(await fs.readFile(path.join(DRAFTS, slug, 'submission.json'), 'utf8'));
+    assert.equal(submission.created_by_url, 'https://example.org/creator');
+    await fs.rm(result.tmp, { recursive: true, force: true });
+
+    result = await run(body({ title: 'Intake Test Zine Invalid Creator URL', creatorUrl: 'ftp://example.org/creator' }), { number: 786 });
+    assert.equal(result.outputs.valid, 'false');
+    const comment = await fs.readFile(result.outputs.validation_comment_path, 'utf8');
+    assert.match(comment, /Creator URL/);
+    await fs.rm(result.tmp, { recursive: true, force: true });
   });
 
   test('reports missing fields, bad links, and unchecked consents in one actionable comment', async () => {

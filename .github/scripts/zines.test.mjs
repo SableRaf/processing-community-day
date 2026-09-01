@@ -16,6 +16,10 @@ const valid = () => ({
 describe('zine metadata', () => {
   test('accepts valid metadata', () => {
     assert.deepEqual(parseZineMetadata(valid(), 'loops-with-shapes'), valid());
+    const withTags = { ...valid(), tags: ['beginner', 'p5.js'] };
+    assert.deepEqual(parseZineMetadata(withTags, 'loops-with-shapes'), withTags);
+    const withAuthorUrl = { ...valid(), created_by_url: 'https://example.com/guide-author' };
+    assert.deepEqual(parseZineMetadata(withAuthorUrl, 'loops-with-shapes'), withAuthorUrl);
     const withoutCover = { ...valid(), cover: undefined };
     assert.deepEqual(parseZineMetadata(withoutCover, 'loops-with-shapes'), withoutCover);
     const externalPdf = {
@@ -37,7 +41,10 @@ describe('zine metadata', () => {
   test('validates required values, topics, ids, and strict object keys', () => {
     const cases = [
       [{ ...valid(), topic: '   ' }, /topic/],
+      [{ ...valid(), tags: [] }, /tags/],
+      [{ ...valid(), tags: ['beginner', '   '] }, /tags/],
       [{ ...valid(), title: '   ' }, /title/],
+      [{ ...valid(), created_by_url: 'javascript:alert(1)' }, /created_by_url/],
       [{ ...valid(), id: 'Not Kebab' }, /id/],
       [{ ...valid(), unexpected: true }, /Unrecognized key/],
       [{ ...valid(), cover: 'cover.png' }, /cover/],

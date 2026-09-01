@@ -37,7 +37,15 @@ async function main() {
   const errors = [];
   const title = required(fields, 'Title', errors);
   const topic = required(fields, 'Topic', errors);
+  const tags = [...new Set((fields.get('Tags') ?? '')
+    .split(',')
+    .map((tag) => tag.trim())
+    .filter(Boolean))];
   const createdBy = required(fields, 'Creator(s)', errors);
+  const createdByUrl = fields.get('Creator URL')?.trim() ?? '';
+  if (createdByUrl && !isValidHttpUrl(createdByUrl)) {
+    errors.push({ field: 'Creator URL', found: createdByUrl, message: 'Enter a valid HTTP(S) URL.' });
+  }
   const summary = required(fields, 'Short summary', errors);
   const description = required(fields, 'Full description', errors);
   const readerOrderUrl = fields.get('Reader-order PDF URL')?.trim() ?? '';
@@ -98,6 +106,8 @@ async function main() {
     },
     description,
   };
+  if (tags.length) submission.tags = tags;
+  if (createdByUrl) submission.created_by_url = createdByUrl;
   for (const [field, key] of [['Activity format', 'format'], ['Duration', 'duration'], ['Materials', 'materials'], ['Preferred attribution', 'attribution']]) {
     const value = fields.get(field)?.trim();
     if (value) submission[key] = value;

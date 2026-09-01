@@ -30,7 +30,7 @@ export function makeDraftMarkdown(slug, description) {
 export function makeZinePrBody({ issueNumber, title, submitterLogin, submission }) {
   const submittedBy = submitterLogin ? `@${submitterLogin}` : 'the submitter';
   const optional = [
-    ['Format', submission.format], ['Duration', submission.duration], ['Materials', submission.materials], ['Preferred attribution', submission.attribution],
+    ['Tags', submission.tags?.join(', ')], ['Creator URL', submission.created_by_url], ['Format', submission.format], ['Duration', submission.duration], ['Materials', submission.materials], ['Preferred attribution', submission.attribution],
   ].filter(([, value]) => value);
   return [
     `Closes #${issueNumber}`,

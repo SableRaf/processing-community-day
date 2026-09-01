@@ -25,12 +25,24 @@ body:
     validations:
       required: true
   - type: input
+    id: tags
+    attributes:
+      label: Tags
+      description: Optional comma-separated tags that help describe the guide.
+      placeholder: beginner, p5.js, physical computing
+  - type: input
     id: creators
     attributes:
       label: Creator(s)
       description: The person or group to credit.
     validations:
       required: true
+  - type: input
+    id: creator_url
+    attributes:
+      label: Creator URL
+      description: Optional public website for the credited person or group.
+      placeholder: https://example.org/
   - type: textarea
     id: summary
     attributes:

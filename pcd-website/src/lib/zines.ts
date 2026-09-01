@@ -12,7 +12,9 @@ export interface Zine {
   order: number;
   title: string;
   topic: string;
+  tags?: string[];
   created_by: string;
+  created_by_url?: string;
   attribution?: string;
   format?: string;
   duration?: string;

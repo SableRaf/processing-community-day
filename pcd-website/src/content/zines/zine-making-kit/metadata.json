@@ -2,7 +2,9 @@
   "id": "zine-making-kit",
   "title": "Zine Making Kit",
   "topic": "Zine Making",
+  "tags": ["zine making", "instructions", "activity guide"],
   "created_by": "Library of Congress",
+  "created_by_url": "https://www.loc.gov/",
   "format": "Individual pages",
   "summary": "A guide to making your own zine.",
   "cover": {
