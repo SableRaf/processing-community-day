@@ -53,7 +53,8 @@ test('a populated zine collection emits linked assets and renders entries in fro
       downloadsSeparatorIndex < downloadsIndex,
       'tags should render between the author and description, with separators around the details',
     );
-    assert.match(page, /<dt[^>]*>Format<\/dt>\s*<dd[^>]*>workshop<\/dd>/);
+    assert.match(page, /<dt[^>]*>Activity type<\/dt>\s*<dd[^>]*>Workshop<\/dd>/);
+    assert.match(page, /<dt[^>]*>Zine format<\/dt>\s*<dd[^>]*>Single-sheet folded zine<\/dd>/);
     assert.match(page, /<dt[^>]*>Duration<\/dt>\s*<dd[^>]*>2 hours<\/dd>/);
     assert.match(page, /<dt[^>]*>Required materials<\/dt>\s*<dd[^>]*>Laptop and p5\.js editor<\/dd>/);
     assert.match(page, /<dt[^>]*>Topic<\/dt>\s*<dd[^>]*>Loops<\/dd>/);
@@ -83,6 +84,7 @@ test('a populated zine collection emits linked assets and renders entries in fro
       'https://guides.loc.gov/ld.php?content_id=67687837',
     );
     assert.match(zineMakingPage, /download-list__size[^>]*>519 kB</);
+    assert.match(zineMakingPage, /<dt[^>]*>Zine format<\/dt>\s*<dd[^>]*>Individual pages<\/dd>/);
 
     const library = readFileSync(join(DIST, 'organize/activity-guides/zine-library/index.html'), 'utf8');
     assert.match(library, /<ul class="guide-grid">\s*<li>\s*<a class="guide-card guide-card--zine" href="\/activity-guide\/zine-making-kit\/"/);

@@ -108,7 +108,13 @@ async function main() {
   };
   if (tags.length) submission.tags = tags;
   if (createdByUrl) submission.created_by_url = createdByUrl;
-  for (const [field, key] of [['Activity format', 'format'], ['Duration', 'duration'], ['Materials', 'materials'], ['Preferred attribution', 'attribution']]) {
+  for (const [field, key] of [
+    ['Activity type', 'activity_type'],
+    ['Zine format', 'zine_format'],
+    ['Duration', 'duration'],
+    ['Materials', 'materials'],
+    ['Preferred attribution', 'attribution'],
+  ]) {
     const value = fields.get(field)?.trim();
     if (value) submission[key] = value;
   }

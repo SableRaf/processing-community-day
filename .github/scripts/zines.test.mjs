@@ -16,6 +16,10 @@ const valid = () => ({
 describe('zine metadata', () => {
   test('accepts valid metadata', () => {
     assert.deepEqual(parseZineMetadata(valid(), 'loops-with-shapes'), valid());
+    const withFormats = {
+      ...valid(), activity_type: 'Workshop', zine_format: 'Single-sheet folded zine',
+    };
+    assert.deepEqual(parseZineMetadata(withFormats, 'loops-with-shapes'), withFormats);
     const withTags = { ...valid(), tags: ['beginner', 'p5.js'] };
     assert.deepEqual(parseZineMetadata(withTags, 'loops-with-shapes'), withTags);
     const withAuthorUrl = { ...valid(), created_by_url: 'https://example.com/guide-author' };
@@ -46,6 +50,7 @@ describe('zine metadata', () => {
       [{ ...valid(), title: '   ' }, /title/],
       [{ ...valid(), created_by_url: 'javascript:alert(1)' }, /created_by_url/],
       [{ ...valid(), id: 'Not Kebab' }, /id/],
+      [{ ...valid(), format: 'Workshop' }, /Unrecognized key/],
       [{ ...valid(), unexpected: true }, /Unrecognized key/],
       [{ ...valid(), cover: 'cover.png' }, /cover/],
       [{ ...valid(), cover: { src: 'cover.PNG', alt: 'Cover' } }, /cover/],

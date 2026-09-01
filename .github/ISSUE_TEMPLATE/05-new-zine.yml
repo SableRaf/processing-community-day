@@ -74,10 +74,15 @@ body:
     validations:
       required: true
   - type: input
-    id: activity_format
+    id: activity_type
     attributes:
-      label: Activity format
-      description: Optional, for example workshop, discussion, or creative exercise.
+      label: Activity type
+      description: Optional. How is the activity intended to be used? For example, workshop, group discussion, self-guided activity, or creative exercise.
+  - type: input
+    id: zine_format
+    attributes:
+      label: Zine format
+      description: Optional. How is the zine structured? For example, single-sheet folded zine, multi-sheet booklet, individual pages, or digital-only.
   - type: input
     id: duration
     attributes:
