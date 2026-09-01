@@ -259,26 +259,6 @@
   text-decoration: none;
   border-radius: var(--border-radius);
 }
-.guide-card--empty {
-  justify-content: flex-start;
-  gap: var(--sp-3);
-  padding: var(--sp-4);
-  color: var(--color-text-subtle);
-  border: 1px dashed var(--color-border);
-}
-.guide-card__empty-title {
-  display: flex;
-  flex: 1;
-  align-items: center;
-  justify-content: center;
-}
-.guide-card__submit {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--sp-1);
-  font-size: var(--step-2);
-  white-space: nowrap;
-}
 .guide-card--zine {
   align-items: stretch;
   justify-content: flex-start;
@@ -331,8 +311,8 @@
   font-size: var(--step-2);
 }
 .guide-card--add {
-  flex-direction: row;
-  gap: var(--sp-2);
+  align-self: flex-start;
+  gap: var(--sp-3);
   padding: var(--sp-4);
   color: var(--color-link);
   font-weight: 600;
@@ -343,11 +323,11 @@
   background: var(--docs-sidebar-color);
 }
 .guide-card__plus {
-  font-size: var(--step-7);
-  font-weight: 300;
-  line-height: 1;
+  width: 3.5rem;
+  height: 3.5rem;
+  flex: 0 0 auto;
+  fill: currentColor;
 }
-.guide-card--add svg { flex: 0 0 auto; }
 .activity-guide-submit { margin-top: var(--sp-5); }
 .activity-guide-submit .btn { display: inline-flex; align-items: center; gap: var(--sp-2); }
 

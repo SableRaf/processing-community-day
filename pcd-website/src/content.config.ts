@@ -43,11 +43,6 @@ const zines = defineCollection({
   schema: z.object({
     id: z.string(),
     order: z.number().int().nonnegative(),
-    placeholder: z.boolean().default(false),
-    title: z.string().trim().min(1).optional(),
-  }).refine((data) => !data.placeholder || Boolean(data.title), {
-    message: 'Placeholder zines require a title',
-    path: ['title'],
   }),
 });
 

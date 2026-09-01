@@ -10,7 +10,6 @@ interface MetadataModule { default: unknown }
 export interface Zine {
   id: string;
   order: number;
-  placeholder: false;
   title: string;
   topic: string;
   created_by: string;
@@ -26,15 +25,6 @@ export interface Zine {
   href: string;
   entry: CollectionEntry<'zines'>;
 }
-
-export interface ZinePlaceholder {
-  id: string;
-  order: number;
-  placeholder: true;
-  title: string;
-}
-
-export type ZineCard = Zine | ZinePlaceholder;
 
 function filename(path: string): string {
   return path.slice(path.lastIndexOf('/') + 1);
@@ -70,20 +60,14 @@ export async function loadZines(): Promise<Zine[]> {
   });
   if (!Object.keys(metadataModules).length && !Object.keys(indexFiles).length) return [];
   const entries = await getCollection('zines');
-  const publishedEntries = entries.filter((entry) => !entry.data.placeholder);
   const metadataBySlug = filesBySlug(metadataModules);
   const coversBySlug = filesBySlug(covers);
   const pdfsBySlug = filesBySlug(pdfs);
-  const allEntriesBySlug = new Map(entries.map((entry) => [entry.id, entry]));
-  const entriesBySlug = new Map(publishedEntries.map((entry) => [entry.id, entry]));
+  const entriesBySlug = new Map(entries.map((entry) => [entry.id, entry]));
 
   for (const slug of metadataBySlug.keys()) {
-    const entry = allEntriesBySlug.get(slug);
-    if (!entry) {
+    if (!entriesBySlug.has(slug)) {
       throw new Error(`Zine "${slug}" has metadata.json but no sibling index.md. Add src/content/zines/${slug}/index.md.`);
-    }
-    if (entry.data.placeholder) {
-      throw new Error(`Placeholder zine "${slug}" must not include metadata.json.`);
     }
   }
   for (const entry of entries) {
@@ -117,7 +101,6 @@ export async function loadZines(): Promise<Zine[]> {
     return {
       ...metadata,
       order: entry.data.order,
-      placeholder: false as const,
       cover: metadata.cover && coverImage
         ? { src: coverImage, alt: metadata.cover.alt }
         : undefined,
@@ -132,24 +115,5 @@ export async function loadZines(): Promise<Zine[]> {
       href: `/activity-guide/${metadata.id}/`,
       entry,
     };
-  }).sort((a, b) => a.order - b.order || a.title.localeCompare(b.title));
-}
-
-export async function loadZineCards(): Promise<ZineCard[]> {
-  const [entries, zines] = await Promise.all([getCollection('zines'), loadZines()]);
-  const zinesById = new Map(zines.map((zine) => [zine.id, zine]));
-
-  return entries.map((entry): ZineCard => {
-    if (entry.data.placeholder) {
-      return {
-        id: entry.id,
-        order: entry.data.order,
-        placeholder: true,
-        title: entry.data.title!,
-      };
-    }
-    const zine = zinesById.get(entry.id);
-    if (!zine) throw new Error(`Published zine "${entry.id}" could not be loaded.`);
-    return zine;
   }).sort((a, b) => a.order - b.order || a.title.localeCompare(b.title));
 }

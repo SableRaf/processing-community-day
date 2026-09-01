@@ -76,28 +76,19 @@ test('a populated zine collection emits linked assets and renders entries in fro
     assert.match(library, new RegExp(`href="/activity-guide/${SLUG}/"`));
     assert.match(library, /A compact guide to making patterns with repeated shapes\./);
     assert.ok(
-      library.indexOf('/activity-guide/zine-making-kit/') < library.indexOf('<strong>Variables</strong>'),
-      'order 1 should render before order 2',
+      library.indexOf('/activity-guide/zine-making-kit/') < library.indexOf(`/activity-guide/${SLUG}/`),
+      'order 1 should render before order 13',
     );
-    assert.ok(
-      library.indexOf('<strong>Randomness</strong>') < library.indexOf(`/activity-guide/${SLUG}/`),
-      'order 12 should render before order 13',
-    );
-    assert.equal((library.match(/Submit a zine/g) ?? []).length, 11, 'each placeholder should render a submission button');
-    assert.doesNotMatch(library, /Guide wanted/);
-    const variablesLink = library.match(/<strong>Variables<\/strong>[\s\S]*?<a[^>]+href="([^"]+)"/);
-    assert.ok(variablesLink, 'the Variables placeholder should have a submission link');
-    const variablesUrl = new URL(variablesLink[1].replaceAll('&amp;', '&'));
-    assert.equal(variablesUrl.searchParams.get('title'), 'Activity Guide Submission: Variables');
+    assert.equal((library.match(/Submit a Zine/g) ?? []).length, 1, 'the grid should render one submission card');
     assert.match(
-      variablesUrl.searchParams.get('body') ?? '',
-      /\*\*Title:\*\* Variables/,
-      'a placeholder submission should pre-populate its topic in the submission body',
+      library,
+      /guide-card guide-card--add[^>]*>[\s\S]*?<svg class="guide-card__plus" aria-hidden="true" viewBox="0 0 16 16">\s*<path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0Z[^>]+><\/path>\s*<\/svg>\s*<span>Submit a Zine<\/span>/,
+      'the submission card should render the feed-plus Octicon followed by its label',
     );
-    assert.equal(existsSync(join(DIST, 'activity-guide/variables/index.html')), false, 'placeholders should not get detail pages');
+    assert.doesNotMatch(library, /guide-card--empty|<strong>Variables<\/strong>/);
     const grid = library.match(/<ul class="guide-grid">([\s\S]*?)<\/ul>/);
     assert.ok(grid, 'the library should render its grid');
-    assert.equal((grid[1].match(/<li>/g) ?? []).length, 14, 'the grid should contain all file-backed entries plus submission');
+    assert.equal((grid[1].match(/<li>/g) ?? []).length, 3, 'the grid should contain published zines plus submission');
     const gridCover = grid[1].match(/<img[^>]+src="([^"]+)"/);
     assert.ok(gridCover, 'the zine card should render a cover image');
     assert.ok(existsSync(emittedPath(gridCover[1])), 'the card cover should be emitted');

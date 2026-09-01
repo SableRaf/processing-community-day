@@ -1,49 +1,33 @@
 ---
 import { Image } from 'astro:assets';
-import { ACTIVITY_GUIDE_SUBMIT_URL, activityGuideSubmitUrl } from '../config';
-import { loadZineCards } from '../lib/zines';
-import ExternalLinkIcon from './ExternalLinkIcon.astro';
+import { ACTIVITY_GUIDE_SUBMIT_URL } from '../config';
+import { loadZines } from '../lib/zines';
 
-const cards = await loadZineCards();
+const zines = await loadZines();
 ---
 
 <ul class="guide-grid">
-  {cards.map((card) => {
-    return card.placeholder ? (
-      <li>
-        <div class="guide-card guide-card--empty">
-          <span class="guide-card__empty-title"><strong>{card.title}</strong></span>
-          <a
-            class="guide-card__submit"
-            href={activityGuideSubmitUrl(card.title)}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Submit a zine <ExternalLinkIcon />
-          </a>
-        </div>
-      </li>
-    ) : (
-      <li>
-        <a class="guide-card guide-card--zine" href={card.href}>
-          <span class="guide-card__cover-frame">
-            {card.cover
-              ? <Image src={card.cover.src} alt={card.cover.alt} />
-              : <span class="guide-card__cover-placeholder" aria-hidden="true">{card.title}</span>}
-          </span>
-          <span class="guide-card__body">
-            <strong>{card.title}</strong>
-            <span class="guide-card__summary">{card.summary}</span>
-          </span>
-        </a>
-      </li>
-    );
-  })}
+  {zines.map((zine) => (
+    <li>
+      <a class="guide-card guide-card--zine" href={zine.href}>
+        <span class="guide-card__cover-frame">
+          {zine.cover
+            ? <Image src={zine.cover.src} alt={zine.cover.alt} />
+            : <span class="guide-card__cover-placeholder" aria-hidden="true">{zine.title}</span>}
+        </span>
+        <span class="guide-card__body">
+          <strong>{zine.title}</strong>
+          <span class="guide-card__summary">{zine.summary}</span>
+        </span>
+      </a>
+    </li>
+  ))}
   <li>
     <a class="guide-card guide-card--add" href={ACTIVITY_GUIDE_SUBMIT_URL} target="_blank" rel="noopener noreferrer">
-      <span class="guide-card__plus" aria-hidden="true">+</span>
-      <span>Submit a guide</span>
-      <ExternalLinkIcon />
+      <svg class="guide-card__plus" aria-hidden="true" viewBox="0 0 16 16">
+        <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0Zm1.062 4.312a1 1 0 1 0-2 0v2.75h-2.75a1 1 0 0 0 0 2h2.75v2.75a1 1 0 1 0 2 0v-2.75h2.75a1 1 0 1 0 0-2h-2.75Z"></path>
+      </svg>
+      <span>Submit a Zine</span>
     </a>
   </li>
 </ul>
