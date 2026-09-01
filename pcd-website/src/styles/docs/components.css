@@ -316,10 +316,6 @@
   color: var(--color-text-muted);
   font-size: var(--step-2);
 }
-.guide-card__summary {
-  color: var(--color-text-muted);
-  font-size: var(--step-2);
-}
 .guide-card--add {
   align-self: flex-start;
   gap: var(--sp-3);
