@@ -82,9 +82,9 @@ These tests cover the shared pure functions extracted into `event-issue-helpers.
 
 | Suite | Cases |
 |---|---|
-| `zines.test.mjs` | Schema, URL safety, draft rejection, identity/id uniqueness, optional covers, external downloads, and asset validation |
-| `zine-build.test.mjs` | Published cards loaded from files, frontmatter ordering, the single GitHub issue-form submission card, download metadata, accessible cover rendering, emitted local assets, and source links |
-| `process-new-zine-issue.test.mjs` | New-zine issue validation, source URL roles, draft JSON/Markdown output, provenance, optional metadata, duplicate slugs, template skipping, and stable issue-edit branch inputs |
+| `zines.test.mjs` | Schema including optional tags, creator/source URL safety, draft rejection, identity/id uniqueness, optional covers, external downloads, and asset validation |
+| `zine-build.test.mjs` | Published cards loaded from files, frontmatter ordering, detail metadata and tags, the single GitHub issue-form submission card, download metadata, accessible cover rendering, emitted local assets, and source links |
+| `process-new-zine-issue.test.mjs` | New-zine issue validation, creator and source URLs, tag parsing, draft JSON/Markdown output, provenance, optional metadata, duplicate slugs, template skipping, and stable issue-edit branch inputs |
 
 ---
 

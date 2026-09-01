@@ -19,48 +19,89 @@ const { Content } = await render(zine.entry);
 
 <SiteLayout title={`${zine.title} — Processing Community Day`} description={zine.summary}>
   <article class="prose activity-guide">
-    <BackButton href="/organize/activity-guides/zine-library/" />
-    <p class="prose__eyebrow">Activity Guide</p>
-    {zine.cover
-      ? <Image class="activity-guide__cover" src={zine.cover.src} alt={zine.cover.alt} />
-      : <div class="activity-guide__cover activity-guide__cover--placeholder" aria-hidden="true">{zine.title}</div>}
+    <BackButton href="/organize/activity-guides/zine-library/" label="Back to Zine Library" />
 
-    <h1>{zine.title}</h1>
-    <Content />
+    <div class="activity-guide__layout">
+      <div class="activity-guide__sidebar">
+        {zine.cover
+          ? <Image class="activity-guide__cover" src={zine.cover.src} alt={zine.cover.alt} />
+          : <div class="activity-guide__cover activity-guide__cover--placeholder" aria-hidden="true">{zine.title}</div>}
+      </div>
 
-    <dl class="activity-guide__metadata">
-      <div><dt>Topic</dt><dd>{zine.topic}</dd></div>
-      <div><dt>Created by</dt><dd>{zine.created_by}</dd></div>
-      {zine.format && <div><dt>Format</dt><dd>{zine.format}</dd></div>}
-      {zine.duration && <div><dt>Duration</dt><dd>{zine.duration}</dd></div>}
-      {zine.materials && <div><dt>Materials</dt><dd>{zine.materials}</dd></div>}
-    </dl>
+      <div class="activity-guide__main">
+        <h1>{zine.title}</h1>
+        <p class:list={['activity-guide__author', { 'activity-guide__author--with-tags': zine.tags }]}>
+          by {zine.created_by_url
+            ? <a href={zine.created_by_url} target="_blank" rel="noopener noreferrer">{zine.created_by}</a>
+            : zine.created_by}
+        </p>
+        {zine.tags && (
+          <ul class="activity-guide__tags" aria-label="Tags">
+            {zine.tags.map((tag) => <li class="activity-guide__tag">{tag}</li>)}
+          </ul>
+        )}
 
-    <ZineDownloads downloads={zine.pdfs} />
+        <div class="activity-guide__details">
+          <Content />
 
-    {(zine.license || zine.attribution) && (
-      <>
-        <h2>Licence and attribution</h2>
-        {zine.license && <p>This guide is available under the <a href={LICENSE_URLS[zine.license]}>{zine.license} License</a>.</p>}
-        {zine.attribution && <p><strong>Preferred attribution:</strong> {zine.attribution}</p>}
-      </>
-    )}
+          <hr />
 
-    {zine.source_url && (
-      <p>
-        <a href={zine.source_url} target="_blank" rel="noopener noreferrer">
-          View the original submission <ExternalLinkIcon />
-        </a>
-      </p>
-    )}
+          <section class="activity-guide__metadata" aria-label="Details">
+            <dl>
+              <div><dt>Topic</dt><dd>{zine.topic}</dd></div>
+              {zine.format && <div><dt>Format</dt><dd>{zine.format}</dd></div>}
+              {zine.duration && <div><dt>Duration</dt><dd>{zine.duration}</dd></div>}
+              {zine.materials && <div><dt>Required materials</dt><dd>{zine.materials}</dd></div>}
+            </dl>
+          </section>
+
+          <hr />
+
+          <ZineDownloads downloads={zine.pdfs} />
+
+          {(zine.license || zine.attribution) && (
+            <>
+              <h2>Licence and attribution</h2>
+              {zine.license && <p>This guide is available under the <a href={LICENSE_URLS[zine.license]}>{zine.license} License</a>.</p>}
+              {zine.attribution && <p><strong>Preferred attribution:</strong> {zine.attribution}</p>}
+            </>
+          )}
+
+          {zine.source_url && (
+            <p>
+              <a href={zine.source_url} target="_blank" rel="noopener noreferrer">
+                View the original submission <ExternalLinkIcon />
+              </a>
+            </p>
+          )}
+        </div>
+      </div>
+    </div>
   </article>
 </SiteLayout>
 
 <style>
+  .activity-guide {
+    max-width: 72rem;
+  }
+
+  .activity-guide__layout {
+    display: grid;
+    gap: var(--spacing-xl);
+  }
+
+  .activity-guide__main {
+    min-width: 0;
+  }
+
+  .activity-guide__main h1 {
+    margin-bottom: var(--spacing-xs);
+  }
+
   .activity-guide__cover {
     display: block;
     width: 100%;
-    margin: 0 0 var(--spacing-lg);
+    margin: 0;
     border: 1px solid var(--color-border);
     border-radius: var(--border-radius);
   }
@@ -78,17 +119,69 @@ const { Content } = await render(zine.entry);
     background: var(--color-border);
   }
 
-  .activity-guide__metadata {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
-    gap: var(--spacing-sm) var(--spacing-lg);
+  .activity-guide__author {
     margin: 0 0 var(--spacing-lg);
-    padding: var(--spacing-md);
-    border: 1px solid var(--color-border);
-    border-radius: var(--border-radius);
+    color: var(--color-text-muted);
+    font-size: 0.9375rem;
   }
 
-  .activity-guide__metadata div { min-width: 0; }
-  .activity-guide__metadata dt { font-size: 0.8125rem; font-weight: 600; color: var(--color-text-subtle); }
-  .activity-guide__metadata dd { margin: 0; color: var(--color-text); }
+  .activity-guide__author--with-tags {
+    margin-bottom: var(--spacing-md);
+  }
+
+  .activity-guide__details {
+    min-width: 0;
+  }
+
+  .activity-guide__metadata dl {
+    display: grid;
+    gap: var(--spacing-sm);
+    margin: 0;
+  }
+
+  .activity-guide__metadata dl > div {
+    display: grid;
+    grid-template-columns: minmax(7rem, auto) minmax(0, 1fr);
+    gap: var(--spacing-md);
+  }
+
+  .activity-guide__metadata dt {
+    color: var(--color-text-subtle);
+    font-weight: 600;
+  }
+
+  .activity-guide__metadata dd {
+    min-width: 0;
+    margin: 0;
+    color: var(--color-text-muted);
+    overflow-wrap: anywhere;
+  }
+
+  .activity-guide__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-xs);
+    margin: 0 0 var(--spacing-lg);
+    padding: 0;
+    list-style: none;
+  }
+
+  .activity-guide__tag {
+    margin: 0;
+    padding: 0.25rem 0.625rem;
+    color: var(--color-text-muted);
+    font-size: 0.8125rem;
+    font-weight: 400;
+    line-height: 1.25;
+    background: var(--color-bg-popup-hover);
+    border-radius: 0.25rem;
+  }
+
+  @media (min-width: 50rem) {
+    .activity-guide__layout {
+      grid-template-columns: minmax(16rem, 2fr) minmax(0, 3fr);
+      gap: var(--spacing-xl);
+      align-items: start;
+    }
+  }
 </style>
