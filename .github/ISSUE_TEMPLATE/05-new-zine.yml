@@ -82,7 +82,8 @@ body:
     id: zine_format
     attributes:
       label: Zine format
-      description: Optional. How is the zine structured? For example, single-sheet folded zine, multi-sheet booklet, individual pages, or digital-only.
+      description: Optional. How is the zine structured, and what paper size does it use? For example, single-sheet folded zine on A4 / US Letter, multi-sheet booklet, individual pages, or digital-only.
+      placeholder: Single-sheet 8-page folded mini-zine on A4
   - type: input
     id: duration
     attributes:
