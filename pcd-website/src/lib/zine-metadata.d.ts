@@ -4,11 +4,15 @@ export declare const LICENSE_URLS: Record<ZineLicense, string>;
 export type ZinePdf =
   | { file: string; label: string; file_size: string }
   | { url: string; label: string; filename: string; file_size: string };
+export interface ZineCover {
+  src: string;
+  alt: string;
+}
 export interface ZineMetadata {
   id: string; title: string; topic: string;
   created_by: string; attribution?: string;
   format?: string; duration?: string; materials?: string;
-  summary: string; cover?: string; pdfs: ZinePdf[];
+  summary: string; cover?: ZineCover; pdfs: ZinePdf[];
   license?: ZineLicense; source_url?: string;
 }
 

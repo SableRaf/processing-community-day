@@ -19,7 +19,7 @@ export interface Zine {
   duration?: string;
   materials?: string;
   summary: string;
-  cover?: ImageMetadata;
+  cover?: { src: ImageMetadata; alt: string };
   pdfs: { url: string; label: string; filename: string; fileSize: string }[];
   license?: ZineLicense;
   source_url?: string;
@@ -111,14 +111,16 @@ export async function loadZines(): Promise<Zine[]> {
   assertUniqueIds(parsed.map(({ metadata }) => metadata));
 
   return parsed.map(({ slug, metadata, entry }) => {
-    const cover = metadata.cover ? coversBySlug.get(slug)?.get(metadata.cover) : undefined;
-    if (metadata.cover && !cover) throw new Error(`Zine "${slug}" cover "${metadata.cover}" could not be loaded.`);
+    const coverImage = metadata.cover ? coversBySlug.get(slug)?.get(metadata.cover.src) : undefined;
+    if (metadata.cover && !coverImage) throw new Error(`Zine "${slug}" cover "${metadata.cover.src}" could not be loaded.`);
     const pdfFiles = pdfsBySlug.get(slug);
     return {
       ...metadata,
       order: entry.data.order,
       placeholder: false as const,
-      cover,
+      cover: metadata.cover && coverImage
+        ? { src: coverImage, alt: metadata.cover.alt }
+        : undefined,
       pdfs: metadata.pdfs.map((pdf) => {
         if ('url' in pdf) return {
           url: pdf.url, label: pdf.label, filename: pdf.filename, fileSize: pdf.file_size,

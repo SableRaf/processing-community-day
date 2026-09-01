@@ -22,7 +22,10 @@ export const zineMetadataSchema = z.object({
   duration: z.string().trim().min(1).optional(),
   materials: z.string().trim().min(1).optional(),
   summary: z.string().trim().min(1),
-  cover: z.string().regex(/\.(png|jpg|jpeg|webp)$/, 'cover must be a lowercase .png/.jpg/.jpeg/.webp').optional(),
+  cover: z.object({
+    src: z.string().regex(/\.(png|jpg|jpeg|webp)$/, 'must be a lowercase .png/.jpg/.jpeg/.webp'),
+    alt: z.string().trim().min(1),
+  }).strict().optional(),
   pdfs: z.array(z.union([
     z.object({
       file: z.string().regex(/\.pdf$/, 'must be a lowercase .pdf'),
@@ -82,7 +85,7 @@ export function assertUniqueIds(zines) {
 export function resolveZineAssets(slug, metadata, availableFiles) {
   const available = new Set(availableFiles);
   const localPdfs = metadata.pdfs.flatMap((pdf) => 'file' in pdf ? [pdf.file] : []);
-  const required = [...(metadata.cover ? [metadata.cover] : []), ...localPdfs];
+  const required = [...(metadata.cover ? [metadata.cover.src] : []), ...localPdfs];
   const missing = required.filter((file) => !available.has(file));
   if (missing.length) {
     throw new Error(
@@ -90,5 +93,5 @@ export function resolveZineAssets(slug, metadata, availableFiles) {
       `Available files in src/content/zines/${slug}/: ${availableFiles.join(', ') || '(none)'}.`,
     );
   }
-  return { cover: metadata.cover, pdfs: localPdfs };
+  return { cover: metadata.cover?.src, pdfs: localPdfs };
 }

@@ -36,6 +36,15 @@ test('a populated zine collection emits linked assets and renders entries in fro
     const page = readFileSync(pagePath, 'utf8');
     assert.match(page, /Loops with Shapes/);
     assert.match(page, /View the original submission/);
+    const coverIndex = page.indexOf('class="activity-guide__cover"');
+    const titleIndex = page.indexOf('>Loops with Shapes</h1>');
+    const descriptionIndex = page.indexOf('Use a loop to draw a playful field of shapes.');
+    const metadataIndex = page.indexOf('class="activity-guide__metadata"');
+    assert.ok(
+      coverIndex !== -1 && coverIndex < titleIndex &&
+      titleIndex < descriptionIndex && descriptionIndex < metadataIndex,
+      'the cover should render before the title and description, followed by metadata',
+    );
 
     for (const filename of ['guide-small.pdf', 'guide-print.pdf']) {
       assert.ok(existsSync(emittedPath(hrefForFilename(page, filename))), `${filename} should resolve to an emitted PDF`);
@@ -45,17 +54,25 @@ test('a populated zine collection emits linked assets and renders entries in fro
     assert.ok(pageCover, 'the zine page should render a cover image');
     assert.ok(existsSync(emittedPath(pageCover[1])), 'the zine cover should be emitted');
 
-    const noCoverPage = readFileSync(join(DIST, 'activity-guide/zine-making-kit/index.html'), 'utf8');
-    assert.match(noCoverPage, /activity-guide__cover--placeholder[^>]*>Zine Making Kit</);
+    const zineMakingPage = readFileSync(join(DIST, 'activity-guide/zine-making-kit/index.html'), 'utf8');
+    const zineMakingCover = zineMakingPage.match(
+      /<img[^>]+src="([^"]+)"[^>]+alt="Zine Making Kit"[^>]+class="activity-guide__cover"/,
+    );
+    assert.ok(zineMakingCover, 'the Zine Making Kit page should render its accessible cover image');
+    assert.ok(existsSync(emittedPath(zineMakingCover[1])), 'the Zine Making Kit cover should be emitted');
     assert.equal(
-      hrefForFilename(noCoverPage, 'B230_zinemakingactivity.pdf'),
+      hrefForFilename(zineMakingPage, 'B230_zinemakingactivity.pdf'),
       'https://guides.loc.gov/ld.php?content_id=67687837',
     );
-    assert.match(noCoverPage, /download-list__size[^>]*>519 kB</);
+    assert.match(zineMakingPage, /download-list__size[^>]*>519 kB</);
 
     const library = readFileSync(join(DIST, 'organize/activity-guides/zine-library/index.html'), 'utf8');
     assert.match(library, /<ul class="guide-grid">\s*<li>\s*<a class="guide-card guide-card--zine" href="\/activity-guide\/zine-making-kit\/"/);
-    assert.match(library, /guide-card__cover-placeholder[^>]*>Zine Making Kit</);
+    assert.match(
+      library,
+      /guide-card__cover-frame[\s\S]*?<\/span>\s*<span class="guide-card__body">\s*<strong>Zine Making Kit<\/strong>/,
+    );
+    assert.match(library, /<img[^>]+alt="Zine Making Kit"/);
     assert.match(library, new RegExp(`href="/activity-guide/${SLUG}/"`));
     assert.match(library, /A compact guide to making patterns with repeated shapes\./);
     assert.ok(

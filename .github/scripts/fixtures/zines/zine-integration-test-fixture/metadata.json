@@ -8,7 +8,10 @@
   "duration": "2 hours",
   "materials": "Laptop and p5.js editor",
   "summary": "A compact guide to making patterns with repeated shapes.",
-  "cover": "cover.png",
+  "cover": {
+    "src": "cover.png",
+    "alt": "Loops with Shapes zine cover"
+  },
   "pdfs": [
     { "file": "guide-small.pdf", "label": "Read on screen", "file_size": "96 B" },
     { "file": "guide-print.pdf", "label": "Print and fold", "file_size": "96 B" }

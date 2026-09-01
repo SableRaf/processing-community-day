@@ -8,7 +8,8 @@ import {
 const valid = () => ({
   id: 'loops-with-shapes', title: 'Loops with Shapes', topic: 'Loops',
   created_by: 'Guide Author', summary: 'Make patterns with repeated shapes.',
-  cover: 'cover.png', pdfs: [{ file: 'guide.pdf', label: 'Read on screen', file_size: '24 kB' }],
+  cover: { src: 'cover.png', alt: 'Loops with Shapes zine cover' },
+  pdfs: [{ file: 'guide.pdf', label: 'Read on screen', file_size: '24 kB' }],
   license: 'CC BY-SA 4.0',
 });
 
@@ -39,7 +40,10 @@ describe('zine metadata', () => {
       [{ ...valid(), title: '   ' }, /title/],
       [{ ...valid(), id: 'Not Kebab' }, /id/],
       [{ ...valid(), unexpected: true }, /Unrecognized key/],
-      [{ ...valid(), cover: 'cover.PNG' }, /cover/],
+      [{ ...valid(), cover: 'cover.png' }, /cover/],
+      [{ ...valid(), cover: { src: 'cover.PNG', alt: 'Cover' } }, /cover/],
+      [{ ...valid(), cover: { src: 'cover.png', alt: '   ' } }, /cover/],
+      [{ ...valid(), cover: { src: 'cover.png', alt: 'Cover', extra: true } }, /Unrecognized key/],
       [{ ...valid(), pdfs: [] }, /pdfs/],
       [{ ...valid(), pdfs: [{ file: 'guide.PDF', label: 'PDF', file_size: '24 kB' }] }, /pdfs/],
       [{ ...valid(), pdfs: [{ file: 'guide.txt', label: 'Text', file_size: '24 kB' }] }, /pdfs/],

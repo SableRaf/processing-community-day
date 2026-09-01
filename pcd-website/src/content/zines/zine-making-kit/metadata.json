@@ -5,6 +5,10 @@
   "created_by": "Library of Congress",
   "format": "Individual pages",
   "summary": "A guide to making your own zine.",
+  "cover": {
+    "src": "cover.png",
+    "alt": "Zine Making Kit"
+  },
   "pdfs": [
     {
       "url": "https://guides.loc.gov/ld.php?content_id=67687837",

@@ -281,29 +281,39 @@
 }
 .guide-card--zine {
   align-items: stretch;
-  border: 1px solid var(--color-border);
+  justify-content: flex-start;
+  aspect-ratio: auto;
+  overflow: visible;
 }
-.guide-card--zine:hover {
+.guide-card--zine:hover .guide-card__cover-frame {
   border-color: var(--color-primary);
-  background: var(--docs-sidebar-color);
 }
 .guide-card--zine:focus-visible,
 .guide-card--add:focus-visible {
   outline: 3px solid var(--color-focus);
   outline-offset: 3px;
 }
-.guide-card--zine img {
+.guide-card__cover-frame {
+  display: flex;
+  width: 100%;
+  aspect-ratio: 210 / 297;
+  overflow: hidden;
+  background: var(--docs-sidebar-color);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+}
+.guide-card__cover-frame img {
   display: block;
   width: 100%;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
+  height: 100%;
+  object-fit: contain;
 }
 .guide-card__cover-placeholder {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
-  aspect-ratio: 4 / 3;
+  height: 100%;
   padding: var(--sp-4);
   color: var(--color-text-subtle);
   font-weight: 600;
@@ -311,11 +321,10 @@
 }
 .guide-card__body {
   display: flex;
-  flex: 1;
   flex-direction: column;
   align-items: center;
   gap: var(--sp-1);
-  padding: var(--sp-3);
+  padding: var(--sp-3) 0 0;
 }
 .guide-card__summary {
   color: var(--color-text-muted);

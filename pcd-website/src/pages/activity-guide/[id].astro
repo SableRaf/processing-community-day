@@ -21,10 +21,12 @@ const { Content } = await render(zine.entry);
   <article class="prose activity-guide">
     <BackButton href="/organize/activity-guides/zine-library/" />
     <p class="prose__eyebrow">Activity Guide</p>
-    <h1>{zine.title}</h1>
     {zine.cover
-      ? <Image class="activity-guide__cover" src={zine.cover} alt="" />
+      ? <Image class="activity-guide__cover" src={zine.cover.src} alt={zine.cover.alt} />
       : <div class="activity-guide__cover activity-guide__cover--placeholder" aria-hidden="true">{zine.title}</div>}
+
+    <h1>{zine.title}</h1>
+    <Content />
 
     <dl class="activity-guide__metadata">
       <div><dt>Topic</dt><dd>{zine.topic}</dd></div>
@@ -33,8 +35,6 @@ const { Content } = await render(zine.entry);
       {zine.duration && <div><dt>Duration</dt><dd>{zine.duration}</dd></div>}
       {zine.materials && <div><dt>Materials</dt><dd>{zine.materials}</dd></div>}
     </dl>
-
-    <Content />
 
     <ZineDownloads downloads={zine.pdfs} />
 

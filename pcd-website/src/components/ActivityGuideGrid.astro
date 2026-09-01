@@ -26,13 +26,15 @@ const cards = await loadZineCards();
     ) : (
       <li>
         <a class="guide-card guide-card--zine" href={card.href}>
-          {card.cover
-            ? <Image src={card.cover} alt="" />
-          : <span class="guide-card__cover-placeholder" aria-hidden="true">{card.title}</span>}
-        <span class="guide-card__body">
-          <strong>{card.title}</strong>
-          <span class="guide-card__summary">{card.summary}</span>
-        </span>
+          <span class="guide-card__cover-frame">
+            {card.cover
+              ? <Image src={card.cover.src} alt={card.cover.alt} />
+              : <span class="guide-card__cover-placeholder" aria-hidden="true">{card.title}</span>}
+          </span>
+          <span class="guide-card__body">
+            <strong>{card.title}</strong>
+            <span class="guide-card__summary">{card.summary}</span>
+          </span>
         </a>
       </li>
     );
