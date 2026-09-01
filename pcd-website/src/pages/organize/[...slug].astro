@@ -40,6 +40,7 @@ const markdown = `# ${entry.data.title}\n\n${entry.body?.trim() ?? ''}\n${markdo
   eyebrow={entry.data.section ?? "Organizer's Kit"}
   headings={headings}
   markdown={markdown}
+  editHref={editHref}
 >
   <Content />
   {entry.id === 'activity-guides/zine-library' && <ZineGrid />}
@@ -70,12 +71,6 @@ const markdown = `# ${entry.data.title}\n\n${entry.body?.trim() ?? ''}\n${markdo
       )}
     </nav>
   )}
-
-  <div class="docs-page-footer">
-    <a class="docs-page-footer__link" href={editHref} target="_blank" rel="noopener noreferrer">
-      Edit this page on GitHub
-    </a>
-  </div>
 
   <p class="docs-page-credit">
     Theme adapted from <a

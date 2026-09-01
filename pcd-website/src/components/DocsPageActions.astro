@@ -1,0 +1,232 @@
+---
+import qrIcon from '../images/qr-code-bold-svgrepo-com_MIT_License.svg';
+
+interface Props {
+  markdown: string;
+  permalink: string;
+  editHref: string;
+}
+
+const { markdown, permalink, editHref } = Astro.props;
+---
+
+<div class="docs-page-actions" data-docs-page-actions data-permalink={permalink}>
+  <div class="share-menu">
+    <button
+      class="docs-action-button share-menu__trigger"
+      type="button"
+      aria-haspopup="menu"
+      aria-expanded="false"
+      aria-controls="docs-share-menu"
+      data-share-trigger
+    >
+      <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+        <path d="M15 3a3 3 0 0 1-5.175 2.066l-3.92 2.179a2.994 2.994 0 0 1 0 1.51l3.92 2.179a3 3 0 1 1-.73 1.31l-3.92-2.178a3 3 0 1 1 0-4.133l3.92-2.178A3 3 0 1 1 15 3Zm-1.5 10a1.5 1.5 0 1 0-3.001.001A1.5 1.5 0 0 0 13.5 13Zm-9-5a1.5 1.5 0 1 0-3.001.001A1.5 1.5 0 0 0 4.5 8Zm9-5a1.5 1.5 0 1 0-3.001.001A1.5 1.5 0 0 0 13.5 3Z"></path>
+      </svg>
+      <span>Share</span>
+      <svg class="share-menu__chevron" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+        <path d="M4.22 6.47a.75.75 0 0 1 1.06 0L8 9.19l2.72-2.72a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-3.25 3.25a.75.75 0 0 1-1.06 0l-3.25-3.25a.75.75 0 0 1 0-1.06Z"></path>
+      </svg>
+    </button>
+
+    <div class="share-menu__items" id="docs-share-menu" role="menu" hidden data-share-menu>
+      <button type="button" role="menuitem" data-copy-markdown={markdown}>
+        <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+          <path d="M14.85 3c.63 0 1.15.52 1.14 1.15v7.7c0 .63-.51 1.15-1.15 1.15H1.15C.52 13 0 12.48 0 11.84V4.15C0 3.52.52 3 1.15 3ZM9 11V5H7L5.5 7 4 5H2v6h2V8l1.5 1.92L7 8v3Zm2.99.5L14.5 8H13V5h-2v3H9.5Z"></path>
+        </svg>
+        <span>Copy as Markdown</span>
+      </button>
+      <button type="button" role="menuitem" data-copy-permalink>
+        <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+          <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path>
+          <path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+        </svg>
+        <span>Copy permalink</span>
+      </button>
+      <button type="button" role="menuitem" data-show-qr>
+        <img src={qrIcon.src} width="16" height="16" alt="" />
+        <span>Show QR code for this page</span>
+      </button>
+    </div>
+    <span class="share-menu__feedback" aria-hidden="true" data-copy-feedback>Copied!</span>
+  </div>
+
+  <a
+    class="docs-action-button"
+    href={editHref}
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Edit on GitHub (opens in a new tab)"
+  >
+    <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+      <path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path>
+    </svg>
+    <span>Edit on GitHub</span>
+  </a>
+
+  <p class="share-actions__status" role="status" aria-live="polite" data-share-status></p>
+
+  <dialog class="share-qr-dialog" aria-labelledby="share-qr-title" data-qr-dialog>
+    <div class="share-qr-dialog__header">
+      <h2 id="share-qr-title">QR code for this page</h2>
+      <button type="button" aria-label="Close QR code" data-close-qr>&times;</button>
+    </div>
+    <div class="share-qr-dialog__body">
+      <canvas
+        width="280"
+        height="280"
+        role="img"
+        aria-label={`QR code for ${permalink}`}
+        data-qr-canvas
+      ></canvas>
+      <p>{permalink}</p>
+    </div>
+  </dialog>
+</div>
+
+<script>
+  import { toCanvas } from 'qrcode';
+
+  const fallbackCopy = (text: string) => {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.setAttribute('readonly', '');
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    document.body.append(textarea);
+    textarea.select();
+    const copied = document.execCommand('copy');
+    textarea.remove();
+    if (!copied) throw new Error('Copy command failed');
+  };
+
+  const copyText = async (text: string) => {
+    if (navigator.clipboard?.writeText) {
+      try {
+        await navigator.clipboard.writeText(text);
+        return;
+      } catch {
+        // The legacy command can still work when clipboard permissions are denied.
+      }
+    }
+    fallbackCopy(text);
+  };
+
+  document.querySelectorAll<HTMLElement>('[data-docs-page-actions]').forEach((actions) => {
+    const trigger = actions.querySelector<HTMLButtonElement>('[data-share-trigger]');
+    const menu = actions.querySelector<HTMLElement>('[data-share-menu]');
+    const status = actions.querySelector<HTMLElement>('[data-share-status]');
+    const markdownButton = actions.querySelector<HTMLButtonElement>('[data-copy-markdown]');
+    const permalinkButton = actions.querySelector<HTMLButtonElement>('[data-copy-permalink]');
+    const copyFeedback = actions.querySelector<HTMLElement>('[data-copy-feedback]');
+    const qrButton = actions.querySelector<HTMLButtonElement>('[data-show-qr]');
+    const dialog = actions.querySelector<HTMLDialogElement>('[data-qr-dialog]');
+    const closeDialogButton = actions.querySelector<HTMLButtonElement>('[data-close-qr]');
+    const canvas = actions.querySelector<HTMLCanvasElement>('[data-qr-canvas]');
+    const permalink = actions.dataset.permalink ?? window.location.href;
+
+    if (!trigger || !menu || !status || !dialog || !canvas) return;
+
+    const menuItems = Array.from(menu.querySelectorAll<HTMLButtonElement>('[role="menuitem"]'));
+
+    const setMenuOpen = (open: boolean, restoreFocus = false) => {
+      menu.hidden = !open;
+      trigger.setAttribute('aria-expanded', String(open));
+      if (restoreFocus) trigger.focus();
+    };
+
+    const announceCopy = async (text: string, description: string) => {
+      setMenuOpen(false, true);
+      status.textContent = '';
+      try {
+        await copyText(text);
+        status.textContent = `${description} copied to clipboard.`;
+        if (copyFeedback) {
+          copyFeedback.classList.remove('share-menu__feedback--visible');
+          void copyFeedback.offsetWidth;
+          copyFeedback.classList.add('share-menu__feedback--visible');
+        }
+      } catch {
+        status.textContent = `Could not copy ${description.toLowerCase()}.`;
+      }
+    };
+
+    trigger.addEventListener('click', () => {
+      const open = trigger.getAttribute('aria-expanded') !== 'true';
+      setMenuOpen(open);
+      if (open) menuItems[0]?.focus();
+    });
+
+    trigger.addEventListener('keydown', (event) => {
+      if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
+      event.preventDefault();
+      setMenuOpen(true);
+      menuItems[event.key === 'ArrowDown' ? 0 : menuItems.length - 1]?.focus();
+    });
+
+    menu.addEventListener('keydown', (event) => {
+      const currentIndex = menuItems.indexOf(document.activeElement as HTMLButtonElement);
+      if (currentIndex < 0) return;
+
+      let nextIndex: number | undefined;
+      if (event.key === 'ArrowDown') nextIndex = (currentIndex + 1) % menuItems.length;
+      if (event.key === 'ArrowUp') nextIndex = (currentIndex - 1 + menuItems.length) % menuItems.length;
+      if (event.key === 'Home') nextIndex = 0;
+      if (event.key === 'End') nextIndex = menuItems.length - 1;
+
+      if (nextIndex !== undefined) {
+        event.preventDefault();
+        menuItems[nextIndex]?.focus();
+      }
+    });
+
+    markdownButton?.addEventListener('click', () => {
+      void announceCopy(markdownButton.dataset.copyMarkdown ?? '', 'Markdown');
+    });
+
+    permalinkButton?.addEventListener('click', () => {
+      void announceCopy(permalink, 'Permalink');
+    });
+
+    qrButton?.addEventListener('click', async () => {
+      setMenuOpen(false);
+      status.textContent = '';
+      dialog.showModal();
+      try {
+        await toCanvas(canvas, permalink, {
+          width: 280,
+          margin: 2,
+          errorCorrectionLevel: 'M',
+          color: { dark: '#1a1a1a', light: '#ffffff' },
+        });
+      } catch {
+        dialog.close();
+        status.textContent = 'Could not generate the QR code.';
+      }
+    });
+
+    closeDialogButton?.addEventListener('click', () => dialog.close());
+    dialog.addEventListener('click', (event) => {
+      if (event.target === dialog) dialog.close();
+    });
+    dialog.addEventListener('close', () => trigger.focus());
+
+    document.addEventListener('click', (event) => {
+      if (!actions.contains(event.target as Node)) setMenuOpen(false);
+    });
+
+    document.addEventListener('focusin', (event) => {
+      const target = event.target as Node;
+      if (!actions.contains(target) || (target !== trigger && !menu.contains(target))) {
+        setMenuOpen(false);
+      }
+    });
+
+    actions.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !menu.hidden) {
+        event.preventDefault();
+        setMenuOpen(false, true);
+      }
+    });
+  });
+</script>
