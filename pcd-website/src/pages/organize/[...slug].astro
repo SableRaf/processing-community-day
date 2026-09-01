@@ -4,8 +4,8 @@ import type { GetStaticPaths } from 'astro';
 import DocsLayout from '../../layouts/DocsLayout.astro';
 import { flattenKitNav, getKitNav } from '../../config/organizer-kit-nav';
 import { ACTIVITY_GUIDE_SUBMIT_URL } from '../../config';
-import ActivityGuideGrid from '../../components/ActivityGuideGrid.astro';
-import ActivityGuideSubmitButton from '../../components/ActivityGuideSubmitButton.astro';
+import ZineGrid from '../../components/ZineGrid.astro';
+import ZineSubmitButton from '../../components/ZineSubmitButton.astro';
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const entries = await getCollection('organizerKit', (entry) => !entry.data.draft);
@@ -42,8 +42,8 @@ const markdown = `# ${entry.data.title}\n\n${entry.body?.trim() ?? ''}\n${markdo
   markdown={markdown}
 >
   <Content />
-  {entry.id === 'activity-guides/zine-library' && <ActivityGuideGrid />}
-  {entry.id === 'activity-guides/contribute-a-guide' && <ActivityGuideSubmitButton />}
+  {entry.id === 'activity-guides/zine-library' && <ZineGrid />}
+  {entry.id === 'activity-guides/contribute-a-guide' && <ZineSubmitButton />}
 
   <a class="docs-back-to-top" href="#main">↑ Back to top</a>
 
