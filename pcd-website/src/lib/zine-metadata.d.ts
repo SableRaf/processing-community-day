@@ -12,7 +12,8 @@ export interface ZineMetadata {
   id: string; title: string; topic: string;
   tags?: string[];
   created_by: string; created_by_url?: string; attribution?: string;
-  format?: string; duration?: string; materials?: string;
+  activity_type?: string; zine_format?: string;
+  duration?: string; materials?: string;
   summary: string; cover?: ZineCover; pdfs: ZinePdf[];
   license?: ZineLicense; source_url?: string;
 }

@@ -9,26 +9,26 @@ body:
     attributes:
       value: |
         <!-- new-zine-template -->
-        Everything in this issue, including the PDF links and notes, is public. Do not include private or sensitive information. We stage accepted submissions for maintainer review before publishing them.
+        Everything you submit via this form is public. Do not include private or sensitive information.
   - type: input
     id: title
     attributes:
       label: Title
-      description: The public title of your activity guide.
+      description: The title of your zine.
     validations:
       required: true
   - type: input
     id: topic
     attributes:
       label: Topic
-      description: The subject or theme of the guide.
+      description: The main focus of your zine.
     validations:
       required: true
   - type: input
     id: tags
     attributes:
       label: Tags
-      description: Optional comma-separated tags that help describe the guide.
+      description: Optional comma-separated tags that help describe the zine.
       placeholder: beginner, p5.js, physical computing
   - type: input
     id: creators
@@ -47,21 +47,21 @@ body:
     id: summary
     attributes:
       label: Short summary
-      description: A concise description for the library card.
+      description: A concise description for the zine for the library card.
     validations:
       required: true
   - type: textarea
     id: description
     attributes:
       label: Full description
-      description: Public description shown on the guide page. Markdown is supported.
+      description: Public description shown on the zine page. Markdown is supported.
     validations:
       required: true
   - type: input
     id: reader_order_pdf
     attributes:
       label: Reader-order PDF URL
-      description: A PDF whose reading order follows the content for accessible reading.
+      description: Link to a PDF with sequentially ordered pages for reading on a screen.
       placeholder: https://example.org/my-guide-reader-order.pdf
     validations:
       required: true
@@ -69,15 +69,20 @@ body:
     id: print_ready_pdf
     attributes:
       label: Print-ready PDF URL
-      description: A PDF prepared for printing, folding, or other physical distribution.
+      description: Link to a PDF with pages arranged for printing and folding into a booklet.
       placeholder: https://example.org/my-guide-print-ready.pdf
     validations:
       required: true
   - type: input
-    id: activity_format
+    id: activity_type
     attributes:
-      label: Activity format
-      description: Optional, for example workshop, discussion, or creative exercise.
+      label: Activity type
+      description: Optional. How is the activity intended to be used? For example, workshop, group discussion, self-guided activity, or creative exercise.
+  - type: input
+    id: zine_format
+    attributes:
+      label: Zine format
+      description: Optional. How is the zine structured? For example, single-sheet folded zine, multi-sheet booklet, individual pages, or digital-only.
   - type: input
     id: duration
     attributes:

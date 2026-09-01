@@ -49,7 +49,8 @@ const { Content } = await render(zine.entry);
           <section class="activity-guide__metadata" aria-label="Details">
             <dl>
               <div><dt>Topic</dt><dd>{zine.topic}</dd></div>
-              {zine.format && <div><dt>Format</dt><dd>{zine.format}</dd></div>}
+              {zine.activity_type && <div><dt>Activity type</dt><dd>{zine.activity_type}</dd></div>}
+              {zine.zine_format && <div><dt>Zine format</dt><dd>{zine.zine_format}</dd></div>}
               {zine.duration && <div><dt>Duration</dt><dd>{zine.duration}</dd></div>}
               {zine.materials && <div><dt>Required materials</dt><dd>{zine.materials}</dd></div>}
             </dl>

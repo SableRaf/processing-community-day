@@ -20,7 +20,8 @@ function body({ title = 'Intake Test Zine 781', tags = '', creatorUrl = '', read
     '### Creator URL', creatorUrl || '_No response_', '',
     '### Short summary', 'A concise test summary.', '', '### Full description', 'A full **test** description.', '',
     '### Reader-order PDF URL', readerUrl, '', '### Print-ready PDF URL', printUrl, '',
-    '### Activity format', optional ? 'Workshop' : '_No response_', '', '### Duration', optional ? '90 minutes' : '_No response_', '',
+    '### Activity type', optional ? 'Workshop' : '_No response_', '', '### Zine format', optional ? 'Single-sheet folded zine' : '_No response_', '',
+    '### Duration', optional ? '90 minutes' : '_No response_', '',
     '### Materials', optional ? 'Paper and pens' : '_No response_', '', '### Preferred attribution', optional ? 'Test Creator, CC BY-SA 4.0' : '_No response_', '',
     '### Maintainer notes', optional ? 'Public maintainer note.' : '_No response_', '',
     '### License consent', license ? '- [x] I own or have permission to license this material under CC BY-SA 4.0.' : '- [ ] I own or have permission to license this material under CC BY-SA 4.0.', '',
@@ -60,12 +61,15 @@ describe('process-new-zine-issue', () => {
       source_pdfs: [{ role: 'reader-order', url: 'https://example.org/reader.pdf' }, { role: 'print-ready', url: 'https://example.org/print.pdf' }],
       license: 'CC BY-SA 4.0', source_issue_url: 'https://github.com/processing/processing-community-day/issues/781',
       intake: { issue_number: 781, submitted_by_github: 'zine-tester', submitted_date: new Date().toISOString().slice(0, 10), maintainer_notes: 'Public maintainer note.' },
-      description: 'A full **test** description.', format: 'Workshop', duration: '90 minutes', materials: 'Paper and pens', attribution: 'Test Creator, CC BY-SA 4.0',
+      description: 'A full **test** description.', activity_type: 'Workshop', zine_format: 'Single-sheet folded zine',
+      duration: '90 minutes', materials: 'Paper and pens', attribution: 'Test Creator, CC BY-SA 4.0',
     });
     assert.equal(await fs.readFile(path.join(DRAFTS, slug, 'index.md'), 'utf8'), '---\nid: "intake-test-zine-781"\n---\n\nA full **test** description.\n');
     const prBody = await fs.readFile(outputs.pr_body_path, 'utf8');
     assert.match(prBody, /Reader-order PDF/);
     assert.match(prBody, /\| Tags \| beginner, creative coding \|/);
+    assert.match(prBody, /\| Activity type \| Workshop \|/);
+    assert.match(prBody, /\| Zine format \| Single-sheet folded zine \|/);
     assert.match(prBody, /commit them as `reader-order.pdf` and `print-ready.pdf`/);
     await fs.rm(tmp, { recursive: true, force: true });
   });
