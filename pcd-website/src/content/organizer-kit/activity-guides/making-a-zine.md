@@ -7,11 +7,11 @@ description: An introduction to zines, resources for making one, and information
 
 ## What is a Zine?
 
-A [zine](https://en.wikipedia.org/wiki/Zine) (pronounced “zeen,” short for magazine or fanzine) is a small, independent publication usually created by one person or a small group. It usually explores a specific or unconventional subject and is often made by hand, photocopied, or published online. Usually, a zine is a small booklet or pamphlet, often with a limited number of pages. Many zines can be printed and folded from a single sheet of paper.
+A [zine](https://en.wikipedia.org/wiki/Zine) (pronounced “zeen,” short for magazine or fanzine) is a small, independent publication usually in a small booklet format, made by hand, photocopied, or shared online. A great thing about zines is that they are easy to make and inexpensive to produce. Zines are often created by individuals or small groups and are typically distributed in small quantities, through local communities, events, or online platforms.
 
 ## How to Make a Zine
 
-The simplest form of a zine is a one-page zine, which can be printed on a single sheet of paper and folded into a small booklet. You can create a one-page zine by drawing, writing, or collaging on a single sheet of paper.
+The simplest form of a zine is a one-page zine, which can be printed on a single sheet of paper and folded into a small 8-pages booklet. You can create a one-page zine by drawing, writing, or collaging on a single sheet of paper.
 
 This [wikiHow article](https://www.wikihow.com/Make-a-Zine) is an illustrated step-by-step guide to making a zine. It's a great starting point for creating your first zine. And if you prefer a video tutorial, [How to Make a Zine](https://www.youtube.com/watch?v=ab4O9SWNl9g) by Austin Kleon, is a short and fun introduction to zine-making available on YouTube.
 
@@ -25,9 +25,7 @@ You can also use some of the tools listed below to create a zine digitally and p
 ## Zine Making Tools
 
 - [p5.(gen)zine](https://github.com/munusshih/p5.genzine) by Munus Shih and Iley Cao is an open-sourced and friendly p5.js library for zine-making.
-
 - [The Electric Zine Maker](https://alienmelon.itch.io/electric-zine-maker) by alienmelon is a printshop and art tool for easily making and printing zines. 
-
 - [Zine Arranger](https://nashhigh.itch.io/zinearranger) by Nash Hight, arranges multi-page PDF files into a printable zine layout.
 
 ## Zine Collections
