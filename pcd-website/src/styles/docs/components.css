@@ -49,7 +49,14 @@
   flex: 1 1 16rem;
   margin-bottom: 0;
 }
-.copy-markdown {
+.docs-page-actions {
+  position: relative;
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: var(--sp-2);
+}
+.docs-action-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -65,20 +72,198 @@
   background: var(--color-bg);
   border: 1px solid #b8b8b8;
   border-radius: var(--border-radius);
+  text-decoration: none;
 }
-.copy-markdown:hover {
+.docs-prose .docs-action-button {
+  color: var(--color-text-muted);
+  text-decoration: none;
+}
+.docs-action-button:hover {
   background: var(--docs-sidebar-color);
   border-color: var(--color-text-muted);
+  text-decoration: none;
 }
-.copy-markdown:active {
+.docs-action-button:active {
   transform: translateY(1px);
 }
-.copy-markdown:focus-visible {
+.docs-action-button:focus-visible {
   outline: 3px solid var(--color-focus);
   outline-offset: 3px;
 }
-.copy-markdown__icon {
+.docs-action-button svg {
   flex: 0 0 auto;
+  fill: currentColor;
+}
+.share-menu {
+  position: relative;
+}
+.share-menu__chevron {
+  transition: transform 120ms ease;
+}
+.share-menu__trigger[aria-expanded="true"] .share-menu__chevron {
+  transform: rotate(180deg);
+}
+.share-menu__items {
+  position: absolute;
+  z-index: 10;
+  top: calc(100% + var(--sp-2));
+  right: 0;
+  width: max-content;
+  min-width: 14.5rem;
+  padding: var(--sp-1);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  box-shadow: 0 6px 18px rgb(0 0 0 / 0.14);
+}
+.share-menu__items button {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  width: 100%;
+  padding: var(--sp-2) var(--sp-3);
+  color: var(--color-text);
+  font: inherit;
+  font-size: var(--step-3);
+  text-align: left;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  border-radius: calc(var(--border-radius) - 1px);
+}
+.share-menu__items button:hover,
+.share-menu__items button:focus-visible {
+  background: var(--docs-sidebar-color);
+}
+.share-menu__items svg,
+.share-menu__items img {
+  flex: 0 0 auto;
+  width: 1rem;
+  height: 1rem;
+}
+.share-menu__items svg {
+  fill: currentColor;
+}
+.share-menu__feedback {
+  position: absolute;
+  z-index: 11;
+  bottom: calc(100% + var(--sp-2));
+  left: 50%;
+  padding: var(--sp-1) var(--sp-2);
+  color: #fff;
+  font-size: var(--step-2);
+  font-weight: 500;
+  white-space: nowrap;
+  pointer-events: none;
+  visibility: hidden;
+  background: var(--color-text-muted);
+  border-radius: var(--border-radius);
+  opacity: 0;
+  transform: translate(-50%, 0);
+}
+.share-menu__feedback::before {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  content: "";
+  border-right: 0.3rem solid transparent;
+  border-top: 0.3rem solid var(--color-text-muted);
+  border-left: 0.3rem solid transparent;
+  transform: translateX(-50%);
+}
+.share-menu__feedback--visible {
+  visibility: visible;
+  opacity: 1;
+  animation: share-feedback-fade 300ms ease 1.25s forwards;
+}
+@keyframes share-feedback-fade {
+  to {
+    visibility: hidden;
+    opacity: 0;
+    transform: translate(-50%, -0.25rem);
+  }
+}
+@media (max-width: 31.249rem) {
+  .share-menu__items {
+    right: auto;
+    left: 0;
+  }
+}
+.share-actions__status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.share-qr-dialog {
+  width: min(92vw, 25rem);
+  padding: 0;
+  color: var(--color-text);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: calc(var(--border-radius) * 2);
+  box-shadow: 0 14px 40px rgb(0 0 0 / 0.24);
+}
+.share-qr-dialog::backdrop {
+  background: var(--color-overlay);
+}
+.share-qr-dialog__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  padding: var(--sp-4) var(--sp-5);
+  border-bottom: 1px solid var(--color-border);
+}
+.docs-prose .share-qr-dialog__header h2 {
+  margin: 0;
+  font-size: var(--step-5);
+}
+.share-qr-dialog__header button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  color: var(--color-text-muted);
+  font: inherit;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  border-radius: var(--border-radius);
+}
+.share-qr-dialog__header button:hover {
+  color: var(--color-text);
+  background: var(--docs-sidebar-color);
+}
+.share-qr-dialog__body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-4);
+  padding: var(--sp-5);
+}
+.share-qr-dialog__body canvas {
+  display: block;
+  width: min(100%, 17.5rem);
+  height: auto;
+}
+.docs-prose .share-qr-dialog__body p {
+  max-width: 100%;
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: var(--step-3);
+  overflow-wrap: anywhere;
 }
 .docs-page-toc a {
   display: inline-block;
@@ -185,7 +370,9 @@
   appearance: none;
 }
 .docs-back-to-top {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
   margin-top: var(--sp-8);
   font-size: var(--step-5);
   font-weight: 500;
@@ -195,26 +382,14 @@
   text-decoration-thickness: 2px;
   text-underline-offset: 2px;
 }
+.docs-back-to-top__icon {
+  flex: 0 0 auto;
+  fill: currentColor;
+}
 .docs-back-to-top:hover {
   text-decoration-color: var(--color-link-underline-hover);
 }
-.docs-page-footer {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--sp-4) var(--sp-6);
-  margin-top: var(--sp-6);
-}
-.docs-page-footer__link {
-  color: var(--color-link);
-  font-size: var(--step-3);
-  text-decoration-line: underline;
-  text-decoration-color: var(--color-link-underline);
-  text-decoration-thickness: 2px;
-  text-underline-offset: 2px;
-}
-.docs-page-footer__link:hover {
-  text-decoration-color: var(--color-link-underline-hover);
-} /* .docs-prose p sets `margin: 0 0 …`, so this needs equal specificity to set a top margin. */
+/* .docs-prose p sets `margin: 0 0 …`, so this needs equal specificity to set a top margin. */
 .docs-prose .docs-page-credit {
   margin: var(--sp-4) 0 0;
   font-size: var(--step-2);
@@ -229,4 +404,125 @@
 }
 .docs-prose .docs-page-credit a:hover {
   text-decoration-color: var(--color-link-underline-hover);
+}
+
+.docs-prose .guide-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-4);
+  margin: var(--sp-6) 0;
+  padding: 0;
+  list-style: none;
+}
+.docs-prose .guide-grid > li::before {
+  content: none;
+}
+.docs-prose .guide-grid > li {
+  display: flex;
+  min-width: 0;
+  margin: 0;
+}
+.docs-prose .guide-grid .guide-card {
+  width: 100%;
+}
+.guide-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 210 / 297;
+  min-height: 5.5rem;
+  overflow: hidden;
+  color: var(--color-text);
+  text-align: center;
+  text-decoration: none;
+  border-radius: var(--border-radius);
+}
+.guide-card--zine {
+  align-items: stretch;
+  justify-content: flex-start;
+  aspect-ratio: auto;
+  overflow: visible;
+}
+.guide-card--zine:hover .guide-card__cover-frame {
+  border-color: var(--color-primary);
+}
+.guide-card--zine:focus-visible,
+.guide-card--add:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 3px;
+}
+.guide-card__cover-frame {
+  display: flex;
+  width: 100%;
+  aspect-ratio: 210 / 297;
+  overflow: hidden;
+  background: var(--docs-sidebar-color);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+}
+.guide-card__cover-frame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.guide-card__cover-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: var(--sp-4);
+  color: var(--color-text-subtle);
+  font-weight: 600;
+  background: var(--color-border);
+}
+.guide-card__body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-1);
+  padding: var(--sp-3) 0 0;
+}
+.guide-card__author {
+  color: var(--color-text-muted);
+  font-size: var(--step-2);
+}
+.guide-card--add {
+  align-self: flex-start;
+  gap: var(--sp-3);
+  padding: var(--sp-4);
+  color: var(--color-link);
+  font-weight: 600;
+  border: 1px dashed var(--color-border);
+}
+.guide-card--add:hover {
+  border-color: var(--color-primary);
+  background: var(--docs-sidebar-color);
+}
+.guide-card__plus {
+  width: 3.5rem;
+  height: 3.5rem;
+  flex: 0 0 auto;
+  fill: currentColor;
+}
+.activity-guide-submit {
+  margin-top: var(--sp-5);
+}
+.activity-guide-submit .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+@media (min-width: 30rem) {
+  .docs-prose .guide-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media (min-width: 66.5rem) {
+  .docs-prose .guide-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 }

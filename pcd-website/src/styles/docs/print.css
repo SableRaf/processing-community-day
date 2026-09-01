@@ -4,10 +4,10 @@
   .docs-nav-toggle,
   footer,
   .docs-pager,
-  .docs-page-footer,
   .docs-page-credit,
   .docs-back-to-top,
-  .copy-markdown {
+  .docs-page-actions,
+  .share-qr-dialog {
     display: none !important;
   }
   .docs-shell {

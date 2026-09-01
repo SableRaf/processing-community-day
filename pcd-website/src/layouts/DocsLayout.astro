@@ -5,7 +5,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import DocsSidebar from '../components/DocsSidebar.astro';
 import DocsTableOfContents from '../components/DocsTableOfContents.astro';
-import CopyMarkdownButton from '../components/CopyMarkdownButton.astro';
+import DocsPageActions from '../components/DocsPageActions.astro';
 import { getKitNav } from '../config/organizer-kit-nav';
 import '../styles/base.css';
 import '../styles/docs.css';
@@ -20,11 +20,14 @@ interface Props {
   headings?: MarkdownHeading[];
   /** Page content, ready to copy as Markdown. */
   markdown?: string;
+  /** GitHub URL for editing this page's source. */
+  editHref?: string;
 }
 
-const { title, description, eyebrow, heading, headings = [], markdown } = Astro.props;
+const { title, description, eyebrow, heading, headings = [], markdown, editHref } = Astro.props;
 
 const nav = await getKitNav();
+const permalink = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).href;
 ---
 
 <BaseLayout
@@ -47,7 +50,9 @@ const nav = await getKitNav();
         {eyebrow && <p class="prose__eyebrow">{eyebrow}</p>}
         <div class="docs-title-row">
           <h1>{heading ?? title}</h1>
-          {markdown && <CopyMarkdownButton markdown={markdown} />}
+          {markdown && editHref && (
+            <DocsPageActions markdown={markdown} permalink={permalink} editHref={editHref} />
+          )}
         </div>
         <DocsTableOfContents headings={headings} />
         <slot />

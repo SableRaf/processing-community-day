@@ -9,8 +9,8 @@ import InfoModal from './InfoModal.vue';
 import SubmitModal from './SubmitModal.vue';
 import { currentLocale } from '../i18n/localeState';
 import { trackEvent, SUBMIT_EVENT_BUTTON_CLICK } from '../lib/analytics';
-import { i18n } from '../i18n/index';
 import { cartoTileUrl } from '../lib/carto';
+import { i18n } from '../i18n/index';
 
 const props = defineProps<{
   nodes: Node[];

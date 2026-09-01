@@ -27,9 +27,9 @@ export const KIT_BASE = '/organize';
 const TOP_LEVEL: ReadonlyArray<string | { page: string }> = [
   'Getting Started',
   'Organizing Your Event',
+  'Event Resources',
   'Activity Guides',
   { page: 'peer-support-sessions' },
-  'Resources',
   { page: 'code-of-conduct' },
   { page: 'faq' },
   { page: 'about-processing-foundation' },

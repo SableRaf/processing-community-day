@@ -16,6 +16,16 @@
   to = "/og-image.png"
   status = 301
 
+[[redirects]]
+  from = "/organize/activity-guides/library/*"
+  to = "/organize/activity-guides/zine-library/"
+  status = 301
+
+[[redirects]]
+  from = "/organize/activity-guides/what-are-activity-guides/*"
+  to = "/organize/activity-guides/zine-library/"
+  status = 301
+
 [[headers]]
   for = "/data.json"
   [headers.values]

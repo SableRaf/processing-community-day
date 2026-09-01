@@ -5,9 +5,9 @@ import { createFocusTrap, type FocusTrap } from 'focus-trap';
 import { Icon } from '@iconify/vue';
 import type { Node } from '../lib/nodes';
 import { formatDateRange, formatTimeRange, calendarLinks, onlinePlatformName } from '../lib/format';
+import { cartoTileUrl } from '../lib/carto';
 import { getOsmUrl } from '../lib/popup';
 import { GITHUB_EDIT_EVENT_URL, GITHUB_CONTENT_ISSUE_URL } from '../config';
-import { cartoTileUrl } from '../lib/carto';
 
 const props = defineProps<{
   node: Node | null;

@@ -3,6 +3,9 @@ import { getCollection, render } from 'astro:content';
 import type { GetStaticPaths } from 'astro';
 import DocsLayout from '../../layouts/DocsLayout.astro';
 import { flattenKitNav, getKitNav } from '../../config/organizer-kit-nav';
+import { ACTIVITY_GUIDE_SUBMIT_URL } from '../../config';
+import ZineGrid from '../../components/ZineGrid.astro';
+import ZineSubmitButton from '../../components/ZineSubmitButton.astro';
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const entries = await getCollection('organizerKit', (entry) => !entry.data.draft);
@@ -24,7 +27,11 @@ const prev = position > 0 ? ordered[position - 1] : undefined;
 const next = position >= 0 && position < ordered.length - 1 ? ordered[position + 1] : undefined;
 
 const editHref = `https://github.com/processing/processing-community-day/edit/main/pcd-website/src/content/organizer-kit/${entry.id}.md`;
-const markdown = `# ${entry.data.title}\n\n${entry.body?.trim() ?? ''}\n`;
+const SUBMIT_PAGES = new Set(['activity-guides/zine-library', 'activity-guides/contribute-a-guide']);
+const markdownSuffix = SUBMIT_PAGES.has(entry.id)
+  ? `\n\n[Submit an activity guide](${ACTIVITY_GUIDE_SUBMIT_URL})\n`
+  : '';
+const markdown = `# ${entry.data.title}\n\n${entry.body?.trim() ?? ''}\n${markdownSuffix}`;
 ---
 
 <DocsLayout
@@ -33,10 +40,18 @@ const markdown = `# ${entry.data.title}\n\n${entry.body?.trim() ?? ''}\n`;
   eyebrow={entry.data.section ?? "Organizer's Kit"}
   headings={headings}
   markdown={markdown}
+  editHref={editHref}
 >
   <Content />
+  {entry.id === 'activity-guides/zine-library' && <ZineGrid />}
+  {entry.id === 'activity-guides/contribute-a-guide' && <ZineSubmitButton />}
 
-  <a class="docs-back-to-top" href="#main">↑ Back to top</a>
+  <a class="docs-back-to-top" href="#main">
+    <svg class="docs-back-to-top__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="20" height="20" aria-hidden="true">
+      <path d="M3.47 7.78a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 0l4.25 4.25a.751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018L9 4.81v7.44a.75.75 0 0 1-1.5 0V4.81L4.53 7.78a.75.75 0 0 1-1.06 0Z" />
+    </svg>
+    Back to top
+  </a>
 
   {(prev || next) && (
     <nav class="docs-pager" aria-label="Organizer Kit pages">
@@ -56,12 +71,6 @@ const markdown = `# ${entry.data.title}\n\n${entry.body?.trim() ?? ''}\n`;
       )}
     </nav>
   )}
-
-  <div class="docs-page-footer">
-    <a class="docs-page-footer__link" href={editHref} target="_blank" rel="noopener noreferrer">
-      Edit this page on GitHub
-    </a>
-  </div>
 
   <p class="docs-page-credit">
     Theme adapted from <a

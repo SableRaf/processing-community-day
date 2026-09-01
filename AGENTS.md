@@ -34,12 +34,15 @@ node --test .github/scripts/event-issue-helpers.test.mjs
 node --test .github/scripts/process-new-event-issue.test.mjs
 node --test .github/scripts/process-edit-event-issue.test.mjs
 node --test .github/scripts/plus-code.test.mjs
+node --test .github/scripts/zines.test.mjs
+node --test .github/scripts/zine-build.test.mjs
+node --test .github/scripts/process-new-zine-issue.test.mjs
 
 # Requires npm run build from pcd-website/ first:
 node --test .github/scripts/data-json.test.mjs
 ```
 
-Need to run the tests end-to-end? `./scripts/run-tests.sh` executes the helper, intake, and plus-code suites, builds the Astro site via `npm --prefix pcd-website run build`, and then runs `data-json.test.mjs` in sequence. Run this script from the repo root after installing dependencies so you get the full battery of checks in one shot.
+Need to run the tests end-to-end? `./scripts/run-tests.sh` executes the helper, event and zine intake, plus-code, and zine metadata suites; runs the zine fixture build; builds the Astro site via `npm --prefix pcd-website run build`; and then runs `data-json.test.mjs` in sequence. Run this script from the repo root after installing dependencies so you get the full battery of checks in one shot.
 
 No install needed — `open-location-code` is already available at `pcd-website/node_modules/`.
 
@@ -66,7 +69,11 @@ Event data lives in `src/content/events/<event-id>/`:
 
 `src/lib/nodes.ts` loads all events at Astro build time using `import.meta.glob()` + `getCollection('events')`, validates plus codes with `OpenLocationCode`, decodes lat/lng, and returns a sorted `Node[]` array passed as props to `<MapView>`.
 
-The global Markdown pipeline runs `rehype-table-wrapper` and `rehype-heading-anchors`, which respectively wrap rendered tables in `.table-wrapper` and add permalink anchors to h2–h6. Their presentation styles live in the shared `prose.css` layer, scoped to both `.prose` and `.docs-prose`, because both plugins apply to all Markdown collections.
+Activity Guide cards live in `src/content/zines/<slug>/` and the library grid at `/organize/activity-guides/zine-library/` is built dynamically from every `*/index.md`, sorted by its required numeric `order` frontmatter. Every entry is a published zine and pairs `index.md` with `metadata.json`, an optional cover image, and one or more PDF downloads; the collection has no placeholder or draft state. Set optional `created_by_url` in metadata to an http(s) page for the credited creator(s); the detail page links the author name when it is present. Optional `tags` are stored as an array of non-empty strings and appear with the required topic in the detail page's metadata section. Cover metadata uses `{ "src": "cover.png", "alt": "..." }` so the local image and its accessible description travel together. Downloads may be local sibling PDF assets or external http(s) URLs; metadata supplies the human-readable file size (and the filename for external files) used by the shared download rows. `src/lib/zines.ts` joins the Astro collection, metadata, and assets at build time; `src/lib/zine-metadata.js` owns the strict published-zine schema and pure validation. Zines must use `index.md` (not `content.md`) so Astro's glob loader makes the entry id equal to the folder slug. A published zine without a cover renders a grey title fallback in the library and on its detail page. The library ends with a single “Submit a Zine” card linking to the submission form.
+
+Zine PDFs are emitted from `src/` assets using `?url&no-inline`, so even small downloads become real files in `dist/`. `src/content/zines/` contains publishable zines only: it deliberately has no `draft` field because eager asset imports would make draft files public. Keep unfinished zines in `src/content/zines-drafts/`. The `Zine Intake` workflow writes review-only `submission.json` + `index.md` pairs there from the `05-new-zine.yml` form. `submission.json` records both external PDF roles (`reader-order`, `print-ready`), provenance, and the fixed CC BY-SA 4.0 license; it is not Astro content. Maintainers verify both PDFs, commit them as `reader-order.pdf` and `print-ready.pdf`, replace the submission file with published `metadata.json` download records labelled `Reader-order PDF` and `Print-ready PDF` (with local human-readable sizes), add `order: max(existing order) + 1` to `index.md`, then move the folder into `zines/` after checking the Netlify preview. No cover is collected, so use the title fallback. Review PDFs for selectable text, logical reading order, document title and language, tagged headings where possible, alt text, and at least one screen-reader-friendly reading-order version.
+
+The global Markdown pipeline runs `rehype-table-wrapper` and `rehype-heading-anchors`, which respectively wrap rendered tables in `.table-wrapper` and add permalink anchors to h2–h6. Their presentation styles live in the shared `prose.css` layer, scoped to both `.prose` and `.docs-prose`, because both plugins apply to all Markdown collections. For a styled caption immediately after a Markdown image, use `<span class="prose-figure-caption">…</span>` on the next line; it supports normal Markdown links for attribution.
 
 **If a plus_code is invalid or too short, the build fails with a clear error — this is intentional.**
 
@@ -87,7 +94,9 @@ The global Markdown pipeline runs `rehype-table-wrapper` and `rehype-heading-anc
 | `src/components/MapView.vue` | Leaflet map, marker clustering, keyboard shortcuts |
 | `src/components/NodePanel.vue` | Slide-in event detail panel with minimap, calendar links, share button |
 | `src/components/LanguageSwitcher.vue` | Language selector dropdown in the top bar |
-| `src/components/CopyMarkdownButton.astro` | Copies an Organizer Kit page as Markdown with accessible success/error feedback |
+| `src/components/BackButton.astro` | Reusable button-style link for navigating from a detail page back to its parent listing |
+| `src/components/DocsPageActions.astro` | Organizer Kit share dropdown (Markdown, permalink, QR code) and GitHub edit action |
+| `src/components/ZineDownloads.astro` | Renders zine download rows with a button, filename, and human-readable file size |
 | `src/components/Header.astro` | Shared fixed site header and primary navigation |
 | `src/components/Footer.astro` | Shared site footer, policy links, community links, and sponsors |
 | `src/layouts/BaseLayout.astro` | Shared HTML document shell and metadata |
@@ -95,6 +104,7 @@ The global Markdown pipeline runs `rehype-table-wrapper` and `rehype-heading-anc
 | `src/layouts/SiteLayout.astro` | Standard static content-page shell |
 | `src/layouts/DocsLayout.astro` | Organizer Kit shell with sidebar, page TOC, and footer |
 | `src/lib/analytics.ts` | `trackEvent()` Fathom helper + `AnalyticsEvent` type + event-name constants |
+| `src/lib/carto.ts` | Adds the optional local-development CARTO API key to basemap tile URLs |
 | `src/lib/nodes.ts` | `Node` interface + `loadNodes()` |
 | `src/lib/format.ts` | `formatDate()`, `formatDateRange()`, `calendarLinks()`, etc. |
 | `src/lib/popup.ts` | Leaflet popup HTML generation (`makePopupContent()`) |
@@ -104,7 +114,10 @@ The global Markdown pipeline runs `rehype-table-wrapper` and `rehype-heading-anc
 | `src/styles/docs/*.css` | Organizer Kit's modular Just-the-Docs-derived tokens, layout, navigation, and Markdown presentation styles |
 | `src/lib/rehype-table-wrapper.mjs` | Markdown rehype plugin that wraps rendered tables for horizontal scrolling |
 | `src/pages/data.json.ts` | Static JSON feed of confirmed events, served at /data.json |
-| `src/content.config.ts` | Astro content collection Zod schema for events |
+| `src/pages/activity-guide/[id].astro` | Standalone per-zine Activity Guide pages |
+| `src/lib/zines.ts` | Build-time zine loader and topic-slot mapping |
+| `src/lib/zine-metadata.js` | Zine schema and pure metadata/asset validation |
+| `src/content.config.ts` | Astro content collection Zod schemas for events, legal pages, Organizer Kit, and zines |
 | `src/config.ts` | Global static constants (contact email, etc.) |
 | `src/i18n/index.ts` | Creates the `vue-i18n` instance and exports `syncLocale()` |
 | `src/i18n/localeState.ts` | Reactive `currentLocale` ref, browser detection, localStorage persistence |
@@ -152,6 +165,8 @@ Use `src/config.ts` for static, non-secret values that are referenced across mul
 - Anything already defined in `astro.config.mjs` (e.g. base path)
 - Component-local constants that aren't shared
 
+For local map development, `pcd-website/.env` may define `PUBLIC_CARTO_API_KEY`. During `npm run dev`, all CARTO raster tile URLs append it as the `key` query parameter; production builds do not embed it.
+
 ## UI / Styling Rules
 
 - The site is light-mode only — there is no dark mode, no `[data-theme]` toggling, and no theme-related CSS. Do not reintroduce it without an explicit decision to do so.
@@ -170,15 +185,20 @@ New events are submitted via GitHub Issues using `.github/ISSUE_TEMPLATE/01-new-
 
 Organizers can edit existing events via `.github/ISSUE_TEMPLATE/04-edit-event.yml`. The same workflow (`process-edit-event` job) runs `.github/scripts/process-edit-event-issue.mjs`. The edit script: reads the existing event by `event_id`, preserves the immutable `uid` and `intake` block, preserves `event_activities` if all checkboxes are unchecked (GitHub issue forms cannot prefill checkboxes), and preserves `content.md` if `full_description` is blank.
 
+### New zines
+
+New Activity Guide zines use `.github/ISSUE_TEMPLATE/05-new-zine.yml` and `.github/workflows/new-zine-intake.yml`. The workflow runs `.github/scripts/process-new-zine-issue.mjs` when an issue labelled `new zine` is opened, edited, reopened, or labelled. It applies `new zine` and `needs review`, assigns `PCD_TEAM_ASSIGNEES`, validates the issue, and upserts one marked status comment. Valid submissions stage only `src/content/zines-drafts/<slug>/submission.json` and `index.md` in a stable `automation/new-zine-<issue-number>` review PR; the workflow labels the PR and requests `PCD_TEAM_REVIEWERS`. Issue edits update that branch and the same status comment. Zines have no edit issue workflow and the automation never fetches source URLs.
+
 ### Shared helpers
 
 Pure functions shared by both intake scripts live in `.github/scripts/event-issue-helpers.mjs`. This includes `parseIssueSections`, validation helpers, `slugify`, `parseActivities`, `parseOrganizers`, `buildValidationComment`, and `generateUniqueUid`.
 
 ### Template detection
 
-Both scripts guard against running on the wrong template:
+Intake scripts guard against running on the wrong template:
 - `process-new-event-issue.mjs` skips if the body contains `### Event ID` (unique to the edit template)
 - `process-edit-event-issue.mjs` skips if the body does NOT contain `### Event ID`
+- `process-new-zine-issue.mjs` skips unless the body contains `### Reader-order PDF URL`
 
 ## Deployment
 

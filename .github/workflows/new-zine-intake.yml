@@ -1,0 +1,189 @@
+name: Zine Intake
+
+on:
+  issues:
+    types: [opened, edited, reopened, labeled]
+
+concurrency:
+  group: new-zine-intake-${{ github.event.issue.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+env:
+  STATUS_COMMENT_MARKER: <!-- new-zine-intake-status -->
+
+jobs:
+  process-new-zine:
+    if: contains(github.event.issue.labels.*.name, 'new zine')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PCD_TEAM_ASSIGNEES: ${{ vars.PCD_TEAM_ASSIGNEES }}
+    outputs:
+      valid: ${{ steps.generate.outputs.valid }}
+      branch: ${{ steps.generate.outputs.branch }}
+      commit_message: ${{ steps.generate.outputs.commit_message }}
+      pr_title: ${{ steps.generate.outputs.pr_title }}
+      pr_body_path: ${{ steps.generate.outputs.pr_body_path }}
+      validation_comment_path: ${{ steps.generate.outputs.validation_comment_path }}
+      zine_title: ${{ steps.generate.outputs.zine_title }}
+    steps:
+      - name: Label and assign intake issue
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const desiredLabels = [
+              { name: 'new zine', color: '5319e7', description: 'New Activity Guide zine submission intake' },
+              { name: 'needs review', color: 'fbca04', description: 'Submission is ready for maintainer review' },
+            ];
+            for (const label of desiredLabels) {
+              try { await github.rest.issues.getLabel({ owner: context.repo.owner, repo: context.repo.repo, name: label.name }); }
+              catch (error) {
+                if (error.status !== 404) throw error;
+                await github.rest.issues.createLabel({ owner: context.repo.owner, repo: context.repo.repo, ...label });
+              }
+            }
+            await github.rest.issues.addLabels({ owner: context.repo.owner, repo: context.repo.repo, issue_number: context.issue.number, labels: desiredLabels.map((label) => label.name) });
+            const assignees = (process.env.PCD_TEAM_ASSIGNEES || '').split(',').map((value) => value.trim()).filter(Boolean);
+            if (assignees.length) await github.rest.issues.addAssignees({ owner: context.repo.owner, repo: context.repo.repo, issue_number: context.issue.number, assignees });
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+      - name: Find drafts staged by other open review PRs
+        id: open-drafts
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const slugs = new Set();
+            const pulls = await github.paginate(github.rest.pulls.list, {
+              owner: context.repo.owner, repo: context.repo.repo, state: 'open', per_page: 100,
+            });
+            for (const pull of pulls) {
+              // The current issue may already have its stable PR; it is safe to update.
+              if (pull.body?.includes(`Closes #${context.issue.number}`)) continue;
+              const files = await github.paginate(github.rest.pulls.listFiles, {
+                owner: context.repo.owner, repo: context.repo.repo, pull_number: pull.number, per_page: 100,
+              });
+              for (const file of files) {
+                const match = file.filename.match(/^pcd-website\/src\/content\/zines-drafts\/([^/]+)\//);
+                if (match) slugs.add(match[1]);
+              }
+            }
+            core.setOutput('slugs', [...slugs].join(','));
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - name: Generate staged zine files
+        id: generate
+        run: node .github/scripts/process-new-zine-issue.mjs
+        env:
+          ZINE_RESERVED_DRAFT_SLUGS: ${{ steps.open-drafts.outputs.slugs }}
+      - name: Upload staged zine artifact
+        if: steps.generate.outputs.valid == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: zine-draft-${{ github.event.issue.number }}
+          path: pcd-website/src/content/zines-drafts/
+          retention-days: 1
+      - name: Upload PR body artifact
+        if: steps.generate.outputs.valid == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: zine-pr-body-${{ github.event.issue.number }}
+          path: ${{ steps.generate.outputs.pr_body_path }}
+          retention-days: 1
+      - name: Upload validation comment artifact
+        if: steps.generate.outputs.valid == 'false'
+        uses: actions/upload-artifact@v4
+        with:
+          name: zine-validation-${{ github.event.issue.number }}
+          path: ${{ steps.generate.outputs.validation_comment_path }}
+          retention-days: 1
+
+  comment-on-validation:
+    needs: process-new-zine
+    if: always() && needs.process-new-zine.outputs.valid == 'false'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: zine-validation-${{ github.event.issue.number }}
+          path: /tmp/zine-validation
+      - name: Upsert validation status comment
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const fs = require('fs');
+            const marker = process.env.STATUS_COMMENT_MARKER;
+            const body = `${marker}\n${fs.readFileSync(`/tmp/zine-validation/zine-validation-${context.issue.number}.md`, 'utf8')}`;
+            const { data: comments } = await github.rest.issues.listComments({ owner: context.repo.owner, repo: context.repo.repo, issue_number: context.issue.number });
+            const existing = comments.find((comment) => comment.user?.type === 'Bot' && comment.body?.includes(marker));
+            const input = { owner: context.repo.owner, repo: context.repo.repo, body };
+            if (existing) await github.rest.issues.updateComment({ ...input, comment_id: existing.id });
+            else await github.rest.issues.createComment({ ...input, issue_number: context.issue.number });
+
+  create-pr:
+    needs: process-new-zine
+    if: needs.process-new-zine.outputs.valid == 'true'
+    runs-on: ubuntu-latest
+    outputs:
+      pull-request-number: ${{ steps.create.outputs.pull-request-number }}
+      pull-request-url: ${{ steps.create.outputs.pull-request-url }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: zine-draft-${{ github.event.issue.number }}
+          path: pcd-website/src/content/zines-drafts/
+      - uses: actions/download-artifact@v4
+        with:
+          name: zine-pr-body-${{ github.event.issue.number }}
+          path: /tmp/zine-pr-body
+      - name: Create or update review pull request
+        id: create
+        uses: peter-evans/create-pull-request@v8
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ needs.process-new-zine.outputs.branch }}
+          delete-branch: false
+          add-paths: pcd-website/src/content/zines-drafts/**
+          commit-message: ${{ needs.process-new-zine.outputs.commit_message }}
+          title: ${{ needs.process-new-zine.outputs.pr_title }}
+          body-path: /tmp/zine-pr-body/zine-pr-body-${{ github.event.issue.number }}.md
+
+  post-pr-actions:
+    needs: [process-new-zine, create-pr]
+    if: always() && needs.create-pr.outputs.pull-request-number != ''
+    runs-on: ubuntu-latest
+    env:
+      PCD_TEAM_REVIEWERS: ${{ vars.PCD_TEAM_REVIEWERS }}
+    steps:
+      - name: Label pull request and request review
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const pull_number = Number('${{ needs.create-pr.outputs.pull-request-number }}');
+            await github.rest.issues.addLabels({ owner: context.repo.owner, repo: context.repo.repo, issue_number: pull_number, labels: ['new zine', 'needs review'] });
+            const team_reviewers = (process.env.PCD_TEAM_REVIEWERS || '').split(',').map((value) => value.trim()).filter(Boolean);
+            if (team_reviewers.length) await github.rest.pulls.requestReviewers({ owner: context.repo.owner, repo: context.repo.repo, pull_number, team_reviewers });
+      - name: Upsert pull request status comment
+        uses: actions/github-script@v8
+        env:
+          PR_NUMBER: ${{ needs.create-pr.outputs.pull-request-number }}
+          PR_URL: ${{ needs.create-pr.outputs.pull-request-url }}
+          ZINE_TITLE: ${{ needs.process-new-zine.outputs.zine_title }}
+        with:
+          script: |
+            const marker = process.env.STATUS_COMMENT_MARKER;
+            const body = `${marker}\n**${process.env.ZINE_TITLE}** was staged for review in [#${process.env.PR_NUMBER}](${process.env.PR_URL}). Maintainers will verify the PDFs before publishing it.`;
+            const { data: comments } = await github.rest.issues.listComments({ owner: context.repo.owner, repo: context.repo.repo, issue_number: context.issue.number });
+            const existing = comments.find((comment) => comment.user?.type === 'Bot' && comment.body?.includes(marker));
+            const input = { owner: context.repo.owner, repo: context.repo.repo, body };
+            if (existing) await github.rest.issues.updateComment({ ...input, comment_id: existing.id });
+            else await github.rest.issues.createComment({ ...input, issue_number: context.issue.number });

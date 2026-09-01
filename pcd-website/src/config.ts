@@ -16,6 +16,9 @@ export const PCD_FORUM_NEW_TOPIC_URL =
     tags: "pcd",
   }).toString();
 
+export const ACTIVITY_GUIDE_SUBMIT_URL =
+  "https://github.com/processing/processing-community-day/issues/new?template=05-new-zine.yml";
+
 export const PCD_DISCORD_URL = "https://discord.gg/q5NksnwGsY";
 
 export interface SocialLink {

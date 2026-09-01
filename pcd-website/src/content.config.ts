@@ -36,8 +36,19 @@ const organizerKit = defineCollection({
   }),
 });
 
+const zines = defineCollection({
+  // One flat folder per zine. `index.md` makes the collection entry id the
+  // folder slug; `content.md` would instead produce `<slug>/content`.
+  loader: glob({ base: './src/content/zines', pattern: '*/index.md' }),
+  schema: z.object({
+    id: z.string(),
+    order: z.number().int().nonnegative(),
+  }),
+});
+
 export const collections = {
   events,
   legal,
   organizerKit,
+  zines,
 };
