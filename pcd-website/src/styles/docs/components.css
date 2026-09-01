@@ -185,7 +185,9 @@
   appearance: none;
 }
 .docs-back-to-top {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
   margin-top: var(--sp-8);
   font-size: var(--step-5);
   font-weight: 500;
@@ -194,6 +196,10 @@
   text-decoration-color: var(--color-link-underline);
   text-decoration-thickness: 2px;
   text-underline-offset: 2px;
+}
+.docs-back-to-top__icon {
+  flex: 0 0 auto;
+  fill: currentColor;
 }
 .docs-back-to-top:hover {
   text-decoration-color: var(--color-link-underline-hover);
