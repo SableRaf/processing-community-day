@@ -36,12 +36,13 @@ node --test .github/scripts/process-edit-event-issue.test.mjs
 node --test .github/scripts/plus-code.test.mjs
 node --test .github/scripts/zines.test.mjs
 node --test .github/scripts/zine-build.test.mjs
+node --test .github/scripts/process-new-zine-issue.test.mjs
 
 # Requires npm run build from pcd-website/ first:
 node --test .github/scripts/data-json.test.mjs
 ```
 
-Need to run the tests end-to-end? `./scripts/run-tests.sh` executes the helper, intake, plus-code, and zine metadata suites; runs the zine fixture build; builds the Astro site via `npm --prefix pcd-website run build`; and then runs `data-json.test.mjs` in sequence. Run this script from the repo root after installing dependencies so you get the full battery of checks in one shot.
+Need to run the tests end-to-end? `./scripts/run-tests.sh` executes the helper, event and zine intake, plus-code, and zine metadata suites; runs the zine fixture build; builds the Astro site via `npm --prefix pcd-website run build`; and then runs `data-json.test.mjs` in sequence. Run this script from the repo root after installing dependencies so you get the full battery of checks in one shot.
 
 No install needed — `open-location-code` is already available at `pcd-website/node_modules/`.
 
@@ -70,7 +71,7 @@ Event data lives in `src/content/events/<event-id>/`:
 
 Activity Guide cards live in `src/content/zines/<slug>/` and the library grid at `/organize/activity-guides/zine-library/` is built dynamically from every `*/index.md`, sorted by its required numeric `order` frontmatter. Every entry is a published zine and pairs `index.md` with `metadata.json`, an optional cover image, and one or more PDF downloads; the collection has no placeholder or draft state. Cover metadata uses `{ "src": "cover.png", "alt": "..." }` so the local image and its accessible description travel together. Downloads may be local sibling PDF assets or external http(s) URLs; metadata supplies the human-readable file size (and the filename for external files) used by the shared download rows. `src/lib/zines.ts` joins the Astro collection, metadata, and assets at build time; `src/lib/zine-metadata.js` owns the strict published-zine schema and pure validation. Zines must use `index.md` (not `content.md`) so Astro's glob loader makes the entry id equal to the folder slug. A published zine without a cover renders a grey title fallback in the library and on its detail page. The library ends with a single “Submit a Zine” card linking to the submission form.
 
-Zine PDFs are emitted from `src/` assets using `?url&no-inline`, so even small downloads become real files in `dist/`. `src/content/zines/` contains publishable zines only: it deliberately has no `draft` field because eager asset imports would make draft files public. Keep unfinished zines in `src/content/zines-drafts/`. Review PDFs for selectable text, logical reading order, document title and language, tagged headings where possible, alt text, and at least one screen-reader-friendly reading-order version.
+Zine PDFs are emitted from `src/` assets using `?url&no-inline`, so even small downloads become real files in `dist/`. `src/content/zines/` contains publishable zines only: it deliberately has no `draft` field because eager asset imports would make draft files public. Keep unfinished zines in `src/content/zines-drafts/`. The `Zine Intake` workflow writes review-only `submission.json` + `index.md` pairs there from the `05-new-zine.yml` form. `submission.json` records both external PDF roles (`reader-order`, `print-ready`), provenance, and the fixed CC BY-SA 4.0 license; it is not Astro content. Maintainers verify both PDFs, commit them as `reader-order.pdf` and `print-ready.pdf`, replace the submission file with published `metadata.json` download records labelled `Reader-order PDF` and `Print-ready PDF` (with local human-readable sizes), add `order: max(existing order) + 1` to `index.md`, then move the folder into `zines/` after checking the Netlify preview. No cover is collected, so use the title fallback. Review PDFs for selectable text, logical reading order, document title and language, tagged headings where possible, alt text, and at least one screen-reader-friendly reading-order version.
 
 The global Markdown pipeline runs `rehype-table-wrapper` and `rehype-heading-anchors`, which respectively wrap rendered tables in `.table-wrapper` and add permalink anchors to h2–h6. Their presentation styles live in the shared `prose.css` layer, scoped to both `.prose` and `.docs-prose`, because both plugins apply to all Markdown collections.
 
@@ -184,15 +185,20 @@ New events are submitted via GitHub Issues using `.github/ISSUE_TEMPLATE/01-new-
 
 Organizers can edit existing events via `.github/ISSUE_TEMPLATE/04-edit-event.yml`. The same workflow (`process-edit-event` job) runs `.github/scripts/process-edit-event-issue.mjs`. The edit script: reads the existing event by `event_id`, preserves the immutable `uid` and `intake` block, preserves `event_activities` if all checkboxes are unchecked (GitHub issue forms cannot prefill checkboxes), and preserves `content.md` if `full_description` is blank.
 
+### New zines
+
+New Activity Guide zines use `.github/ISSUE_TEMPLATE/05-new-zine.yml` and `.github/workflows/new-zine-intake.yml`. The workflow runs `.github/scripts/process-new-zine-issue.mjs` when an issue labelled `new zine` is opened, edited, reopened, or labelled. It applies `new zine` and `needs review`, assigns `PCD_TEAM_ASSIGNEES`, validates the issue, and upserts one marked status comment. Valid submissions stage only `src/content/zines-drafts/<slug>/submission.json` and `index.md` in a stable `automation/new-zine-<issue-number>` review PR; the workflow labels the PR and requests `PCD_TEAM_REVIEWERS`. Issue edits update that branch and the same status comment. Zines have no edit issue workflow and the automation never fetches source URLs.
+
 ### Shared helpers
 
 Pure functions shared by both intake scripts live in `.github/scripts/event-issue-helpers.mjs`. This includes `parseIssueSections`, validation helpers, `slugify`, `parseActivities`, `parseOrganizers`, `buildValidationComment`, and `generateUniqueUid`.
 
 ### Template detection
 
-Both scripts guard against running on the wrong template:
+Intake scripts guard against running on the wrong template:
 - `process-new-event-issue.mjs` skips if the body contains `### Event ID` (unique to the edit template)
 - `process-edit-event-issue.mjs` skips if the body does NOT contain `### Event ID`
+- `process-new-zine-issue.mjs` skips unless the body contains `### Reader-order PDF URL`
 
 ## Deployment
 

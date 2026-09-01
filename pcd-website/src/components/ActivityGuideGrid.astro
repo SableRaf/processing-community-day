@@ -17,6 +17,7 @@ const zines = await loadZines();
         </span>
         <span class="guide-card__body">
           <strong>{zine.title}</strong>
+          <span class="guide-card__author">by {zine.created_by}</span>
           <span class="guide-card__summary">{zine.summary}</span>
         </span>
       </a>

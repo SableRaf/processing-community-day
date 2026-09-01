@@ -70,7 +70,7 @@ test('a populated zine collection emits linked assets and renders entries in fro
     assert.match(library, /<ul class="guide-grid">\s*<li>\s*<a class="guide-card guide-card--zine" href="\/activity-guide\/zine-making-kit\/"/);
     assert.match(
       library,
-      /guide-card__cover-frame[\s\S]*?<\/span>\s*<span class="guide-card__body">\s*<strong>Zine Making Kit<\/strong>/,
+      /guide-card__cover-frame[\s\S]*?<\/span>\s*<span class="guide-card__body">\s*<strong>Zine Making Kit<\/strong>\s*<span class="guide-card__author">by Library of Congress<\/span>/,
     );
     assert.match(library, /<img[^>]+alt="Zine Making Kit"/);
     assert.match(library, new RegExp(`href="/activity-guide/${SLUG}/"`));
@@ -85,6 +85,7 @@ test('a populated zine collection emits linked assets and renders entries in fro
       /guide-card guide-card--add[^>]*>[\s\S]*?<svg class="guide-card__plus" aria-hidden="true" viewBox="0 0 16 16">\s*<path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0Z[^>]+><\/path>\s*<\/svg>\s*<span>Submit a Zine<\/span>/,
       'the submission card should render the feed-plus Octicon followed by its label',
     );
+    assert.match(library, /href="https:\/\/github\.com\/processing\/processing-community-day\/issues\/new\?template=05-new-zine\.yml"/, 'the submission card should link to the public New Zine GitHub issue form');
     assert.doesNotMatch(library, /guide-card--empty|<strong>Variables<\/strong>/);
     const grid = library.match(/<ul class="guide-grid">([\s\S]*?)<\/ul>/);
     assert.ok(grid, 'the library should render its grid');

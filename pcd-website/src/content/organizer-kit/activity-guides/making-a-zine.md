@@ -31,4 +31,4 @@ The US Library of Congress has a [Zine Making Guide (PDF)](https://guides.loc.go
 
 ## Submit Your Zine
 
-Go to the [Zine Library](/organize/activity-guides/zine-library/) to submit your zine and explore the full collection. We recommend submitting your zine as two PDF files, one reader-order version and one print-ready version.
+Go to the [Zine Library](/organize/activity-guides/zine-library/) to submit your zine and explore the full collection. Submission requires two PDF files: a reader-order version with an accessible reading order and a print-ready version. Both links must be public, non-expiring links that work without login. Submitted information is public, and guides are reviewed by maintainers before publication under CC BY-SA 4.0.

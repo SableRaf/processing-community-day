@@ -306,6 +306,10 @@
   gap: var(--sp-1);
   padding: var(--sp-3) 0 0;
 }
+.guide-card__author {
+  color: var(--color-text-muted);
+  font-size: var(--step-2);
+}
 .guide-card__summary {
   color: var(--color-text-muted);
   font-size: var(--step-2);

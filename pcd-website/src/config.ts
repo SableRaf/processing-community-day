@@ -16,44 +16,8 @@ export const PCD_FORUM_NEW_TOPIC_URL =
     tags: "pcd",
   }).toString();
 
-export const ACTIVITY_GUIDE_SUBMISSION_TEMPLATE = `*This post uses the submission template for the Processing Community Day [Zine Library](https://day.processing.org/organize/activity-guides/zine-library/), a collection of activities for PCD events.*
-
----
-
-**Title:**
-**Author(s):**
-
-**Activity Format:** <!-- workshop, discussion, creative exercise, etc. -->
-**About the Activity:** <!-- Briefly explain what participants will do. -->
-
-**Number of Pages:**
-**Duration:** <!-- 1 hour / 2 hours / 3 hours -->
-
-<!-- Host your PDFs on a public file sharing service (e.g., Google Drive, Dropbox, etc.) and provide the links below. -->
-**PDF (individual pages):** 
-**PDF (printable version):**
-
-**License:** I confirm that I own or have permission to license this material, and I agree to publish it under the [CC BY-SA 4.0 License](https://creativecommons.org/licenses/by-sa/4.0/).
-
-**Tags:** <!-- Processing, p5js, python, etc. Comma-separated. -->`
-
-
-
-export function activityGuideSubmitUrl(topic?: string): string {
-  return "https://discourse.processing.org/new-topic?" +
-    new URLSearchParams({
-      title: topic
-        ? `Activity Guide Submission: ${topic}`
-        : 'Activity Guide Submission: [Title of your Activity]',
-      body: topic
-        ? ACTIVITY_GUIDE_SUBMISSION_TEMPLATE.replace('**Title:**', `**Title:** ${topic}`)
-        : ACTIVITY_GUIDE_SUBMISSION_TEMPLATE,
-      category: 'community',
-      tags: 'pcd,zine',
-    }).toString();
-}
-
-export const ACTIVITY_GUIDE_SUBMIT_URL = activityGuideSubmitUrl();
+export const ACTIVITY_GUIDE_SUBMIT_URL =
+  "https://github.com/processing/processing-community-day/issues/new?template=05-new-zine.yml";
 
 export const PCD_DISCORD_URL = "https://discord.gg/q5NksnwGsY";
 

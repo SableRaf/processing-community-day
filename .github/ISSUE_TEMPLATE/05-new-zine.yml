@@ -1,0 +1,103 @@
+name: "📚 New Zine"
+description: Submit an Activity Guide zine for the PCD Zine Library.
+title: "New Zine: "
+labels:
+  - new zine
+  - needs review
+body:
+  - type: markdown
+    attributes:
+      value: |
+        <!-- new-zine-template -->
+        Everything in this issue, including the PDF links and notes, is public. Do not include private or sensitive information. We stage accepted submissions for maintainer review before publishing them.
+  - type: input
+    id: title
+    attributes:
+      label: Title
+      description: The public title of your activity guide.
+    validations:
+      required: true
+  - type: input
+    id: topic
+    attributes:
+      label: Topic
+      description: The subject or theme of the guide.
+    validations:
+      required: true
+  - type: input
+    id: creators
+    attributes:
+      label: Creator(s)
+      description: The person or group to credit.
+    validations:
+      required: true
+  - type: textarea
+    id: summary
+    attributes:
+      label: Short summary
+      description: A concise description for the library card.
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Full description
+      description: Public description shown on the guide page. Markdown is supported.
+    validations:
+      required: true
+  - type: input
+    id: reader_order_pdf
+    attributes:
+      label: Reader-order PDF URL
+      description: A PDF whose reading order follows the content for accessible reading.
+      placeholder: https://example.org/my-guide-reader-order.pdf
+    validations:
+      required: true
+  - type: input
+    id: print_ready_pdf
+    attributes:
+      label: Print-ready PDF URL
+      description: A PDF prepared for printing, folding, or other physical distribution.
+      placeholder: https://example.org/my-guide-print-ready.pdf
+    validations:
+      required: true
+  - type: input
+    id: activity_format
+    attributes:
+      label: Activity format
+      description: Optional, for example workshop, discussion, or creative exercise.
+  - type: input
+    id: duration
+    attributes:
+      label: Duration
+      description: Optional, for example 45 minutes or 2 hours.
+  - type: textarea
+    id: materials
+    attributes:
+      label: Materials
+      description: Optional materials participants need.
+  - type: input
+    id: attribution
+    attributes:
+      label: Preferred attribution
+      description: Optional attribution wording.
+  - type: textarea
+    id: maintainer_notes
+    attributes:
+      label: Maintainer notes
+      description: Optional notes for maintainers. These notes are public.
+  - type: checkboxes
+    id: license_consent
+    attributes:
+      label: License consent
+      options:
+        - label: I own or have permission to license this material under CC BY-SA 4.0.
+          required: true
+  - type: checkboxes
+    id: link_consent
+    attributes:
+      label: Public, stable PDF links
+      description: Both links must work without login and must not be short-lived or expiring.
+      options:
+        - label: I confirm both PDF links are publicly accessible without login and are stable, non-expiring links.
+          required: true

@@ -16,4 +16,18 @@ For published guides, `metadata.json` requires these fields: `id` (the folder sl
 
 Only published zines belong in `src/content/zines/`. This collection has no `draft` or placeholder state because its eager asset imports would emit unpublished cover and PDF files to the public build. Keep unfinished work in `src/content/zines-drafts/`, outside the collection and its asset globs.
 
+## GitHub issue intake and promotion
+
+Community submissions start in the public [New Zine issue form](https://github.com/processing/processing-community-day/issues/new?template=05-new-zine.yml). The `Zine Intake` workflow validates required metadata, HTTP(S) source URLs, both consent checkboxes, and slug uniqueness. It creates or updates a review PR on `automation/new-zine-<issue-number>` with these files only:
+
+```
+src/content/zines-drafts/<slug>/
+  submission.json
+  index.md
+```
+
+`submission.json` keeps the submitted metadata, `source_pdfs` with `reader-order` and `print-ready` roles, the fixed `CC BY-SA 4.0` license, source issue URL, and intake provenance. These draft files are deliberately not loaded by Astro and must never be treated as a published guide.
+
+To promote an approved draft, verify that both stable source links work and review the PDFs, including the reader-order PDF’s accessibility. Download and commit them with the deterministic filenames `reader-order.pdf` and `print-ready.pdf`. Replace `submission.json` with a published `metadata.json` that lists both local files using the labels `Reader-order PDF` and `Print-ready PDF` and each file’s human-readable size. Add `order: max(existing order) + 1` to `index.md`, move the folder into `src/content/zines/`, verify the Netlify preview, then merge. The form does not collect a cover image, so the existing grey title fallback is expected.
+
 Before publishing, review PDFs for accessible, selectable (not scanned) text; logical reading order; document title and language; tagged headings where the authoring tool allows; and alt text on images. Include at least one PDF whose reading order follows the content, not only a print-imposed layout.
