@@ -105,6 +105,18 @@
   height: auto;
 }
 
+:where(.prose, .docs-prose) p:has(+ p > .prose-figure-caption) {
+  margin-bottom: var(--spacing-xs);
+}
+
+:where(.prose, .docs-prose) .prose-figure-caption {
+  display: block;
+  color: var(--color-text-subtle);
+  font-size: 0.875rem;
+  line-height: 1.4;
+  text-align: center;
+}
+
 :where(.prose, .docs-prose) :not(pre) > code {
   padding: 0.2em 0.15em;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;

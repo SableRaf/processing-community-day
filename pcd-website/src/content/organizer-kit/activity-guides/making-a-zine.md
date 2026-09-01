@@ -9,7 +9,17 @@ description: An introduction to zines, resources for making one, and information
 
 A [zine](https://en.wikipedia.org/wiki/Zine) (pronounced “zeen,” short for magazine or fanzine) is a small, independent publication usually created by one person or a small group. It usually explores a specific or unconventional subject and is often made by hand, photocopied, or published online. Usually, a zine is a small booklet or pamphlet, often with a limited number of pages. Many zines can be printed and folded from a single sheet of paper.
 
-## Zine making resources
+## How to Make a Zine
+
+The simplest form of a zine is a one-page zine, which can be printed on a single sheet of paper and folded into a small booklet. You can create a one-page zine by drawing, writing, or collaging on a single sheet of paper.
+
+You can also use some of the tools listed below to create a zine digitally and print it out. And if you'd rather just use ready-to-print zines, you can find them in the [Zine Library](/organize/activity-guides/zine-library/).
+
+![Illustrated folding instructions for making a one-page zine](./images/folding_instructions_small_CC_BY-SA%204.0_1pagedungeons.png)
+
+<span class="prose-figure-caption">Illustration by [1pagedungeons](https://1pagedungeons.itch.io/) ([CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/))</span>
+
+## Zine Making Resources
 
 This [wikiHow article](https://www.wikihow.com/Make-a-Zine) is an illustrated step-by-step guide to making a zine. It's a great starting point for creating your first zine.
 
