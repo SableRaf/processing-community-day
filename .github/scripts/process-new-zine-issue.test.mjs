@@ -8,7 +8,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { promisify } from 'node:util';
 import {
   allowedRedirectHost, fetchAttachment, formatFileSize, hasValidContent, isGitHubAttachmentUrl,
-  normaliseFilename, parseSubmittedAttachments, validateAttachmentSelection, validateDownloadedFiles,
+  normaliseFilename, parseSubmittedAttachments, resolveEmbeddedImageFilenames, validateAttachmentSelection, validateDownloadedFiles,
 } from './zine-intake-helpers.mjs';
 
 const execFileAsync = promisify(execFile);
@@ -83,7 +83,7 @@ async function runProcessor(body, { number = 801, publishedOrders = [], env = {}
       let body;
       if (filename.endsWith('.pdf')) body = encoder.encode('%PDF-1.7');
       else if (filename.endsWith('.zip')) body = new Uint8Array([0x50, 0x4b, 0x03, 0x04]);
-      else if (filename.endsWith('.png')) body = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+      else if (filename.endsWith('.png') || filename === 'embedded-cover') body = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
       else if (/\\.jpe?g$/.test(filename)) body = new Uint8Array([0xff, 0xd8, 0xff]);
       else if (filename.endsWith('.webp')) body = encoder.encode('RIFFxxxxWEBP');
       else if (filename.endsWith('.json')) body = encoder.encode('{"fixture":true}');
@@ -129,6 +129,18 @@ describe('new-zine attachment helpers', () => {
     assert.equal(normaliseFilename('COM9.pdf'), null);
     assert.equal(normaliseFilename('lpt10.txt'), 'lpt10.txt');
     assert.equal(normaliseFilename('bad\u0000.pdf'), null);
+  });
+
+  test('accepts GitHub HTML image embeds and derives their missing filenames from content', () => {
+    const url = 'https://github.com/user-attachments/assets/b4e4171c-0c05-44d3-afee-923acce095a4';
+    const html = `<img width="854" height="1280" alt="Image" src="${url}" />`;
+    const parsed = parseSubmittedAttachments(html);
+    assert.deepEqual(parsed, { attachments: [{ filename: 'image', url, embeddedImage: true }], invalidEntries: [] });
+    const files = [{ ...parsed.attachments[0], field: 'Cover image', kind: 'cover', bytes: bytes(0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a) }];
+    assert.deepEqual(validateAttachmentSelection(files, { allowUnresolvedImages: true }), []);
+    resolveEmbeddedImageFilenames(files);
+    assert.equal(files[0].filename, 'cover.png');
+    assert.deepEqual(validateAttachmentSelection(files), []);
   });
 
   test('scopes collisions to storage namespaces and enforces formats and file count', () => {
@@ -221,6 +233,16 @@ describe('process-new-zine-issue', () => {
     for (const file of ['Reader.pdf', 'Print.pdf', 'cover.jpeg', 'metadata.json']) await fs.access(path.join(directory, 'downloads', file));
     await fs.access(path.join(directory, 'cover.jpeg'));
     assert.match(await fs.readFile(result.outputs.pr_body_path, 'utf8'), /### Maintainer notes\n\nCheck the fold before merging\./);
+  });
+
+  test('publishes a cover pasted as GitHub HTML image markup', async () => {
+    const coverUrl = 'https://github.com/user-attachments/assets/embedded-cover';
+    const result = await runProcessor(issueBody({ cover: `<img width="854" height="1280" alt="Image" src="${coverUrl}" />` }));
+    assert.equal(result.outputs.valid, 'true');
+    const directory = path.join(result.zines, 'publication-ready-zine');
+    const metadata = JSON.parse(await fs.readFile(path.join(directory, 'metadata.json'), 'utf8'));
+    assert.deepEqual(metadata.cover, { src: 'cover.png', alt: 'Publication Ready Zine' });
+    await fs.access(path.join(directory, 'cover.png'));
   });
 
   test('reuses a valid current order of zero', async () => {

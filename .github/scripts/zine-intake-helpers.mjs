@@ -13,8 +13,21 @@ const WINDOWS_RESERVED_BASENAMES = /^(?:con|prn|aux|nul|com[1-9]|lpt[1-9])$/i;
 
 function entries(value) { return String(value ?? '').replace(/\r/g, '').split('\n').map((line) => line.trim()).filter(Boolean); }
 function markdownAttachment(entry) {
-  const match = entry.match(/^!?\[([^\]]+)\]\((https:\/\/[^\s]+)\)$/i);
-  return match ? { filename: match[1], url: match[2] } : null;
+  const match = entry.match(/^(!?)\[([^\]]+)\]\((https:\/\/[^\s]+)\)$/i);
+  return match ? { filename: match[2], url: match[3], ...(match[1] ? { embeddedImage: true } : {}) } : null;
+}
+function htmlImageAttachment(entry) {
+  const match = entry.match(/^<img\b([^>]*)\/?\s*>$/i);
+  if (!match) return null;
+  const attributes = new Map();
+  for (const attribute of match[1].matchAll(/\b(src|alt)\s*=\s*(?:"([^"]*)"|'([^']*)')/gi)) {
+    attributes.set(attribute[1].toLowerCase(), attribute[2] ?? attribute[3] ?? '');
+  }
+  const url = attributes.get('src');
+  if (!url) return null;
+  const alt = attributes.get('alt')?.trim() ?? '';
+  const filename = COVER_EXTENSIONS.has(extensionOf(alt)) ? alt : 'image';
+  return { filename, url, embeddedImage: true };
 }
 
 export function isGitHubAttachmentUrl(value) {
@@ -27,7 +40,7 @@ export function isGitHubAttachmentUrl(value) {
 export function parseSubmittedAttachments(value) {
   const attachments = []; const invalidEntries = []; const seen = new Set();
   for (const entry of entries(value)) {
-    const attachment = markdownAttachment(entry);
+    const attachment = markdownAttachment(entry) ?? htmlImageAttachment(entry);
     if (!attachment || !isGitHubAttachmentUrl(attachment.url)) { invalidEntries.push(entry); continue; }
     if (!seen.has(attachment.url)) { seen.add(attachment.url); attachments.push(attachment); }
   }
@@ -51,12 +64,13 @@ export function formatFileSize(bytes) {
   return `${Math.round(bytes / 100_000) / 10} MB`;
 }
 
-export function validateAttachmentNames(files) {
+export function validateAttachmentNames(files, { allowUnresolvedImages = false } = {}) {
   const errors = []; const seenByNamespace = new Map();
   for (const file of files) {
     const filename = normaliseFilename(file.filename);
     if (!filename) { errors.push({ field: file.field, found: file.filename, message: 'Attachment filenames cannot contain paths, control characters, or reserved filenames.' }); continue; }
     file.filename = filename;
+    if (allowUnresolvedImages && file.embeddedImage && !extensionOf(filename)) continue;
     const namespace = file.kind === 'cover' ? 'root' : 'downloads';
     const seen = seenByNamespace.get(namespace) ?? new Set();
     if (seen.has(filename.toLowerCase())) errors.push({ field: file.field, found: filename, message: 'Attachment filenames must be unique, even when they differ only by letter case.' });
@@ -65,15 +79,43 @@ export function validateAttachmentNames(files) {
   }
   return errors;
 }
-export function validateAttachmentSelection(files) {
-  const errors = validateAttachmentNames(files);
+export function validateAttachmentSelection(files, { allowUnresolvedImages = false } = {}) {
+  const errors = validateAttachmentNames(files, { allowUnresolvedImages });
   if (files.length > MAX_FILES) errors.push({ field: 'Attachments', message: `Upload no more than ${MAX_FILES} files total, including the cover and two required PDFs.` });
   for (const file of files) {
     const extension = extensionOf(file.filename); const allowed = file.kind === 'cover' ? COVER_EXTENSIONS : DOWNLOAD_EXTENSIONS;
-    if (!allowed.has(extension)) errors.push({ field: file.field, found: file.filename, message: file.kind === 'cover' ? 'The cover must be a PNG, JPG, JPEG, or WebP image.' : 'Supported downloads are PDF, ZIP, PNG, JPG/JPEG, WebP, TXT, MD, CSV, and JSON.' });
+    const unresolvedImage = allowUnresolvedImages && file.embeddedImage && !extension;
+    if (!allowed.has(extension) && !unresolvedImage) errors.push({ field: file.field, found: file.filename, message: file.kind === 'cover' ? 'The cover must be a PNG, JPG, JPEG, or WebP image.' : 'Supported downloads are PDF, ZIP, PNG, JPG/JPEG, WebP, TXT, MD, CSV, and JSON.' });
     if (file.role && extension !== 'pdf') errors.push({ field: file.field, found: file.filename, message: 'The required reader-order and print-ready uploads must be PDFs.' });
   }
   return errors;
+}
+
+function imageExtensionOfBytes(bytes) {
+  const at = (index) => bytes[index] ?? -1;
+  if ([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a].every((byte, index) => at(index) === byte)) return 'png';
+  if (at(0) === 0xff && at(1) === 0xd8 && at(2) === 0xff) return 'jpg';
+  if (new TextDecoder().decode(bytes.slice(0, 4)) === 'RIFF' && new TextDecoder().decode(bytes.slice(8, 12)) === 'WEBP') return 'webp';
+  return null;
+}
+
+export function resolveEmbeddedImageFilenames(files) {
+  const usedByNamespace = new Map();
+  for (const file of files.filter((candidate) => !candidate.embeddedImage || extensionOf(candidate.filename))) {
+    const namespace = file.kind === 'cover' ? 'root' : 'downloads';
+    const used = usedByNamespace.get(namespace) ?? new Set();
+    used.add(file.filename.toLowerCase()); usedByNamespace.set(namespace, used);
+  }
+  for (const file of files.filter((candidate) => candidate.embeddedImage && !extensionOf(candidate.filename))) {
+    const extension = imageExtensionOfBytes(file.bytes ?? new Uint8Array());
+    if (!extension) continue;
+    const namespace = file.kind === 'cover' ? 'root' : 'downloads';
+    const used = usedByNamespace.get(namespace) ?? new Set();
+    const stem = file.kind === 'cover' ? 'cover' : (normaliseFilename(file.filename) ?? 'image');
+    let filename = `${stem}.${extension}`; let suffix = 2;
+    while (used.has(filename.toLowerCase())) { filename = `${stem}-${suffix}.${extension}`; suffix += 1; }
+    file.filename = filename; used.add(filename.toLowerCase()); usedByNamespace.set(namespace, used);
+  }
 }
 
 export function allowedRedirectHost(hostname) { return REDIRECT_HOSTS.some((rule) => rule.test(hostname)); }

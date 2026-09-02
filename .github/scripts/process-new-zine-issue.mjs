@@ -3,7 +3,7 @@ import path from 'node:path';
 import { isValidHttpUrl, parseIssueSections, required, slugify } from './event-issue-helpers.mjs';
 import {
   ZINE_TEMPLATE_HEADING, fetchAttachment, formatFileSize, hasCheckedConsent,
-  makeZineMarkdown, makeZinePrBody, parseSubmittedAttachments, validateAttachmentSelection,
+  makeZineMarkdown, makeZinePrBody, parseSubmittedAttachments, resolveEmbeddedImageFilenames, validateAttachmentSelection,
   validateDownloadedFiles, zineValidationComment,
 } from './zine-intake-helpers.mjs';
 
@@ -67,7 +67,7 @@ async function main() {
     ...cover.attachments.map((attachment) => ({ ...attachment, field: 'Cover image', kind: 'cover' })),
     ...additional.attachments.map((attachment) => ({ ...attachment, field: 'Additional files', kind: 'download' })),
   ];
-  errors.push(...validateAttachmentSelection(files));
+  errors.push(...validateAttachmentSelection(files, { allowUnresolvedImages: true }));
   const slug = slugify(title); const publishedDir = path.join(WORKSPACE, 'pcd-website/src/content/zines', slug);
   const reservedSlugs = new Set((process.env.ZINE_RESERVED_SLUGS ?? '').split(',').filter(Boolean));
   if (!slug) errors.push({ field: 'Title', message: 'Use at least one letter or number so we can create a URL slug.' });
@@ -75,7 +75,11 @@ async function main() {
   else if (await folderExists(publishedDir) && process.env.ZINE_CURRENT_SLUG !== slug) errors.push({ field: 'Title', found: title, message: `The generated slug \`${slug}\` already exists in published zines.` });
   if (!errors.length) {
     await Promise.all(files.map(async (file) => { try { file.bytes = await fetchAttachment(file.url); } catch (error) { errors.push({ field: file.field, found: file.filename, message: error.message }); } }));
-    if (!errors.length) errors.push(...validateDownloadedFiles(files));
+    if (!errors.length) {
+      resolveEmbeddedImageFilenames(files);
+      errors.push(...validateAttachmentSelection(files));
+      if (!errors.length) errors.push(...validateDownloadedFiles(files));
+    }
   }
   if (errors.length) {
     const comment = path.join(RUNNER_TEMP, `zine-validation-${issueNumber}.md`); await fs.writeFile(comment, zineValidationComment(errors));
