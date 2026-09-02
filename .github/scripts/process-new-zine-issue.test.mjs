@@ -232,7 +232,9 @@ describe('process-new-zine-issue', () => {
     assert.match(await fs.readFile(path.join(directory, 'index.md'), 'utf8'), /^order: 8$/m);
     for (const file of ['Reader.pdf', 'Print.pdf', 'cover.jpeg', 'metadata.json']) await fs.access(path.join(directory, 'downloads', file));
     await fs.access(path.join(directory, 'cover.jpeg'));
-    assert.match(await fs.readFile(result.outputs.pr_body_path, 'utf8'), /### Maintainer notes\n\nCheck the fold before merging\./);
+    const prBody = await fs.readFile(result.outputs.pr_body_path, 'utf8');
+    assert.match(prBody, /generated from \*\*"Publication Ready Zine"\*\*/);
+    assert.match(prBody, /### Maintainer notes\n\nCheck the fold before merging\./);
   });
 
   test('publishes a cover pasted as GitHub HTML image markup', async () => {
@@ -316,5 +318,6 @@ describe('process-new-zine-issue', () => {
     assert.match(workflow, /issues\.removeLabel[\s\S]+name: 'needs review'/);
     assert.match(workflow, /issues\.removeLabel[\s\S]+name: 'needs changes'/);
     assert.match(workflow, /git switch -C "\$BRANCH"[\s\S]+git add pcd-website\/src\/content\/zines[\s\S]+git push --force-with-lease/);
+    assert.match(workflow, /\*\*"\$\{process\.env\.TITLE\}"\*\* is ready for review/);
   });
 });

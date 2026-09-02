@@ -171,7 +171,7 @@ export function makeZinePrBody({ issueNumber, title, submitterLogin, maintainerN
   return [
     `Closes #${issueNumber}`,
     '',
-    `This publication-ready Activity Guide was generated from **${title}** and submitted by ${submittedBy}.`,
+    `This publication-ready Activity Guide was generated from **"${title}"** and submitted by ${submittedBy}.`,
     ...(maintainerNotes ? ['', '### Maintainer notes', '', maintainerNotes] : []),
     '',
     '### Reviewer checklist',
@@ -179,6 +179,5 @@ export function makeZinePrBody({ issueNumber, title, submitterLogin, maintainerN
     '- [ ] Review all files and reader-order accessibility.',
     '- [ ] Verify generated metadata.',
     '- [ ] Verify the Netlify preview.',
-    '- [ ] Merge.',
   ].join('\n');
 }
