@@ -68,7 +68,7 @@ const markdown = `# ${zine.title}\n\nby ${creator}\n\n${zine.entry.body?.trim() 
 
           <hr />
 
-          <ZineDownloads downloads={zine.pdfs} />
+          <ZineDownloads downloads={zine.downloads} />
 
           {(zine.license || zine.attribution) && (
             <>

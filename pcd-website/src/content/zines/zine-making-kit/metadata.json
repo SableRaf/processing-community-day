@@ -11,10 +11,9 @@
     "src": "cover.png",
     "alt": "Zine Making Kit"
   },
-  "pdfs": [
+  "downloads": [
     {
       "url": "https://guides.loc.gov/ld.php?content_id=67687837",
-      "label": "Zine Making Kit",
       "filename": "B230_zinemakingactivity.pdf",
       "file_size": "519 kB"
     }

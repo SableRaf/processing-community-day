@@ -1,7 +1,11 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { isValidHttpUrl, parseIssueSections, required, slugify } from './event-issue-helpers.mjs';
-import { ZINE_TEMPLATE_HEADING, hasCheckedConsent, isPdfUrl, makeDraftMarkdown, makeZinePrBody, parseSubmittedFileUrls, zineValidationComment } from './zine-intake-helpers.mjs';
+import {
+  ZINE_TEMPLATE_HEADING, extensionOf, fetchAttachment, formatFileSize, hasCheckedConsent,
+  makeZineMarkdown, makeZinePrBody, parseSubmittedAttachments, validateAttachmentSelection,
+  validateDownloadedFiles, zineValidationComment,
+} from './zine-intake-helpers.mjs';
 
 const WORKSPACE = process.cwd();
 const RUNNER_TEMP = process.env.RUNNER_TEMP ?? path.join(WORKSPACE, '.tmp');
@@ -11,153 +15,86 @@ const issue = payload.issue;
 const issueNumber = issue.number;
 const issueBody = issue.body ?? '';
 
-async function setOutput(key, value) {
-  if (OUTPUT_PATH) await fs.appendFile(OUTPUT_PATH, `${key}=${String(value)}\n`);
-}
-
+async function setOutput(key, value) { if (OUTPUT_PATH) await fs.appendFile(OUTPUT_PATH, `${key}=${String(value)}\n`); }
 function issueUrl() {
   if (issue.html_url) return issue.html_url;
   const repository = payload.repository?.full_name ?? process.env.GITHUB_REPOSITORY;
   return repository ? `${process.env.GITHUB_SERVER_URL ?? 'https://github.com'}/${repository}/issues/${issueNumber}` : `issue #${issueNumber}`;
 }
-
-async function folderExists(folder) {
-  try { await fs.access(folder); return true; } catch { return false; }
+async function folderExists(folder) { try { await fs.access(folder); return true; } catch { return false; } }
+function addAttachmentErrors(errors, field, parsed, requiredRole) {
+  if (parsed.invalidEntries.length) {
+    errors.push({ field, message: 'Attach files directly in this field using GitHub’s upload control. External URLs and prose are not accepted; download the source file and attach it here.' });
+  }
+  if (requiredRole && parsed.attachments.length !== 1) {
+    errors.push({ field, message: parsed.attachments.length ? 'Keep exactly one uploaded PDF in this field.' : 'Upload one PDF in this field.' });
+  }
+}
+function ordersFromEnvironment() {
+  return (process.env.ZINE_OPEN_PR_ORDERS ?? '').split(',').map(Number).filter(Number.isFinite);
+}
+async function publishedOrders() {
+  const root = path.join(WORKSPACE, 'pcd-website/src/content/zines');
+  const dirs = await fs.readdir(root, { withFileTypes: true }); const values = [];
+  for (const dir of dirs.filter((entry) => entry.isDirectory())) {
+    try { const text = await fs.readFile(path.join(root, dir.name, 'index.md'), 'utf8'); const match = text.match(/^order:\s*(\d+)\s*$/m); if (match) values.push(Number(match[1])); } catch { /* ignored: normal validation reports broken entries at build time */ }
+  }
+  return values;
 }
 
 async function main() {
   await fs.mkdir(RUNNER_TEMP, { recursive: true });
-  if (!issueBody.includes(ZINE_TEMPLATE_HEADING)) {
-    console.log('[process-new-zine-issue] template heading not found — skipping');
-    await setOutput('valid', 'skip');
-    return;
-  }
-
-  const fields = parseIssueSections(issueBody);
-  const errors = [];
-  const title = required(fields, 'Title', errors);
-  const topic = required(fields, 'Topic', errors);
-  const tags = [...new Set((fields.get('Tags') ?? '')
-    .split(',')
-    .map((tag) => tag.trim())
-    .filter(Boolean))];
-  const languages = [...new Set((fields.get('Language(s)') ?? '')
-    .split(',')
-    .map((language) => language.trim())
-    .filter(Boolean))];
-  const createdBy = required(fields, 'Creator(s)', errors);
+  if (!issueBody.includes(ZINE_TEMPLATE_HEADING)) { console.log('[process-new-zine-issue] template heading not found — skipping'); await setOutput('valid', 'skip'); return; }
+  const fields = parseIssueSections(issueBody); const errors = [];
+  const title = required(fields, 'Title', errors); const topic = required(fields, 'Topic', errors); const createdBy = required(fields, 'Creator(s)', errors);
+  const summary = required(fields, 'Short summary', errors); const description = required(fields, 'Full description', errors);
+  const tags = [...new Set((fields.get('Tags') ?? '').split(',').map((value) => value.trim()).filter(Boolean))];
+  const languages = [...new Set((fields.get('Language(s)') ?? '').split(',').map((value) => value.trim()).filter(Boolean))];
   const createdByUrl = fields.get('Creator URL')?.trim() ?? '';
-  if (createdByUrl && !isValidHttpUrl(createdByUrl)) {
-    errors.push({ field: 'Creator URL', found: createdByUrl, message: 'Enter a valid HTTP(S) URL.' });
-  }
-  const summary = required(fields, 'Short summary', errors);
-  const description = required(fields, 'Full description', errors);
-  const readerOrderValue = fields.get('Reader-order PDF') ?? fields.get('Reader-order PDF URL') ?? '';
-  const printReadyValue = fields.get('Print-ready PDF') ?? fields.get('Print-ready PDF URL') ?? '';
-  const additionalFilesValue = fields.get('Additional files') ?? '';
-  const readerOrderFiles = parseSubmittedFileUrls(readerOrderValue);
-  const printReadyFiles = parseSubmittedFileUrls(printReadyValue);
-  const additionalFiles = parseSubmittedFileUrls(additionalFilesValue);
-  if (readerOrderFiles.invalidEntries.length) {
-    errors.push({ field: 'Reader-order PDF', message: 'Keep only one uploaded file link or raw HTTP(S) URL in this field; remove any descriptions or unrelated links.' });
-  } else if (readerOrderFiles.urls.length !== 1) {
-    errors.push({ field: 'Reader-order PDF', message: readerOrderFiles.urls.length ? 'Keep exactly one PDF link in this field; remove any other links.' : 'Upload one PDF in this field.' });
-  } else if (!isPdfUrl(readerOrderFiles.urls[0])) {
-    errors.push({ field: 'Reader-order PDF', found: readerOrderFiles.urls[0], message: 'The attached file must be a PDF.' });
-  }
-  if (printReadyFiles.invalidEntries.length) {
-    errors.push({ field: 'Print-ready PDF', message: 'Keep only one uploaded file link or raw HTTP(S) URL in this field; remove any descriptions or unrelated links.' });
-  } else if (printReadyFiles.urls.length !== 1) {
-    errors.push({ field: 'Print-ready PDF', message: printReadyFiles.urls.length ? 'Keep exactly one PDF link in this field; remove any other links.' : 'Upload one PDF in this field.' });
-  } else if (!isPdfUrl(printReadyFiles.urls[0])) {
-    errors.push({ field: 'Print-ready PDF', found: printReadyFiles.urls[0], message: 'The attached file must be a PDF.' });
-  }
-  if (additionalFiles.invalidEntries.length) {
-    errors.push({ field: 'Additional files', message: 'Use only uploaded file links (one per line) or raw HTTP(S) URLs; remove descriptions and unrelated links.' });
-  }
+  if (createdByUrl && !isValidHttpUrl(createdByUrl)) errors.push({ field: 'Creator URL', found: createdByUrl, message: 'Enter a valid HTTP(S) URL.' });
   if (!hasCheckedConsent(fields.get('License consent'))) errors.push({ field: 'License consent', message: 'Confirm that the material can be licensed under CC BY-SA 4.0.' });
 
-  const slug = slugify(title);
+  const reader = parseSubmittedAttachments(fields.get('Reader-order PDF') ?? fields.get('Reader-order PDF URL') ?? '');
+  const print = parseSubmittedAttachments(fields.get('Print-ready PDF') ?? fields.get('Print-ready PDF URL') ?? '');
+  const cover = parseSubmittedAttachments(fields.get('Cover image') ?? '');
+  const additional = parseSubmittedAttachments(fields.get('Additional files') ?? '');
+  addAttachmentErrors(errors, 'Reader-order PDF', reader, true); addAttachmentErrors(errors, 'Print-ready PDF', print, true);
+  addAttachmentErrors(errors, 'Cover image', cover, false); addAttachmentErrors(errors, 'Additional files', additional, false);
+  if (cover.attachments.length > 1) errors.push({ field: 'Cover image', message: 'Upload no more than one cover image.' });
+  const files = [
+    ...reader.attachments.map((attachment) => ({ ...attachment, field: 'Reader-order PDF', role: 'reader-order', kind: 'download' })),
+    ...print.attachments.map((attachment) => ({ ...attachment, field: 'Print-ready PDF', role: 'print-ready', kind: 'download' })),
+    ...cover.attachments.map((attachment) => ({ ...attachment, field: 'Cover image', kind: 'cover' })),
+    ...additional.attachments.map((attachment) => ({ ...attachment, field: 'Additional files', kind: 'download' })),
+  ];
+  errors.push(...validateAttachmentSelection(files));
+  const slug = slugify(title); const publishedDir = path.join(WORKSPACE, 'pcd-website/src/content/zines', slug);
+  const reservedSlugs = new Set((process.env.ZINE_RESERVED_SLUGS ?? '').split(',').filter(Boolean));
   if (!slug) errors.push({ field: 'Title', message: 'Use at least one letter or number so we can create a URL slug.' });
-  const publishedDir = path.join(WORKSPACE, 'pcd-website/src/content/zines', slug);
-  const draftDir = path.join(WORKSPACE, 'pcd-website/src/content/zines-drafts', slug);
-  const reservedDraftSlugs = new Set((process.env.ZINE_RESERVED_DRAFT_SLUGS ?? '').split(',').filter(Boolean));
-  if (slug && reservedDraftSlugs.has(slug)) {
-    errors.push({ field: 'Title', found: title, message: `The generated slug \`${slug}\` is already staged by another open zine review PR.` });
-  } else if (slug && await folderExists(publishedDir)) {
-    errors.push({ field: 'Title', found: title, message: `The generated slug \`${slug}\` already exists in published or draft zines.` });
-  } else if (slug && await folderExists(draftDir)) {
-    let existingIssueNumber;
-    try {
-      existingIssueNumber = JSON.parse(await fs.readFile(path.join(draftDir, 'submission.json'), 'utf8')).intake?.issue_number;
-    } catch {
-      // A malformed draft must not be overwritten by an unrelated submission.
-    }
-    if (existingIssueNumber !== issueNumber) {
-      errors.push({ field: 'Title', found: title, message: `The generated slug \`${slug}\` already exists in published or draft zines.` });
-    }
+  else if (reservedSlugs.has(slug)) errors.push({ field: 'Title', found: title, message: `The generated slug \`${slug}\` is already staged by another open zine review PR.` });
+  else if (await folderExists(publishedDir) && process.env.ZINE_CURRENT_SLUG !== slug) errors.push({ field: 'Title', found: title, message: `The generated slug \`${slug}\` already exists in published zines.` });
+  if (!errors.length) {
+    await Promise.all(files.map(async (file) => { try { file.bytes = await fetchAttachment(file.url); } catch (error) { errors.push({ field: file.field, found: file.filename, message: error.message }); } }));
+    if (!errors.length) errors.push(...validateDownloadedFiles(files));
   }
-
   if (errors.length) {
-    const validationCommentPath = path.join(RUNNER_TEMP, `zine-validation-${issueNumber}.md`);
-    await fs.writeFile(validationCommentPath, zineValidationComment(errors));
-    await setOutput('valid', 'false');
-    await setOutput('validation_comment_path', validationCommentPath);
-    return;
+    const comment = path.join(RUNNER_TEMP, `zine-validation-${issueNumber}.md`); await fs.writeFile(comment, zineValidationComment(errors));
+    await setOutput('valid', 'false'); await setOutput('validation_comment_path', comment); return;
   }
-
-  const submission = {
-    id: slug,
-    title,
-    topic,
-    created_by: createdBy,
-    summary,
-    source_pdfs: [
-      { role: 'reader-order', url: readerOrderFiles.urls[0] },
-      { role: 'print-ready', url: printReadyFiles.urls[0] },
-    ],
-    license: 'CC BY-SA 4.0',
-    source_issue_url: issueUrl(),
-    intake: {
-      issue_number: issueNumber,
-      submitted_by_github: issue.user?.login ?? '',
-      submitted_date: new Date().toISOString().slice(0, 10),
-      maintainer_notes: fields.get('Maintainer notes')?.trim() ?? '',
-    },
-    description,
-  };
-  if (tags.length) submission.tags = tags;
-  if (languages.length) submission.languages = languages;
-  if (additionalFiles.urls.length) submission.additional_files = additionalFiles.urls;
-  if (createdByUrl) submission.created_by_url = createdByUrl;
-  for (const [field, key] of [
-    ['Activity type', 'activity_type'],
-    ['Zine format', 'zine_format'],
-    ['Duration', 'duration'],
-    ['Materials', 'materials'],
-    ['Preferred attribution', 'attribution'],
-  ]) {
-    const value = fields.get(field)?.trim();
-    if (value) submission[key] = value;
-  }
-  await fs.mkdir(draftDir, { recursive: true });
-  await fs.writeFile(path.join(draftDir, 'submission.json'), `${JSON.stringify(submission, null, 2)}\n`);
-  await fs.writeFile(path.join(draftDir, 'index.md'), makeDraftMarkdown(slug, description));
-  const prBodyPath = path.join(RUNNER_TEMP, `zine-pr-body-${issueNumber}.md`);
-  await fs.writeFile(prBodyPath, makeZinePrBody({ issueNumber, title, submitterLogin: issue.user?.login ?? '', submission }));
-  await setOutput('valid', 'true');
-  await setOutput('branch', `automation/new-zine-${issueNumber}`);
-  await setOutput('commit_message', `Stage ${title} zine from issue #${issueNumber}`);
-  await setOutput('pr_title', `Review zine: ${title}`);
-  await setOutput('pr_body_path', prBodyPath);
-  await setOutput('zine_title', title);
+  const knownOrders = [...await publishedOrders(), ...ordersFromEnvironment()];
+  const previousOrder = Number(process.env.ZINE_CURRENT_ORDER);
+  const order = Number.isFinite(previousOrder) && previousOrder > 0 ? previousOrder : (Math.max(0, ...knownOrders) + 1);
+  const downloads = files.filter((file) => file.kind === 'download').map((file) => ({ file: file.filename, file_size: formatFileSize(file.bytes.byteLength), ...(file.role ? { role: file.role } : {}) }));
+  const metadata = { id: slug, title, topic, created_by: createdBy, summary, downloads, license: 'CC BY-SA 4.0', source_url: issueUrl() };
+  if (tags.length) metadata.tags = tags; if (languages.length) metadata.languages = languages; if (createdByUrl) metadata.created_by_url = createdByUrl;
+  if (cover.attachments.length) metadata.cover = { src: files.find((file) => file.kind === 'cover').filename, alt: title };
+  for (const [field, key] of [['Activity type', 'activity_type'], ['Zine format', 'zine_format'], ['Duration', 'duration'], ['Materials', 'materials'], ['Preferred attribution', 'attribution']]) { const value = fields.get(field)?.trim(); if (value) metadata[key] = value; }
+  await fs.mkdir(path.join(publishedDir, 'downloads'), { recursive: true });
+  await fs.writeFile(path.join(publishedDir, 'metadata.json'), `${JSON.stringify(metadata, null, 2)}\n`);
+  await fs.writeFile(path.join(publishedDir, 'index.md'), makeZineMarkdown(slug, order, description));
+  for (const file of files) await fs.writeFile(path.join(publishedDir, file.kind === 'cover' ? file.filename : path.join('downloads', file.filename)), file.bytes);
+  const prBodyPath = path.join(RUNNER_TEMP, `zine-pr-body-${issueNumber}.md`); await fs.writeFile(prBodyPath, makeZinePrBody({ issueNumber, title, submitterLogin: issue.user?.login ?? '' }));
+  await setOutput('valid', 'true'); await setOutput('branch', `automation/new-zine-${issueNumber}`); await setOutput('commit_message', `Publish ${title} zine from issue #${issueNumber}`); await setOutput('pr_title', `Review zine: ${title}`); await setOutput('pr_body_path', prBodyPath); await setOutput('zine_title', title); await setOutput('zine_slug', slug);
 }
 
-await main().catch(async (error) => {
-  console.error('[process-new-zine-issue] unhandled error:', error);
-  const validationCommentPath = path.join(RUNNER_TEMP, `zine-validation-${issueNumber}.md`);
-  await fs.writeFile(validationCommentPath, 'An unexpected error occurred while processing this zine submission. Please edit and save the issue to try again.');
-  await setOutput('valid', 'false');
-  await setOutput('validation_comment_path', validationCommentPath);
-  process.exitCode = 1;
-});
+await main().catch(async (error) => { console.error('[process-new-zine-issue] unhandled error:', error); const comment = path.join(RUNNER_TEMP, `zine-validation-${issueNumber}.md`); await fs.mkdir(RUNNER_TEMP, { recursive: true }); await fs.writeFile(comment, 'An unexpected error occurred while processing this zine submission. Please edit and save the issue to try again.'); await setOutput('valid', 'false'); await setOutput('validation_comment_path', comment); process.exitCode = 1; });

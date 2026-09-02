@@ -1,7 +1,6 @@
 ---
 interface Download {
   url: string;
-  label: string;
   filename: string;
   fileSize: string;
 }
@@ -21,7 +20,7 @@ const { downloads } = Astro.props;
           class="download-list__button"
           href={download.url}
           download={download.filename}
-          aria-label={`Download ${download.label}: ${download.filename} (${download.fileSize})`}
+          aria-label={`Download ${download.filename} (${download.fileSize})`}
         >Download</a>
         <span class="download-list__details">
           <span class="download-list__filename">{download.filename}</span>

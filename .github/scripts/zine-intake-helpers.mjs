@@ -1,128 +1,122 @@
 import { formatError } from './event-issue-helpers.mjs';
 
 export const ZINE_TEMPLATE_HEADING = '### Reader-order PDF';
+export const COVER_EXTENSIONS = new Set(['png', 'jpg', 'jpeg', 'webp']);
+export const DOWNLOAD_EXTENSIONS = new Set(['pdf', 'zip', 'png', 'jpg', 'jpeg', 'webp', 'txt', 'md', 'csv', 'json']);
+export const MAX_FILES = 10;
+export const MAX_IMAGE_BYTES = 10_000_000;
+export const MAX_OTHER_BYTES = 25_000_000;
+export const MAX_TOTAL_BYTES = 50_000_000;
 
-function submittedFileEntries(value) {
-  return String(value ?? '')
-    .replace(/\r/g, '')
-    .split('\n')
-    .flatMap((line) => {
-      const trimmed = line.trim();
-      if (!trimmed) return [];
-      // GitHub emits one Markdown attachment per line. Only the former raw-URL
-      // input used commas as separators, so preserve that legacy format.
-      return /^!?\[/.test(trimmed)
-        ? [trimmed]
-        : trimmed.split(',').map((entry) => entry.trim()).filter(Boolean);
-    });
+const REDIRECT_HOSTS = [/^objects\.githubusercontent\.com$/i, /^github-cloud\.s3\.amazonaws\.com$/i, /^github-production-user-asset-[^.]+\.s3\.amazonaws\.com$/i, /^github-production-repository-file-[^.]+\.s3\.amazonaws\.com$/i];
+const RESERVED_FILENAMES = new Set(['metadata.json', 'index.md', 'readme.md', 'con', 'prn', 'aux', 'nul', 'com1', 'lpt1']);
+
+function entries(value) { return String(value ?? '').replace(/\r/g, '').split('\n').map((line) => line.trim()).filter(Boolean); }
+function markdownAttachment(entry) {
+  const match = entry.match(/^!?\[([^\]]+)\]\((https:\/\/[^\s]+)\)$/i);
+  return match ? { filename: match[1], url: match[2] } : null;
 }
 
-function markdownLinkTarget(entry) {
-  const labelStart = entry.startsWith('![') ? 2 : entry.startsWith('[') ? 1 : -1;
-  if (labelStart === -1 || !entry.endsWith(')')) return null;
-  const targetStart = entry.indexOf('](', labelStart);
-  if (targetStart === -1) return null;
-  return entry.slice(targetStart + 2, -1).trim();
-}
-
-export function parseSubmittedFileUrls(value) {
-  const urls = [];
-  const invalidEntries = [];
-  const seen = new Set();
-  for (const entry of submittedFileEntries(value)) {
-    const isMarkdownLink = /^!?\[/.test(entry);
-    const candidate = isMarkdownLink ? markdownLinkTarget(entry) : entry.replace(/[.,;:!?]+$/, '');
-    if (!candidate || /\s/.test(candidate) || (!isMarkdownLink && !/^https?:\/\//i.test(candidate))) {
-      invalidEntries.push(entry);
-      continue;
-    }
-    try {
-      const url = new URL(candidate);
-      if ((url.protocol === 'http:' || url.protocol === 'https:') && !seen.has(url.href)) {
-        seen.add(url.href);
-        urls.push(url.href);
-      } else if (url.protocol !== 'http:' && url.protocol !== 'https:') {
-        invalidEntries.push(entry);
-      }
-    } catch {
-      invalidEntries.push(entry);
-    }
-  }
-
-  return { urls, invalidEntries };
-}
-
-export function isPdfUrl(value) {
+export function isGitHubAttachmentUrl(value) {
   try {
-    return decodeURIComponent(new URL(value).pathname).toLowerCase().endsWith('.pdf');
-  } catch {
-    return false;
+    const url = new URL(value);
+    return url.protocol === 'https:' && url.hostname === 'github.com' && /^\/user-attachments\/(?:files|assets)\//.test(url.pathname);
+  } catch { return false; }
+}
+
+export function parseSubmittedAttachments(value) {
+  const attachments = []; const invalidEntries = []; const seen = new Set();
+  for (const entry of entries(value)) {
+    const attachment = markdownAttachment(entry);
+    if (!attachment || !isGitHubAttachmentUrl(attachment.url)) { invalidEntries.push(entry); continue; }
+    if (!seen.has(attachment.url)) { seen.add(attachment.url); attachments.push(attachment); }
   }
+  return { attachments, invalidEntries };
 }
 
-export function hasCheckedConsent(value) {
-  return /^\s*-\s*\[x\]/im.test(value ?? '');
+export function extensionOf(filename) { return String(filename).match(/\.([^.]+)$/)?.[1]?.toLowerCase() ?? ''; }
+export function normaliseFilename(value) {
+  const filename = String(value ?? '').trim();
+  if (!filename || filename !== filename.replace(/[\\/]/g, '') || /[\0-\x1f\x7f]/.test(filename) || filename === '.' || filename === '..') return null;
+  const dot = filename.lastIndexOf('.');
+  const normalised = dot > 0 ? `${filename.slice(0, dot)}.${filename.slice(dot + 1).toLowerCase()}` : filename;
+  return RESERVED_FILENAMES.has(normalised.toLowerCase()) ? null : normalised;
+}
+export function isImageFilename(filename) { return COVER_EXTENSIONS.has(extensionOf(filename)); }
+export function formatFileSize(bytes) {
+  if (bytes < 1000) return `${bytes} B`;
+  if (bytes < 1_000_000) return `${Math.round(bytes / 100) / 10} kB`;
+  return `${Math.round(bytes / 100_000) / 10} MB`;
 }
 
-export function zineValidationComment(errors) {
-  const count = errors.length;
-  return [
-    'Thanks for submitting an Activity Guide zine to Processing Community Day!',
-    '',
-    `We couldn't create a review pull request yet because **${count} ${count === 1 ? 'field needs' : 'fields need'} attention**:`,
-    '',
-    ...errors.map(formatError),
-    '',
-    'Please edit and save this issue with the corrected information. The check will run again automatically.',
-  ].join('\n');
+export function validateAttachmentNames(files) {
+  const errors = []; const seen = new Set();
+  for (const file of files) {
+    const filename = normaliseFilename(file.filename);
+    if (!filename) { errors.push({ field: file.field, found: file.filename, message: 'Attachment filenames cannot contain paths, control characters, or reserved filenames.' }); continue; }
+    file.filename = filename;
+    if (seen.has(filename.toLowerCase())) errors.push({ field: file.field, found: filename, message: 'Attachment filenames must be unique, even when they differ only by letter case.' });
+    seen.add(filename.toLowerCase());
+  }
+  return errors;
+}
+export function validateAttachmentSelection(files) {
+  const errors = validateAttachmentNames(files);
+  if (files.length > MAX_FILES) errors.push({ field: 'Attachments', message: `Upload no more than ${MAX_FILES} files total, including the cover and two required PDFs.` });
+  for (const file of files) {
+    const extension = extensionOf(file.filename); const allowed = file.kind === 'cover' ? COVER_EXTENSIONS : DOWNLOAD_EXTENSIONS;
+    if (!allowed.has(extension)) errors.push({ field: file.field, found: file.filename, message: file.kind === 'cover' ? 'The cover must be a PNG, JPG, JPEG, or WebP image.' : 'Supported downloads are PDF, ZIP, PNG, JPG/JPEG, WebP, TXT, MD, CSV, and JSON.' });
+    if (file.role && extension !== 'pdf') errors.push({ field: file.field, found: file.filename, message: 'The required reader-order and print-ready uploads must be PDFs.' });
+  }
+  return errors;
 }
 
-export function yamlScalar(value) {
-  return JSON.stringify(String(value));
+export function allowedRedirectHost(hostname) { return REDIRECT_HOSTS.some((rule) => rule.test(hostname)); }
+export async function fetchAttachment(url, fetchImpl = globalThis.fetch) {
+  if (!isGitHubAttachmentUrl(url)) throw new Error('Only direct GitHub file attachments can be downloaded. Please attach the source file directly to this issue.');
+  let current = new URL(url);
+  for (let hop = 0; hop <= 5; hop += 1) {
+    const response = await fetchImpl(current, { redirect: 'manual' });
+    if (response.status >= 300 && response.status < 400) {
+      if (hop === 5) throw new Error('The upload redirected more than five times. Please attach the file again.');
+      const location = response.headers.get('location');
+      if (!location) throw new Error('The upload returned a redirect without a destination. Please attach the file again.');
+      const next = new URL(location, current);
+      if (next.protocol !== 'https:' || !allowedRedirectHost(next.hostname)) throw new Error('The upload redirected to an unapproved host. Please attach the source file directly to this issue.');
+      current = next; continue;
+    }
+    if (!response.ok) throw new Error(`The upload could not be downloaded (HTTP ${response.status}). Please attach it again.`);
+    if (current.hostname !== 'github.com' && !allowedRedirectHost(current.hostname)) throw new Error('The upload was served by an unapproved host. Please attach it again.');
+    return new Uint8Array(await response.arrayBuffer());
+  }
+  throw new Error('The upload could not be downloaded.');
 }
 
-export function makeDraftMarkdown(slug, description) {
-  return ['---', `id: ${yamlScalar(slug)}`, '---', '', description.trim(), ''].join('\n');
+function validText(bytes, parseJson = false) {
+  try { const value = new TextDecoder('utf-8', { fatal: true }).decode(bytes); if (value.includes('\0')) return false; if (parseJson) JSON.parse(value); return true; } catch { return false; }
+}
+export function hasValidContent(filename, bytes) {
+  const ext = extensionOf(filename); const at = (index) => bytes[index] ?? -1;
+  if (ext === 'pdf') return new TextDecoder().decode(bytes.slice(0, 5)) === '%PDF-';
+  if (ext === 'zip') return at(0) === 0x50 && at(1) === 0x4b && [0x03, 0x05, 0x07].includes(at(2)) && [0x04, 0x06, 0x08].includes(at(3));
+  if (ext === 'png') return [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a].every((byte, index) => at(index) === byte);
+  if (ext === 'jpg' || ext === 'jpeg') return at(0) === 0xff && at(1) === 0xd8 && at(2) === 0xff;
+  if (ext === 'webp') return new TextDecoder().decode(bytes.slice(0, 4)) === 'RIFF' && new TextDecoder().decode(bytes.slice(8, 12)) === 'WEBP';
+  return validText(bytes, ext === 'json');
+}
+export function validateDownloadedFiles(files) {
+  const errors = []; let total = 0;
+  for (const file of files) {
+    const bytes = file.bytes?.byteLength ?? 0; total += bytes; const limit = isImageFilename(file.filename) ? MAX_IMAGE_BYTES : MAX_OTHER_BYTES;
+    if (bytes > limit) { const guidance = file.kind === 'cover' ? ' Resize or compress the cover before attaching it again.' : ' Reduce the file size before attaching it again.'; errors.push({ field: file.field, found: file.filename, message: `This file is ${formatFileSize(bytes)}; the limit is ${formatFileSize(limit)}.${guidance}` }); }
+    if (!hasValidContent(file.filename, file.bytes ?? new Uint8Array())) errors.push({ field: file.field, found: file.filename, message: 'The file content does not match its extension. Please attach a valid file.' });
+  }
+  if (total > MAX_TOTAL_BYTES) errors.push({ field: 'Attachments', message: `All uploads total ${formatFileSize(total)}; the limit is ${formatFileSize(MAX_TOTAL_BYTES)}.` });
+  return errors;
 }
 
-export function makeZinePrBody({ issueNumber, title, submitterLogin, submission }) {
-  const submittedBy = submitterLogin ? `@${submitterLogin}` : 'the submitter';
-  const optional = [
-    ['Tags', submission.tags?.join(', ')],
-    ['Language(s)', submission.languages?.join(', ')],
-    ['Creator URL', submission.created_by_url],
-    ['Additional files', submission.additional_files?.join(', ')],
-    ['Activity type', submission.activity_type],
-    ['Zine format', submission.zine_format],
-    ['Duration', submission.duration],
-    ['Materials', submission.materials],
-    ['Preferred attribution', submission.attribution],
-  ].filter(([, value]) => value);
-  return [
-    `Closes #${issueNumber}`,
-    '',
-    `This draft was generated from the "New Zine" issue form for **${title}**. Submitted by ${submittedBy}.`,
-    '',
-    '### Submitted metadata',
-    '',
-    '| Field | Value |', '|---|---|',
-    `| Topic | ${submission.topic.replace(/\|/g, '\\|')} |`,
-    `| Creator(s) | ${submission.created_by.replace(/\|/g, '\\|')} |`,
-    `| Short summary | ${submission.summary.replace(/\|/g, '\\|')} |`,
-    `| Reader-order PDF | [source](${submission.source_pdfs[0].url}) |`,
-    `| Print-ready PDF | [source](${submission.source_pdfs[1].url}) |`,
-    ...optional.map(([label, value]) => `| ${label} | ${String(value).replace(/\|/g, '\\|').replace(/\n/g, '<br>')} |`),
-    '',
-    '### Submitted description',
-    '',
-    submission.description,
-    '',
-    '### Reviewer promotion checklist',
-    '',
-    '- [ ] Verify all uploaded files and review both PDFs, including reader-order accessibility.',
-    '- [ ] Download and commit them as `reader-order.pdf` and `print-ready.pdf`.',
-    '- [ ] Convert `submission.json` to published `metadata.json`, with downloads labelled `Reader-order PDF` and `Print-ready PDF` and each local file’s human-readable size.',
-    '- [ ] Add `order: max(existing order) + 1` to `index.md` and move the folder into `src/content/zines/`.',
-    '- [ ] Verify the Netlify preview, then merge. No cover was collected; the existing title fallback is expected.',
-  ].join('\n');
-}
+export function hasCheckedConsent(value) { return /^\s*-\s*\[x\]/im.test(value ?? ''); }
+export function zineValidationComment(errors) { const count = errors.length; return ['Thanks for submitting an Activity Guide zine to Processing Community Day!', '', `We couldn't create a review pull request yet because **${count} ${count === 1 ? 'field needs' : 'fields need'} attention**:`, '', ...errors.map(formatError), '', 'Please edit and save this issue with the corrected information. Upload files directly to their form fields; external links are not accepted.'].join('\n'); }
+export function yamlScalar(value) { return JSON.stringify(String(value)); }
+export function makeZineMarkdown(slug, order, description) { return ['---', `id: ${yamlScalar(slug)}`, `order: ${order}`, '---', '', description.trim(), ''].join('\n'); }
+export function makeZinePrBody({ issueNumber, title, submitterLogin }) { const submittedBy = submitterLogin ? `@${submitterLogin}` : 'the submitter'; return [`Closes #${issueNumber}`, '', `This publication-ready Activity Guide was generated from **${title}** and submitted by ${submittedBy}.`, '', '### Reviewer checklist', '', '- [ ] Review all files and reader-order accessibility.', '- [ ] Verify generated metadata.', '- [ ] Verify the Netlify preview.', '- [ ] Merge.'].join('\n'); }
