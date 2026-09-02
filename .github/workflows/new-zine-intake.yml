@@ -36,39 +36,34 @@ jobs:
         uses: actions/github-script@v8
         with:
           script: |
+            const { owner, repo } = context.repo;
             const branch = `automation/new-zine-${context.issue.number}`;
-            const pulls = await github.paginate(github.rest.pulls.list, { owner: context.repo.owner, repo: context.repo.repo, state: 'open', per_page: 100 });
+            const pulls = await github.paginate(github.rest.pulls.list, { owner, repo, state: 'open', per_page: 100 });
             const reserved = new Set(); const orders = []; let current; let currentSlug = '';
             for (const pull of pulls) {
-              const files = await github.paginate(github.rest.pulls.listFiles, { owner: context.repo.owner, repo: context.repo.repo, pull_number: pull.number, per_page: 100 });
+              const isCurrent = pull.head.ref === branch && pull.head.repo?.full_name === `${owner}/${repo}`;
+              const files = await github.paginate(github.rest.pulls.listFiles, { owner, repo, pull_number: pull.number, per_page: 100 });
               for (const file of files) {
                 const match = file.filename.match(/^pcd-website\/src\/content\/zines\/([^/]+)\//);
-                if (match && pull.head.ref !== branch) reserved.add(match[1]);
-                if (match && pull.head.ref === branch) currentSlug = match[1];
-              }
-              if (pull.head.ref === branch) current = pull;
-            }
-            if (current) {
-              const contents = await github.rest.repos.getContent({ owner: context.repo.owner, repo: context.repo.repo, path: 'pcd-website/src/content/zines', ref: current.head.sha });
-              for (const entry of contents.data) {
-                if (entry.type !== 'dir') continue;
+                if (match && file.status !== 'removed' && !isCurrent) reserved.add(match[1]);
+                if (match && file.status !== 'removed' && isCurrent) currentSlug = match[1];
+                const indexMatch = file.filename.match(/^pcd-website\/src\/content\/zines\/([^/]+)\/index\.md$/);
+                if (!indexMatch || file.status === 'removed') continue;
                 try {
-                  const index = await github.rest.repos.getContent({ owner: context.repo.owner, repo: context.repo.repo, path: `${entry.path}/index.md`, ref: current.head.sha });
+                  const index = await github.rest.repos.getContent({ owner, repo, path: file.filename, ref: pull.head.sha });
                   const text = Buffer.from(index.data.content, index.data.encoding).toString('utf8');
-                  const match = text.match(/^order:\s*(\d+)\s*$/m); if (match) orders.push(match[1]);
+                  const orderMatch = text.match(/^order:\s*(\d+)\s*$/m);
+                  if (!orderMatch) continue;
+                  if (isCurrent) core.setOutput('current_order', orderMatch[1]);
+                  else orders.push(orderMatch[1]);
                 } catch {}
               }
-              if (currentSlug) {
-                try {
-                  const index = await github.rest.repos.getContent({ owner: context.repo.owner, repo: context.repo.repo, path: `pcd-website/src/content/zines/${currentSlug}/index.md`, ref: current.head.sha });
-                  const text = Buffer.from(index.data.content, index.data.encoding).toString('utf8');
-                  const match = text.match(/^order:\s*(\d+)\s*$/m); if (match) core.setOutput('current_order', match[1]);
-                } catch {}
-              }
+              if (isCurrent) current = pull;
             }
             core.setOutput('reserved_slugs', [...reserved].join(','));
             core.setOutput('orders', orders.join(','));
             core.setOutput('current_slug', currentSlug);
+            core.setOutput('current_pr_number', current?.number ?? '');
       - name: Install website dependencies
         run: npm ci
         working-directory: pcd-website
@@ -111,6 +106,9 @@ jobs:
             const input = { owner: context.repo.owner, repo: context.repo.repo, title: process.env.TITLE, body };
             const pull = pulls.data[0] ? await github.rest.pulls.update({ ...input, pull_number: pulls.data[0].number }) : await github.rest.pulls.create({ ...input, head: process.env.BRANCH, base: context.payload.repository.default_branch });
             await github.rest.issues.addLabels({ owner: context.repo.owner, repo: context.repo.repo, issue_number: pull.data.number, labels: ['new zine', 'needs review'] });
+            try {
+              await github.rest.issues.removeLabel({ owner: context.repo.owner, repo: context.repo.repo, issue_number: pull.data.number, name: 'needs changes' });
+            } catch (error) { if (error.status !== 404) throw error; }
             core.setOutput('number', pull.data.number); core.setOutput('url', pull.data.html_url);
       - name: Upsert successful intake status
         if: steps.generate.outputs.valid == 'true'
@@ -132,9 +130,19 @@ jobs:
         uses: actions/github-script@v8
         env:
           COMMENT_PATH: ${{ steps.generate.outputs.validation_comment_path }}
+          CURRENT_PR_NUMBER: ${{ steps.open-prs.outputs.current_pr_number }}
         with:
           script: |
             const fs = require('fs'); const marker = process.env.STATUS_COMMENT_MARKER;
+            const pullNumber = Number(process.env.CURRENT_PR_NUMBER);
+            if (Number.isInteger(pullNumber) && pullNumber > 0) {
+              const label = { name: 'needs changes', color: 'd93f0b', description: 'Submission changes are required before review can continue' };
+              try { await github.rest.issues.getLabel({ owner: context.repo.owner, repo: context.repo.repo, name: label.name }); }
+              catch (error) { if (error.status === 404) await github.rest.issues.createLabel({ owner: context.repo.owner, repo: context.repo.repo, ...label }); else throw error; }
+              await github.rest.issues.addLabels({ owner: context.repo.owner, repo: context.repo.repo, issue_number: pullNumber, labels: [label.name] });
+              try { await github.rest.issues.removeLabel({ owner: context.repo.owner, repo: context.repo.repo, issue_number: pullNumber, name: 'needs review' }); }
+              catch (error) { if (error.status !== 404) throw error; }
+            }
             const body = `${marker}\n> [!WARNING]\n> The existing review PR, if any, was left unchanged.\n\n${fs.readFileSync(process.env.COMMENT_PATH, 'utf8')}`;
             const { data: comments } = await github.rest.issues.listComments({ owner: context.repo.owner, repo: context.repo.repo, issue_number: context.issue.number });
             const existing = comments.find((comment) => comment.user?.type === 'Bot' && comment.body?.includes(marker));

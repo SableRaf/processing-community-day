@@ -9,7 +9,7 @@ export const MAX_OTHER_BYTES = 25_000_000;
 export const MAX_TOTAL_BYTES = 50_000_000;
 
 const REDIRECT_HOSTS = [/^objects\.githubusercontent\.com$/i, /^github-cloud\.s3\.amazonaws\.com$/i, /^github-production-user-asset-[^.]+\.s3\.amazonaws\.com$/i, /^github-production-repository-file-[^.]+\.s3\.amazonaws\.com$/i];
-const RESERVED_FILENAMES = new Set(['metadata.json', 'index.md', 'readme.md', 'con', 'prn', 'aux', 'nul', 'com1', 'lpt1']);
+const WINDOWS_RESERVED_BASENAMES = /^(?:con|prn|aux|nul|com[1-9]|lpt[1-9])$/i;
 
 function entries(value) { return String(value ?? '').replace(/\r/g, '').split('\n').map((line) => line.trim()).filter(Boolean); }
 function markdownAttachment(entry) {
@@ -40,23 +40,28 @@ export function normaliseFilename(value) {
   if (!filename || filename !== filename.replace(/[\\/]/g, '') || /[\0-\x1f\x7f]/.test(filename) || filename === '.' || filename === '..') return null;
   const dot = filename.lastIndexOf('.');
   const normalised = dot > 0 ? `${filename.slice(0, dot)}.${filename.slice(dot + 1).toLowerCase()}` : filename;
-  return RESERVED_FILENAMES.has(normalised.toLowerCase()) ? null : normalised;
+  const basename = normalised.split('.')[0];
+  return WINDOWS_RESERVED_BASENAMES.test(basename) ? null : normalised;
 }
 export function isImageFilename(filename) { return COVER_EXTENSIONS.has(extensionOf(filename)); }
 export function formatFileSize(bytes) {
   if (bytes < 1000) return `${bytes} B`;
-  if (bytes < 1_000_000) return `${Math.round(bytes / 100) / 10} kB`;
+  const kilobytes = Math.round(bytes / 100) / 10;
+  if (kilobytes < 1000) return `${kilobytes} kB`;
   return `${Math.round(bytes / 100_000) / 10} MB`;
 }
 
 export function validateAttachmentNames(files) {
-  const errors = []; const seen = new Set();
+  const errors = []; const seenByNamespace = new Map();
   for (const file of files) {
     const filename = normaliseFilename(file.filename);
     if (!filename) { errors.push({ field: file.field, found: file.filename, message: 'Attachment filenames cannot contain paths, control characters, or reserved filenames.' }); continue; }
     file.filename = filename;
+    const namespace = file.kind === 'cover' ? 'root' : 'downloads';
+    const seen = seenByNamespace.get(namespace) ?? new Set();
     if (seen.has(filename.toLowerCase())) errors.push({ field: file.field, found: filename, message: 'Attachment filenames must be unique, even when they differ only by letter case.' });
     seen.add(filename.toLowerCase());
+    seenByNamespace.set(namespace, seen);
   }
   return errors;
 }
@@ -119,4 +124,19 @@ export function hasCheckedConsent(value) { return /^\s*-\s*\[x\]/im.test(value ?
 export function zineValidationComment(errors) { const count = errors.length; return ['Thanks for submitting an Activity Guide zine to Processing Community Day!', '', `We couldn't create a review pull request yet because **${count} ${count === 1 ? 'field needs' : 'fields need'} attention**:`, '', ...errors.map(formatError), '', 'Please edit and save this issue with the corrected information. Upload files directly to their form fields; external links are not accepted.'].join('\n'); }
 export function yamlScalar(value) { return JSON.stringify(String(value)); }
 export function makeZineMarkdown(slug, order, description) { return ['---', `id: ${yamlScalar(slug)}`, `order: ${order}`, '---', '', description.trim(), ''].join('\n'); }
-export function makeZinePrBody({ issueNumber, title, submitterLogin }) { const submittedBy = submitterLogin ? `@${submitterLogin}` : 'the submitter'; return [`Closes #${issueNumber}`, '', `This publication-ready Activity Guide was generated from **${title}** and submitted by ${submittedBy}.`, '', '### Reviewer checklist', '', '- [ ] Review all files and reader-order accessibility.', '- [ ] Verify generated metadata.', '- [ ] Verify the Netlify preview.', '- [ ] Merge.'].join('\n'); }
+export function makeZinePrBody({ issueNumber, title, submitterLogin, maintainerNotes = '' }) {
+  const submittedBy = submitterLogin ? `@${submitterLogin}` : 'the submitter';
+  return [
+    `Closes #${issueNumber}`,
+    '',
+    `This publication-ready Activity Guide was generated from **${title}** and submitted by ${submittedBy}.`,
+    ...(maintainerNotes ? ['', '### Maintainer notes', '', maintainerNotes] : []),
+    '',
+    '### Reviewer checklist',
+    '',
+    '- [ ] Review all files and reader-order accessibility.',
+    '- [ ] Verify generated metadata.',
+    '- [ ] Verify the Netlify preview.',
+    '- [ ] Merge.',
+  ].join('\n');
+}

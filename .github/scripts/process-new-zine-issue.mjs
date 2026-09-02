@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { isValidHttpUrl, parseIssueSections, required, slugify } from './event-issue-helpers.mjs';
 import {
-  ZINE_TEMPLATE_HEADING, extensionOf, fetchAttachment, formatFileSize, hasCheckedConsent,
+  ZINE_TEMPLATE_HEADING, fetchAttachment, formatFileSize, hasCheckedConsent,
   makeZineMarkdown, makeZinePrBody, parseSubmittedAttachments, validateAttachmentSelection,
   validateDownloadedFiles, zineValidationComment,
 } from './zine-intake-helpers.mjs';
@@ -82,18 +82,22 @@ async function main() {
     await setOutput('valid', 'false'); await setOutput('validation_comment_path', comment); return;
   }
   const knownOrders = [...await publishedOrders(), ...ordersFromEnvironment()];
-  const previousOrder = Number(process.env.ZINE_CURRENT_ORDER);
-  const order = Number.isFinite(previousOrder) && previousOrder > 0 ? previousOrder : (Math.max(0, ...knownOrders) + 1);
+  const currentOrderValue = process.env.ZINE_CURRENT_ORDER?.trim() ?? '';
+  const previousOrder = currentOrderValue ? Number(currentOrderValue) : Number.NaN;
+  const order = Number.isInteger(previousOrder) && previousOrder >= 0 ? previousOrder : (Math.max(0, ...knownOrders) + 1);
   const downloads = files.filter((file) => file.kind === 'download').map((file) => ({ file: file.filename, file_size: formatFileSize(file.bytes.byteLength), ...(file.role ? { role: file.role } : {}) }));
   const metadata = { id: slug, title, topic, created_by: createdBy, summary, downloads, license: 'CC BY-SA 4.0', source_url: issueUrl() };
   if (tags.length) metadata.tags = tags; if (languages.length) metadata.languages = languages; if (createdByUrl) metadata.created_by_url = createdByUrl;
   if (cover.attachments.length) metadata.cover = { src: files.find((file) => file.kind === 'cover').filename, alt: title };
-  for (const [field, key] of [['Activity type', 'activity_type'], ['Zine format', 'zine_format'], ['Duration', 'duration'], ['Materials', 'materials'], ['Preferred attribution', 'attribution']]) { const value = fields.get(field)?.trim(); if (value) metadata[key] = value; }
+  for (const [field, key] of [['Activity type', 'activity_type'], ['Zine format', 'zine_format'], ['Duration of the activity', 'duration'], ['Materials', 'materials'], ['Preferred attribution', 'attribution']]) {
+    const value = (fields.get(field) ?? (field === 'Duration of the activity' ? fields.get('Duration') : ''))?.trim();
+    if (value) metadata[key] = value;
+  }
   await fs.mkdir(path.join(publishedDir, 'downloads'), { recursive: true });
   await fs.writeFile(path.join(publishedDir, 'metadata.json'), `${JSON.stringify(metadata, null, 2)}\n`);
   await fs.writeFile(path.join(publishedDir, 'index.md'), makeZineMarkdown(slug, order, description));
   for (const file of files) await fs.writeFile(path.join(publishedDir, file.kind === 'cover' ? file.filename : path.join('downloads', file.filename)), file.bytes);
-  const prBodyPath = path.join(RUNNER_TEMP, `zine-pr-body-${issueNumber}.md`); await fs.writeFile(prBodyPath, makeZinePrBody({ issueNumber, title, submitterLogin: issue.user?.login ?? '' }));
+  const prBodyPath = path.join(RUNNER_TEMP, `zine-pr-body-${issueNumber}.md`); await fs.writeFile(prBodyPath, makeZinePrBody({ issueNumber, title, submitterLogin: issue.user?.login ?? '', maintainerNotes: fields.get('Maintainer notes')?.trim() ?? '' }));
   await setOutput('valid', 'true'); await setOutput('branch', `automation/new-zine-${issueNumber}`); await setOutput('commit_message', `Publish ${title} zine from issue #${issueNumber}`); await setOutput('pr_title', `Review zine: ${title}`); await setOutput('pr_body_path', prBodyPath); await setOutput('zine_title', title); await setOutput('zine_slug', slug);
 }
 

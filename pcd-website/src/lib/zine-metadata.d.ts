@@ -25,5 +25,6 @@ export declare function assertIdentity(ids: {
 }): void;
 export declare function assertUniqueIds(zines: ZineMetadata[]): void;
 export declare function resolveZineAssets(
-  slug: string, metadata: ZineMetadata, availableFiles: string[],
+  slug: string, metadata: ZineMetadata,
+  availableAssets: { covers: string[]; downloads: string[] },
 ): { cover: string | undefined; downloads: string[] };

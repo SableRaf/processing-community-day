@@ -23,8 +23,10 @@ describe('zine metadata', () => {
     assert.throws(() => parseZineMetadata({ ...valid(), draft: true }, 'loops-with-shapes'), /zines-drafts/);
   });
   test('checks cover and downloads in their separate namespaces', () => {
-    assert.deepEqual(resolveZineAssets('loops-with-shapes', valid(), ['cover.png', 'guide.pdf', 'data.json']), { cover: 'cover.png', downloads: ['guide.pdf', 'data.json'] });
-    assert.throws(() => resolveZineAssets('loops-with-shapes', valid(), ['cover.png']), /guide.pdf/);
+    const assets = { covers: ['cover.png'], downloads: ['guide.pdf', 'data.json'] };
+    assert.deepEqual(resolveZineAssets('loops-with-shapes', valid(), assets), { cover: 'cover.png', downloads: ['guide.pdf', 'data.json'] });
+    assert.throws(() => resolveZineAssets('loops-with-shapes', valid(), { covers: [], downloads: ['cover.png', 'guide.pdf', 'data.json'] }), /cover: cover\.png/);
+    assert.throws(() => resolveZineAssets('loops-with-shapes', valid(), { covers: ['cover.png', 'guide.pdf', 'data.json'], downloads: [] }), /download: guide\.pdf/);
   });
   test('checks unique ids and identity', () => {
     assert.throws(() => assertUniqueIds([valid(), valid()]), /Duplicate zine id/);

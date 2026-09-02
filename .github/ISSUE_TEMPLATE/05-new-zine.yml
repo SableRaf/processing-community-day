@@ -89,7 +89,7 @@ body:
     id: additional_files
     attributes:
       label: Additional files
-      description: Optional. Attach up to seven extra PDF, ZIP, PNG, JPG/JPEG, WebP, TXT, MD, CSV, or JSON files directly here. Files are downloads, not covers. Limits: 25 MB each (10 MB for images), 50 MB total, and 10 files including cover and PDFs.
+      description: Optional. Attach up to eight extra PDF, ZIP, PNG, JPG/JPEG, WebP, TXT, MD, CSV, or JSON files directly here (seven when also attaching a cover). Files are downloads, not covers. Limits: 25 MB each (10 MB for images), 50 MB total, and 10 files including cover and PDFs.
       placeholder: Attach any additional files here.
   - type: input
     id: activity_type

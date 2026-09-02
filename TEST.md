@@ -84,7 +84,7 @@ These tests cover the shared pure functions extracted into `event-issue-helpers.
 |---|---|
 | `zines.test.mjs` | Generic download schema, optional covers/languages, manual external downloads, identity/id uniqueness, and root-cover versus `downloads/` asset validation |
 | `zine-build.test.mjs` | Published cards, ordering, emitted cover and mixed-format downloads, including same-named root/download images and downloadable JSON assets |
-| `process-new-zine-issue.test.mjs` | Attachment-only URL rules, filename normalisation/collisions, size limits, redirect allowlisting, binary signatures, UTF-8/JSON validation, and cover-specific error guidance |
+| `process-new-zine-issue.test.mjs` | Attachment-only URL rules, namespace-aware filename normalisation/collisions, size boundaries and limits, redirect allowlisting/hop limits, binary signatures, UTF-8/JSON validation, publication-ready file generation, metadata and maintainer-note preservation, order assignment/reuse, slug conflicts, template skipping, authoritative branch shape, and invalid/successful PR label transitions |
 
 ---
 

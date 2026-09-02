@@ -98,8 +98,10 @@ export async function loadZines(): Promise<Zine[]> {
     const metadata = parseZineMetadata(metadataModule.default, slug);
     const entry = entriesBySlug.get(slug)!;
     assertIdentity({ slug, frontmatterId: entry.data.id, metadataId: metadata.id });
-    const availableFiles = [...(coversBySlug.get(slug)?.keys() ?? []), ...(downloadsBySlug.get(slug)?.keys() ?? [])];
-    resolveZineAssets(slug, metadata, availableFiles);
+    resolveZineAssets(slug, metadata, {
+      covers: [...(coversBySlug.get(slug)?.keys() ?? [])],
+      downloads: [...(downloadsBySlug.get(slug)?.keys() ?? [])],
+    });
     return { slug, metadata, entry };
   });
 

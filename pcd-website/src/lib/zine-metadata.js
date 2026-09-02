@@ -86,15 +86,19 @@ export function assertUniqueIds(zines) {
   }
 }
 
-export function resolveZineAssets(slug, metadata, availableFiles) {
-  const available = new Set(availableFiles);
+export function resolveZineAssets(slug, metadata, availableAssets) {
+  const availableCovers = new Set(availableAssets.covers);
+  const availableDownloads = new Set(availableAssets.downloads);
   const localDownloads = metadata.downloads.flatMap((download) => 'file' in download ? [download.file] : []);
-  const required = [...(metadata.cover ? [metadata.cover.src] : []), ...localDownloads];
-  const missing = required.filter((file) => !available.has(file));
+  const missing = [
+    ...(metadata.cover && !availableCovers.has(metadata.cover.src) ? [`cover: ${metadata.cover.src}`] : []),
+    ...localDownloads.filter((file) => !availableDownloads.has(file)).map((file) => `download: ${file}`),
+  ];
   if (missing.length) {
     throw new Error(
       `Zine "${slug}" references missing asset(s): ${missing.join(', ')}. ` +
-      `Available files in src/content/zines/${slug}/: ${availableFiles.join(', ') || '(none)'}.`,
+      `Available covers: ${availableAssets.covers.join(', ') || '(none)'}; ` +
+      `available downloads: ${availableAssets.downloads.join(', ') || '(none)'}.`,
     );
   }
   return { cover: metadata.cover?.src, downloads: localDownloads };
