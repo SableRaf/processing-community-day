@@ -74,7 +74,7 @@
   border-radius: var(--border-radius);
   text-decoration: none;
 }
-.docs-prose .docs-action-button {
+:is(.prose, .docs-prose) .docs-action-button {
   color: var(--color-text-muted);
   text-decoration: none;
 }
@@ -222,7 +222,7 @@
   padding: var(--sp-4) var(--sp-5);
   border-bottom: 1px solid var(--color-border);
 }
-.docs-prose .share-qr-dialog__header h2 {
+:is(.prose, .docs-prose) .share-qr-dialog__header h2 {
   margin: 0;
   font-size: var(--step-5);
 }
@@ -258,7 +258,7 @@
   width: min(100%, 17.5rem);
   height: auto;
 }
-.docs-prose .share-qr-dialog__body p {
+:is(.prose, .docs-prose) .share-qr-dialog__body p {
   max-width: 100%;
   margin: 0;
   color: var(--color-text-muted);

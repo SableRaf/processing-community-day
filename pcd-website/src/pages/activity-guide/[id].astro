@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import { render, type GetStaticPaths } from 'astro:content';
 import SiteLayout from '../../layouts/SiteLayout.astro';
 import BackButton from '../../components/BackButton.astro';
+import DocsPageActions from '../../components/DocsPageActions.astro';
 import ExternalLinkIcon from '../../components/ExternalLinkIcon.astro';
 import ZineDownloads from '../../components/ZineDownloads.astro';
 import { LICENSE_URLS } from '../../lib/zine-metadata.js';
@@ -15,6 +16,12 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 const { zine } = Astro.props as { zine: Zine };
 const { Content } = await render(zine.entry);
+const permalink = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).href;
+const editHref = `https://github.com/processing/processing-community-day/edit/main/pcd-website/src/content/zines/${zine.id}/index.md`;
+const creator = zine.created_by_url
+  ? `[${zine.created_by}](${zine.created_by_url})`
+  : zine.created_by;
+const markdown = `# ${zine.title}\n\nby ${creator}\n\n${zine.entry.body?.trim() ?? ''}`;
 ---
 
 <SiteLayout title={`${zine.title} — Processing Community Day`} description={zine.summary}>
@@ -29,7 +36,10 @@ const { Content } = await render(zine.entry);
       </div>
 
       <div class="activity-guide__main">
-        <h1>{zine.title}</h1>
+        <div class="activity-guide__title-row">
+          <h1>{zine.title}</h1>
+          <DocsPageActions markdown={markdown} permalink={permalink} editHref={editHref} />
+        </div>
         <p class:list={['activity-guide__author', { 'activity-guide__author--with-tags': zine.tags }]}>
           by {zine.created_by_url
             ? <a href={zine.created_by_url} target="_blank" rel="noopener noreferrer">{zine.created_by}</a>
@@ -97,6 +107,20 @@ const { Content } = await render(zine.entry);
 
   .activity-guide__main h1 {
     margin-bottom: var(--spacing-xs);
+  }
+
+  .activity-guide__title-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-sm) var(--spacing-lg);
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .activity-guide__title-row h1 {
+    flex: 1 1 16rem;
+    margin-bottom: 0;
   }
 
   .activity-guide__cover {
