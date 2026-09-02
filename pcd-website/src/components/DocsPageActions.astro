@@ -69,18 +69,48 @@ const { markdown, permalink, editHref } = Astro.props;
 
   <dialog class="share-qr-dialog" aria-labelledby="share-qr-title" data-qr-dialog>
     <div class="share-qr-dialog__header">
-      <h2 id="share-qr-title">QR code for this page</h2>
-      <button type="button" aria-label="Close QR code" data-close-qr>&times;</button>
+      <h2 id="share-qr-title">Scan this QR code</h2>
+      <button class="share-qr-dialog__close" type="button" aria-label="Close QR code" data-close-qr>
+        &times;
+      </button>
     </div>
     <div class="share-qr-dialog__body">
-      <canvas
-        width="280"
-        height="280"
-        role="img"
-        aria-label={`QR code for ${permalink}`}
-        data-qr-canvas
-      ></canvas>
-      <p>{permalink}</p>
+      <div class="share-qr-dialog__code">
+        <canvas
+          width="512"
+          height="512"
+          role="img"
+          aria-label={`QR code for ${permalink}`}
+          data-qr-canvas
+        ></canvas>
+      </div>
+
+      <label class="share-qr-dialog__url">
+        <span class="share-qr-dialog__url-label">Link encoded in this QR code</span>
+        <input type="url" value={permalink} readonly data-qr-url />
+      </label>
+
+      <div class="share-qr-dialog__actions">
+        <div class="share-qr-dialog__info-control">
+          <button
+            class="share-qr-dialog__info-button"
+            type="button"
+            aria-label="About scanning QR codes"
+            aria-describedby="share-qr-info"
+          >
+            <svg viewBox="0 0 16 16" width="18" height="18" aria-hidden="true">
+              <path fill-rule="evenodd" d="M8 14.5a6.5 6.5 0 1 0 0-13 6.5 6.5 0 0 0 0 13Zm0 1a7.5 7.5 0 1 0 0-15 7.5 7.5 0 0 0 0 15ZM7.25 7a.75.75 0 0 1 .75-.75h.01a.75.75 0 0 1 .75.75v4a.75.75 0 0 1-1.5 0V7ZM8 3.75a.875.875 0 1 0 0 1.75.875.875 0 0 0 0-1.75Z" clip-rule="evenodd"></path>
+            </svg>
+          </button>
+          <p class="share-qr-dialog__tooltip" id="share-qr-info" role="tooltip">
+            Scan this code with your phone's camera or a QR scanner app to open this page.
+          </p>
+        </div>
+        <div class="share-qr-dialog__action-buttons">
+          <button type="button" data-copy-qr-link>Copy</button>
+          <button type="button" data-download-qr>Download</button>
+        </div>
+      </div>
     </div>
   </dialog>
 </div>
@@ -124,7 +154,11 @@ const { markdown, permalink, editHref } = Astro.props;
     const dialog = actions.querySelector<HTMLDialogElement>('[data-qr-dialog]');
     const closeDialogButton = actions.querySelector<HTMLButtonElement>('[data-close-qr]');
     const canvas = actions.querySelector<HTMLCanvasElement>('[data-qr-canvas]');
+    const qrUrl = actions.querySelector<HTMLInputElement>('[data-qr-url]');
+    const copyQrButton = actions.querySelector<HTMLButtonElement>('[data-copy-qr-link]');
+    const downloadQrButton = actions.querySelector<HTMLButtonElement>('[data-download-qr]');
     const permalink = actions.dataset.permalink ?? window.location.href;
+    let qrBlob: Blob | null = null;
 
     if (!trigger || !menu || !status || !dialog || !canvas) return;
 
@@ -192,25 +226,77 @@ const { markdown, permalink, editHref } = Astro.props;
     qrButton?.addEventListener('click', async () => {
       setMenuOpen(false);
       status.textContent = '';
+      qrBlob = null;
+      copyQrButton?.setAttribute('disabled', '');
+      downloadQrButton?.setAttribute('disabled', '');
       dialog.showModal();
       try {
         await toCanvas(canvas, permalink, {
-          width: 280,
+          width: 512,
           margin: 2,
           errorCorrectionLevel: 'M',
           color: { dark: '#1a1a1a', light: '#ffffff' },
         });
+        // qrcode applies the bitmap dimensions as inline display styles. Remove
+        // those styles so CSS can keep the high-resolution canvas responsive.
+        canvas.style.removeProperty('width');
+        canvas.style.removeProperty('height');
+        qrBlob = await new Promise<Blob>((resolve, reject) => {
+          canvas.toBlob((blob) => {
+            if (blob) resolve(blob);
+            else reject(new Error('Could not create a QR code image.'));
+          }, 'image/png');
+        });
+        copyQrButton?.removeAttribute('disabled');
+        downloadQrButton?.removeAttribute('disabled');
       } catch {
         dialog.close();
         status.textContent = 'Could not generate the QR code.';
       }
     });
 
+    qrUrl?.addEventListener('click', () => qrUrl.select());
+
+    copyQrButton?.addEventListener('click', async () => {
+      status.textContent = '';
+      try {
+        if (!qrBlob || !navigator.clipboard?.write || typeof ClipboardItem === 'undefined') {
+          throw new Error('Image clipboard is not supported.');
+        }
+        await navigator.clipboard.write([new ClipboardItem({ 'image/png': qrBlob })]);
+        copyQrButton.textContent = 'Copied!';
+        status.textContent = 'QR code copied to clipboard.';
+        window.setTimeout(() => {
+          copyQrButton.textContent = 'Copy';
+        }, 1600);
+      } catch {
+        status.textContent = 'Could not copy the QR code. Try downloading it instead.';
+      }
+    });
+
+    downloadQrButton?.addEventListener('click', () => {
+      if (!qrBlob) {
+        status.textContent = 'Could not download the QR code.';
+        return;
+      }
+
+      const downloadUrl = URL.createObjectURL(qrBlob);
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.download = 'page-qr-code.png';
+      link.click();
+      window.setTimeout(() => URL.revokeObjectURL(downloadUrl), 0);
+      status.textContent = 'QR code downloaded.';
+    });
+
     closeDialogButton?.addEventListener('click', () => dialog.close());
     dialog.addEventListener('click', (event) => {
       if (event.target === dialog) dialog.close();
     });
-    dialog.addEventListener('close', () => trigger.focus());
+    dialog.addEventListener('close', () => {
+      trigger.focus();
+      if (copyQrButton) copyQrButton.textContent = 'Copy';
+    });
 
     document.addEventListener('click', (event) => {
       if (!actions.contains(event.target as Node)) setMenuOpen(false);
