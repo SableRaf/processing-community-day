@@ -68,7 +68,7 @@ body:
     attributes:
       label: Reader-order PDF
       description: Upload one PDF with sequentially ordered pages for reading on a screen. Attach the file directly here; external links are not accepted.
-      placeholder: Attach one PDF here.
+      placeholder: Attach the reader-order PDF here.
     validations:
       required: true
   - type: textarea
@@ -76,7 +76,7 @@ body:
     attributes:
       label: Print-ready PDF
       description: Upload one PDF with pages arranged for printing and folding into a booklet. Attach the file directly here; external links are not accepted.
-      placeholder: Attach one PDF here.
+      placeholder: Attach the print-ready PDF here.
     validations:
       required: true
   - type: textarea
