@@ -95,7 +95,8 @@ The global Markdown pipeline runs `rehype-table-wrapper` and `rehype-heading-anc
 | `src/components/NodePanel.vue` | Slide-in event detail panel with minimap, calendar links, share button |
 | `src/components/LanguageSwitcher.vue` | Language selector dropdown in the top bar |
 | `src/components/BackButton.astro` | Reusable button-style link for navigating from a detail page back to its parent listing |
-| `src/components/DocsPageActions.astro` | Organizer Kit share dropdown (Markdown, permalink, QR code) and GitHub edit action |
+| `src/components/DocsPageActions.astro` | Reusable share dropdown (Markdown, permalink, QR code) and GitHub edit action used by Organizer Kit and zine detail pages |
+| `src/components/ShareMenu.vue` | Shared Markdown, permalink, and QR-code menu used by docs actions and the event detail panel |
 | `src/components/ZineDownloads.astro` | Renders zine download rows with a button, filename, and human-readable file size |
 | `src/components/Header.astro` | Shared fixed site header and primary navigation |
 | `src/components/Footer.astro` | Shared site footer, policy links, community links, and sponsors |
