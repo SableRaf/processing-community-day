@@ -221,7 +221,7 @@
   gap: var(--sp-4);
   padding: var(--sp-5) var(--sp-6) var(--sp-2);
 }
-:is(.prose, .docs-prose) .share-qr-dialog__header h2 {
+.share-qr-dialog__header h2 {
   flex: 1;
   margin: 0;
   padding-left: 0;
@@ -368,7 +368,7 @@
   background: var(--color-border);
   border-color: var(--color-border);
 }
-:is(.prose, .docs-prose) .share-qr-dialog__tooltip {
+.share-qr-dialog__tooltip {
   position: absolute;
   z-index: 1;
   bottom: calc(100% + var(--sp-2));

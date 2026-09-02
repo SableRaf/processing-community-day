@@ -8,6 +8,7 @@ import { formatDateRange, formatTimeRange, calendarLinks, onlinePlatformName } f
 import { cartoTileUrl } from '../lib/carto';
 import { getOsmUrl } from '../lib/popup';
 import { GITHUB_EDIT_EVENT_URL, GITHUB_CONTENT_ISSUE_URL } from '../config';
+import ShareMenu from './ShareMenu.vue';
 
 const props = defineProps<{
   node: Node | null;
@@ -23,8 +24,6 @@ const tabButtonRef = ref<HTMLButtonElement | null>(null);
 const minimapRef = ref<HTMLDivElement | null>(null);
 const descContentRef = ref<HTMLElement | null>(null);
 const calDropdownOpen = ref(false);
-const shareDropdownOpen = ref(false);
-const linkCopied = ref(false);
 const descExpanded = ref(false);
 const descHasMore = ref(false);
 const hostsExpanded = ref(false);
@@ -40,9 +39,6 @@ function handleOutsideClick(e: MouseEvent) {
   const target = e.target as HTMLElement;
   if (calDropdownOpen.value && !target.closest('.info-card-calendar-row')) {
     calDropdownOpen.value = false;
-  }
-  if (shareDropdownOpen.value && !target.closest('.share-btn-wrap')) {
-    shareDropdownOpen.value = false;
   }
 }
 
@@ -186,11 +182,12 @@ function getShareUrl(node: Node): string {
   return `${window.location.origin}${base}/event/${node.id}-${node.uid}/`;
 }
 
-async function copyLink(node: Node) {
-  try { await navigator.clipboard.writeText(getShareUrl(node)); } catch { /* unavailable */ }
-  linkCopied.value = true;
-  shareDropdownOpen.value = false;
-  setTimeout(() => { linkCopied.value = false; }, 2000);
+function getShareMarkdown(node: Node): string {
+  return [
+    `# ${node.event_name}`,
+    node.event_short_description,
+    node.details_markdown,
+  ].filter(Boolean).join('\n\n');
 }
 
 function getReportIssueHref(node: Node): string {
@@ -282,50 +279,12 @@ const calLinks = computed(() => props.node && !props.node.date_tbd ? calendarLin
 
         <div class="panel-header-row">
           <h2 id="panel-title" class="panel-name">{{ node.event_name }}</h2>
-          <div class="share-btn-wrap">
-            <button
-              class="quick-action-btn"
-              :aria-label="linkCopied ? t('panel.share.link_copied') : t('panel.share.share_event')"
-              :title="linkCopied ? t('panel.share.link_copied') : t('panel.share.share_event')"
-                aria-haspopup="menu"
-              :aria-expanded="shareDropdownOpen"
-              @click.stop="shareDropdownOpen = !shareDropdownOpen"
-            >
-              <Icon v-if="!linkCopied" icon="bi:box-arrow-up" width="1.3em" height="1.3em" aria-hidden="true" />
-              <Icon v-else icon="bi:check-lg" width="1em" height="1em" aria-hidden="true" />
-            </button>
-            <div v-show="shareDropdownOpen" class="quick-action-menu share-menu" role="menu">
-              <button role="menuitem" class="copy-link-btn" @click="copyLink(node)">
-                <Icon icon="bi:copy" width="1em" height="1em" aria-hidden="true" />
-                {{ t('panel.share.copy_link') }}
-              </button>
-              <hr class="share-menu-divider" />
-              <a
-                :href="`https://mastodon.social/share?text=${encodeURIComponent('Join me at ' + node.event_name + ' ' + getShareUrl(node))}`"
-                target="_blank" rel="noopener noreferrer" role="menuitem"
-                :aria-label="t('panel.share.mastodon_new_tab')"
-                @click="shareDropdownOpen = false"
-              >{{ t('panel.share.mastodon') }}</a>
-              <a
-                :href="`https://bsky.app/intent/compose?text=${encodeURIComponent('Join me at ' + node.event_name + ' ' + getShareUrl(node))}`"
-                target="_blank" rel="noopener noreferrer" role="menuitem"
-                :aria-label="t('panel.share.bluesky_new_tab')"
-                @click="shareDropdownOpen = false"
-              >{{ t('panel.share.bluesky') }}</a>
-              <a
-                :href="`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(getShareUrl(node))}`"
-                target="_blank" rel="noopener noreferrer" role="menuitem"
-                :aria-label="t('panel.share.facebook_new_tab')"
-                @click="shareDropdownOpen = false"
-              >{{ t('panel.share.facebook') }}</a>
-              <a
-                :href="`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(getShareUrl(node))}`"
-                target="_blank" rel="noopener noreferrer" role="menuitem"
-                :aria-label="t('panel.share.linkedin_new_tab')"
-                @click="shareDropdownOpen = false"
-              >{{ t('panel.share.linkedin') }}</a>
-            </div>
-          </div>
+          <ShareMenu
+            class="panel-share-menu"
+            :markdown="getShareMarkdown(node)"
+            :permalink="getShareUrl(node)"
+            :qr-filename="`${node.id}-qr-code.png`"
+          />
         </div>
         <div class="panel-byline">
           <p v-if="node.organization_name" class="panel-organizing-entity">
@@ -1064,42 +1023,9 @@ const calLinks = computed(() => props.node && !props.node.date_tbd ? calendarLin
   z-index: 1000;
 }
 
-.share-btn-wrap {
-  position: relative;
-}
-
-.share-menu {
+.panel-share-menu :deep(.share-menu__items) {
   right: 0;
   left: auto;
-  top: calc(100% + 4px);
-}
-
-.share-menu-divider {
-  margin: 4px -4px 4px;
-  border: none;
-  border-top: 1px solid var(--color-border);
-}
-
-.quick-action-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border: 1px solid var(--color-border);
-  border-radius: 10px;
-  background: var(--color-bg-panel);
-  color: var(--color-text-muted);
-  cursor: pointer;
-  text-decoration: none;
-  font-family: var(--font-family);
-  transition: background-color 0.12s ease, color 0.12s ease, border-color 0.12s ease;
-}
-
-.quick-action-btn:hover {
-  background: var(--color-primary);
-  color: #fff;
-  border-color: var(--color-primary);
 }
 
 /* ─── Description ─── */

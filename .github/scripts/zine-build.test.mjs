@@ -40,7 +40,9 @@ test('a populated zine collection emits linked assets and renders entries in fro
     const titleIndex = page.indexOf('>Loops with Shapes</h1>');
     const authorIndex = page.indexOf('class="activity-guide__author');
     const tagsIndex = page.indexOf('class="activity-guide__tags"');
-    const descriptionIndex = page.indexOf('Use a loop to draw a playful field of shapes.');
+    // Hydrated components may serialize page Markdown into props before the
+    // rendered article body, so find the visible description after its tags.
+    const descriptionIndex = page.indexOf('Use a loop to draw a playful field of shapes.', tagsIndex);
     const detailsSeparatorIndex = page.indexOf('<hr', descriptionIndex);
     const metadataIndex = page.indexOf('class="activity-guide__metadata"');
     const downloadsSeparatorIndex = page.indexOf('<hr', metadataIndex);
