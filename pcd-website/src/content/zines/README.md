@@ -18,7 +18,7 @@ Only published zines belong in `src/content/zines/`. This collection has no `dra
 
 ## GitHub issue intake and promotion
 
-Community submissions start in the public [New Zine issue form](https://github.com/processing/processing-community-day/issues/new?template=05-new-zine.yml). Submitters attach one reader-order PDF, one print-ready PDF, and any optional supporting files directly to the form's textarea fields. GitHub inserts public Markdown attachment links into the issue. The `Zine Intake` workflow extracts those HTTP(S) URLs, validates required metadata, requires exactly one `.pdf` in each PDF field, checks the license consent and slug uniqueness, and creates or updates a review PR on `automation/new-zine-<issue-number>` with these files only:
+Community submissions start in the public [New Zine issue form](https://github.com/processing/processing-community-day/issues/new?template=05-new-zine.yml). Submitters attach one reader-order PDF, one print-ready PDF, and any optional supporting files directly to the form's textarea fields. GitHub inserts public Markdown attachment links into the issue. The `Zine Intake` workflow requires each non-empty file entry to contain only a complete Markdown attachment link or raw HTTP(S) URL, extracts and deduplicates those URLs, validates required metadata, requires exactly one `.pdf` in each PDF field, checks the license consent and slug uniqueness, and creates or updates a review PR on `automation/new-zine-<issue-number>` with these files only. Legacy comma-separated raw URLs remain supported:
 
 ```
 src/content/zines-drafts/<slug>/

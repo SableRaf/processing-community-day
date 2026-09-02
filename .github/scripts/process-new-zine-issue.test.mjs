@@ -99,10 +99,11 @@ describe('process-new-zine-issue', () => {
   test('keeps accepting raw URLs and former PDF URL headings on existing issues', async () => {
     const title = 'Intake Test Zine Legacy URLs';
     const slug = 'intake-test-zine-legacy-urls';
-    const readerUrl = 'https://example.org/legacy-reader.pdf';
+    const readerUrl = 'https://example.org/legacy-reader(v2).pdf';
     const printUrl = 'https://example.org/legacy-print.pdf';
+    const additionalFiles = 'https://example.org/worksheet.pdf, https://example.org/source(v2).zip';
     created.add(slug);
-    const legacyBody = body({ title, readerUrl, printUrl })
+    const legacyBody = body({ title, readerUrl, printUrl, additionalFiles })
       .replace('### Reader-order PDF', '### Reader-order PDF URL')
       .replace('### Print-ready PDF', '### Print-ready PDF URL')
       .replace(attachment('Reader order.pdf', readerUrl), readerUrl)
@@ -113,6 +114,10 @@ describe('process-new-zine-issue', () => {
     assert.deepEqual(submission.source_pdfs, [
       { role: 'reader-order', url: readerUrl },
       { role: 'print-ready', url: printUrl },
+    ]);
+    assert.deepEqual(submission.additional_files, [
+      'https://example.org/worksheet.pdf',
+      'https://example.org/source(v2).zip',
     ]);
     await fs.rm(tmp, { recursive: true, force: true });
   });
@@ -136,12 +141,12 @@ describe('process-new-zine-issue', () => {
   test('rejects additional-file text without an upload and extracts multiple uploaded files', async () => {
     let result = await run(body({
       title: 'Intake Test Zine Invalid Additional Files',
-      additionalFiles: 'I forgot to attach the source files.',
+      additionalFiles: 'See my site at [https://example.com](https://example.com) for the assets.',
     }), { number: 787 });
     assert.equal(result.outputs.valid, 'false');
     let comment = await fs.readFile(result.outputs.validation_comment_path, 'utf8');
     assert.match(comment, /Additional files/);
-    assert.match(comment, /upload control/);
+    assert.match(comment, /remove descriptions and unrelated links/);
     await fs.rm(result.tmp, { recursive: true, force: true });
 
     const slug = 'intake-test-zine-additional-files';
@@ -160,6 +165,18 @@ describe('process-new-zine-issue', () => {
       'https://github.com/user-attachments/files/10000007/source.zip',
     ]);
     await fs.rm(result.tmp, { recursive: true, force: true });
+  });
+
+  test('rejects descriptive text beside an otherwise valid PDF attachment with a clear message', async () => {
+    const readerUrl = 'https://github.com/user-attachments/files/10000009/reader.pdf';
+    const issueBody = body({ title: 'Intake Test Zine Mixed PDF Field', readerUrl })
+      .replace(attachment('Reader order.pdf', readerUrl), `${attachment('Reader order.pdf', readerUrl)}\nPreferred version for screens.`);
+    const { tmp, outputs } = await run(issueBody, { number: 790 });
+    assert.equal(outputs.valid, 'false');
+    const comment = await fs.readFile(outputs.validation_comment_path, 'utf8');
+    assert.match(comment, /Reader-order PDF/);
+    assert.match(comment, /remove any descriptions or unrelated links/);
+    await fs.rm(tmp, { recursive: true, force: true });
   });
 
   test('reports missing fields, wrong file types, and unchecked license consent in one actionable comment', async () => {

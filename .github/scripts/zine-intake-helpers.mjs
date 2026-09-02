@@ -2,24 +2,54 @@ import { formatError } from './event-issue-helpers.mjs';
 
 export const ZINE_TEMPLATE_HEADING = '### Reader-order PDF';
 
-export function extractSubmittedFileUrls(value) {
+function submittedFileEntries(value) {
+  return String(value ?? '')
+    .replace(/\r/g, '')
+    .split('\n')
+    .flatMap((line) => {
+      const trimmed = line.trim();
+      if (!trimmed) return [];
+      // GitHub emits one Markdown attachment per line. Only the former raw-URL
+      // input used commas as separators, so preserve that legacy format.
+      return /^!?\[/.test(trimmed)
+        ? [trimmed]
+        : trimmed.split(',').map((entry) => entry.trim()).filter(Boolean);
+    });
+}
+
+function markdownLinkTarget(entry) {
+  const labelStart = entry.startsWith('![') ? 2 : entry.startsWith('[') ? 1 : -1;
+  if (labelStart === -1 || !entry.endsWith(')')) return null;
+  const targetStart = entry.indexOf('](', labelStart);
+  if (targetStart === -1) return null;
+  return entry.slice(targetStart + 2, -1).trim();
+}
+
+export function parseSubmittedFileUrls(value) {
   const urls = [];
+  const invalidEntries = [];
   const seen = new Set();
-  const add = (candidate) => {
-    const cleaned = candidate.replace(/[.,;:!?]+$/, '');
+  for (const entry of submittedFileEntries(value)) {
+    const isMarkdownLink = /^!?\[/.test(entry);
+    const candidate = isMarkdownLink ? markdownLinkTarget(entry) : entry;
+    if (!candidate || /\s/.test(candidate) || (!isMarkdownLink && !/^https?:\/\//i.test(candidate))) {
+      invalidEntries.push(entry);
+      continue;
+    }
     try {
-      const url = new URL(cleaned);
+      const url = new URL(candidate);
       if ((url.protocol === 'http:' || url.protocol === 'https:') && !seen.has(url.href)) {
         seen.add(url.href);
         urls.push(url.href);
+      } else if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+        invalidEntries.push(entry);
       }
     } catch {
-      // Validation reports a non-empty field with no usable attachment below.
+      invalidEntries.push(entry);
     }
-  };
+  }
 
-  for (const match of String(value ?? '').matchAll(/https?:\/\/[^\s<>'"\])]+/gi)) add(match[0]);
-  return urls;
+  return { urls, invalidEntries };
 }
 
 export function isPdfUrl(value) {
