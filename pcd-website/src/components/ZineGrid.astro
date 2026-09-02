@@ -12,7 +12,14 @@ const zines = await loadZines();
       <a class="guide-card guide-card--zine" href={zine.href}>
         <span class="guide-card__cover-frame">
           {zine.cover
-            ? <Image src={zine.cover.src} alt={zine.cover.alt} />
+            ? <Image
+                src={zine.cover.src}
+                alt={zine.cover.alt}
+                width={420}
+                height={594}
+                layout="constrained"
+                fit="cover"
+              />
             : <span class="guide-card__cover-placeholder" aria-hidden="true">{zine.title}</span>}
         </span>
         <span class="guide-card__body">
