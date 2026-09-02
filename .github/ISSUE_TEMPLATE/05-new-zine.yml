@@ -31,6 +31,12 @@ body:
       description: Optional comma-separated tags that help describe the zine.
       placeholder: beginner, p5.js, physical computing
   - type: input
+    id: languages
+    attributes:
+      label: Language(s)
+      description: Optional comma-separated languages used in the zine.
+      placeholder: English, Spanish, Chinese
+  - type: input
     id: creators
     attributes:
       label: Creator(s)
@@ -61,18 +67,24 @@ body:
     id: reader_order_pdf
     attributes:
       label: Reader-order PDF URL
-      description: Link to a PDF with sequentially ordered pages for reading on a screen.
-      placeholder: https://example.org/my-guide-reader-order.pdf
+      description: Download link to a PDF with sequentially ordered pages for reading on a screen.
+      placeholder: https://example.org/my-zine-reader-order.pdf
     validations:
       required: true
   - type: input
     id: print_ready_pdf
     attributes:
       label: Print-ready PDF URL
-      description: Link to a PDF with pages arranged for printing and folding into a booklet.
-      placeholder: https://example.org/my-guide-print-ready.pdf
+      description: Download link to a PDF with pages arranged for printing and folding into a booklet.
+      placeholder: https://example.org/my-zine-print-ready.pdf
     validations:
       required: true
+  - type: input
+    id: additional_files
+    attributes:
+      label: Additional files
+      description: Optional comma-separated download links for any additional files like other formats or useful resources. These files will be downloadable from the zine page.
+      placeholder: https://example.org/my-zine-print-monochrome.pdf, https://example.org/worksheet.pdf, https://example.org/source-files.zip
   - type: input
     id: activity_type
     attributes:
@@ -87,7 +99,7 @@ body:
   - type: input
     id: duration
     attributes:
-      label: Duration
+      label: Duration of the activity
       description: Optional, for example 45 minutes or 2 hours.
   - type: textarea
     id: materials
@@ -103,7 +115,7 @@ body:
     id: maintainer_notes
     attributes:
       label: Maintainer notes
-      description: Optional notes for maintainers. These notes are public.
+      description: Anything you'd like to tell us about your submission. These notes are public on GitHub but will not be included on the website.
   - type: checkboxes
     id: license_consent
     attributes:
@@ -114,8 +126,8 @@ body:
   - type: checkboxes
     id: link_consent
     attributes:
-      label: Public, stable PDF links
-      description: Both links must work without login and must not be short-lived or expiring.
+      label: Public and stable links
+      description: All download links must work without login and must not be short-lived or expiring.
       options:
-        - label: I confirm both PDF links are publicly accessible without login and are stable, non-expiring links.
+        - label: I confirm all links above are publicly accessible without login and are stable, non-expiring URLs.
           required: true

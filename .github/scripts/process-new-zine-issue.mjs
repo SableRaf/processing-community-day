@@ -41,6 +41,10 @@ async function main() {
     .split(',')
     .map((tag) => tag.trim())
     .filter(Boolean))];
+  const languages = [...new Set((fields.get('Language(s)') ?? '')
+    .split(',')
+    .map((language) => language.trim())
+    .filter(Boolean))];
   const createdBy = required(fields, 'Creator(s)', errors);
   const createdByUrl = fields.get('Creator URL')?.trim() ?? '';
   if (createdByUrl && !isValidHttpUrl(createdByUrl)) {
@@ -50,12 +54,25 @@ async function main() {
   const description = required(fields, 'Full description', errors);
   const readerOrderUrl = fields.get('Reader-order PDF URL')?.trim() ?? '';
   const printReadyUrl = fields.get('Print-ready PDF URL')?.trim() ?? '';
+  const additionalFiles = [...new Set((fields.get('Additional files') ?? '')
+    .split(',')
+    .map((url) => url.trim())
+    .filter(Boolean))];
   if (!readerOrderUrl) errors.push({ field: 'Reader-order PDF URL', message: 'This field is required.' });
   else if (!isValidHttpUrl(readerOrderUrl)) errors.push({ field: 'Reader-order PDF URL', found: readerOrderUrl, message: 'Enter a valid HTTP(S) URL.' });
   if (!printReadyUrl) errors.push({ field: 'Print-ready PDF URL', message: 'This field is required.' });
   else if (!isValidHttpUrl(printReadyUrl)) errors.push({ field: 'Print-ready PDF URL', found: printReadyUrl, message: 'Enter a valid HTTP(S) URL.' });
+  const invalidAdditionalFiles = additionalFiles.filter((url) => !isValidHttpUrl(url));
+  if (invalidAdditionalFiles.length) {
+    errors.push({
+      field: 'Additional files',
+      found: invalidAdditionalFiles.join(', '),
+      message: 'Enter only valid HTTP(S) URLs, separated by commas.',
+    });
+  }
   if (!hasCheckedConsent(fields.get('License consent'))) errors.push({ field: 'License consent', message: 'Confirm that the material can be licensed under CC BY-SA 4.0.' });
-  if (!hasCheckedConsent(fields.get('Public, stable PDF links'))) errors.push({ field: 'Public, stable PDF links', message: 'Confirm that both links are public, stable, and non-expiring.' });
+  const linkConsent = fields.get('Public and stable links') ?? fields.get('Public, stable PDF links');
+  if (!hasCheckedConsent(linkConsent)) errors.push({ field: 'Public and stable links', message: 'Confirm that all download links are public, stable, and non-expiring.' });
 
   const slug = slugify(title);
   if (!slug) errors.push({ field: 'Title', message: 'Use at least one letter or number so we can create a URL slug.' });
@@ -107,6 +124,8 @@ async function main() {
     description,
   };
   if (tags.length) submission.tags = tags;
+  if (languages.length) submission.languages = languages;
+  if (additionalFiles.length) submission.additional_files = additionalFiles;
   if (createdByUrl) submission.created_by_url = createdByUrl;
   for (const [field, key] of [
     ['Activity type', 'activity_type'],
