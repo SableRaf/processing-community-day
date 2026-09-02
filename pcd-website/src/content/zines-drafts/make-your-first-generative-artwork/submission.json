@@ -1,0 +1,41 @@
+{
+  "id": "make-your-first-generative-artwork",
+  "title": "Make your first generative artwork",
+  "topic": "generative art",
+  "created_by": "Raphaël de Courville",
+  "summary": "Make your first generative artwork In less than 15 lines of code!",
+  "source_pdfs": [
+    {
+      "role": "reader-order",
+      "url": "https://github.com/user-attachments/files/31750418/zine-read.pdf"
+    },
+    {
+      "role": "print-ready",
+      "url": "https://github.com/user-attachments/files/31750422/zine-print-A4.pdf"
+    }
+  ],
+  "license": "CC BY-SA 4.0",
+  "source_issue_url": "https://github.com/processing/processing-community-day/issues/202",
+  "intake": {
+    "issue_number": 202,
+    "submitted_by_github": "SableRaf",
+    "submitted_date": "2026-09-02",
+    "maintainer_notes": "Testing the submission process"
+  },
+  "description": "This mini tutorial takes you through the steps to create a minimalist generative art collection. It's inspired, with thanks, by [this 2022 thread](https://sableraf.github.io/genlight-thread-unroll/) by [Adam genlight](https://genlight.art/).",
+  "tags": [
+    "beginner",
+    "p5.js",
+    "generative art"
+  ],
+  "languages": [
+    "English"
+  ],
+  "additional_files": [
+    "https://github.com/user-attachments/files/31750430/zine-print-A4-monochrome.pdf"
+  ],
+  "created_by_url": "https://raphaeldecourville.com",
+  "activity_type": "workshop",
+  "zine_format": "Single-sheet 8-page folded minizine on A4",
+  "materials": "none"
+}
