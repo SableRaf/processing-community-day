@@ -18,7 +18,7 @@ Only published zines belong in `src/content/zines/`. This collection has no `dra
 
 ## GitHub issue intake and promotion
 
-Community submissions start in the public [New Zine issue form](https://github.com/processing/processing-community-day/issues/new?template=05-new-zine.yml). The `Zine Intake` workflow validates required metadata, HTTP(S) source URLs, both consent checkboxes, and slug uniqueness. It creates or updates a review PR on `automation/new-zine-<issue-number>` with these files only:
+Community submissions start in the public [New Zine issue form](https://github.com/processing/processing-community-day/issues/new?template=05-new-zine.yml). Submitters attach one reader-order PDF, one print-ready PDF, and any optional supporting files directly to the form's textarea fields. GitHub inserts public Markdown attachment links into the issue. The `Zine Intake` workflow extracts those HTTP(S) URLs, validates required metadata, requires exactly one `.pdf` in each PDF field, checks the license consent and slug uniqueness, and creates or updates a review PR on `automation/new-zine-<issue-number>` with these files only:
 
 ```
 src/content/zines-drafts/<slug>/
@@ -28,6 +28,6 @@ src/content/zines-drafts/<slug>/
 
 `submission.json` keeps the submitted metadata, including optional deduplicated `languages` and validated HTTP(S) `additional_files` arrays, `source_pdfs` with `reader-order` and `print-ready` roles, the fixed `CC BY-SA 4.0` license, source issue URL, and intake provenance. These draft files are deliberately not loaded by Astro and must never be treated as a published guide.
 
-To promote an approved draft, verify that both stable PDF source links and any submitted additional file links work, then review the PDFs, including the reader-order PDF’s accessibility. Download and commit them with the deterministic filenames `reader-order.pdf` and `print-ready.pdf`. Replace `submission.json` with a published `metadata.json` that lists both local files using the labels `Reader-order PDF` and `Print-ready PDF` and each file’s human-readable size. Add `order: max(existing order) + 1` to `index.md`, move the folder into `src/content/zines/`, verify the Netlify preview, then merge. The form does not collect a cover image, so the existing grey title fallback is expected.
+To promote an approved draft, verify the uploaded PDFs and any submitted additional files, then review the PDFs, including the reader-order PDF’s accessibility. Download and commit them with the deterministic filenames `reader-order.pdf` and `print-ready.pdf`. Replace `submission.json` with a published `metadata.json` that lists both local files using the labels `Reader-order PDF` and `Print-ready PDF` and each file’s human-readable size. Add `order: max(existing order) + 1` to `index.md`, move the folder into `src/content/zines/`, verify the Netlify preview, then merge. The form does not collect a cover image, so the existing grey title fallback is expected.
 
 Before publishing, review PDFs for accessible, selectable (not scanned) text; logical reading order; document title and language; tagged headings where the authoring tool allows; and alt text on images. Include at least one PDF whose reading order follows the content, not only a print-imposed layout.

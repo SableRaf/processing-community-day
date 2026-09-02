@@ -1,6 +1,34 @@
 import { formatError } from './event-issue-helpers.mjs';
 
-export const ZINE_TEMPLATE_HEADING = '### Reader-order PDF URL';
+export const ZINE_TEMPLATE_HEADING = '### Reader-order PDF';
+
+export function extractSubmittedFileUrls(value) {
+  const urls = [];
+  const seen = new Set();
+  const add = (candidate) => {
+    const cleaned = candidate.replace(/[.,;:!?]+$/, '');
+    try {
+      const url = new URL(cleaned);
+      if ((url.protocol === 'http:' || url.protocol === 'https:') && !seen.has(url.href)) {
+        seen.add(url.href);
+        urls.push(url.href);
+      }
+    } catch {
+      // Validation reports a non-empty field with no usable attachment below.
+    }
+  };
+
+  for (const match of String(value ?? '').matchAll(/https?:\/\/[^\s<>'"\])]+/gi)) add(match[0]);
+  return urls;
+}
+
+export function isPdfUrl(value) {
+  try {
+    return decodeURIComponent(new URL(value).pathname).toLowerCase().endsWith('.pdf');
+  } catch {
+    return false;
+  }
+}
 
 export function hasCheckedConsent(value) {
   return /^\s*-\s*\[x\]/im.test(value ?? '');
@@ -61,7 +89,7 @@ export function makeZinePrBody({ issueNumber, title, submitterLogin, submission 
     '',
     '### Reviewer promotion checklist',
     '',
-    '- [ ] Verify both stable PDF source links and any additional file links; review both PDFs, including reader-order accessibility.',
+    '- [ ] Verify all uploaded files and review both PDFs, including reader-order accessibility.',
     '- [ ] Download and commit them as `reader-order.pdf` and `print-ready.pdf`.',
     '- [ ] Convert `submission.json` to published `metadata.json`, with downloads labelled `Reader-order PDF` and `Print-ready PDF` and each local file’s human-readable size.',
     '- [ ] Add `order: max(existing order) + 1` to `index.md` and move the folder into `src/content/zines/`.',
