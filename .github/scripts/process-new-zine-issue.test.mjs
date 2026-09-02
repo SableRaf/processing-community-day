@@ -13,19 +13,21 @@ const DRAFTS = path.join(ROOT, 'pcd-website/src/content/zines-drafts');
 const PUBLISHED = path.join(ROOT, 'pcd-website/src/content/zines');
 const created = new Set();
 
-function body({ title = 'Intake Test Zine 781', tags = '', creatorUrl = '', readerUrl = 'https://example.org/reader.pdf', printUrl = 'https://example.org/print.pdf', license = true, links = true, optional = false } = {}) {
+function body({ title = 'Intake Test Zine 781', tags = '', languages = '', creatorUrl = '', readerUrl = 'https://example.org/reader.pdf', printUrl = 'https://example.org/print.pdf', additionalFiles = '', license = true, links = true, optional = false } = {}) {
   return [
     '### Title', title, '', '### Topic', 'Creative coding', '', '### Creator(s)', 'Test Creator', '',
     '### Tags', tags || (optional ? 'beginner, creative coding, beginner' : '_No response_'), '',
+    '### Language(s)', languages || (optional ? 'English, Spanish, English' : '_No response_'), '',
     '### Creator URL', creatorUrl || '_No response_', '',
     '### Short summary', 'A concise test summary.', '', '### Full description', 'A full **test** description.', '',
     '### Reader-order PDF URL', readerUrl, '', '### Print-ready PDF URL', printUrl, '',
+    '### Additional files', additionalFiles || (optional ? 'https://example.org/worksheet.pdf, https://example.org/source.zip, https://example.org/worksheet.pdf' : '_No response_'), '',
     '### Activity type', optional ? 'Workshop' : '_No response_', '', '### Zine format', optional ? 'Single-sheet folded zine' : '_No response_', '',
     '### Duration', optional ? '90 minutes' : '_No response_', '',
     '### Materials', optional ? 'Paper and pens' : '_No response_', '', '### Preferred attribution', optional ? 'Test Creator, CC BY-SA 4.0' : '_No response_', '',
     '### Maintainer notes', optional ? 'Public maintainer note.' : '_No response_', '',
     '### License consent', license ? '- [x] I own or have permission to license this material under CC BY-SA 4.0.' : '- [ ] I own or have permission to license this material under CC BY-SA 4.0.', '',
-    '### Public, stable PDF links', links ? '- [x] I confirm both PDF links are publicly accessible without login and are stable, non-expiring links.' : '- [ ] I confirm both PDF links are publicly accessible without login and are stable, non-expiring links.',
+    '### Public and stable links', links ? '- [x] I confirm all links above are publicly accessible without login and are stable, non-expiring URLs.' : '- [ ] I confirm all links above are publicly accessible without login and are stable, non-expiring URLs.',
   ].join('\n');
 }
 
@@ -57,8 +59,9 @@ describe('process-new-zine-issue', () => {
     assert.equal(outputs.branch, 'automation/new-zine-781');
     const submission = JSON.parse(await fs.readFile(path.join(DRAFTS, slug, 'submission.json'), 'utf8'));
     assert.deepEqual(submission, {
-      id: slug, title, topic: 'Creative coding', tags: ['beginner', 'creative coding'], created_by: 'Test Creator', summary: 'A concise test summary.',
+      id: slug, title, topic: 'Creative coding', tags: ['beginner', 'creative coding'], languages: ['English', 'Spanish'], created_by: 'Test Creator', summary: 'A concise test summary.',
       source_pdfs: [{ role: 'reader-order', url: 'https://example.org/reader.pdf' }, { role: 'print-ready', url: 'https://example.org/print.pdf' }],
+      additional_files: ['https://example.org/worksheet.pdf', 'https://example.org/source.zip'],
       license: 'CC BY-SA 4.0', source_issue_url: 'https://github.com/processing/processing-community-day/issues/781',
       intake: { issue_number: 781, submitted_by_github: 'zine-tester', submitted_date: new Date().toISOString().slice(0, 10), maintainer_notes: 'Public maintainer note.' },
       description: 'A full **test** description.', activity_type: 'Workshop', zine_format: 'Single-sheet folded zine',
@@ -68,6 +71,8 @@ describe('process-new-zine-issue', () => {
     const prBody = await fs.readFile(outputs.pr_body_path, 'utf8');
     assert.match(prBody, /Reader-order PDF/);
     assert.match(prBody, /\| Tags \| beginner, creative coding \|/);
+    assert.match(prBody, /\| Language\(s\) \| English, Spanish \|/);
+    assert.match(prBody, /\| Additional files \| https:\/\/example\.org\/worksheet\.pdf, https:\/\/example\.org\/source\.zip \|/);
     assert.match(prBody, /\| Activity type \| Workshop \|/);
     assert.match(prBody, /\| Zine format \| Single-sheet folded zine \|/);
     assert.match(prBody, /commit them as `reader-order.pdf` and `print-ready.pdf`/);
@@ -100,12 +105,38 @@ describe('process-new-zine-issue', () => {
     await fs.rm(result.tmp, { recursive: true, force: true });
   });
 
+  test('rejects invalid additional file URLs and accepts comma-separated HTTP(S) URLs', async () => {
+    let result = await run(body({
+      title: 'Intake Test Zine Invalid Additional Files',
+      additionalFiles: 'https://example.org/worksheet.pdf, ftp://example.org/source.zip, not a url',
+    }), { number: 787 });
+    assert.equal(result.outputs.valid, 'false');
+    let comment = await fs.readFile(result.outputs.validation_comment_path, 'utf8');
+    assert.match(comment, /Additional files/);
+    assert.match(comment, /ftp:\/\/example\.org\/source\.zip, not a url/);
+    await fs.rm(result.tmp, { recursive: true, force: true });
+
+    const slug = 'intake-test-zine-additional-files';
+    created.add(slug);
+    result = await run(body({
+      title: 'Intake Test Zine Additional Files',
+      additionalFiles: 'http://example.org/worksheet.pdf, https://example.org/source.zip',
+    }), { number: 788 });
+    assert.equal(result.outputs.valid, 'true');
+    const submission = JSON.parse(await fs.readFile(path.join(DRAFTS, slug, 'submission.json'), 'utf8'));
+    assert.deepEqual(submission.additional_files, [
+      'http://example.org/worksheet.pdf',
+      'https://example.org/source.zip',
+    ]);
+    await fs.rm(result.tmp, { recursive: true, force: true });
+  });
+
   test('reports missing fields, bad links, and unchecked consents in one actionable comment', async () => {
     const { tmp, outputs } = await run(body({ title: '', readerUrl: 'ftp://example.org/file.pdf', printUrl: '', license: false, links: false }), { number: 782 });
     assert.equal(outputs.valid, 'false');
     const comment = await fs.readFile(outputs.validation_comment_path, 'utf8');
     assert.match(comment, /Title/); assert.match(comment, /Reader-order PDF URL/); assert.match(comment, /Print-ready PDF URL/);
-    assert.match(comment, /License consent/); assert.match(comment, /Public, stable PDF links/);
+    assert.match(comment, /License consent/); assert.match(comment, /Public and stable links/);
     await fs.rm(tmp, { recursive: true, force: true });
   });
 

@@ -31,7 +31,9 @@ export function makeZinePrBody({ issueNumber, title, submitterLogin, submission 
   const submittedBy = submitterLogin ? `@${submitterLogin}` : 'the submitter';
   const optional = [
     ['Tags', submission.tags?.join(', ')],
+    ['Language(s)', submission.languages?.join(', ')],
     ['Creator URL', submission.created_by_url],
+    ['Additional files', submission.additional_files?.join(', ')],
     ['Activity type', submission.activity_type],
     ['Zine format', submission.zine_format],
     ['Duration', submission.duration],
@@ -59,7 +61,7 @@ export function makeZinePrBody({ issueNumber, title, submitterLogin, submission 
     '',
     '### Reviewer promotion checklist',
     '',
-    '- [ ] Verify both stable source links and review both PDFs, including reader-order accessibility.',
+    '- [ ] Verify both stable PDF source links and any additional file links; review both PDFs, including reader-order accessibility.',
     '- [ ] Download and commit them as `reader-order.pdf` and `print-ready.pdf`.',
     '- [ ] Convert `submission.json` to published `metadata.json`, with downloads labelled `Reader-order PDF` and `Print-ready PDF` and each local file’s human-readable size.',
     '- [ ] Add `order: max(existing order) + 1` to `index.md` and move the folder into `src/content/zines/`.',
