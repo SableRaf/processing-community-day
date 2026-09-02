@@ -14,9 +14,12 @@
     "src": "cover.png",
     "alt": "Loops with Shapes zine cover"
   },
-  "pdfs": [
-    { "file": "guide-small.pdf", "label": "Read on screen", "file_size": "96 B" },
-    { "file": "guide-print.pdf", "label": "Print and fold", "file_size": "96 B" }
+  "downloads": [
+    { "file": "guide-small.pdf", "file_size": "96 B", "role": "reader-order" },
+    { "file": "guide-print.pdf", "file_size": "96 B", "role": "print-ready" },
+    { "file": "cover.png", "file_size": "425.2 kB" },
+    { "file": "cover.jpeg", "file_size": "245.4 kB" },
+    { "file": "metadata.json", "file_size": "20 B" }
   ],
   "license": "CC BY-SA 4.0",
   "source_url": "https://discourse.processing.org/t/activity-guide-integration-test/1"

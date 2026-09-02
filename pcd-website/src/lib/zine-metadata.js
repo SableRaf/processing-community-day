@@ -17,6 +17,7 @@ export const zineMetadataSchema = z.object({
   title: z.string().trim().min(1),
   topic: z.string().trim().min(1),
   tags: z.array(z.string().trim().min(1)).min(1).optional(),
+  languages: z.array(z.string().trim().min(1)).min(1).optional(),
   created_by: z.string().trim().min(1),
   created_by_url: z.string().refine(isHttpUrl, 'must be an http(s) URL').optional(),
   attribution: z.string().trim().min(1).optional(),
@@ -29,19 +30,19 @@ export const zineMetadataSchema = z.object({
     src: z.string().regex(/\.(png|jpg|jpeg|webp)$/, 'must be a lowercase .png/.jpg/.jpeg/.webp'),
     alt: z.string().trim().min(1),
   }).strict().optional(),
-  pdfs: z.array(z.union([
+  downloads: z.array(z.union([
     z.object({
-      file: z.string().regex(/\.pdf$/, 'must be a lowercase .pdf'),
-      label: z.string().trim().min(1),
+      file: z.string().regex(/^[^/\\\\]+$/, 'must be a filename without a path'),
       file_size: z.string().trim().min(1),
+      role: z.enum(['reader-order', 'print-ready']).optional(),
     }).strict(),
     z.object({
       url: z.string().refine(isHttpUrl, 'must be an http(s) URL'),
-      label: z.string().trim().min(1),
-      filename: z.string().regex(/\.pdf$/, 'must be a lowercase .pdf'),
+      filename: z.string().regex(/^[^/\\\\]+$/, 'must be a filename without a path'),
       file_size: z.string().trim().min(1),
+      role: z.enum(['reader-order', 'print-ready']).optional(),
     }).strict(),
-  ])).min(1, 'at least one PDF is required'),
+  ])).min(1, 'at least one download is required'),
   license: z.literal('CC BY-SA 4.0').optional(),
   source_url: z.string().refine(isHttpUrl, 'must be an http(s) URL').optional(),
 }).strict();
@@ -85,16 +86,20 @@ export function assertUniqueIds(zines) {
   }
 }
 
-export function resolveZineAssets(slug, metadata, availableFiles) {
-  const available = new Set(availableFiles);
-  const localPdfs = metadata.pdfs.flatMap((pdf) => 'file' in pdf ? [pdf.file] : []);
-  const required = [...(metadata.cover ? [metadata.cover.src] : []), ...localPdfs];
-  const missing = required.filter((file) => !available.has(file));
+export function resolveZineAssets(slug, metadata, availableAssets) {
+  const availableCovers = new Set(availableAssets.covers);
+  const availableDownloads = new Set(availableAssets.downloads);
+  const localDownloads = metadata.downloads.flatMap((download) => 'file' in download ? [download.file] : []);
+  const missing = [
+    ...(metadata.cover && !availableCovers.has(metadata.cover.src) ? [`cover: ${metadata.cover.src}`] : []),
+    ...localDownloads.filter((file) => !availableDownloads.has(file)).map((file) => `download: ${file}`),
+  ];
   if (missing.length) {
     throw new Error(
       `Zine "${slug}" references missing asset(s): ${missing.join(', ')}. ` +
-      `Available files in src/content/zines/${slug}/: ${availableFiles.join(', ') || '(none)'}.`,
+      `Available covers: ${availableAssets.covers.join(', ') || '(none)'}; ` +
+      `available downloads: ${availableAssets.downloads.join(', ') || '(none)'}.`,
     );
   }
-  return { cover: metadata.cover?.src, pdfs: localPdfs };
+  return { cover: metadata.cover?.src, downloads: localDownloads };
 }

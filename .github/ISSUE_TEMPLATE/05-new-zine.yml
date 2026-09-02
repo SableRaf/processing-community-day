@@ -67,7 +67,7 @@ body:
     id: reader_order_pdf
     attributes:
       label: Reader-order PDF
-      description: Upload a PDF with sequentially ordered pages for reading on a screen. Paste, drop, or click the button below to attach the file.
+      description: Upload one PDF with sequentially ordered pages for reading on a screen. Attach the file directly here; external links are not accepted.
       placeholder: Attach one PDF here.
     validations:
       required: true
@@ -75,15 +75,21 @@ body:
     id: print_ready_pdf
     attributes:
       label: Print-ready PDF
-      description: Upload a PDF with pages arranged for printing and folding into a booklet. Paste, drop, or click the button below to attach the file.
+      description: Upload one PDF with pages arranged for printing and folding into a booklet. Attach the file directly here; external links are not accepted.
       placeholder: Attach one PDF here.
     validations:
       required: true
   - type: textarea
+    id: cover_image
+    attributes:
+      label: Cover image
+      description: Optional. Attach one PNG, JPG/JPEG, or WebP cover image (10 MB maximum). The zine title is used as its alt text.
+      placeholder: Attach one cover image here.
+  - type: textarea
     id: additional_files
     attributes:
       label: Additional files
-      description: Optional. One file per line. Other formats, resources, or source files. They will be downloadable from the zine page.
+      description: Optional. Attach up to eight extra PDF, ZIP, PNG, JPG/JPEG, WebP, TXT, MD, CSV, or JSON files directly here (seven when also attaching a cover). Files are downloads, not covers. Limits: 25 MB each (10 MB for images), 50 MB total, and 10 files including cover and PDFs.
       placeholder: Attach any additional files here.
   - type: input
     id: activity_type

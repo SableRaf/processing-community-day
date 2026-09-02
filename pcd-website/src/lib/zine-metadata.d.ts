@@ -1,20 +1,20 @@
 export type ZineLicense = 'CC BY-SA 4.0';
 export declare const LICENSE_URLS: Record<ZineLicense, string>;
 
-export type ZinePdf =
-  | { file: string; label: string; file_size: string }
-  | { url: string; label: string; filename: string; file_size: string };
+export type ZineDownload =
+  | { file: string; file_size: string; role?: 'reader-order' | 'print-ready' }
+  | { url: string; filename: string; file_size: string; role?: 'reader-order' | 'print-ready' };
 export interface ZineCover {
   src: string;
   alt: string;
 }
 export interface ZineMetadata {
   id: string; title: string; topic: string;
-  tags?: string[];
+  tags?: string[]; languages?: string[];
   created_by: string; created_by_url?: string; attribution?: string;
   activity_type?: string; zine_format?: string;
   duration?: string; materials?: string;
-  summary: string; cover?: ZineCover; pdfs: ZinePdf[];
+  summary: string; cover?: ZineCover; downloads: ZineDownload[];
   license?: ZineLicense; source_url?: string;
 }
 
@@ -25,5 +25,6 @@ export declare function assertIdentity(ids: {
 }): void;
 export declare function assertUniqueIds(zines: ZineMetadata[]): void;
 export declare function resolveZineAssets(
-  slug: string, metadata: ZineMetadata, availableFiles: string[],
-): { cover: string | undefined; pdfs: string[] };
+  slug: string, metadata: ZineMetadata,
+  availableAssets: { covers: string[]; downloads: string[] },
+): { cover: string | undefined; downloads: string[] };

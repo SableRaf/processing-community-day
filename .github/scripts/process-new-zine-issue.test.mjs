@@ -1,228 +1,298 @@
-import { test, describe, after } from 'node:test';
+import { afterEach, describe, test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
-import path from 'node:path';
 import os from 'node:os';
+import path from 'node:path';
 import { execFile } from 'node:child_process';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { promisify } from 'node:util';
+import {
+  allowedRedirectHost, fetchAttachment, formatFileSize, hasValidContent, isGitHubAttachmentUrl,
+  normaliseFilename, parseSubmittedAttachments, validateAttachmentSelection, validateDownloadedFiles,
+} from './zine-intake-helpers.mjs';
 
 const execFileAsync = promisify(execFile);
-const SCRIPT = new URL('./process-new-zine-issue.mjs', import.meta.url).pathname;
-const ROOT = path.resolve(path.dirname(SCRIPT), '../..');
-const DRAFTS = path.join(ROOT, 'pcd-website/src/content/zines-drafts');
-const PUBLISHED = path.join(ROOT, 'pcd-website/src/content/zines');
-const created = new Set();
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
+const SCRIPT = path.join(ROOT, '.github/scripts/process-new-zine-issue.mjs');
+const WORKFLOW = path.join(ROOT, '.github/workflows/new-zine-intake.yml');
+const temporaryRoots = new Set();
 
-function attachment(filename, url) {
-  return url ? `[${filename}](${url})` : '';
-}
+const attachment = (name, url = `https://github.com/user-attachments/files/1/${encodeURIComponent(name)}`) => `[${name}](${url})`;
+const bytes = (...values) => new Uint8Array(values);
+const git = (cwd, ...args) => execFileAsync('git', args, { cwd });
 
-function body({ title = 'Intake Test Zine 781', tags = '', languages = '', creatorUrl = '', readerUrl = 'https://github.com/user-attachments/files/10000001/reader.pdf', printUrl = 'https://github.com/user-attachments/files/10000002/print.pdf', additionalFiles = '', license = true, optional = false } = {}) {
+function issueBody({
+  title = 'Publication Ready Zine', reader = attachment('Reader.PDF'), print = attachment('Print.PDF'),
+  cover = '', additional = '', maintainerNotes = '',
+} = {}) {
   return [
-    '### Title', title, '', '### Topic', 'Creative coding', '', '### Creator(s)', 'Test Creator', '',
-    '### Tags', tags || (optional ? 'beginner, creative coding, beginner' : '_No response_'), '',
-    '### Language(s)', languages || (optional ? 'English, Spanish, English' : '_No response_'), '',
-    '### Creator URL', creatorUrl || '_No response_', '',
-    '### Short summary', 'A concise test summary.', '', '### Full description', 'A full **test** description.', '',
-    '### Reader-order PDF', attachment('Reader order.pdf', readerUrl), '', '### Print-ready PDF', attachment('Print ready.pdf', printUrl), '',
-    '### Additional files', additionalFiles || (optional ? [
-      attachment('worksheet.pdf', 'https://github.com/user-attachments/files/10000003/worksheet.pdf'),
-      attachment('source files.zip', 'https://github.com/user-attachments/files/10000004/source.files.zip'),
-      attachment('worksheet.pdf', 'https://github.com/user-attachments/files/10000003/worksheet.pdf'),
-    ].join('\n') : '_No response_'), '',
-    '### Activity type', optional ? 'Workshop' : '_No response_', '', '### Zine format', optional ? 'Single-sheet folded zine' : '_No response_', '',
-    '### Duration', optional ? '90 minutes' : '_No response_', '',
-    '### Materials', optional ? 'Paper and pens' : '_No response_', '', '### Preferred attribution', optional ? 'Test Creator, CC BY-SA 4.0' : '_No response_', '',
-    '### Maintainer notes', optional ? 'Public maintainer note.' : '_No response_', '',
-    '### License consent', license ? '- [x] I own or have permission to license this material under CC BY-SA 4.0.' : '- [ ] I own or have permission to license this material under CC BY-SA 4.0.',
-  ].join('\n');
+    '### Title', title,
+    '### Topic', 'Creative coding',
+    '### Tags', 'beginner, p5.js',
+    '### Language(s)', 'English, Spanish',
+    '### Creator(s)', 'Guide Author',
+    '### Creator URL', 'https://example.com/author',
+    '### Short summary', 'A compact guide.',
+    '### Full description', 'Make something together.',
+    '### Reader-order PDF', reader,
+    '### Print-ready PDF', print,
+    '### Cover image', cover,
+    '### Additional files', additional,
+    '### Activity type', 'Workshop',
+    '### Zine format', 'Single-sheet folded zine',
+    '### Duration of the activity', '45 minutes',
+    '### Materials', 'Paper and markers',
+    '### Preferred attribution', 'Guide Author, CC BY-SA 4.0',
+    '### Maintainer notes', maintainerNotes,
+    '### License consent', '- [x] I own or have permission to license this material under CC BY-SA 4.0.',
+  ].join('\n\n');
 }
 
-async function run(issueBody, { number = 781, login = 'zine-tester' } = {}) {
-  const tmp = await fs.mkdtemp(path.join(os.tmpdir(), 'pnzi-test-'));
-  const eventPath = path.join(tmp, 'event.json');
-  const outputPath = path.join(tmp, 'output.txt');
-  await fs.writeFile(eventPath, JSON.stringify({ repository: { full_name: 'processing/processing-community-day' }, issue: { number, body: issueBody, html_url: `https://github.com/processing/processing-community-day/issues/${number}`, user: { login } } }));
+function parseOutputs(value) {
+  return Object.fromEntries(value.trim().split('\n').filter(Boolean).map((line) => {
+    const separator = line.indexOf('=');
+    return [line.slice(0, separator), line.slice(separator + 1)];
+  }));
+}
+
+async function runProcessor(body, { number = 801, publishedOrders = [], env = {} } = {}) {
+  const workspace = await fs.mkdtemp(path.join(os.tmpdir(), 'pcd-zine-intake-'));
+  temporaryRoots.add(workspace);
+  const zines = path.join(workspace, 'pcd-website/src/content/zines');
+  const runnerTemp = path.join(workspace, 'runner-temp');
+  await fs.mkdir(zines, { recursive: true });
+  await fs.mkdir(runnerTemp, { recursive: true });
+  for (const [index, order] of publishedOrders.entries()) {
+    const directory = path.join(zines, `existing-${index}`);
+    await fs.mkdir(directory, { recursive: true });
+    await fs.writeFile(path.join(directory, 'index.md'), `---\nid: "existing-${index}"\norder: ${order}\n---\n`);
+  }
+
+  const eventPath = path.join(workspace, 'event.json');
+  const outputPath = path.join(workspace, 'output.txt');
+  const fetchMockPath = path.join(workspace, 'mock-fetch.mjs');
+  await fs.writeFile(eventPath, JSON.stringify({
+    issue: { number, body, html_url: `https://github.com/processing/processing-community-day/issues/${number}`, user: { login: 'submitter' } },
+    repository: { full_name: 'processing/processing-community-day' },
+  }));
   await fs.writeFile(outputPath, '');
-  let exitCode = 0;
-  try { await execFileAsync(process.execPath, [SCRIPT], { cwd: ROOT, env: { ...process.env, GITHUB_EVENT_PATH: eventPath, GITHUB_OUTPUT: outputPath, RUNNER_TEMP: tmp } }); }
-  catch (error) { exitCode = error.code ?? 1; }
-  const raw = await fs.readFile(outputPath, 'utf8');
-  const outputs = Object.fromEntries(raw.trim().split('\n').filter(Boolean).map((line) => [line.slice(0, line.indexOf('=')), line.slice(line.indexOf('=') + 1)]));
-  return { tmp, outputs, exitCode };
+  await fs.writeFile(fetchMockPath, `
+    const encoder = new TextEncoder();
+    globalThis.fetch = async (input) => {
+      const filename = decodeURIComponent(new URL(input).pathname.split('/').pop()).toLowerCase();
+      let body;
+      if (filename.endsWith('.pdf')) body = encoder.encode('%PDF-1.7');
+      else if (filename.endsWith('.zip')) body = new Uint8Array([0x50, 0x4b, 0x03, 0x04]);
+      else if (filename.endsWith('.png')) body = new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+      else if (/\\.jpe?g$/.test(filename)) body = new Uint8Array([0xff, 0xd8, 0xff]);
+      else if (filename.endsWith('.webp')) body = encoder.encode('RIFFxxxxWEBP');
+      else if (filename.endsWith('.json')) body = encoder.encode('{"fixture":true}');
+      else body = encoder.encode('fixture text');
+      return new Response(body, { status: 200 });
+    };
+  `);
+
+  await execFileAsync(process.execPath, ['--import', pathToFileURL(fetchMockPath).href, SCRIPT], {
+    cwd: workspace,
+    env: {
+      ...process.env,
+      GITHUB_EVENT_PATH: eventPath,
+      GITHUB_OUTPUT: outputPath,
+      RUNNER_TEMP: runnerTemp,
+      ZINE_RESERVED_SLUGS: '',
+      ZINE_OPEN_PR_ORDERS: '',
+      ZINE_CURRENT_SLUG: '',
+      ZINE_CURRENT_ORDER: '',
+      ...env,
+    },
+  });
+  return { workspace, zines, outputs: parseOutputs(await fs.readFile(outputPath, 'utf8')) };
 }
 
-after(async () => {
-  await Promise.all([...created].map((slug) => fs.rm(path.join(DRAFTS, slug), { recursive: true, force: true })));
+afterEach(async () => {
+  await Promise.all([...temporaryRoots].map((directory) => fs.rm(directory, { recursive: true, force: true })));
+  temporaryRoots.clear();
+});
+
+describe('new-zine attachment helpers', () => {
+  test('accepts only direct GitHub attachments and normalizes safe filenames', () => {
+    assert.equal(isGitHubAttachmentUrl('https://github.com/user-attachments/files/1/a.pdf'), true);
+    assert.equal(isGitHubAttachmentUrl('https://example.com/a.pdf'), false);
+    const uploaded = '[My Guide.PDF](https://github.com/user-attachments/files/1/my-guide.pdf)';
+    assert.deepEqual(parseSubmittedAttachments(`${uploaded}\n${uploaded}`), { attachments: [{ filename: 'My Guide.PDF', url: 'https://github.com/user-attachments/files/1/my-guide.pdf' }], invalidEntries: [] });
+    assert.equal(normaliseFilename('My Guide.PDF'), 'My Guide.pdf');
+    assert.equal(normaliseFilename('../secret.pdf'), null);
+    assert.equal(normaliseFilename('metadata.json'), 'metadata.json');
+    assert.equal(normaliseFilename('index.md'), 'index.md');
+    assert.equal(normaliseFilename('readme.md'), 'readme.md');
+    assert.equal(normaliseFilename('nul.txt'), null);
+    assert.equal(normaliseFilename('COM9.pdf'), null);
+    assert.equal(normaliseFilename('lpt10.txt'), 'lpt10.txt');
+    assert.equal(normaliseFilename('bad\u0000.pdf'), null);
+  });
+
+  test('scopes collisions to storage namespaces and enforces formats and file count', () => {
+    const files = [
+      { filename: 'cover.PNG', field: 'Cover image', kind: 'cover' },
+      { filename: 'cover.png', field: 'Additional files', kind: 'download' },
+      { filename: 'COVER.PNG', field: 'Additional files', kind: 'download' },
+      ...Array.from({ length: 8 }, (_, index) => ({ filename: `file-${index}.exe`, field: 'Additional files', kind: 'download' })),
+    ];
+    const errors = validateAttachmentSelection(files);
+    assert.equal(errors.filter((error) => /unique/.test(error.message)).length, 1);
+    assert.match(errors.map((error) => error.message).join(' '), /no more than 10/);
+    assert.match(errors.map((error) => error.message).join(' '), /Supported downloads/);
+  });
+
+  test('checks binary signatures and UTF-8/JSON content independently of MIME', () => {
+    assert.equal(hasValidContent('guide.pdf', new TextEncoder().encode('%PDF-1.7')), true);
+    assert.equal(hasValidContent('archive.zip', bytes(0x50, 0x4b, 0x03, 0x04)), true);
+    assert.equal(hasValidContent('cover.png', bytes(0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a)), true);
+    assert.equal(hasValidContent('cover.jpg', bytes(0xff, 0xd8, 0xff)), true);
+    assert.equal(hasValidContent('cover.jpeg', bytes(0xff, 0xd8, 0xff)), true);
+    assert.equal(hasValidContent('cover.webp', new TextEncoder().encode('RIFFxxxxWEBP')), true);
+    assert.equal(hasValidContent('notes.md', new TextEncoder().encode('hello')), true);
+    assert.equal(hasValidContent('table.csv', new TextEncoder().encode('a,b')), true);
+    assert.equal(hasValidContent('data.json', new TextEncoder().encode('{"ok":true}')), true);
+    assert.equal(hasValidContent('data.json', new TextEncoder().encode('{bad')), false);
+    assert.equal(hasValidContent('notes.txt', bytes(0x68, 0x00)), false);
+    assert.equal(hasValidContent('notes.txt', bytes(0xc3, 0x28)), false);
+  });
+
+  test('uses decimal file sizes without crossing a rounded unit boundary', () => {
+    assert.equal(formatFileSize(311_000), '311 kB');
+    assert.equal(formatFileSize(999_949), '999.9 kB');
+    assert.equal(formatFileSize(999_950), '1 MB');
+    assert.equal(formatFileSize(1_200_000), '1.2 MB');
+    const tooLargeCover = { filename: 'cover.png', field: 'Cover image', kind: 'cover', bytes: new Uint8Array(10_000_001) };
+    assert.match(validateDownloadedFiles([tooLargeCover]).map((error) => error.message).join(' '), /Resize or compress the cover/);
+  });
+
+  test('follows only approved HTTPS redirects and stops after five hops', async () => {
+    for (const host of ['objects.githubusercontent.com', 'github-cloud.s3.amazonaws.com', 'github-production-user-asset-abc.s3.amazonaws.com', 'github-production-repository-file-123.s3.amazonaws.com']) assert.equal(allowedRedirectHost(host), true);
+    assert.equal(allowedRedirectHost('evil.example'), false);
+    let calls = 0;
+    const fiveRedirects = async () => {
+      calls += 1;
+      return calls <= 5
+        ? new Response(null, { status: 302, headers: { location: `https://objects.githubusercontent.com/file?hop=${calls}` } })
+        : new Response(bytes(0x25, 0x50, 0x44, 0x46, 0x2d), { status: 200 });
+    };
+    assert.deepEqual(await fetchAttachment('https://github.com/user-attachments/files/1/guide.pdf', fiveRedirects), bytes(0x25, 0x50, 0x44, 0x46, 0x2d));
+    assert.equal(calls, 6);
+    await assert.rejects(fetchAttachment('https://github.com/user-attachments/files/1/guide.pdf', async () => new Response(null, { status: 302, headers: { location: 'https://objects.githubusercontent.com/file' } })), /more than five times/);
+    await assert.rejects(fetchAttachment('https://example.com/guide.pdf', fiveRedirects), /direct GitHub file attachments/);
+    await assert.rejects(fetchAttachment('https://github.com/user-attachments/files/1/guide.pdf', async () => new Response(null, { status: 302, headers: { location: 'https://evil.example/file' } })), /unapproved host/);
+  });
 });
 
 describe('process-new-zine-issue', () => {
-  test('stages valid submissions with exact source roles, provenance, optional metadata, and markdown', async () => {
-    const title = 'Intake Test Zine 781';
-    const slug = 'intake-test-zine-781';
-    created.add(slug);
-    const { tmp, outputs } = await run(body({ title, optional: true }));
-    assert.equal(outputs.valid, 'true');
-    assert.equal(outputs.branch, 'automation/new-zine-781');
-    const submission = JSON.parse(await fs.readFile(path.join(DRAFTS, slug, 'submission.json'), 'utf8'));
-    assert.deepEqual(submission, {
-      id: slug, title, topic: 'Creative coding', tags: ['beginner', 'creative coding'], languages: ['English', 'Spanish'], created_by: 'Test Creator', summary: 'A concise test summary.',
-      source_pdfs: [{ role: 'reader-order', url: 'https://github.com/user-attachments/files/10000001/reader.pdf' }, { role: 'print-ready', url: 'https://github.com/user-attachments/files/10000002/print.pdf' }],
-      additional_files: ['https://github.com/user-attachments/files/10000003/worksheet.pdf', 'https://github.com/user-attachments/files/10000004/source.files.zip'],
-      license: 'CC BY-SA 4.0', source_issue_url: 'https://github.com/processing/processing-community-day/issues/781',
-      intake: { issue_number: 781, submitted_by_github: 'zine-tester', submitted_date: new Date().toISOString().slice(0, 10), maintainer_notes: 'Public maintainer note.' },
-      description: 'A full **test** description.', activity_type: 'Workshop', zine_format: 'Single-sheet folded zine',
-      duration: '90 minutes', materials: 'Paper and pens', attribution: 'Test Creator, CC BY-SA 4.0',
-    });
-    assert.equal(await fs.readFile(path.join(DRAFTS, slug, 'index.md'), 'utf8'), '---\nid: "intake-test-zine-781"\n---\n\nA full **test** description.\n');
-    const prBody = await fs.readFile(outputs.pr_body_path, 'utf8');
-    assert.match(prBody, /Reader-order PDF/);
-    assert.match(prBody, /\| Tags \| beginner, creative coding \|/);
-    assert.match(prBody, /\| Language\(s\) \| English, Spanish \|/);
-    assert.match(prBody, /\| Additional files \| https:\/\/github\.com\/user-attachments\/files\/10000003\/worksheet\.pdf, https:\/\/github\.com\/user-attachments\/files\/10000004\/source\.files\.zip \|/);
-    assert.match(prBody, /\| Activity type \| Workshop \|/);
-    assert.match(prBody, /\| Zine format \| Single-sheet folded zine \|/);
-    assert.match(prBody, /commit them as `reader-order.pdf` and `print-ready.pdf`/);
-    await fs.rm(tmp, { recursive: true, force: true });
-  });
+  test('writes publication-ready output, preserves namespaces, metadata, order, and maintainer notes', async () => {
+    const result = await runProcessor(issueBody({
+      cover: attachment('cover.JPEG', 'https://github.com/user-attachments/files/1/root-cover.jpeg'),
+      additional: [
+        attachment('cover.jpeg', 'https://github.com/user-attachments/files/2/download-cover.jpeg'),
+        attachment('metadata.json', 'https://github.com/user-attachments/files/3/metadata.json'),
+      ].join('\n'),
+      maintainerNotes: 'Check the fold before merging.',
+    }), { publishedOrders: [2, 4], env: { ZINE_OPEN_PR_ORDERS: '7,6' } });
 
-  test('edited issues overwrite their own staged inputs and retain the stable branch', async () => {
-    const slug = 'intake-test-zine-781';
-    const { tmp, outputs } = await run(body({ title: 'Intake Test Zine 781', readerUrl: 'https://github.com/user-attachments/files/10000005/updated-reader.pdf' }));
-    assert.equal(outputs.valid, 'true');
-    assert.equal(outputs.branch, 'automation/new-zine-781');
-    const submission = JSON.parse(await fs.readFile(path.join(DRAFTS, slug, 'submission.json'), 'utf8'));
-    assert.equal(submission.source_pdfs[0].url, 'https://github.com/user-attachments/files/10000005/updated-reader.pdf');
-    await fs.rm(tmp, { recursive: true, force: true });
-  });
-
-  test('keeps accepting raw URLs and former PDF URL headings on existing issues', async () => {
-    const title = 'Intake Test Zine Legacy URLs';
-    const slug = 'intake-test-zine-legacy-urls';
-    const readerUrl = 'https://example.org/legacy-reader(v2).pdf';
-    const readerInput = `${readerUrl}.`;
-    const printUrl = 'https://example.org/legacy-print.pdf';
-    const additionalFiles = 'https://example.org/worksheet.pdf, https://example.org/source(v2).zip;';
-    created.add(slug);
-    const legacyBody = body({ title, readerUrl: readerInput, printUrl, additionalFiles })
-      .replace('### Reader-order PDF', '### Reader-order PDF URL')
-      .replace('### Print-ready PDF', '### Print-ready PDF URL')
-      .replace(attachment('Reader order.pdf', readerInput), readerInput)
-      .replace(attachment('Print ready.pdf', printUrl), printUrl);
-    const { tmp, outputs } = await run(legacyBody, { number: 789 });
-    assert.equal(outputs.valid, 'true');
-    const submission = JSON.parse(await fs.readFile(path.join(DRAFTS, slug, 'submission.json'), 'utf8'));
-    assert.deepEqual(submission.source_pdfs, [
-      { role: 'reader-order', url: readerUrl },
-      { role: 'print-ready', url: printUrl },
-    ]);
-    assert.deepEqual(submission.additional_files, [
-      'https://example.org/worksheet.pdf',
-      'https://example.org/source(v2).zip',
-    ]);
-    await fs.rm(tmp, { recursive: true, force: true });
-  });
-
-  test('stages an optional creator URL and rejects an invalid one', async () => {
-    const slug = 'intake-test-zine-creator-url';
-    created.add(slug);
-    let result = await run(body({ title: 'Intake Test Zine Creator URL', creatorUrl: 'https://example.org/creator' }), { number: 785 });
     assert.equal(result.outputs.valid, 'true');
-    const submission = JSON.parse(await fs.readFile(path.join(DRAFTS, slug, 'submission.json'), 'utf8'));
-    assert.equal(submission.created_by_url, 'https://example.org/creator');
-    await fs.rm(result.tmp, { recursive: true, force: true });
+    assert.equal(result.outputs.branch, 'automation/new-zine-801');
+    const directory = path.join(result.zines, 'publication-ready-zine');
+    const metadata = JSON.parse(await fs.readFile(path.join(directory, 'metadata.json'), 'utf8'));
+    assert.deepEqual(metadata.downloads.map(({ file, role }) => [file, role]), [
+      ['Reader.pdf', 'reader-order'],
+      ['Print.pdf', 'print-ready'],
+      ['cover.jpeg', undefined],
+      ['metadata.json', undefined],
+    ]);
+    assert.deepEqual(metadata.cover, { src: 'cover.jpeg', alt: 'Publication Ready Zine' });
+    assert.deepEqual(metadata.tags, ['beginner', 'p5.js']);
+    assert.deepEqual(metadata.languages, ['English', 'Spanish']);
+    assert.equal(metadata.created_by_url, 'https://example.com/author');
+    assert.equal(metadata.activity_type, 'Workshop');
+    assert.equal(metadata.zine_format, 'Single-sheet folded zine');
+    assert.equal(metadata.duration, '45 minutes');
+    assert.equal(metadata.materials, 'Paper and markers');
+    assert.equal(metadata.attribution, 'Guide Author, CC BY-SA 4.0');
+    assert.equal(metadata.source_url, 'https://github.com/processing/processing-community-day/issues/801');
+    assert.match(await fs.readFile(path.join(directory, 'index.md'), 'utf8'), /^order: 8$/m);
+    for (const file of ['Reader.pdf', 'Print.pdf', 'cover.jpeg', 'metadata.json']) await fs.access(path.join(directory, 'downloads', file));
+    await fs.access(path.join(directory, 'cover.jpeg'));
+    assert.match(await fs.readFile(result.outputs.pr_body_path, 'utf8'), /### Maintainer notes\n\nCheck the fold before merging\./);
+  });
 
-    result = await run(body({ title: 'Intake Test Zine Invalid Creator URL', creatorUrl: 'ftp://example.org/creator' }), { number: 786 });
+  test('reuses a valid current order of zero', async () => {
+    const result = await runProcessor(issueBody({ title: 'Zero Order Zine' }), { env: { ZINE_CURRENT_ORDER: '0', ZINE_OPEN_PR_ORDERS: '9' } });
+    assert.equal(result.outputs.valid, 'true');
+    assert.match(await fs.readFile(path.join(result.zines, 'zero-order-zine/index.md'), 'utf8'), /^order: 0$/m);
+  });
+
+  test('rejects reserved and published slugs while allowing the current slug', async () => {
+    let result = await runProcessor(issueBody({ title: 'Reserved Zine' }), { env: { ZINE_RESERVED_SLUGS: 'reserved-zine' } });
+    assert.equal(result.outputs.valid, 'false');
+    assert.match(await fs.readFile(result.outputs.validation_comment_path, 'utf8'), /already staged by another open zine review PR/);
+
+    result = await runProcessor(issueBody({ title: 'Existing 0' }), { publishedOrders: [3] });
+    assert.equal(result.outputs.valid, 'false');
+
+    result = await runProcessor(issueBody({ title: 'Existing 0' }), { publishedOrders: [3], env: { ZINE_CURRENT_SLUG: 'existing-0', ZINE_CURRENT_ORDER: '3' } });
+    assert.equal(result.outputs.valid, 'true');
+  });
+
+  test('skips unrelated issue templates', async () => {
+    const result = await runProcessor('### Title\n\nNot a zine');
+    assert.equal(result.outputs.valid, 'skip');
+  });
+
+  test('reports an external attachment in its issue field with actionable guidance', async () => {
+    const result = await runProcessor(issueBody({ reader: '[Reader.pdf](https://example.com/reader.pdf)' }));
     assert.equal(result.outputs.valid, 'false');
     const comment = await fs.readFile(result.outputs.validation_comment_path, 'utf8');
-    assert.match(comment, /Creator URL/);
-    await fs.rm(result.tmp, { recursive: true, force: true });
-  });
-
-  test('rejects additional-file text without an upload and extracts multiple uploaded files', async () => {
-    let result = await run(body({
-      title: 'Intake Test Zine Invalid Additional Files',
-      additionalFiles: 'See my site at [https://example.com](https://example.com) for the assets.',
-    }), { number: 787 });
-    assert.equal(result.outputs.valid, 'false');
-    let comment = await fs.readFile(result.outputs.validation_comment_path, 'utf8');
-    assert.match(comment, /Additional files/);
-    assert.match(comment, /remove descriptions and unrelated links/);
-    await fs.rm(result.tmp, { recursive: true, force: true });
-
-    const slug = 'intake-test-zine-additional-files';
-    created.add(slug);
-    result = await run(body({
-      title: 'Intake Test Zine Additional Files',
-      additionalFiles: [
-        attachment('worksheet.pdf', 'https://github.com/user-attachments/files/10000006/worksheet.pdf'),
-        attachment('source.zip', 'https://github.com/user-attachments/files/10000007/source.zip'),
-      ].join('\n'),
-    }), { number: 788 });
-    assert.equal(result.outputs.valid, 'true');
-    const submission = JSON.parse(await fs.readFile(path.join(DRAFTS, slug, 'submission.json'), 'utf8'));
-    assert.deepEqual(submission.additional_files, [
-      'https://github.com/user-attachments/files/10000006/worksheet.pdf',
-      'https://github.com/user-attachments/files/10000007/source.zip',
-    ]);
-    await fs.rm(result.tmp, { recursive: true, force: true });
-  });
-
-  test('rejects descriptive text beside an otherwise valid PDF attachment with a clear message', async () => {
-    const readerUrl = 'https://github.com/user-attachments/files/10000009/reader.pdf';
-    const issueBody = body({ title: 'Intake Test Zine Mixed PDF Field', readerUrl })
-      .replace(attachment('Reader order.pdf', readerUrl), `${attachment('Reader order.pdf', readerUrl)}\nPreferred version for screens.`);
-    const { tmp, outputs } = await run(issueBody, { number: 790 });
-    assert.equal(outputs.valid, 'false');
-    const comment = await fs.readFile(outputs.validation_comment_path, 'utf8');
     assert.match(comment, /Reader-order PDF/);
-    assert.match(comment, /remove any descriptions or unrelated links/);
-    await fs.rm(tmp, { recursive: true, force: true });
+    assert.match(comment, /download the source file and attach it here/);
   });
 
-  test('reports missing fields, wrong file types, and unchecked license consent in one actionable comment', async () => {
-    const { tmp, outputs } = await run(body({ title: '', readerUrl: 'https://github.com/user-attachments/files/10000008/file.zip', printUrl: '', license: false }), { number: 782 });
-    assert.equal(outputs.valid, 'false');
-    const comment = await fs.readFile(outputs.validation_comment_path, 'utf8');
-    assert.match(comment, /Title/); assert.match(comment, /Reader-order PDF/); assert.match(comment, /Print-ready PDF/);
-    assert.match(comment, /attached file must be a PDF/); assert.match(comment, /License consent/);
-    await fs.rm(tmp, { recursive: true, force: true });
+  test('authoritative branch rebuilding drops an obsolete slug and renamed download', async () => {
+    const repository = await fs.mkdtemp(path.join(os.tmpdir(), 'pcd-zine-branch-'));
+    temporaryRoots.add(repository);
+    await git(repository, 'init');
+    await git(repository, 'config', 'user.name', 'Test Bot');
+    await git(repository, 'config', 'user.email', 'test@example.com');
+    await git(repository, 'config', 'commit.gpgsign', 'false');
+    await fs.writeFile(path.join(repository, 'README.md'), 'base\n');
+    await git(repository, 'add', 'README.md');
+    await git(repository, 'commit', '-m', 'base');
+    const defaultBranch = (await git(repository, 'branch', '--show-current')).stdout.trim();
+    await git(repository, 'switch', '-c', 'automation/new-zine-801');
+    const oldDownload = path.join(repository, 'pcd-website/src/content/zines/old-zine/downloads/old.pdf');
+    await fs.mkdir(path.dirname(oldDownload), { recursive: true });
+    await fs.writeFile(oldDownload, '%PDF-old');
+    await git(repository, 'add', 'pcd-website/src/content/zines');
+    await git(repository, 'commit', '-m', 'old generated zine');
+
+    await git(repository, 'switch', defaultBranch);
+    const newDownload = path.join(repository, 'pcd-website/src/content/zines/new-zine/downloads/new.pdf');
+    await fs.mkdir(path.dirname(newDownload), { recursive: true });
+    await fs.writeFile(newDownload, '%PDF-new');
+    await git(repository, 'switch', '-C', 'automation/new-zine-801');
+    await git(repository, 'add', 'pcd-website/src/content/zines');
+    await git(repository, 'commit', '-m', 'new generated zine');
+
+    const tree = (await git(repository, 'ls-tree', '-r', '--name-only', 'HEAD')).stdout;
+    assert.match(tree, /pcd-website\/src\/content\/zines\/new-zine\/downloads\/new\.pdf/);
+    assert.doesNotMatch(tree, /old-zine|old\.pdf/);
   });
 
-  test('rejects duplicate published and other-issue draft slugs, and skips unrelated templates', async () => {
-    const publishedSlug = 'intake-published-conflict';
-    await fs.mkdir(path.join(PUBLISHED, publishedSlug), { recursive: true });
-    try {
-      let result = await run(body({ title: 'Intake Published Conflict' }), { number: 783 });
-      assert.equal(result.outputs.valid, 'false');
-      await fs.rm(result.tmp, { recursive: true, force: true });
-    } finally { await fs.rm(path.join(PUBLISHED, publishedSlug), { recursive: true, force: true }); }
-    const draftSlug = 'intake-draft-conflict';
-    created.add(draftSlug);
-    await fs.mkdir(path.join(DRAFTS, draftSlug), { recursive: true });
-    await fs.writeFile(path.join(DRAFTS, draftSlug, 'submission.json'), JSON.stringify({ intake: { issue_number: 1 } }));
-    let result = await run(body({ title: 'Intake Draft Conflict' }), { number: 784 });
-    assert.equal(result.outputs.valid, 'false');
-    await fs.rm(result.tmp, { recursive: true, force: true });
-    result = await run('### Title\nNot a zine');
-    assert.equal(result.outputs.valid, 'skip');
-    await fs.rm(result.tmp, { recursive: true, force: true });
-  });
-
-  test('workflow keeps edited issues on one branch and upserts one marked status comment', async () => {
-    const workflow = await fs.readFile(path.join(ROOT, '.github/workflows/new-zine-intake.yml'), 'utf8');
-    const processor = await fs.readFile(SCRIPT, 'utf8');
-    const issueTemplate = await fs.readFile(path.join(ROOT, '.github/ISSUE_TEMPLATE/05-new-zine.yml'), 'utf8');
-    assert.match(workflow, /branch: \$\{\{ needs\.process-new-zine\.outputs\.branch \}\}/);
-    assert.match(processor, /automation\/new-zine-\$\{issueNumber\}/);
-    assert.match(processor, /ZINE_RESERVED_DRAFT_SLUGS/);
-    assert.match(workflow, /STATUS_COMMENT_MARKER: <!-- new-zine-intake-status -->/);
-    assert.match(workflow, /pulls\.listFiles/);
-    assert.match(workflow, /const existing = comments\.find/);
-    assert.match(workflow, /issues\.updateComment/);
-    assert.match(issueTemplate, /type: textarea\s+id: reader_order_pdf/);
-    assert.match(issueTemplate, /type: textarea\s+id: print_ready_pdf/);
-    assert.match(issueTemplate, /type: textarea\s+id: additional_files/);
-    assert.doesNotMatch(issueTemplate, /Public and stable links/);
+  test('workflow discovers other PR orders and transitions needs-changes labels', async () => {
+    const workflow = await fs.readFile(WORKFLOW, 'utf8');
+    assert.match(workflow, /pull\.head\.repo\?\.full_name === `\$\{owner\}\/\$\{repo\}`/);
+    assert.match(workflow, /else orders\.push\(orderMatch\[1\]\)/);
+    assert.match(workflow, /core\.setOutput\('current_pr_number'/);
+    assert.match(workflow, /name: 'needs changes'/);
+    assert.match(workflow, /issues\.removeLabel[\s\S]+name: 'needs review'/);
+    assert.match(workflow, /issues\.removeLabel[\s\S]+name: 'needs changes'/);
+    assert.match(workflow, /git switch -C "\$BRANCH"[\s\S]+git add pcd-website\/src\/content\/zines[\s\S]+git push --force-with-lease/);
   });
 });

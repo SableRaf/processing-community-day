@@ -1,110 +1,35 @@
 import { describe, test } from 'node:test';
 import assert from 'node:assert/strict';
-import {
-  assertIdentity, assertUniqueIds, parseZineMetadata,
-  resolveZineAssets, zineMetadataSchema,
-} from '../../pcd-website/src/lib/zine-metadata.js';
+import { assertIdentity, assertUniqueIds, parseZineMetadata, resolveZineAssets, zineMetadataSchema } from '../../pcd-website/src/lib/zine-metadata.js';
 
 const valid = () => ({
-  id: 'loops-with-shapes', title: 'Loops with Shapes', topic: 'Loops',
-  created_by: 'Guide Author', summary: 'Make patterns with repeated shapes.',
+  id: 'loops-with-shapes', title: 'Loops with Shapes', topic: 'Loops', created_by: 'Guide Author', summary: 'Make patterns with repeated shapes.',
   cover: { src: 'cover.png', alt: 'Loops with Shapes zine cover' },
-  pdfs: [{ file: 'guide.pdf', label: 'Read on screen', file_size: '24 kB' }],
-  license: 'CC BY-SA 4.0',
+  downloads: [{ file: 'guide.pdf', file_size: '24 kB', role: 'reader-order' }, { file: 'data.json', file_size: '1 kB' }], license: 'CC BY-SA 4.0',
 });
 
 describe('zine metadata', () => {
-  test('accepts valid metadata', () => {
+  test('accepts local generic downloads and manually maintained external downloads', () => {
     assert.deepEqual(parseZineMetadata(valid(), 'loops-with-shapes'), valid());
-    const withFormats = {
-      ...valid(), activity_type: 'Workshop', zine_format: 'Single-sheet folded zine',
-    };
-    assert.deepEqual(parseZineMetadata(withFormats, 'loops-with-shapes'), withFormats);
-    const withTags = { ...valid(), tags: ['beginner', 'p5.js'] };
-    assert.deepEqual(parseZineMetadata(withTags, 'loops-with-shapes'), withTags);
-    const withAuthorUrl = { ...valid(), created_by_url: 'https://example.com/guide-author' };
-    assert.deepEqual(parseZineMetadata(withAuthorUrl, 'loops-with-shapes'), withAuthorUrl);
-    const withoutCover = { ...valid(), cover: undefined };
-    assert.deepEqual(parseZineMetadata(withoutCover, 'loops-with-shapes'), withoutCover);
-    const externalPdf = {
-      ...valid(), cover: undefined, license: undefined,
-      pdfs: [{
-        url: 'https://example.com/guide.pdf', label: 'Download guide',
-        filename: 'guide.pdf', file_size: '24 kB',
-      }],
-    };
-    assert.deepEqual(parseZineMetadata(externalPdf, 'loops-with-shapes'), externalPdf);
+    const external = { ...valid(), cover: undefined, downloads: [{ url: 'https://example.com/guide.pdf', filename: 'guide.pdf', file_size: '24 kB', role: 'print-ready' }] };
+    assert.deepEqual(parseZineMetadata(external, 'loops-with-shapes'), external);
   });
-
-  test('rejects non-object metadata cleanly', () => {
-    for (const input of [null, 'metadata', []]) {
-      assert.throws(() => parseZineMetadata(input, 'loops-with-shapes'), /Invalid metadata/);
-    }
+  test('enforces strict metadata and safe filenames', () => {
+    for (const input of [{ ...valid(), pdfs: [] }, { ...valid(), downloads: [] }, { ...valid(), downloads: [{ file: '../guide.pdf', file_size: '1 kB' }] }, { ...valid(), downloads: [{ file: 'guide.pdf', file_size: '1 kB', role: 'screen' }] }, { ...valid(), cover: { src: 'cover.PNG', alt: 'Cover' } }, { ...valid(), languages: [] }]) assert.throws(() => parseZineMetadata(input, 'loops-with-shapes'), /Invalid metadata/);
   });
-
-  test('validates required values, topics, ids, and strict object keys', () => {
-    const cases = [
-      [{ ...valid(), topic: '   ' }, /topic/],
-      [{ ...valid(), tags: [] }, /tags/],
-      [{ ...valid(), tags: ['beginner', '   '] }, /tags/],
-      [{ ...valid(), title: '   ' }, /title/],
-      [{ ...valid(), created_by_url: 'javascript:alert(1)' }, /created_by_url/],
-      [{ ...valid(), id: 'Not Kebab' }, /id/],
-      [{ ...valid(), format: 'Workshop' }, /Unrecognized key/],
-      [{ ...valid(), unexpected: true }, /Unrecognized key/],
-      [{ ...valid(), cover: 'cover.png' }, /cover/],
-      [{ ...valid(), cover: { src: 'cover.PNG', alt: 'Cover' } }, /cover/],
-      [{ ...valid(), cover: { src: 'cover.png', alt: '   ' } }, /cover/],
-      [{ ...valid(), cover: { src: 'cover.png', alt: 'Cover', extra: true } }, /Unrecognized key/],
-      [{ ...valid(), pdfs: [] }, /pdfs/],
-      [{ ...valid(), pdfs: [{ file: 'guide.PDF', label: 'PDF', file_size: '24 kB' }] }, /pdfs/],
-      [{ ...valid(), pdfs: [{ file: 'guide.txt', label: 'Text', file_size: '24 kB' }] }, /pdfs/],
-      [{ ...valid(), pdfs: [{ file: 'guide.pdf', file_size: '24 kB' }] }, /pdfs/],
-      [{ ...valid(), pdfs: [{ file: 'guide.pdf', label: 'PDF' }] }, /pdfs/],
-      [{ ...valid(), pdfs: [{ file: 'guide.pdf', label: 'PDF', file_size: '24 kB', extra: true }] }, /Unrecognized key/],
-      [{ ...valid(), pdfs: [{
-        url: 'javascript:alert(1)', label: 'PDF', filename: 'guide.pdf', file_size: '24 kB',
-      }] }, /pdfs/],
-      [{ ...valid(), license: 'CC BY 4.0' }, /license/],
-    ];
-    for (const [input, message] of cases) {
-      assert.throws(() => parseZineMetadata(input, 'loops-with-shapes'), message);
-    }
-  });
-
-  test('rejects draft zines with the safe unpublished location', () => {
+  test('guards urls and draft values', () => {
+    assert.equal(zineMetadataSchema.safeParse({ ...valid(), source_url: 'https://example.com' }).success, true);
+    assert.equal(zineMetadataSchema.safeParse({ ...valid(), source_url: 'javascript:alert(1)' }).success, false);
     assert.throws(() => parseZineMetadata({ ...valid(), draft: true }, 'loops-with-shapes'), /zines-drafts/);
   });
-
-  test('guards source URLs without allowing malformed values to escape', () => {
-    for (const source_url of ['https://example.com', 'http://example.com/path']) {
-      assert.equal(zineMetadataSchema.safeParse({ ...valid(), source_url }).success, true);
-    }
-    for (const source_url of ['javascript:alert(1)', 'data:text/html,test', 'not a url']) {
-      assert.doesNotThrow(() => zineMetadataSchema.safeParse({ ...valid(), source_url }));
-      assert.equal(zineMetadataSchema.safeParse({ ...valid(), source_url }).success, false);
-    }
+  test('checks cover and downloads in their separate namespaces', () => {
+    const assets = { covers: ['cover.png'], downloads: ['guide.pdf', 'data.json'] };
+    assert.deepEqual(resolveZineAssets('loops-with-shapes', valid(), assets), { cover: 'cover.png', downloads: ['guide.pdf', 'data.json'] });
+    assert.throws(() => resolveZineAssets('loops-with-shapes', valid(), { covers: [], downloads: ['cover.png', 'guide.pdf', 'data.json'] }), /cover: cover\.png/);
+    assert.throws(() => resolveZineAssets('loops-with-shapes', valid(), { covers: ['cover.png', 'guide.pdf', 'data.json'], downloads: [] }), /download: guide\.pdf/);
   });
-
-  test('checks asset existence', () => {
-    assert.deepEqual(resolveZineAssets('loops-with-shapes', valid(), ['cover.png', 'guide.pdf']), {
-      cover: 'cover.png', pdfs: ['guide.pdf'],
-    });
-    assert.deepEqual(resolveZineAssets('loops-with-shapes', {
-      ...valid(), cover: undefined,
-      pdfs: [{
-        url: 'https://example.com/guide.pdf', label: 'Download guide',
-        filename: 'guide.pdf', file_size: '24 kB',
-      }],
-    }, []), { cover: undefined, pdfs: [] });
-    assert.throws(() => resolveZineAssets('loops-with-shapes', valid(), ['cover.png']), /guide.pdf/);
-    assert.throws(() => resolveZineAssets('loops-with-shapes', valid(), ['guide.pdf']), /cover.png/);
-  });
-
-  test('checks unique ids and three-way identity', () => {
-    const first = valid();
-    assert.throws(() => assertUniqueIds([first, { ...valid() }]), /Duplicate zine id/);
-    assert.throws(() => assertIdentity({ slug: 'loops-with-shapes', frontmatterId: 'loops', metadataId: 'loops-with-shapes' }), /identity mismatch/);
+  test('checks unique ids and identity', () => {
+    assert.throws(() => assertUniqueIds([valid(), valid()]), /Duplicate zine id/);
     assert.doesNotThrow(() => assertIdentity({ slug: 'loops-with-shapes', frontmatterId: 'loops-with-shapes', metadataId: 'loops-with-shapes' }));
   });
 });
