@@ -67,7 +67,7 @@ test('a populated zine collection emits linked assets and renders entries in fro
     assert.doesNotMatch(page, /<dt[^>]*>Tags<\/dt>/);
     assert.doesNotMatch(page, /activity-guide__topics/);
 
-    for (const filename of ['guide-small.pdf', 'guide-print.pdf', 'cover.png', 'metadata.json']) {
+    for (const filename of ['guide-small.pdf', 'guide-print.pdf', 'cover.png', 'cover.jpeg', 'metadata.json']) {
       assert.ok(existsSync(emittedPath(hrefForFilename(page, filename))), `${filename} should resolve to an emitted download`);
     }
     assert.match(page, /download-list__size[^>]*>96 B</);

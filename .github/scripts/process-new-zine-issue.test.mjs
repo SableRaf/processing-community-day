@@ -149,6 +149,7 @@ describe('new-zine attachment helpers', () => {
     assert.equal(hasValidContent('archive.zip', bytes(0x50, 0x4b, 0x03, 0x04)), true);
     assert.equal(hasValidContent('cover.png', bytes(0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a)), true);
     assert.equal(hasValidContent('cover.jpg', bytes(0xff, 0xd8, 0xff)), true);
+    assert.equal(hasValidContent('cover.jpeg', bytes(0xff, 0xd8, 0xff)), true);
     assert.equal(hasValidContent('cover.webp', new TextEncoder().encode('RIFFxxxxWEBP')), true);
     assert.equal(hasValidContent('notes.md', new TextEncoder().encode('hello')), true);
     assert.equal(hasValidContent('table.csv', new TextEncoder().encode('a,b')), true);
@@ -188,9 +189,9 @@ describe('new-zine attachment helpers', () => {
 describe('process-new-zine-issue', () => {
   test('writes publication-ready output, preserves namespaces, metadata, order, and maintainer notes', async () => {
     const result = await runProcessor(issueBody({
-      cover: attachment('cover.PNG', 'https://github.com/user-attachments/files/1/root-cover.png'),
+      cover: attachment('cover.JPEG', 'https://github.com/user-attachments/files/1/root-cover.jpeg'),
       additional: [
-        attachment('cover.png', 'https://github.com/user-attachments/files/2/download-cover.png'),
+        attachment('cover.jpeg', 'https://github.com/user-attachments/files/2/download-cover.jpeg'),
         attachment('metadata.json', 'https://github.com/user-attachments/files/3/metadata.json'),
       ].join('\n'),
       maintainerNotes: 'Check the fold before merging.',
@@ -203,10 +204,10 @@ describe('process-new-zine-issue', () => {
     assert.deepEqual(metadata.downloads.map(({ file, role }) => [file, role]), [
       ['Reader.pdf', 'reader-order'],
       ['Print.pdf', 'print-ready'],
-      ['cover.png', undefined],
+      ['cover.jpeg', undefined],
       ['metadata.json', undefined],
     ]);
-    assert.deepEqual(metadata.cover, { src: 'cover.png', alt: 'Publication Ready Zine' });
+    assert.deepEqual(metadata.cover, { src: 'cover.jpeg', alt: 'Publication Ready Zine' });
     assert.deepEqual(metadata.tags, ['beginner', 'p5.js']);
     assert.deepEqual(metadata.languages, ['English', 'Spanish']);
     assert.equal(metadata.created_by_url, 'https://example.com/author');
@@ -217,8 +218,8 @@ describe('process-new-zine-issue', () => {
     assert.equal(metadata.attribution, 'Guide Author, CC BY-SA 4.0');
     assert.equal(metadata.source_url, 'https://github.com/processing/processing-community-day/issues/801');
     assert.match(await fs.readFile(path.join(directory, 'index.md'), 'utf8'), /^order: 8$/m);
-    for (const file of ['Reader.pdf', 'Print.pdf', 'cover.png', 'metadata.json']) await fs.access(path.join(directory, 'downloads', file));
-    await fs.access(path.join(directory, 'cover.png'));
+    for (const file of ['Reader.pdf', 'Print.pdf', 'cover.jpeg', 'metadata.json']) await fs.access(path.join(directory, 'downloads', file));
+    await fs.access(path.join(directory, 'cover.jpeg'));
     assert.match(await fs.readFile(result.outputs.pr_body_path, 'utf8'), /### Maintainer notes\n\nCheck the fold before merging\./);
   });
 

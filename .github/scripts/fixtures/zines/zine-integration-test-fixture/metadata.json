@@ -17,7 +17,8 @@
   "downloads": [
     { "file": "guide-small.pdf", "file_size": "96 B", "role": "reader-order" },
     { "file": "guide-print.pdf", "file_size": "96 B", "role": "print-ready" },
-    { "file": "cover.png", "file_size": "12 kB" },
+    { "file": "cover.png", "file_size": "425.2 kB" },
+    { "file": "cover.jpeg", "file_size": "245.4 kB" },
     { "file": "metadata.json", "file_size": "20 B" }
   ],
   "license": "CC BY-SA 4.0",
