@@ -31,7 +31,7 @@ export function parseSubmittedFileUrls(value) {
   const seen = new Set();
   for (const entry of submittedFileEntries(value)) {
     const isMarkdownLink = /^!?\[/.test(entry);
-    const candidate = isMarkdownLink ? markdownLinkTarget(entry) : entry;
+    const candidate = isMarkdownLink ? markdownLinkTarget(entry) : entry.replace(/[.,;:!?]+$/, '');
     if (!candidate || /\s/.test(candidate) || (!isMarkdownLink && !/^https?:\/\//i.test(candidate))) {
       invalidEntries.push(entry);
       continue;

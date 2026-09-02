@@ -100,13 +100,14 @@ describe('process-new-zine-issue', () => {
     const title = 'Intake Test Zine Legacy URLs';
     const slug = 'intake-test-zine-legacy-urls';
     const readerUrl = 'https://example.org/legacy-reader(v2).pdf';
+    const readerInput = `${readerUrl}.`;
     const printUrl = 'https://example.org/legacy-print.pdf';
-    const additionalFiles = 'https://example.org/worksheet.pdf, https://example.org/source(v2).zip';
+    const additionalFiles = 'https://example.org/worksheet.pdf, https://example.org/source(v2).zip;';
     created.add(slug);
-    const legacyBody = body({ title, readerUrl, printUrl, additionalFiles })
+    const legacyBody = body({ title, readerUrl: readerInput, printUrl, additionalFiles })
       .replace('### Reader-order PDF', '### Reader-order PDF URL')
       .replace('### Print-ready PDF', '### Print-ready PDF URL')
-      .replace(attachment('Reader order.pdf', readerUrl), readerUrl)
+      .replace(attachment('Reader order.pdf', readerInput), readerInput)
       .replace(attachment('Print ready.pdf', printUrl), printUrl);
     const { tmp, outputs } = await run(legacyBody, { number: 789 });
     assert.equal(outputs.valid, 'true');
