@@ -63,28 +63,28 @@ body:
       description: Public description shown on the zine page. Markdown is supported.
     validations:
       required: true
-  - type: input
+  - type: textarea
     id: reader_order_pdf
     attributes:
-      label: Reader-order PDF URL
-      description: Download link to a PDF with sequentially ordered pages for reading on a screen.
-      placeholder: https://example.org/my-zine-reader-order.pdf
+      label: Reader-order PDF
+      description: Upload a PDF with sequentially ordered pages for reading on a screen. Paste, drop, or click the button below to attach the file.
+      placeholder: Attach one PDF here.
     validations:
       required: true
-  - type: input
+  - type: textarea
     id: print_ready_pdf
     attributes:
-      label: Print-ready PDF URL
-      description: Download link to a PDF with pages arranged for printing and folding into a booklet.
-      placeholder: https://example.org/my-zine-print-ready.pdf
+      label: Print-ready PDF
+      description: Upload a PDF with pages arranged for printing and folding into a booklet. Paste, drop, or click the button below to attach the file.
+      placeholder: Attach one PDF here.
     validations:
       required: true
-  - type: input
+  - type: textarea
     id: additional_files
     attributes:
       label: Additional files
-      description: Optional comma-separated download links for any additional files like other formats or useful resources. These files will be downloadable from the zine page.
-      placeholder: https://example.org/my-zine-print-monochrome.pdf, https://example.org/worksheet.pdf, https://example.org/source-files.zip
+      description: Optional. One file per line. Other formats, resources, or source files. They will be downloadable from the zine page.
+      placeholder: Attach any additional files here.
   - type: input
     id: activity_type
     attributes:
@@ -122,12 +122,4 @@ body:
       label: License consent
       options:
         - label: I own or have permission to license this material under CC BY-SA 4.0.
-          required: true
-  - type: checkboxes
-    id: link_consent
-    attributes:
-      label: Public and stable links
-      description: All download links must work without login and must not be short-lived or expiring.
-      options:
-        - label: I confirm all links above are publicly accessible without login and are stable, non-expiring URLs.
           required: true

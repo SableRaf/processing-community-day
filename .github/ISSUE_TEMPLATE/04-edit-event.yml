@@ -8,6 +8,12 @@ body:
   - type: markdown
     attributes:
       value: |
+        > [!IMPORTANT]
+        > Due to a GitHub limitation, you cannot edit the existing event data while completing this form.
+        > **Workaround:** Submit the form with the existing data left in place. Then edit the issue you just submitted to make your changes.
+  - type: markdown
+    attributes:
+      value: |
         > [!TIP]
         > Go to your event's page and use the **Edit event data** link. It will open this form already pre-filled.
   - type: markdown

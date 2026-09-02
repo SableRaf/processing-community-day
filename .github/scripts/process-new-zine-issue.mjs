@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { isValidHttpUrl, parseIssueSections, required, slugify } from './event-issue-helpers.mjs';
-import { ZINE_TEMPLATE_HEADING, hasCheckedConsent, makeDraftMarkdown, makeZinePrBody, zineValidationComment } from './zine-intake-helpers.mjs';
+import { ZINE_TEMPLATE_HEADING, hasCheckedConsent, isPdfUrl, makeDraftMarkdown, makeZinePrBody, parseSubmittedFileUrls, zineValidationComment } from './zine-intake-helpers.mjs';
 
 const WORKSPACE = process.cwd();
 const RUNNER_TEMP = process.env.RUNNER_TEMP ?? path.join(WORKSPACE, '.tmp');
@@ -52,27 +52,30 @@ async function main() {
   }
   const summary = required(fields, 'Short summary', errors);
   const description = required(fields, 'Full description', errors);
-  const readerOrderUrl = fields.get('Reader-order PDF URL')?.trim() ?? '';
-  const printReadyUrl = fields.get('Print-ready PDF URL')?.trim() ?? '';
-  const additionalFiles = [...new Set((fields.get('Additional files') ?? '')
-    .split(',')
-    .map((url) => url.trim())
-    .filter(Boolean))];
-  if (!readerOrderUrl) errors.push({ field: 'Reader-order PDF URL', message: 'This field is required.' });
-  else if (!isValidHttpUrl(readerOrderUrl)) errors.push({ field: 'Reader-order PDF URL', found: readerOrderUrl, message: 'Enter a valid HTTP(S) URL.' });
-  if (!printReadyUrl) errors.push({ field: 'Print-ready PDF URL', message: 'This field is required.' });
-  else if (!isValidHttpUrl(printReadyUrl)) errors.push({ field: 'Print-ready PDF URL', found: printReadyUrl, message: 'Enter a valid HTTP(S) URL.' });
-  const invalidAdditionalFiles = additionalFiles.filter((url) => !isValidHttpUrl(url));
-  if (invalidAdditionalFiles.length) {
-    errors.push({
-      field: 'Additional files',
-      found: invalidAdditionalFiles.join(', '),
-      message: 'Enter only valid HTTP(S) URLs, separated by commas.',
-    });
+  const readerOrderValue = fields.get('Reader-order PDF') ?? fields.get('Reader-order PDF URL') ?? '';
+  const printReadyValue = fields.get('Print-ready PDF') ?? fields.get('Print-ready PDF URL') ?? '';
+  const additionalFilesValue = fields.get('Additional files') ?? '';
+  const readerOrderFiles = parseSubmittedFileUrls(readerOrderValue);
+  const printReadyFiles = parseSubmittedFileUrls(printReadyValue);
+  const additionalFiles = parseSubmittedFileUrls(additionalFilesValue);
+  if (readerOrderFiles.invalidEntries.length) {
+    errors.push({ field: 'Reader-order PDF', message: 'Keep only one uploaded file link or raw HTTP(S) URL in this field; remove any descriptions or unrelated links.' });
+  } else if (readerOrderFiles.urls.length !== 1) {
+    errors.push({ field: 'Reader-order PDF', message: readerOrderFiles.urls.length ? 'Keep exactly one PDF link in this field; remove any other links.' : 'Upload one PDF in this field.' });
+  } else if (!isPdfUrl(readerOrderFiles.urls[0])) {
+    errors.push({ field: 'Reader-order PDF', found: readerOrderFiles.urls[0], message: 'The attached file must be a PDF.' });
+  }
+  if (printReadyFiles.invalidEntries.length) {
+    errors.push({ field: 'Print-ready PDF', message: 'Keep only one uploaded file link or raw HTTP(S) URL in this field; remove any descriptions or unrelated links.' });
+  } else if (printReadyFiles.urls.length !== 1) {
+    errors.push({ field: 'Print-ready PDF', message: printReadyFiles.urls.length ? 'Keep exactly one PDF link in this field; remove any other links.' : 'Upload one PDF in this field.' });
+  } else if (!isPdfUrl(printReadyFiles.urls[0])) {
+    errors.push({ field: 'Print-ready PDF', found: printReadyFiles.urls[0], message: 'The attached file must be a PDF.' });
+  }
+  if (additionalFiles.invalidEntries.length) {
+    errors.push({ field: 'Additional files', message: 'Use only uploaded file links (one per line) or raw HTTP(S) URLs; remove descriptions and unrelated links.' });
   }
   if (!hasCheckedConsent(fields.get('License consent'))) errors.push({ field: 'License consent', message: 'Confirm that the material can be licensed under CC BY-SA 4.0.' });
-  const linkConsent = fields.get('Public and stable links') ?? fields.get('Public, stable PDF links');
-  if (!hasCheckedConsent(linkConsent)) errors.push({ field: 'Public and stable links', message: 'Confirm that all download links are public, stable, and non-expiring.' });
 
   const slug = slugify(title);
   if (!slug) errors.push({ field: 'Title', message: 'Use at least one letter or number so we can create a URL slug.' });
@@ -110,8 +113,8 @@ async function main() {
     created_by: createdBy,
     summary,
     source_pdfs: [
-      { role: 'reader-order', url: readerOrderUrl },
-      { role: 'print-ready', url: printReadyUrl },
+      { role: 'reader-order', url: readerOrderFiles.urls[0] },
+      { role: 'print-ready', url: printReadyFiles.urls[0] },
     ],
     license: 'CC BY-SA 4.0',
     source_issue_url: issueUrl(),
@@ -125,7 +128,7 @@ async function main() {
   };
   if (tags.length) submission.tags = tags;
   if (languages.length) submission.languages = languages;
-  if (additionalFiles.length) submission.additional_files = additionalFiles;
+  if (additionalFiles.urls.length) submission.additional_files = additionalFiles.urls;
   if (createdByUrl) submission.created_by_url = createdByUrl;
   for (const [field, key] of [
     ['Activity type', 'activity_type'],
