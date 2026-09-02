@@ -25,13 +25,13 @@
   },
   "event_date": "2026-10-06",
   "event_end_date": "2026-10-07",
-  "event_start_time": "",
-  "event_end_time": "",
+  "event_start_time": "11:00",
+  "event_end_time": "13:00",
   "event_short_description": "Presentación y Taller Introductorio",
   "event_activities": [
+    "Show-and-tell",
     "Panel discussions",
-    "Beginner introductions to Processing or p5.js",
-    "Student project presentations"
+    "Screening"
   ],
   "event_page_url": "",
   "forum_thread_url": "https://discourse.processing.org/t/pcd-bariloche-2026/48861",
