@@ -25,6 +25,10 @@ A smartphone is completely fine. Take several versions of important photos, try 
 
 The rest of this guide contains practical tips for getting better results without needing much photography experience.
 
+![A large group of Processing Community Day Los Angeles participants gathered outdoors](../../../images/pcd-worldwide-photos/PCD_Los_Angeles_group_02.webp)
+
+<span class="prose-figure-caption">For group photos, a slightly elevated position can make it easier to see everyone clearly — PCD @ Los Angeles</span>
+
 ## Equipment Preparation
 
 1. **Camera:** A DSLR, mirrorless camera, or a recent smartphone camera all work well. Use whatever you are comfortable with.
@@ -55,6 +59,10 @@ The rest of this guide contains practical tips for getting better results withou
 
 7. **Coordinate With the Organizers:** Discuss any areas, activities, artworks, or participants that should not be photographed. Make sure the photographer knows who to ask if a question comes up during the event.
 
+![Two participants looking at a laptop during a demonstration at PCD Boston](../../../images/pcd-worldwide-photos/PCD_Boston_demo.webp)
+
+<span class="prose-figure-caption">Look for moments when participants are sharing their work with each other — PCD Boston.</span>
+
 ## During the Event
 
 * **Arrive Early:** Photograph the venue, signage, installations, and setup before participants arrive. These photos can help tell the story of the event.
@@ -71,6 +79,10 @@ The rest of this guide contains practical tips for getting better results withou
 
 * **Show the Work:** Photograph sketches, installations, projections, performances, hardware projects, drawings, workshop materials, and other things participants are creating.
 
+![A participant viewing a purple generative drawing on a computer screen at PCD São Paulo](../../../images/pcd-worldwide-photos/PCD_São_Paulo_overTheShoulder.webp)
+
+<span class="prose-figure-caption">An over-the-shoulder shot is useful for showing both a participant and their work — PCD São Paulo.</span>
+
 * **Capture Key Moments:** Document opening remarks, talks, workshops, performances, demonstrations, presentations, and other important parts of the program.
 
 * **Capture the Community:** Look for conversations, people helping one another, small groups working together, people showing projects to each other, and informal moments between scheduled activities.
@@ -82,6 +94,10 @@ The rest of this guide contains practical tips for getting better results withou
 * **Be Privacy-Conscious:** Respect any system used to indicate that someone does not want to be photographed. Avoid including those participants, especially in close-up photographs. It is usually easier to leave someone out of the frame than to edit them out later.
 
 * **Be Respectful:** Photography should document the event without interfering with it. See the section below for more guidance.
+
+![A participant drawing on a wall while another operates a projector at PCD Boston](../../../images/pcd-worldwide-photos/PCD_Boston_action.webp)
+
+<span class="prose-figure-caption">Capture people in the middle of an activity, rather than waiting for them to pose — PCD @ Boston.</span>
 
 ## Specific Shots to Consider
 
@@ -115,6 +131,11 @@ You do not need every kind of photograph on this list. Think of it as a checklis
 
 * **Closing Shots:** Document the end of the event, including final presentations, farewells, packing up, or the organizers and volunteers after the event has finished.
 
+![Participants gathered around tables for small-group conversations at PCD Boston](../../../images/pcd-worldwide-photos/PCD_Boston_discussion.webp)
+
+<span class="prose-figure-caption">
+People talking, listening, and gesturing makes for a more engaging photo — PCD @ Boston</span>
+
 ## Be Respectful
 
 Photography should not interfere with people's ability to participate in or enjoy the event.
@@ -145,6 +166,10 @@ Photography should not interfere with people's ability to participate in or enjo
 
 * **Get Some Height:** For large groups, position yourself above the group or arrange people on a large staircase if one is available. This makes it much easier to keep everyone's face visible.
 
+![A large group of PCD Tokyo participants arranged in rows and looking toward the camera](../../../images/pcd-worldwide-photos/PCD_Tokyo_2020_group_by-Naoto-Hieda.webp)
+
+<span class="prose-figure-caption">For group photos, you can try giving everyone the same simple action or gesture — PCD @ Tokyo 2020 (credit: Naoto Hieda)</span>
+
 * **Check the Light:** Avoid strong backlighting or direct sunlight that makes people squint. Even, soft light is usually easier to work with.
 
 * **Arrange People Clearly:** Ask taller people to stand toward the back and shorter people toward the front. Keep people reasonably close together so the group does not look scattered.
@@ -161,6 +186,10 @@ Photography should not interfere with people's ability to participate in or enjo
 
 * **Respect Photo Preferences:** Never pressure someone to join the group photo. Make sure people who have opted out of photography are not included unless they explicitly choose to participate.
 
+![Participants sitting and talking together outdoors during a break at PCD Boston](../../../images/pcd-worldwide-photos/PCD_Boston_break.webp)
+
+<span class="prose-figure-caption">Breaks can also show the atmosphere of an event. Just make sure to respect everyone's photo preferences — PCD @ Boston</span>
+
 ## After the Event
 
 1. **Back Up Your Photos:** Transfer the photographs from your camera or phone somewhere safe soon after the event.
@@ -176,3 +205,7 @@ Photography should not interfere with people's ability to participate in or enjo
 6. **Share With the PCD Team:** Keep the original files and your selected/edited photographs in separate folders. Share your selected photographs with the Processing Foundation using the method provided to PCD organizers so they can potentially be included in documentation of PCD events around the world.
 
 A few good photographs are more valuable than hundreds of similar ones. Focus on documenting what made your PCD distinctive: the people, the work they shared, the activities they took part in, and the community that formed around the event.
+
+![PCD Bangalore participants arranged around a colorful collaborative artwork](../../../images/pcd-worldwide-photos/PCD_Bangalore_group.webp)
+
+<span class="prose-figure-caption">Don't forget to enjoy the moment! It's not just about the photos — PCD @ Bangalore</span>
