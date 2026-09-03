@@ -83,6 +83,7 @@ The global Markdown pipeline runs `rehype-table-wrapper` and `rehype-heading-anc
 
 - **Leaflet CSS** is loaded via `<link>` tags in `MapLayout.astro`, NOT via JS imports — avoids SSR issues since MapView is `client:only="vue"`.
 - **Docs page share actions** render `ShareMenu.vue` with `client:load` so the control is present in the initial HTML and hydrates immediately. Keep `vue-i18n` in Vite's `ssr.noExternal` list so this server render can resolve its compile-time feature flags.
+- **Browser storage** must be accessed through `src/lib/safeStorage.mjs`; direct `localStorage` property access can throw under iOS privacy restrictions and abort Vue island hydration.
 - **`open-location-code`** exports `{ OpenLocationCode }` as a named export — use `new OpenLocationCode()` (not static methods).
 - **`leaflet.markercluster`** causes a circular dependency warning, suppressed via `rollupOptions.onwarn` in `astro.config.mjs`.
 - **Deep linking:** `?event=<id-or-uid>` query param auto-opens the event detail panel. Both the slug `id` and the short `uid` are accepted.
@@ -107,6 +108,7 @@ The global Markdown pipeline runs `rehype-table-wrapper` and `rehype-heading-anc
 | `src/layouts/DocsLayout.astro` | Organizer Kit shell with sidebar, page TOC, and footer |
 | `src/lib/analytics.ts` | `trackEvent()` Fathom helper + `AnalyticsEvent` type + event-name constants |
 | `src/lib/carto.ts` | Adds the optional local-development CARTO API key to basemap tile URLs |
+| `src/lib/safeStorage.mjs` | Guards localStorage reads and writes so browser privacy settings cannot abort hydration |
 | `src/lib/nodes.ts` | `Node` interface + `loadNodes()` |
 | `src/lib/format.ts` | `formatDate()`, `formatDateRange()`, `calendarLinks()`, etc. |
 | `src/lib/popup.ts` | Leaflet popup HTML generation (`makePopupContent()`) |

@@ -1,5 +1,15 @@
 # Tests
 
+## Browser storage safety
+
+**File:** `.github/scripts/safe-storage.test.mjs`
+**Run:** `node --test .github/scripts/safe-storage.test.mjs`
+**Requires:** Node built-ins only — no install needed.
+
+These tests verify that `safeStorage` passes available `localStorage` reads and writes through while returning safe defaults when browser privacy settings make the `localStorage` property itself throw.
+
+---
+
 ## Event issue helpers
 
 **File:** `.github/scripts/event-issue-helpers.test.mjs`

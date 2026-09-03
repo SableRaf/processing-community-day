@@ -214,8 +214,27 @@
   border-radius: calc(var(--border-radius) * 2);
   box-shadow: 0 14px 40px rgb(0 0 0 / 0.24);
 }
+.share-qr-dialog:not([open]) {
+  display: none;
+}
 .share-qr-dialog::backdrop {
   background: var(--color-overlay);
+}
+.share-qr-dialog__fallback-backdrop {
+  position: fixed;
+  z-index: calc(var(--z-panel) + 1);
+  inset: 0;
+  background: var(--color-overlay);
+}
+.share-qr-dialog--fallback {
+  position: fixed;
+  z-index: calc(var(--z-panel) + 2);
+  top: 50%;
+  left: 50%;
+  max-height: calc(100vh - var(--sp-6));
+  margin: 0;
+  overflow-y: auto;
+  transform: translate(-50%, -50%);
 }
 .share-qr-dialog__header {
   display: flex;
