@@ -28,7 +28,7 @@ const TOP_LEVEL: ReadonlyArray<string | { page: string }> = [
   'Getting Started',
   'Organizing Your Event',
   'Event Resources',
-  'Activity Guides',
+  'Zines',
   { page: 'peer-support-sessions' },
   { page: 'code-of-conduct' },
   { page: 'faq' },

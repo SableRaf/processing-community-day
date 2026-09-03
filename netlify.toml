@@ -18,12 +18,27 @@
 
 [[redirects]]
   from = "/organize/activity-guides/library/*"
-  to = "/organize/activity-guides/zine-library/"
+  to = "/organize/zines/zine-library/"
   status = 301
 
 [[redirects]]
   from = "/organize/activity-guides/what-are-activity-guides/*"
-  to = "/organize/activity-guides/zine-library/"
+  to = "/organize/zines/zine-library/"
+  status = 301
+
+[[redirects]]
+  from = "/organize/activity-guides/what-is-a-guide/*"
+  to = "/organize/zines/zine-library/"
+  status = 301
+
+[[redirects]]
+  from = "/organize/activity-guides/making-a-zine/*"
+  to = "/organize/zines/how-to-make-a-zine/"
+  status = 301
+
+[[redirects]]
+  from = "/organize/activity-guides/*"
+  to = "/organize/zines/:splat"
   status = 301
 
 [[headers]]

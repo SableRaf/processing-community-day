@@ -163,7 +163,7 @@ export function validateDownloadedFiles(files) {
 }
 
 export function hasCheckedConsent(value) { return /^\s*-\s*\[x\]/im.test(value ?? ''); }
-export function zineValidationComment(errors) { const count = errors.length; return ['Thanks for submitting an Activity Guide zine to Processing Community Day!', '', `We couldn't create a review pull request yet because **${count} ${count === 1 ? 'field needs' : 'fields need'} attention**:`, '', ...errors.map(formatError), '', 'Please edit and save this issue with the corrected information. Upload files directly to their form fields; external links are not accepted.'].join('\n'); }
+export function zineValidationComment(errors) { const count = errors.length; return ['Thanks for submitting a zine to Processing Community Day!', '', `We couldn't create a review pull request yet because **${count} ${count === 1 ? 'field needs' : 'fields need'} attention**:`, '', ...errors.map(formatError), '', 'Please edit and save this issue with the corrected information. Upload files directly to their form fields; external links are not accepted.'].join('\n'); }
 export function yamlScalar(value) { return JSON.stringify(String(value)); }
 export function makeZineMarkdown(slug, order, description) { return ['---', `id: ${yamlScalar(slug)}`, `order: ${order}`, '---', '', description.trim(), ''].join('\n'); }
 export function makeZinePrBody({ issueNumber, title, submitterLogin, maintainerNotes = '' }) {
@@ -171,7 +171,7 @@ export function makeZinePrBody({ issueNumber, title, submitterLogin, maintainerN
   return [
     `Closes #${issueNumber}`,
     '',
-    `This publication-ready Activity Guide was generated from **"${title}"** and submitted by ${submittedBy}.`,
+    `This publication-ready zine was generated from **"${title}"** and submitted by ${submittedBy}.`,
     ...(maintainerNotes ? ['', '### Maintainer notes', '', maintainerNotes] : []),
     '',
     '### Reviewer checklist',

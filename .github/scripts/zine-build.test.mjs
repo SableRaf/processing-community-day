@@ -76,7 +76,7 @@ test('a populated zine collection emits linked assets and renders entries in fro
     assert.ok(pageCover, 'the zine page should render a cover image');
     assert.ok(existsSync(emittedPath(pageCover[1])), 'the zine cover should be emitted');
 
-    const library = readFileSync(join(DIST, 'organize/activity-guides/zine-library/index.html'), 'utf8');
+    const library = readFileSync(join(DIST, 'organize/zines/zine-library/index.html'), 'utf8');
     assert.match(library, /<ul class="guide-grid">\s*<li>\s*<a class="guide-card guide-card--zine" href="\/activity-guide\/make-your-first-generative-artwork\/"/);
     assert.match(
       library,

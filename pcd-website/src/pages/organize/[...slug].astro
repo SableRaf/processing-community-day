@@ -3,9 +3,8 @@ import { getCollection, render } from 'astro:content';
 import type { GetStaticPaths } from 'astro';
 import DocsLayout from '../../layouts/DocsLayout.astro';
 import { flattenKitNav, getKitNav } from '../../config/organizer-kit-nav';
-import { ACTIVITY_GUIDE_SUBMIT_URL } from '../../config';
+import { ZINE_SUBMIT_URL } from '../../config';
 import ZineGrid from '../../components/ZineGrid.astro';
-import ZineSubmitButton from '../../components/ZineSubmitButton.astro';
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const entries = await getCollection('organizerKit', (entry) => !entry.data.draft);
@@ -27,9 +26,9 @@ const prev = position > 0 ? ordered[position - 1] : undefined;
 const next = position >= 0 && position < ordered.length - 1 ? ordered[position + 1] : undefined;
 
 const editHref = `https://github.com/processing/processing-community-day/edit/main/pcd-website/src/content/organizer-kit/${entry.id}.md`;
-const SUBMIT_PAGES = new Set(['activity-guides/zine-library', 'activity-guides/contribute-a-guide']);
+const SUBMIT_PAGES = new Set(['zines/zine-library']);
 const markdownSuffix = SUBMIT_PAGES.has(entry.id)
-  ? `\n\n[Submit an activity guide](${ACTIVITY_GUIDE_SUBMIT_URL})\n`
+  ? `\n\n[Submit a zine](${ZINE_SUBMIT_URL})\n`
   : '';
 const markdown = `# ${entry.data.title}\n\n${entry.body?.trim() ?? ''}\n${markdownSuffix}`;
 ---
@@ -43,8 +42,7 @@ const markdown = `# ${entry.data.title}\n\n${entry.body?.trim() ?? ''}\n${markdo
   editHref={editHref}
 >
   <Content />
-  {entry.id === 'activity-guides/zine-library' && <ZineGrid />}
-  {entry.id === 'activity-guides/contribute-a-guide' && <ZineSubmitButton />}
+  {entry.id === 'zines/zine-library' && <ZineGrid />}
 
   <a class="docs-back-to-top" href="#main">
     <svg class="docs-back-to-top__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="20" height="20" aria-hidden="true">

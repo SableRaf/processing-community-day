@@ -1,6 +1,6 @@
 ---
-title: Making a Zine
-section: Activity Guides
+title: How to Make a Zine
+section: Zines
 order: 3
 description: An introduction to zines, resources for making one, and information about submitting your zine.
 ---
@@ -11,7 +11,7 @@ A [zine](https://en.wikipedia.org/wiki/Zine) (pronounced “zeen”, as in "maga
 
 ## What should I include in my zine?
 
-For the PCD Zine Library, we encourage you to create zines that work as an activity guide for a Processing Community Day session, meaning something that can be completed in 1-3 hours with or without guidance (your choice). 
+For the Zine Library, we encourage you to create zines that work as an activity guide for a Processing Community Day session, meaning something that can be completed in 1-3 hours with or without guidance (your choice).
 
 What should you put in your zine? Well, that's up to you! A tutorial, documentation of a project, a series of discussion questions, exercises, or any other kind of activity that can be completed in a group or individually.
 
@@ -29,7 +29,7 @@ The simplest form of a zine is a one-page zine, which can be printed on a single
 
 This [wikiHow article](https://www.wikihow.com/Make-a-Zine) is an illustrated step-by-step guide to making a zine. It's a great starting point for creating your first zine. And if you prefer a video tutorial, [How to Make a Zine](https://www.youtube.com/watch?v=ab4O9SWNl9g) by Austin Kleon, is a short and fun introduction to zine-making available on YouTube.
 
-You can also use some of the tools listed below to create a zine digitally and print it out. And if you'd rather just use ready-to-print zines, you can find them in the [Zine Library](/organize/activity-guides/zine-library/).
+You can also use some of the tools listed below to create a zine digitally and print it out. And if you'd rather just use ready-to-print zines, you can find them in the [Zine Library](/organize/zines/zine-library/).
 
 ![Illustrated folding instructions for making a one-page zine](./images/folding_instructions_small_CC_BY-SA%204.0_1pagedungeons.png)
 
@@ -57,4 +57,4 @@ You can also use some of the tools listed below to create a zine digitally and p
 
 ## Submit Your Zine
 
-Go to the [Zine Library](/organize/activity-guides/zine-library/) to submit your zine and explore the full collection.
+Go to the [Zine Library](/organize/zines/zine-library/) to submit your zine and explore the full collection.

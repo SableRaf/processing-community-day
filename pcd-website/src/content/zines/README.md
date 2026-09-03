@@ -1,4 +1,4 @@
-# Activity Guide zines
+# Zines
 
 Each published guide has this final structure:
 

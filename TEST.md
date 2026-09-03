@@ -84,7 +84,7 @@ These tests cover the shared pure functions extracted into `event-issue-helpers.
 
 ---
 
-## Activity Guide zines
+## Zines
 
 **Files:** `.github/scripts/zines.test.mjs`, `.github/scripts/zine-build.test.mjs`, `.github/scripts/process-new-zine-issue.test.mjs`
 **Run:** `node --test .github/scripts/zines.test.mjs`, `node --test .github/scripts/zine-build.test.mjs`, and `node --test .github/scripts/process-new-zine-issue.test.mjs`
