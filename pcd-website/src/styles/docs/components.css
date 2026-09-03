@@ -56,6 +56,9 @@
   align-items: center;
   gap: var(--sp-2);
 }
+.docs-page-actions > astro-island {
+  display: block;
+}
 .docs-action-button {
   display: inline-flex;
   align-items: center;

@@ -14,6 +14,11 @@ export default defineConfig({
     rehypePlugins: [rehypeTableWrapper, rehypeHeadingAnchors],
   },
   vite: {
+    ssr: {
+      // ShareMenu is server-rendered on content pages. Bundle vue-i18n so its
+      // compile-time feature flags are resolved during Astro's SSR build.
+      noExternal: ['vue-i18n'],
+    },
     build: {
       rollupOptions: {
         onwarn(warning, warn) {

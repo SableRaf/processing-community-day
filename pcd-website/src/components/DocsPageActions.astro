@@ -13,7 +13,7 @@ const { markdown, permalink, editHref } = Astro.props;
 ---
 
 <div class="docs-page-actions">
-  <ShareMenu markdown={markdown} permalink={permalink} client:only="vue" />
+  <ShareMenu markdown={markdown} permalink={permalink} client:load />
 
   <a
     class="docs-action-button"
