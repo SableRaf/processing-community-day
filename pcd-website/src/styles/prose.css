@@ -183,21 +183,29 @@
 
 :where(.prose, .docs-prose) :is(h2, h3, h4, h5, h6) {
   position: relative;
-  margin-left: -1.4em;
-  padding-left: 1.4em;
 }
 
+/* Sits after the heading text so it never reaches into the sidebar gutter. The
+   icon is a fixed 16px regardless of heading size, so centre it on the text's
+   lowercase body rather than letting it stretch with the line box. */
 :where(.prose, .docs-prose) .docs-heading-anchor {
-  position: absolute;
-  top: 0.15em;
-  left: 0.2em;
   display: inline-flex;
   align-items: center;
-  height: 1em;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  margin-left: 0.3em;
+  vertical-align: baseline;
+  transform: translateY(0.16em);
   opacity: 0;
   color: var(--color-primary);
   text-decoration: none;
   pointer-events: none;
+}
+
+:where(.prose, .docs-prose) .docs-heading-anchor svg {
+  display: block;
+  fill: currentColor;
 }
 
 :where(.prose, .docs-prose) :is(h2, h3, h4, h5, h6):hover .docs-heading-anchor,
@@ -212,11 +220,6 @@
 }
 
 @media (max-width: 30rem) {
-  :where(.prose, .docs-prose) :is(h2, h3, h4, h5, h6) {
-    margin-left: 0;
-    padding-left: 0;
-  }
-
   :where(.prose, .docs-prose) .docs-heading-anchor {
     display: none;
   }

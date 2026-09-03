@@ -2,11 +2,19 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, useId, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { toCanvas } from 'qrcode';
-import qrIcon from '../images/qr-code-bold-svgrepo-com_MIT_License.svg';
+import shareIcon from '../icons/share.svg?raw';
+import chevronDownIcon from '../icons/chevron-down.svg?raw';
+import markdownIcon from '../icons/markdown.svg?raw';
+import linkIcon from '../icons/link.svg?raw';
+import qrIconRaw from '../icons/qr-code.svg?raw';
+import infoIcon from '../icons/info.svg?raw';
 import Snackbar from './Snackbar.vue';
 import { vTouchActivate } from '../directives/touchActivate';
 import '../styles/docs/tokens.css';
 import '../styles/docs/components.css';
+
+// The .svg sources carry attribution comments; keep them out of the DOM.
+const qrIcon = qrIconRaw.replace(/<!--[\s\S]*?-->/g, '').trim();
 
 const props = withDefaults(defineProps<{
   markdown: string;
@@ -373,13 +381,9 @@ onBeforeUnmount(() => {
       @click="toggleMenu"
       @keydown="handleTriggerKeydown"
     >
-      <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
-        <path d="M15 3a3 3 0 0 1-5.175 2.066l-3.92 2.179a2.994 2.994 0 0 1 0 1.51l3.92 2.179a3 3 0 1 1-.73 1.31l-3.92-2.178a3 3 0 1 1 0-4.133l3.92-2.178A3 3 0 1 1 15 3Zm-1.5 10a1.5 1.5 0 1 0-3.001.001A1.5 1.5 0 0 0 13.5 13Zm-9-5a1.5 1.5 0 1 0-3.001.001A1.5 1.5 0 0 0 4.5 8Zm9-5a1.5 1.5 0 1 0-3.001.001A1.5 1.5 0 0 0 13.5 3Z" />
-      </svg>
+      <span class="share-menu__icon" aria-hidden="true" v-html="shareIcon"></span>
       <span>{{ t('share_menu.share') }}</span>
-      <svg class="share-menu__chevron" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
-        <path d="M4.22 6.47a.75.75 0 0 1 1.06 0L8 9.19l2.72-2.72a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-3.25 3.25a.75.75 0 0 1-1.06 0l-3.25-3.25a.75.75 0 0 1 0-1.06Z" />
-      </svg>
+      <span class="share-menu__icon share-menu__chevron" aria-hidden="true" v-html="chevronDownIcon"></span>
     </button>
 
     <div
@@ -396,9 +400,7 @@ onBeforeUnmount(() => {
         @click="copyMarkdown"
         v-touch-activate="copyMarkdown"
       >
-        <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
-          <path d="M14.85 3c.63 0 1.15.52 1.14 1.15v7.7c0 .63-.51 1.15-1.15 1.15H1.15C.52 13 0 12.48 0 11.84V4.15C0 3.52.52 3 1.15 3ZM9 11V5H7L5.5 7 4 5H2v6h2V8l1.5 1.92L7 8v3Zm2.99.5L14.5 8H13V5h-2v3H9.5Z" />
-        </svg>
+        <span class="share-menu__icon" aria-hidden="true" v-html="markdownIcon"></span>
         <span>{{ t('share_menu.copy_markdown') }}</span>
       </button>
       <button
@@ -407,13 +409,11 @@ onBeforeUnmount(() => {
         @click="copyPermalink"
         v-touch-activate="copyPermalink"
       >
-        <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
-          <path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z" />
-        </svg>
+        <span class="share-menu__icon" aria-hidden="true" v-html="linkIcon"></span>
         <span>{{ t('share_menu.copy_permalink') }}</span>
       </button>
       <button type="button" role="menuitem" @click="showQrCode" v-touch-activate="showQrCode">
-        <img :src="qrIcon.src" width="16" height="16" alt="" />
+        <span class="share-menu__icon" aria-hidden="true" v-html="qrIcon"></span>
         <span>{{ t('share_menu.show_qr') }}</span>
       </button>
     </div>
@@ -470,9 +470,7 @@ onBeforeUnmount(() => {
               :aria-label="t('share_menu.about_scanning')"
               :aria-describedby="qrInfoId"
             >
-              <svg viewBox="0 0 16 16" width="18" height="18" aria-hidden="true">
-                <path fill-rule="evenodd" d="M8 14.5a6.5 6.5 0 1 0 0-13 6.5 6.5 0 0 0 0 13Zm0 1a7.5 7.5 0 1 0 0-15 7.5 7.5 0 0 0 0 15ZM7.25 7a.75.75 0 0 1 .75-.75h.01a.75.75 0 0 1 .75.75v4a.75.75 0 0 1-1.5 0V7ZM8 3.75a.875.875 0 1 0 0 1.75.875.875 0 0 0 0-1.75Z" clip-rule="evenodd" />
-              </svg>
+              <span class="share-menu__icon share-menu__info-icon" aria-hidden="true" v-html="infoIcon"></span>
             </button>
             <p :id="qrInfoId" class="share-qr-dialog__tooltip" role="tooltip">
               {{ t('share_menu.qr_help') }}

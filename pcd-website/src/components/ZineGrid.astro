@@ -1,4 +1,5 @@
 ---
+import Icon from './Icon.astro';
 import { Image } from 'astro:assets';
 import { ZINE_SUBMIT_URL } from '../config';
 import { loadZines } from '../lib/zines';
@@ -31,9 +32,7 @@ const zines = await loadZines();
   ))}
   <li>
     <a class="guide-card guide-card--add" href={ZINE_SUBMIT_URL} target="_blank" rel="noopener noreferrer">
-      <svg class="guide-card__plus" aria-hidden="true" viewBox="0 0 16 16">
-        <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0Zm1.062 4.312a1 1 0 1 0-2 0v2.75h-2.75a1 1 0 0 0 0 2h2.75v2.75a1 1 0 1 0 2 0v-2.75h2.75a1 1 0 1 0 0-2h-2.75Z"></path>
-      </svg>
+      <Icon name="plus-circle" class="guide-card__plus" />
       <span>Submit a Zine</span>
     </a>
   </li>

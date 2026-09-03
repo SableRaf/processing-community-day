@@ -1,0 +1,25 @@
+---
+// Vite's `?raw` inlines each .svg at build time, so src/icons/*.svg stays the
+// single source of truth without any runtime file reads.
+const icons = import.meta.glob('../icons/*.svg', { query: '?raw', import: 'default', eager: true });
+
+interface Props {
+  /** Basename of a file in src/icons/, e.g. "link" for link.svg. */
+  name: string;
+  class?: string;
+}
+
+const { name, class: className } = Astro.props;
+
+const source = icons[`../icons/${name}.svg`];
+if (!source) throw new Error(`Unknown icon "${name}" — expected src/icons/${name}.svg`);
+
+// Attribution comments belong in the .svg source, not in every page's HTML.
+let svg = source.replace(/<!--[\s\S]*?-->/g, '').trim();
+
+// Icons are decorative here; callers that need a label wrap them in one.
+svg = svg.replace('<svg', '<svg aria-hidden="true"');
+if (className) svg = svg.replace('<svg', `<svg class="${className}"`);
+---
+
+<Fragment set:html={svg} />

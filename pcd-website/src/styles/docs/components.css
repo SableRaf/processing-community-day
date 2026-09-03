@@ -100,6 +100,27 @@
 .share-menu {
   position: relative;
 }
+/* Icons are inlined from src/icons/*.svg via v-html, so the wrapper span is
+   what layout sees — the svg inside just fills it. */
+.share-menu__icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
+  color: currentColor;
+}
+.share-menu__icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+.share-menu__info-icon {
+  width: 1.125rem;
+  height: 1.125rem;
+}
 .share-menu__chevron {
   transition: transform 120ms ease;
 }
@@ -138,6 +159,7 @@
 .share-menu__items button:focus-visible {
   background: var(--docs-sidebar-color);
 }
+.share-menu__items .share-menu__icon,
 .share-menu__items svg,
 .share-menu__items img {
   flex: 0 0 auto;

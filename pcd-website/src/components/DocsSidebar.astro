@@ -1,6 +1,6 @@
 ---
 import type { KitNavNode, KitPage } from '../config/organizer-kit-nav';
-import NavExpanderIcon from './NavExpanderIcon.astro';
+import Icon from './Icon.astro';
 
 interface Props {
   nav: KitNavNode[];
@@ -36,7 +36,7 @@ const isGroupActive = (pages: KitPage[]) => pages.some((page) => isCurrent(page.
       }
       const groupActive = isGroupActive(node.pages);
       return <li class:list={['nav-list-item', { active: groupActive }]}>
-          <button class="nav-list-expander nav-list-toggle btn-reset" type="button" aria-label={`${node.title} submenu`} aria-expanded={groupActive ? 'true' : 'false'}><NavExpanderIcon /></button>
+          <button class="nav-list-expander nav-list-toggle btn-reset" type="button" aria-label={`${node.title} submenu`} aria-expanded={groupActive ? 'true' : 'false'}><Icon name="nav-expander" /></button>
           <button class="nav-list-link nav-list-link--static nav-list-group-toggle nav-list-toggle btn-reset" type="button" aria-expanded={groupActive ? 'true' : 'false'}>{node.title}</button>
           <ul class="nav-list">
             {node.pages.map((page) => {
