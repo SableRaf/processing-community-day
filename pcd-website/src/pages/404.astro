@@ -13,10 +13,17 @@ for (const node of nodes) {
 ---
 
 <SiteLayout title="Page not found — Processing Community Day" description="Page not found." noindex>
+  <div class="prose">
+    <h1>Page not found</h1>
+    <p><a id="not-found-link" href={`${base}/`}>Go to the map</a>.</p>
+  </div>
+
   <script is:inline define:vars={{ uidMap, base }}>
+    const path = window.location.pathname;
+
     // If the path looks like /event/<anything>-<uid>/, extract the uid
     // and redirect to the canonical event URL.
-    const match = window.location.pathname.match(/\/event\/.*-([0-9a-f]{7})\/?$/);
+    const match = path.match(/\/event\/.*-([0-9a-f]{7})\/?$/);
     if (match) {
       const uid = match[1];
       const target = uidMap[uid];
@@ -24,9 +31,12 @@ for (const node of nodes) {
         window.location.replace(target);
       }
     }
+
+    const organizerPrefix = `${base}/organize`;
+    if (path === organizerPrefix || path.startsWith(`${organizerPrefix}/`)) {
+      const link = document.getElementById('not-found-link');
+      link.href = `${base}/organize/`;
+      link.textContent = 'Go to the Organizer Kit';
+    }
   </script>
-  <div class="prose">
-    <h1>Page not found</h1>
-    <p><a href={`${base}/`}>Go to the map</a>.</p>
-  </div>
 </SiteLayout>
