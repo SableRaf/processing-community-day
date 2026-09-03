@@ -103,12 +103,14 @@
         "about_scanning": "About scanning QR codes",
         "qr_help": "Scan this code with your phone's camera or a QR scanner app to open this page.",
         "copy": "Copy",
-        "download": "Download",
         "qr_generate_failed": "Could not generate the QR code.",
         "qr_copied": "QR code copied to clipboard.",
-        "qr_copy_failed": "Could not copy the QR code. Try downloading it instead.",
-        "qr_download_failed": "Could not download the QR code.",
-        "qr_downloaded": "QR code downloaded."
+        "qr_copy_requires_https": "Copying QR code images requires HTTPS.",
+        "qr_copy_failed": "Could not copy the QR code. Try Share instead.",
+        "qr_shared": "QR code shared.",
+        "qr_link_shared": "Page link shared because this browser cannot share the QR image.",
+        "qr_share_failed": "Could not share the QR code.",
+        "qr_share_unavailable": "QR code sharing is unavailable here. Use an HTTPS page in a supported browser."
     },
     "popup": {
         "date_tbd": "Date TBD",

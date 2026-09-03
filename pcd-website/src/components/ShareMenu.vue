@@ -3,6 +3,7 @@ import { computed, nextTick, onBeforeUnmount, onMounted, ref, useId, watch } fro
 import { useI18n } from 'vue-i18n';
 import { toCanvas } from 'qrcode';
 import qrIcon from '../images/qr-code-bold-svgrepo-com_MIT_License.svg';
+import { vTouchActivate } from '../directives/touchActivate';
 import '../styles/docs/tokens.css';
 import '../styles/docs/components.css';
 
@@ -26,6 +27,7 @@ const menuOpen = ref(false);
 const dialogFallbackOpen = ref(false);
 const copyFeedbackVisible = ref(false);
 const status = ref('');
+const qrStatus = ref('');
 const qrReady = ref(false);
 const qrCopyLabel = ref('');
 let qrBlob: Blob | null = null;
@@ -169,6 +171,7 @@ function handleMenuKeydown(event: KeyboardEvent) {
 async function showQrCode() {
   setMenuOpen(false);
   status.value = '';
+  qrStatus.value = '';
   qrBlob = null;
   qrReady.value = false;
 
@@ -237,39 +240,63 @@ async function canvasToPngBlob(canvas: HTMLCanvasElement): Promise<Blob> {
 }
 
 async function copyQrCode() {
-  status.value = '';
+  qrStatus.value = '';
+
+  if (!window.isSecureContext) {
+    qrStatus.value = t('share_menu.qr_copy_requires_https');
+    return;
+  }
+
   try {
     if (!qrBlob || !navigator.clipboard?.write || typeof ClipboardItem === 'undefined') {
       throw new Error('Image clipboard is not supported.');
     }
-    await navigator.clipboard.write([new ClipboardItem({ 'image/png': qrBlob })]);
+
+    // WebKit preserves user activation only when clipboard representations are
+    // created synchronously in the touch/click handler and resolved by promises.
+    // Include the URL as a lower-fidelity representation for text-only targets.
+    const item = new ClipboardItem({
+      'image/png': Promise.resolve(qrBlob),
+      'text/plain': Promise.resolve(new Blob([props.permalink], { type: 'text/plain' })),
+    });
+    await navigator.clipboard.write([item]);
     qrCopyLabel.value = t('share_menu.copied');
-    status.value = t('share_menu.qr_copied');
+    qrStatus.value = t('share_menu.qr_copied');
     window.clearTimeout(qrCopyTimer);
     qrCopyTimer = window.setTimeout(() => {
       qrCopyLabel.value = '';
     }, 1600);
   } catch {
-    status.value = t('share_menu.qr_copy_failed');
+    qrStatus.value = t('share_menu.qr_copy_failed');
   }
 }
 
-function downloadQrCode() {
+async function shareQrCode() {
+  qrStatus.value = '';
   if (!qrBlob) {
-    status.value = t('share_menu.qr_download_failed');
+    qrStatus.value = t('share_menu.qr_share_failed');
     return;
   }
 
-  const downloadUrl = URL.createObjectURL(qrBlob);
-  const link = document.createElement('a');
-  link.href = downloadUrl;
-  link.download = props.qrFilename;
-  link.style.display = 'none';
-  document.body.append(link);
-  link.click();
-  link.remove();
-  window.setTimeout(() => URL.revokeObjectURL(downloadUrl), 0);
-  status.value = t('share_menu.qr_downloaded');
+  if (!window.isSecureContext || typeof navigator.share !== 'function') {
+    qrStatus.value = t('share_menu.qr_share_unavailable');
+    return;
+  }
+
+  const file = new File([qrBlob], props.qrFilename, { type: 'image/png' });
+  const canShareFile = typeof navigator.canShare !== 'function' || navigator.canShare({ files: [file] });
+  const shareData: ShareData = canShareFile
+    ? { files: [file], title: document.title }
+    : { url: props.permalink, title: document.title };
+
+  try {
+    await navigator.share(shareData);
+    qrStatus.value = t(canShareFile ? 'share_menu.qr_shared' : 'share_menu.qr_link_shared');
+  } catch (error) {
+    // Closing the native share sheet is a user choice, not a failure.
+    if (error instanceof DOMException && error.name === 'AbortError') return;
+    qrStatus.value = t('share_menu.qr_share_failed');
+  }
 }
 
 function handleDocumentClick(event: MouseEvent) {
@@ -303,6 +330,7 @@ function handleDialogClick(event: MouseEvent) {
 function handleDialogClose() {
   triggerRef.value?.focus();
   qrCopyLabel.value = '';
+  qrStatus.value = '';
 }
 
 watch(() => props.permalink, () => {
@@ -356,7 +384,7 @@ onBeforeUnmount(() => {
         type="button"
         role="menuitem"
         @click="copyMarkdown"
-        @touchend.stop.prevent="copyMarkdown"
+        v-touch-activate="copyMarkdown"
       >
         <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
           <path d="M14.85 3c.63 0 1.15.52 1.14 1.15v7.7c0 .63-.51 1.15-1.15 1.15H1.15C.52 13 0 12.48 0 11.84V4.15C0 3.52.52 3 1.15 3ZM9 11V5H7L5.5 7 4 5H2v6h2V8l1.5 1.92L7 8v3Zm2.99.5L14.5 8H13V5h-2v3H9.5Z" />
@@ -367,14 +395,14 @@ onBeforeUnmount(() => {
         type="button"
         role="menuitem"
         @click="copyPermalink"
-        @touchend.stop.prevent="copyPermalink"
+        v-touch-activate="copyPermalink"
       >
         <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
           <path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z" />
         </svg>
         <span>{{ t('share_menu.copy_permalink') }}</span>
       </button>
-      <button type="button" role="menuitem" @click="showQrCode" @touchend.stop.prevent="showQrCode">
+      <button type="button" role="menuitem" @click="showQrCode" v-touch-activate="showQrCode">
         <img :src="qrIcon.src" width="16" height="16" alt="" />
         <span>{{ t('share_menu.show_qr') }}</span>
       </button>
@@ -424,6 +452,8 @@ onBeforeUnmount(() => {
           <input ref="qrUrlRef" type="url" :value="permalink" readonly @click="qrUrlRef?.select()" />
         </label>
 
+        <p class="share-qr-dialog__status" role="status" aria-live="polite">{{ qrStatus }}</p>
+
         <div class="share-qr-dialog__actions">
           <div class="share-qr-dialog__info-control">
             <button
@@ -441,8 +471,8 @@ onBeforeUnmount(() => {
             </p>
           </div>
           <div class="share-qr-dialog__action-buttons">
-            <button type="button" :disabled="!qrReady" @click="copyQrCode">{{ copyButtonLabel }}</button>
-            <button type="button" :disabled="!qrReady" @click="downloadQrCode">{{ t('share_menu.download') }}</button>
+            <button type="button" :disabled="!qrReady" @click="copyQrCode" v-touch-activate="copyQrCode">{{ copyButtonLabel }}</button>
+            <button type="button" :disabled="!qrReady" @click="shareQrCode" v-touch-activate="shareQrCode">{{ t('share_menu.share') }}</button>
           </div>
         </div>
       </div>

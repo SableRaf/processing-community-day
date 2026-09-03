@@ -103,12 +103,14 @@
         "about_scanning": "À propos de la lecture des codes QR",
         "qr_help": "Scannez ce code avec l'appareil photo de votre téléphone ou une application de lecture de codes QR pour ouvrir cette page.",
         "copy": "Copier",
-        "download": "Télécharger",
         "qr_generate_failed": "Impossible de générer le code QR.",
         "qr_copied": "Code QR copié dans le presse-papiers.",
-        "qr_copy_failed": "Impossible de copier le code QR. Essayez plutôt de le télécharger.",
-        "qr_download_failed": "Impossible de télécharger le code QR.",
-        "qr_downloaded": "Code QR téléchargé."
+        "qr_copy_requires_https": "La copie d’images de codes QR nécessite HTTPS.",
+        "qr_copy_failed": "Impossible de copier le code QR. Essayez plutôt de le partager.",
+        "qr_shared": "Code QR partagé.",
+        "qr_link_shared": "Le lien de la page a été partagé, car ce navigateur ne peut pas partager l’image du code QR.",
+        "qr_share_failed": "Impossible de partager le code QR.",
+        "qr_share_unavailable": "Le partage du code QR n’est pas disponible ici. Utilisez une page HTTPS dans un navigateur compatible."
     },
     "popup": {
         "date_tbd": "Date à confirmer",

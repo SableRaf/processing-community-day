@@ -103,12 +103,14 @@
         "about_scanning": "Acerca de escanear códigos QR",
         "qr_help": "Escanea este código con la cámara de tu teléfono o una aplicación de códigos QR para abrir esta página.",
         "copy": "Copiar",
-        "download": "Descargar",
         "qr_generate_failed": "No se pudo generar el código QR.",
         "qr_copied": "Código QR copiado al portapapeles.",
-        "qr_copy_failed": "No se pudo copiar el código QR. Intenta descargarlo.",
-        "qr_download_failed": "No se pudo descargar el código QR.",
-        "qr_downloaded": "Código QR descargado."
+        "qr_copy_requires_https": "Para copiar imágenes de códigos QR se requiere HTTPS.",
+        "qr_copy_failed": "No se pudo copiar el código QR. Intenta compartirlo.",
+        "qr_shared": "Código QR compartido.",
+        "qr_link_shared": "Se compartió el enlace de la página porque este navegador no puede compartir la imagen QR.",
+        "qr_share_failed": "No se pudo compartir el código QR.",
+        "qr_share_unavailable": "No se puede compartir el código QR aquí. Usa una página HTTPS en un navegador compatible."
     },
     "popup": {
         "date_tbd": "Fecha por confirmar",

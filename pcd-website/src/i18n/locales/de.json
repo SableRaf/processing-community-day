@@ -103,12 +103,14 @@
         "about_scanning": "Informationen zum Scannen von QR-Codes",
         "qr_help": "Scanne diesen Code mit der Kamera deines Smartphones oder einer QR-Scanner-App, um diese Seite zu öffnen.",
         "copy": "Kopieren",
-        "download": "Herunterladen",
         "qr_generate_failed": "Der QR-Code konnte nicht erstellt werden.",
         "qr_copied": "QR-Code wurde in die Zwischenablage kopiert.",
-        "qr_copy_failed": "Der QR-Code konnte nicht kopiert werden. Versuche stattdessen, ihn herunterzuladen.",
-        "qr_download_failed": "Der QR-Code konnte nicht heruntergeladen werden.",
-        "qr_downloaded": "QR-Code wurde heruntergeladen."
+        "qr_copy_requires_https": "Zum Kopieren von QR-Code-Bildern ist HTTPS erforderlich.",
+        "qr_copy_failed": "Der QR-Code konnte nicht kopiert werden. Versuche stattdessen „Teilen“.",
+        "qr_shared": "QR-Code wurde geteilt.",
+        "qr_link_shared": "Der Seitenlink wurde geteilt, da dieser Browser das QR-Code-Bild nicht teilen kann.",
+        "qr_share_failed": "Der QR-Code konnte nicht geteilt werden.",
+        "qr_share_unavailable": "Das Teilen des QR-Codes ist hier nicht verfügbar. Verwende eine HTTPS-Seite in einem unterstützten Browser."
     },
     "popup": {
         "date_tbd": "Datum noch offen",
