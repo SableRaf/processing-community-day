@@ -9,40 +9,46 @@ description: An introduction to zines, resources for making one, and information
 
 A [zine](https://en.wikipedia.org/wiki/Zine) (pronounced “zeen”, as in "magazine") is a small, independent publication usually in a small booklet format, made by hand, photocopied, or shared online. A great thing about zines is that they are easy to make and inexpensive to produce. Zines are usually created by individuals or small groups and are typically distributed in small quantities, through local communities, events, or online platforms.
 
-## What should I include in my zine?
+## What kind of zine works well for PCD?
 
-For the Zine Library, we encourage you to create zines that work as an activity guide for a Processing Community Day session, meaning something that can be completed in 1-3 hours with or without guidance (your choice).
-
-What should you put in your zine? Well, that's up to you! A tutorial, documentation of a project, a series of discussion questions, exercises, or any other kind of activity that can be completed in a group or individually.
-
-You can use doodles, code snippets, images, quotes, stickers, or anything else you might think of. It's your zine!
-
-Keep in mind that zines are usually small, so you may want to focus on one topic or idea. You can also create a series of zines if you have more to share.
-
-For the same reason, if you are making your zine digitally, make sure to print it out, fold it, and test it before submitting it to the Zine Library. You want to make sure that the text is large enough to read, and that the pages are in the right order.
-
-Since a printed URL isn’t clickable, if you want to include a link in your zine, consider generating a QR code for it. You can use [this p5.js sketch](https://editor.p5js.org/SableRaf/sketches/fr3vzCehC) to generate a QR code for any URL.
+For PCD, we encourage you to create a zine that can be used as a guide by other PCD organizers or participants. Think of it as support material for an activity that could be completed in 1 to 3 hours. It could be a tutorial, a series of discussion questions, an art/code assignment, or any other kind of activity that can be completed in a group or individually. Some might need a facilitator to guide the activity. Others could be completed independently. It's up to you!
 
 ## How to Make a Zine
 
-The simplest form of a zine is a one-page zine, which can be printed on a single sheet of paper and folded into a small 8-pages booklet. You can create a one-page zine by drawing, writing, or collaging on a single sheet of paper.
+The simplest form of a zine is a minizine. It can be printed on a single sheet of paper (A4 or US Letter format) and folded into a small 8-page booklet. You can make one by drawing, writing, or collaging directly on a sheet of paper, or create it digitally and print it out (see the [software tools](#software-tools) below).
 
-This [wikiHow article](https://www.wikihow.com/Make-a-Zine) is an illustrated step-by-step guide to making a zine. It's a great starting point for creating your first zine. And if you prefer a video tutorial, [How to Make a Zine](https://www.youtube.com/watch?v=ab4O9SWNl9g) by Austin Kleon, is a short and fun introduction to zine-making available on YouTube.
+This [wikiHow article](https://www.wikihow.com/Make-a-Zine) is an illustrated step-by-step guide to making a zine and a good starting point. If you prefer a video tutorial, try [How to Make a Zine](https://www.youtube.com/watch?v=ab4O9SWNl9g) by Austin Kleon on YouTube.
 
-You can also use some of the tools listed below to create a zine digitally and print it out. And if you'd rather just use ready-to-print zines, you can find them in the [Zine Library](/organize/zines/zine-library/).
+And if you'd rather use a ready-to-print zine, you can find one in our [Zine Library](/organize/zines/zine-library/).
 
-![Illustrated folding instructions for making a one-page zine](./images/folding_instructions_small_CC_BY-SA%204.0_1pagedungeons.png)
+![Illustrated folding instructions for making a one-page zine](./images/folding_instructions_small_CC_BY-SA_4-0-1pagedungeons.png)
 
 <span class="prose-figure-caption">Illustration by [1pagedungeons](https://1pagedungeons.itch.io/) ([CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/))</span>
 
-## Zine Making Resources
+### Choose a topic
+
+One way to find a topic is to think of something you know a lot about, or something you want to learn more about. Then boil it down to a single topic or idea. How about a zine on the concept of a variable? A zine on rotation? Or a zine on using code comments as poetry?
+
+Alternatively, you could create a zine that is a collection of smaller ideas or prompts, in the spirit of Yoko Ono's [Grapefruit](https://en.wikipedia.org/wiki/Grapefruit_(book)), or Brian Eno's [Oblique Strategies](https://en.wikipedia.org/wiki/Oblique_Strategies).
+
+Remember that a zine is usually small, so make sure to keep it focused. If you have more to share, you can always create multiple zines!
+
+### Print and test it
+
+If you are making your zine digitally, do print it out, fold it, and read it yourself before submitting it to the Zine Library. Make sure the text is large enough to read, that the pages are in the right order, and that everything else looks good on the printed version. If possible, include a monochrome version of your zine, as it will make it easier to print (ever ran out of color ink?) and to photocopy.
+
+### Use QR codes for links
+
+A printed URL isn't clickable, so if you want to include a link in your zine, consider adding a QR code. You can use [this p5.js sketch](https://editor.p5js.org/SableRaf/sketches/fr3vzCehC) to generate a QR code for any URL.
+
+## Resources
 
 ### Zine Tutorials
 
 - [Bre's Zine Resources](https://docs.google.com/document/d/11Lc8s3w5HLrs8ekKiIGrbxNjVUV591MRvLdIOp_5fiA/)
 - [Wuthipol Designs](https://www.instagram.com/wuthipol.designs/reels/) on Instagram shares zine templates and tutorials like [this one](https://www.instagram.com/reels/C7EOqcryOZU/) for making a 16-page zine from a single sheet of paper.
 
-### Zine Tools
+### Software Tools
 
 - [p5.(gen)zine](https://github.com/munusshih/p5.genzine) by Munus Shih and Iley Cao is an open-sourced and friendly p5.js library for zine-making.
 - [The Electric Zine Maker](https://alienmelon.itch.io/electric-zine-maker) by alienmelon is a printshop and art tool for easily making and printing zines. 
@@ -54,6 +60,12 @@ You can also use some of the tools listed below to create a zine digitally and p
 - [Zine Libraries of The World](https://zines.barnard.edu/zine-libraries) by Barnard Zine Library
 - [Solidarity! Revolutionary Center and Radical Library](https://archive.org/details/solidarityrevolutionarycenter)
 - [ZineWiki](https://web.archive.org/web/20250320022039/https://zinewiki.com/) on the Internet Archive.
+
+## Other Inspiration
+
+[Code as Creative Medium: A Handbook for Computational Art and Design](https://mitpress.mit.edu/9780262542043/code-as-creative-medium/) is a book by Golan Levin and Tega Brain that features classic creative coding prompts and assignments, together with examples of artworks, and interviews with creative code educators.
+
+[Draw It With Your Eyes Closed: The Art of the Art Assignment](https://shop.nplusonemag.com/products/draw-it-with-your-eyes-closed-the-art-of-the-art-assignment) is an anthology of essays, assignements, anti-assignments, and stories by over a hundred artists, teachers, and students. It is a great source of inspiration for creating your own art assignments.
 
 ## Submit Your Zine
 
