@@ -15,11 +15,11 @@ Think of it as an inspiration rather than a set of instructions to follow like a
 
 ## Acknowledgement
 
-The original 2019 Organizer's Kit was created by Xin Xin, with guidance and support from Lauren McCarthy, Casey Reas, Dorothy Santos, Johanna Hedva, and Daniel Shiffman.
+The original 2019 Organizer's Kit was created by Xin Xin, with guidance and support from Lauren Lee McCarthy, Casey Reas, Dorothy Santos, Johanna Hedva, and Daniel Shiffman.
 
 The 2026 Organizer's Kit was created by Raphaël de Courville and Amy B. Woodman, with support from the Processing Foundation team, and the global Processing community. Special thanks to Roopa Vasudevan, Mathura M. Govindarajan, Xin Xin, and Roxana Hadad for their feedback and contributions.
 
-Some of this guide is inspired by [https://artandfeminism.org/](https://artandfeminism.org/).
+Some of this guide, especially the [Safe, Brave Space Policy](/organize/code-of-conduct/), is inspired by [https://artandfeminism.org/](https://artandfeminism.org/).
 
 ## License
 
