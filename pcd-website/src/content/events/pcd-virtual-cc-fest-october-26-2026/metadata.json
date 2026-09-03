@@ -1,0 +1,43 @@
+{
+  "id": "pcd-virtual-cc-fest-october-26-2026",
+  "uid": "98222da",
+  "organizers": [
+    {
+      "name": "Saber Khan"
+    }
+  ],
+  "primary_contact": {
+    "name": "Saber Khan",
+    "email": "mrkhanatndv@gmail.com"
+  },
+  "organization_name": "CC Fest",
+  "organization_url": "https://ccfest.rocks",
+  "organization_type": "Meetup, code club, community group",
+  "online_event": true,
+  "event_url": "https://ccfest.rocks",
+  "event_name": "virtual CC Fest October 26",
+  "event_location": {
+    "address": "",
+    "plus_code": "85634JQ2+HXJ"
+  },
+  "event_date": "",
+  "event_start_time": "",
+  "event_end_time": "",
+  "event_short_description": "CC Fest is a free and friendly event for anyone curious about creative code.",
+  "event_activities": [
+    "Hands-on workshops",
+    "Panel discussions",
+    "Beginner introductions to Processing or p5.js"
+  ],
+  "event_page_url": "",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-virtual-cc-fest-2026/49310",
+  "city": "Studio City",
+  "country": "United States",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 214,
+    "submitted_by_github": "saberkhan372",
+    "submitted_date": "2026-09-03",
+    "maintainer_notes": "Excited to see PCD up and running again."
+  }
+}
