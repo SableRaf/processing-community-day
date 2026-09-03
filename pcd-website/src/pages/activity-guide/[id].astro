@@ -34,6 +34,20 @@ const markdown = `# ${zine.title}\n\nby ${creator}\n\n${zine.entry.body?.trim() 
     </div>
 
     <div class="activity-guide__layout">
+      <div class="activity-guide__intro">
+        <h1>{zine.title}</h1>
+        <p class:list={['activity-guide__author', { 'activity-guide__author--with-tags': zine.tags }]}>
+          by {zine.created_by_url
+            ? <a href={zine.created_by_url} target="_blank" rel="noopener noreferrer">{zine.created_by}</a>
+            : zine.created_by}
+        </p>
+        {zine.tags && (
+          <ul class="activity-guide__tags" aria-label="Tags">
+            {zine.tags.map((tag) => <li class="activity-guide__tag">{tag}</li>)}
+          </ul>
+        )}
+      </div>
+
       <div class="activity-guide__sidebar">
         {zine.cover
           ? <Image class="activity-guide__cover" src={zine.cover.src} alt={zine.cover.alt} />
@@ -48,46 +62,31 @@ const markdown = `# ${zine.title}\n\nby ${creator}\n\n${zine.entry.body?.trim() 
         )}
       </div>
 
-      <div class="activity-guide__main">
-        <h1>{zine.title}</h1>
-        <p class:list={['activity-guide__author', { 'activity-guide__author--with-tags': zine.tags }]}>
-          by {zine.created_by_url
-            ? <a href={zine.created_by_url} target="_blank" rel="noopener noreferrer">{zine.created_by}</a>
-            : zine.created_by}
-        </p>
-        {zine.tags && (
-          <ul class="activity-guide__tags" aria-label="Tags">
-            {zine.tags.map((tag) => <li class="activity-guide__tag">{tag}</li>)}
-          </ul>
-        )}
+      <div class="activity-guide__details">
+        <Content />
 
-        <div class="activity-guide__details">
-          <Content />
+        <hr />
 
-          <hr />
+        <ZineDownloads downloads={zine.downloads} />
 
-          <ZineDownloads downloads={zine.downloads} />
+        <hr />
 
-          <hr />
-
-          <section class="activity-guide__metadata" aria-label="Details">
-            <dl>
-              <div><dt>Topic:</dt><dd>{zine.topic}</dd></div>
-              {zine.activity_type && <div><dt>Activity type:</dt><dd>{zine.activity_type}</dd></div>}
-              {zine.zine_format && <div><dt>Zine format:</dt><dd>{zine.zine_format}</dd></div>}
-              {zine.duration && <div><dt>Duration:</dt><dd>{zine.duration}</dd></div>}
-              {zine.materials && <div><dt>Required materials:</dt><dd>{zine.materials}</dd></div>}
-              {zine.license && (
-                <div>
-                  <dt>License:</dt>
-                  <dd><a href={LICENSE_URLS[zine.license]}>{zine.license}</a></dd>
-                </div>
-              )}
-              {zine.attribution && <div><dt>Attribution:</dt><dd>{zine.attribution}</dd></div>}
-            </dl>
-          </section>
-
-        </div>
+        <section class="activity-guide__metadata" aria-label="Details">
+          <dl>
+            <div><dt>Topic:</dt><dd>{zine.topic}</dd></div>
+            {zine.activity_type && <div><dt>Activity type:</dt><dd>{zine.activity_type}</dd></div>}
+            {zine.zine_format && <div><dt>Zine format:</dt><dd>{zine.zine_format}</dd></div>}
+            {zine.duration && <div><dt>Duration:</dt><dd>{zine.duration}</dd></div>}
+            {zine.materials && <div><dt>Required materials:</dt><dd>{zine.materials}</dd></div>}
+            {zine.license && (
+              <div>
+                <dt>License:</dt>
+                <dd><a href={LICENSE_URLS[zine.license]}>{zine.license}</a></dd>
+              </div>
+            )}
+            {zine.attribution && <div><dt>Attribution:</dt><dd>{zine.attribution}</dd></div>}
+          </dl>
+        </section>
       </div>
     </div>
   </article>
@@ -100,27 +99,27 @@ const markdown = `# ${zine.title}\n\nby ${creator}\n\n${zine.entry.body?.trim() 
 
   .activity-guide__actions {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     align-items: flex-start;
-    justify-content: space-between;
-    gap: var(--spacing-sm) var(--spacing-lg);
-  }
-
-  .activity-guide__page-actions {
-    margin-left: auto;
+    margin-bottom: var(--spacing-xl);
   }
 
   .activity-guide__layout {
     display: grid;
-    gap: var(--spacing-xl);
+    gap: 0;
   }
 
-  .activity-guide__main {
+  .activity-guide__intro,
+  .activity-guide__details {
     min-width: 0;
   }
 
-  .activity-guide__main h1 {
+  .activity-guide__intro h1 {
     margin-bottom: var(--spacing-xs);
+  }
+
+  .activity-guide__sidebar {
+    margin-bottom: var(--spacing-xl);
   }
 
   .activity-guide__cover {
@@ -157,10 +156,6 @@ const markdown = `# ${zine.title}\n\nby ${creator}\n\n${zine.entry.body?.trim() 
 
   .activity-guide__author--with-tags {
     margin-bottom: var(--spacing-md);
-  }
-
-  .activity-guide__details {
-    min-width: 0;
   }
 
   .activity-guide__metadata dl {
@@ -208,10 +203,39 @@ const markdown = `# ${zine.title}\n\nby ${creator}\n\n${zine.entry.body?.trim() 
   }
 
   @media (min-width: 50rem) {
+    .activity-guide__actions {
+      flex-flow: row wrap;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: var(--spacing-sm) var(--spacing-lg);
+      margin-bottom: 0;
+    }
+
+    .activity-guide__page-actions {
+      margin-left: auto;
+    }
+
     .activity-guide__layout {
       grid-template-columns: minmax(16rem, 2fr) minmax(0, 3fr);
-      gap: var(--spacing-xl);
+      grid-template-rows: auto auto;
+      column-gap: var(--spacing-xl);
       align-items: start;
+    }
+
+    .activity-guide__intro {
+      grid-column: 2;
+      grid-row: 1;
+    }
+
+    .activity-guide__sidebar {
+      grid-column: 1;
+      grid-row: 1 / span 2;
+      margin-bottom: 0;
+    }
+
+    .activity-guide__details {
+      grid-column: 2;
+      grid-row: 2;
     }
   }
 </style>
