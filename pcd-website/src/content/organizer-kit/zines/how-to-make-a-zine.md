@@ -13,21 +13,23 @@ A [zine](https://en.wikipedia.org/wiki/Zine) (pronounced “zeen”, as in "maga
 
 For PCD, we encourage you to create a zine that can be used as a guide by other PCD organizers or participants. Think of it as support material for an activity that could be completed in 1 to 3 hours. It could be a tutorial, a series of discussion questions, an art/code assignment, or any other kind of activity that can be completed in a group or individually. Some might need a facilitator to guide the activity. Others could be completed independently. It's up to you!
 
-## How to Make a Zine
-
-The simplest form of a zine is a minizine. It can be printed on a single sheet of paper (A4 or US Letter format) and folded into a small 8-page booklet. You can make one by drawing, writing, or collaging directly on a sheet of paper, or create it digitally and print it out (see the [software tools](#software-tools) below).
-
-This [wikiHow article](https://www.wikihow.com/Make-a-Zine) is an illustrated step-by-step guide to making a zine and a good starting point. If you prefer a video tutorial, try [How to Make a Zine](https://www.youtube.com/watch?v=ab4O9SWNl9g) by Austin Kleon on YouTube.
-
 And if you'd rather use a ready-to-print zine, you can find one in our [Zine Library](/organize/zines/zine-library/).
 
 ![Illustrated folding instructions for making a one-page zine](./images/folding_instructions_small_CC_BY-SA_4-0-1pagedungeons.png)
 
-<span class="prose-figure-caption">Illustration by [1pagedungeons](https://1pagedungeons.itch.io/) ([CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/))</span>
+<span class="prose-figure-caption">A minizine is printed on a single sheet of paper and folded into a small 8-page booklet. <br/>Illustration by [1pagedungeons](https://1pagedungeons.itch.io/) ([CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/))</span>
 
-### Choose a topic
+## How to Make a Zine
 
-One way to find a topic is to think of something you know a lot about, or something you want to learn more about. Then boil it down to a single topic or idea. How about a zine on the concept of a variable? A zine on rotation? Or a zine on using code comments as poetry?
+I highly recommend starting with Neta Bomani's [How to Plan a Zine Project](https://www.brooklynmuseum.org/en-GB/stories/how-to-plan-zine-project). It's a short and very practical guide. You can also download it as a printable zine [here](https://d1lfxha3ugu3d4.cloudfront.net/article/images/Neta_Bomani_Zine_3.pdf). Thanks to Roopa Vasudevan for pointing me to it!
+
+This [wikiHow article](https://www.wikihow.com/Make-a-Zine) is an illustrated step-by-step guide to making a zine and a good starting point. If you prefer a video tutorial, try [How to Make a Zine](https://www.youtube.com/watch?v=ab4O9SWNl9g) by Austin Kleon on YouTube.
+
+### Choosing a topic
+
+One way to pick a topic is to think of something you know a lot about, or something you want to learn more about. Then boil it down to a single idea. How about a zine on the concept of a *variable*? A zine on *rotation*? Or a zine on using *code comments as poetry*?
+
+If you are organizing a PCD yourself, are there any topics that you'd like participants to discuss? This could be a starting point for your zine. How would you like people to engage with that topic or conversation? How might that translate into the zine format?
 
 Alternatively, you could create a zine that is a collection of smaller ideas or prompts, in the spirit of Yoko Ono's [Grapefruit](https://en.wikipedia.org/wiki/Grapefruit_(book)), or Brian Eno's [Oblique Strategies](https://en.wikipedia.org/wiki/Oblique_Strategies).
 
@@ -35,7 +37,7 @@ Remember that a zine is usually small, so make sure to keep it focused. If you h
 
 ### Print and test it
 
-If you are making your zine digitally, do print it out, fold it, and read it yourself before submitting it to the Zine Library. Make sure the text is large enough to read, that the pages are in the right order, and that everything else looks good on the printed version. If possible, include a monochrome version of your zine, as it will make it easier to print (ever ran out of color ink?) and to photocopy.
+If you are making your zine digitally, it's a good idea to print it out, fold it, and read it yourself before submitting it to the Zine Library. Make sure the text is large enough to read, that the pages are in the right order, and that everything else looks good on the printed version. If possible, include a monochrome version of your zine, as it will make it easier to print (ever run out of color ink?) and to photocopy.
 
 ### Use QR codes for links
 
@@ -45,8 +47,8 @@ A printed URL isn't clickable, so if you want to include a link in your zine, co
 
 ### Zine Tutorials
 
-- [Bre's Zine Resources](https://docs.google.com/document/d/11Lc8s3w5HLrs8ekKiIGrbxNjVUV591MRvLdIOp_5fiA/)
 - [Wuthipol Designs](https://www.instagram.com/wuthipol.designs/reels/) on Instagram shares zine templates and tutorials like [this one](https://www.instagram.com/reels/C7EOqcryOZU/) for making a 16-page zine from a single sheet of paper.
+- [Bre's Zine Resources](https://docs.google.com/document/d/11Lc8s3w5HLrs8ekKiIGrbxNjVUV591MRvLdIOp_5fiA/)
 
 ### Software Tools
 
