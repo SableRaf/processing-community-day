@@ -5,6 +5,8 @@ order: 3
 description: The simplest version of a Processing Community Day you can realistically host.
 ---
 
+We understand that it can take enormous physical and emotional effort to organize a community event, therefore we have compiled this Organizer's Kit to help you get things started.
+
 If this is your first time organizing an event, we encourage you to start small.
 
 Your PCD does not need to be a large event, or professionally produced, to be impactful. What matters most is creating a space where people can connect with each other around creative coding.

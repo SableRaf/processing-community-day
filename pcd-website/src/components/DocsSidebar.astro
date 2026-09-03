@@ -1,5 +1,5 @@
 ---
-import { KIT_BASE, type KitNavNode, type KitPage } from '../config/organizer-kit-nav';
+import type { KitNavNode, KitPage } from '../config/organizer-kit-nav';
 import NavExpanderIcon from './NavExpanderIcon.astro';
 
 interface Props {
@@ -18,9 +18,7 @@ const isGroupActive = (pages: KitPage[]) => pages.some((page) => isCurrent(page.
 ---
 
 <nav id="docs-nav" class="docs-nav" aria-label="Organizer Kit">
-  <a class="nav-list-link nav-list-link--home" href={`${KIT_BASE}/`} aria-current={isCurrent(`${KIT_BASE}/`) ? 'page' : undefined}>
-    Organizer Kit
-  </a>
+  <div class="nav-list-link nav-list-link--home">PCD Organizer Kit</div>
 
   <ul class="nav-list">
     {nav.map((node) => {

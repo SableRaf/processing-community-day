@@ -5,6 +5,6 @@ export interface NavItem {
 
 export const NAV_ITEMS: NavItem[] = [
   { label: 'Events Map', href: '/' },
-  { label: 'Organize', href: '/organize/' },
+  { label: 'Organize', href: '/organize/getting-started/introduction/' },
   { label: 'What is PCD?', href: '/about/' },
 ];
