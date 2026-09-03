@@ -58,6 +58,7 @@ No install needed — `open-location-code` is already available at `pcd-website/
 ### Astro + Vue split
 
 - **Astro** owns routing, layouts, metadata, and static content pages. `src/layouts/BaseLayout.astro` provides the document shell; `MapLayout.astro`, `SiteLayout.astro`, and `DocsLayout.astro` provide the map, standard content, and Organizer Kit shells respectively.
+- The Organizer Kit introduction lives in `src/content/organizer-kit/getting-started/introduction.md`; `/organize/` redirects to its canonical `/organize/getting-started/introduction/` route.
 - **Vue** handles the interactive map UI as `client:only="vue"` island components. Map-specific interactive features belong in Vue; static site and Organizer Kit pages belong in Astro and Markdown content collections.
 
 ### Data loading at build time

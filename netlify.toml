@@ -17,6 +17,11 @@
   status = 301
 
 [[redirects]]
+  from = "/organize/"
+  to = "/organize/getting-started/introduction/"
+  status = 301
+
+[[redirects]]
   from = "/organize/activity-guides/library/*"
   to = "/organize/zines/zine-library/"
   status = 301

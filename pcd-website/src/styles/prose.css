@@ -183,21 +183,31 @@
 
 :where(.prose, .docs-prose) :is(h2, h3, h4, h5, h6) {
   position: relative;
-  margin-left: -1.4em;
-  padding-left: 1.4em;
 }
 
+/* Sits after the heading text so it never reaches into the sidebar gutter.
+   Sized in em so it keeps the same optical weight from h2 down to h6, and
+   centred on the capitals rather than stretched to the line box. */
 :where(.prose, .docs-prose) .docs-heading-anchor {
-  position: absolute;
-  top: 0.15em;
-  left: 0.2em;
-  display: inline-flex;
-  align-items: center;
-  height: 1em;
+  display: inline-block;
+  width: 0.75em;
+  height: 0.75em;
+  margin-left: 0.3em;
+  /* `middle` centres the icon on the parent's x-height; nudging up by half
+     the leftover cap height lands it on the centre of the capitals. */
+  vertical-align: middle;
+  transform: translateY(-0.06em);
   opacity: 0;
   color: var(--color-primary);
   text-decoration: none;
   pointer-events: none;
+}
+
+:where(.prose, .docs-prose) .docs-heading-anchor svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
 }
 
 :where(.prose, .docs-prose) :is(h2, h3, h4, h5, h6):hover .docs-heading-anchor,
@@ -212,11 +222,6 @@
 }
 
 @media (max-width: 30rem) {
-  :where(.prose, .docs-prose) :is(h2, h3, h4, h5, h6) {
-    margin-left: 0;
-    padding-left: 0;
-  }
-
   :where(.prose, .docs-prose) .docs-heading-anchor {
     display: none;
   }

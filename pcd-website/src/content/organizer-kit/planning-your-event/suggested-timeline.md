@@ -5,7 +5,7 @@ order: 1
 description: A possible path for how a PCD comes together, from first idea to follow-up.
 ---
 
-*There's no single way to organize a PCD. The plan below is one possible path. It is not a checklist or a list of requirements, and the order and timing will vary depending on the specifics of your event.*
+*There's no single way to organize a PCD. The plan below is one possible path. It is not a checklist or a list of requirements, and you are welcome to define the timeline and format of your event in any way that best serves your local communities.*
 
 ## 1. Deciding whether to host a PCD
 
@@ -13,7 +13,7 @@ Before committing, give yourself time to figure out whether hosting is right for
 
 ### Do your research
 
-* Read up on PCD, starting with the [Introduction](/organize/getting-started/introduction/) and [Minimum Viable PCD](/organize/getting-started/minimum-viable-pcd/)
+* Read up on PCD, starting with [A Letter to PCD Organizers](/organize/getting-started/a-letter-to-organizers/) and [Minimum Viable PCD](/organize/getting-started/minimum-viable-pcd/)
 * Watch a recording of a past [info session](/organize/resources/info-sessions/) to hear from past organizers
 
 
