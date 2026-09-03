@@ -20,6 +20,15 @@ const legal = defineCollection({
   }),
 });
 
+// Prose for standalone top-level pages (e.g. /about/), so the copy lives in
+// markdown instead of inline in the .astro route.
+const pages = defineCollection({
+  loader: glob({ base: './src/content/pages', pattern: '**/*.md' }),
+  schema: z.object({
+    title: z.string(),
+  }),
+});
+
 const organizerKit = defineCollection({
   loader: glob({ base: './src/content/organizer-kit', pattern: '**/*.md' }),
   schema: z.object({
@@ -52,6 +61,7 @@ const zines = defineCollection({
 export const collections = {
   events,
   legal,
+  pages,
   organizerKit,
   zines,
 };
