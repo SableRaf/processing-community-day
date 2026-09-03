@@ -16,11 +16,6 @@ const issueNumber = issue.number;
 const issueBody = issue.body ?? '';
 
 async function setOutput(key, value) { if (OUTPUT_PATH) await fs.appendFile(OUTPUT_PATH, `${key}=${String(value)}\n`); }
-function issueUrl() {
-  if (issue.html_url) return issue.html_url;
-  const repository = payload.repository?.full_name ?? process.env.GITHUB_REPOSITORY;
-  return repository ? `${process.env.GITHUB_SERVER_URL ?? 'https://github.com'}/${repository}/issues/${issueNumber}` : `issue #${issueNumber}`;
-}
 async function folderExists(folder) { try { await fs.access(folder); return true; } catch { return false; } }
 function addAttachmentErrors(errors, field, parsed, requiredRole) {
   if (parsed.invalidEntries.length) {
@@ -90,7 +85,16 @@ async function main() {
   const previousOrder = currentOrderValue ? Number(currentOrderValue) : Number.NaN;
   const order = Number.isInteger(previousOrder) && previousOrder >= 0 ? previousOrder : (Math.max(0, ...knownOrders) + 1);
   const downloads = files.filter((file) => file.kind === 'download').map((file) => ({ file: file.filename, file_size: formatFileSize(file.bytes.byteLength), ...(file.role ? { role: file.role } : {}) }));
-  const metadata = { id: slug, title, topic, created_by: createdBy, summary, downloads, license: 'CC BY-SA 4.0', source_url: issueUrl() };
+  const maintainerNotes = fields.get('Maintainer notes')?.trim() ?? '';
+  const metadata = {
+    id: slug, title, topic, created_by: createdBy, summary, downloads, license: 'CC BY-SA 4.0',
+    intake: {
+      issue_number: issueNumber,
+      submitted_by_github: issue.user?.login ?? '',
+      submitted_date: new Date().toISOString().slice(0, 10),
+      maintainer_notes: maintainerNotes,
+    },
+  };
   if (tags.length) metadata.tags = tags; if (languages.length) metadata.languages = languages; if (createdByUrl) metadata.created_by_url = createdByUrl;
   if (cover.attachments.length) metadata.cover = { src: files.find((file) => file.kind === 'cover').filename, alt: title };
   for (const [field, key] of [['Activity type', 'activity_type'], ['Zine format', 'zine_format'], ['Duration of the activity', 'duration'], ['Materials', 'materials'], ['Preferred attribution', 'attribution']]) {
@@ -101,7 +105,7 @@ async function main() {
   await fs.writeFile(path.join(publishedDir, 'metadata.json'), `${JSON.stringify(metadata, null, 2)}\n`);
   await fs.writeFile(path.join(publishedDir, 'index.md'), makeZineMarkdown(slug, order, description));
   for (const file of files) await fs.writeFile(path.join(publishedDir, file.kind === 'cover' ? file.filename : path.join('downloads', file.filename)), file.bytes);
-  const prBodyPath = path.join(RUNNER_TEMP, `zine-pr-body-${issueNumber}.md`); await fs.writeFile(prBodyPath, makeZinePrBody({ issueNumber, title, submitterLogin: issue.user?.login ?? '', maintainerNotes: fields.get('Maintainer notes')?.trim() ?? '' }));
+  const prBodyPath = path.join(RUNNER_TEMP, `zine-pr-body-${issueNumber}.md`); await fs.writeFile(prBodyPath, makeZinePrBody({ issueNumber, title, submitterLogin: issue.user?.login ?? '', maintainerNotes }));
   await setOutput('valid', 'true'); await setOutput('branch', `automation/new-zine-${issueNumber}`); await setOutput('commit_message', `Publish ${title} zine from issue #${issueNumber}`); await setOutput('pr_title', `Review zine: ${title}`); await setOutput('pr_body_path', prBodyPath); await setOutput('zine_title', title); await setOutput('zine_slug', slug);
 }
 

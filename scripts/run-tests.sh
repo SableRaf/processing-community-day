@@ -11,6 +11,7 @@ tests=(
   ".github/scripts/process-edit-event-issue.test.mjs"
   ".github/scripts/process-new-zine-issue.test.mjs"
   ".github/scripts/plus-code.test.mjs"
+  ".github/scripts/safe-storage.test.mjs"
   ".github/scripts/zines.test.mjs"
 )
 

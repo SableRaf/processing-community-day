@@ -69,7 +69,8 @@ onUnmounted(() => {
         class="submit-modal"
       >
         <button
-          class="submit-modal-close"
+          class="modal-close-button submit-modal-close"
+          type="button"
           :aria-label="t('nav.submit_modal_close')"
           @click="handleClose()"
         >×</button>
@@ -166,29 +167,6 @@ onUnmounted(() => {
   top: var(--spacing-sm);
   right: var(--spacing-sm);
   z-index: 1;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  color: var(--color-text-muted);
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  font-size: 1.25rem;
-  line-height: 1;
-  transition: background-color 0.15s ease, color 0.15s ease;
-}
-
-.submit-modal-close:hover {
-  background: var(--color-border);
-  color: var(--color-text);
-}
-
-.submit-modal-close:focus-visible {
-  outline: 2px solid var(--color-focus);
-  outline-offset: 2px;
 }
 
 .submit-modal-body {

@@ -35,7 +35,7 @@ test('a populated zine collection emits linked assets and renders entries in fro
     assert.ok(existsSync(pagePath), 'the zine page should be generated');
     const page = readFileSync(pagePath, 'utf8');
     assert.match(page, /Loops with Shapes/);
-    assert.match(page, /View the original submission/);
+    assert.doesNotMatch(page, /View the original submission/);
     const coverIndex = page.indexOf('class="activity-guide__cover"');
     const titleIndex = page.indexOf('>Loops with Shapes</h1>');
     const authorIndex = page.indexOf('class="activity-guide__author');
@@ -59,6 +59,8 @@ test('a populated zine collection emits linked assets and renders entries in fro
     assert.match(page, /<dt[^>]*>Duration:<\/dt>\s*<dd[^>]*>2 hours<\/dd>/);
     assert.match(page, /<dt[^>]*>Required materials:<\/dt>\s*<dd[^>]*>Laptop and p5\.js editor<\/dd>/);
     assert.match(page, /<dt[^>]*>Topic:<\/dt>\s*<dd[^>]*>Loops<\/dd>/);
+    assert.match(page, /<dt[^>]*>Submitted:<\/dt>[\s\S]*?href="https:\/\/github\.com\/processing\/processing-community-day\/issues\/123"[\s\S]*?<time[^>]*datetime="2026-06-23"[^>]*>June 23, 2026<\/time>/);
+    assert.match(page, /<dt[^>]*>Submitted by:<\/dt>[\s\S]*?href="https:\/\/github\.com\/fixture-author"[^>]*>fixture-author<\/a>/);
     assert.match(
       page,
       /<ul class="activity-guide__tags"[^>]*>[\s\S]*?<li class="activity-guide__tag"[^>]*>beginner<\/li>[\s\S]*?<li class="activity-guide__tag"[^>]*>p5\.js<\/li>/,

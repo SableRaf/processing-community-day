@@ -10,6 +10,7 @@ import SubmitModal from './SubmitModal.vue';
 import { currentLocale } from '../i18n/localeState';
 import { trackEvent, SUBMIT_EVENT_BUTTON_CLICK } from '../lib/analytics';
 import { cartoTileUrl } from '../lib/carto';
+import { safeStorage } from '../lib/safeStorage.mjs';
 import { i18n } from '../i18n/index';
 
 const props = defineProps<{
@@ -38,11 +39,11 @@ function handleInfoClick() {
 }
 
 function shouldAutoOpenInfoModal(): boolean {
-  return localStorage.getItem(INFO_MODAL_SUPPRESS_KEY) !== 'true';
+  return safeStorage.get(INFO_MODAL_SUPPRESS_KEY) !== 'true';
 }
 
 function suppressInfoModal() {
-  localStorage.setItem(INFO_MODAL_SUPPRESS_KEY, 'true');
+  safeStorage.set(INFO_MODAL_SUPPRESS_KEY, 'true');
   infoModalOpen.value = false;
 }
 

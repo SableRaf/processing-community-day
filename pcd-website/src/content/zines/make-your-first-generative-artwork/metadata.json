@@ -21,7 +21,12 @@
     }
   ],
   "license": "CC BY-SA 4.0",
-  "source_url": "https://github.com/processing/processing-community-day/issues/207",
+  "intake": {
+    "issue_number": 207,
+    "submitted_by_github": "SableRaf",
+    "submitted_date": "2026-09-02",
+    "maintainer_notes": "Test for file uploads"
+  },
   "tags": [
     "beginner",
     "p5.js",
