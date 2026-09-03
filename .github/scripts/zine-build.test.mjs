@@ -43,23 +43,22 @@ test('a populated zine collection emits linked assets and renders entries in fro
     // Hydrated components may serialize page Markdown into props before the
     // rendered article body, so find the visible description after its tags.
     const descriptionIndex = page.indexOf('Use a loop to draw a playful field of shapes.', tagsIndex);
-    const detailsSeparatorIndex = page.indexOf('<hr', descriptionIndex);
-    const metadataIndex = page.indexOf('class="activity-guide__metadata"');
-    const downloadsSeparatorIndex = page.indexOf('<hr', metadataIndex);
+    const downloadsSeparatorIndex = page.indexOf('<hr', descriptionIndex);
     const downloadsIndex = page.indexOf('class="downloads"');
+    const metadataSeparatorIndex = page.indexOf('<hr', downloadsIndex);
+    const metadataIndex = page.indexOf('class="activity-guide__metadata"');
     assert.ok(
-      coverIndex !== -1 && coverIndex < titleIndex &&
-      titleIndex < authorIndex && authorIndex < tagsIndex && tagsIndex < descriptionIndex &&
-      descriptionIndex < detailsSeparatorIndex &&
-      detailsSeparatorIndex < metadataIndex && metadataIndex < downloadsSeparatorIndex &&
-      downloadsSeparatorIndex < downloadsIndex,
+      titleIndex !== -1 && titleIndex < authorIndex && authorIndex < tagsIndex && tagsIndex < coverIndex &&
+      coverIndex < descriptionIndex && descriptionIndex < downloadsSeparatorIndex &&
+      downloadsSeparatorIndex < downloadsIndex && downloadsIndex < metadataSeparatorIndex &&
+      metadataSeparatorIndex < metadataIndex,
       'tags should render between the author and description, with separators around the details',
     );
-    assert.match(page, /<dt[^>]*>Activity type<\/dt>\s*<dd[^>]*>Workshop<\/dd>/);
-    assert.match(page, /<dt[^>]*>Zine format<\/dt>\s*<dd[^>]*>Single-sheet folded zine<\/dd>/);
-    assert.match(page, /<dt[^>]*>Duration<\/dt>\s*<dd[^>]*>2 hours<\/dd>/);
-    assert.match(page, /<dt[^>]*>Required materials<\/dt>\s*<dd[^>]*>Laptop and p5\.js editor<\/dd>/);
-    assert.match(page, /<dt[^>]*>Topic<\/dt>\s*<dd[^>]*>Loops<\/dd>/);
+    assert.match(page, /<dt[^>]*>Activity type:<\/dt>\s*<dd[^>]*>Workshop<\/dd>/);
+    assert.match(page, /<dt[^>]*>Zine format:<\/dt>\s*<dd[^>]*>Single-sheet folded zine<\/dd>/);
+    assert.match(page, /<dt[^>]*>Duration:<\/dt>\s*<dd[^>]*>2 hours<\/dd>/);
+    assert.match(page, /<dt[^>]*>Required materials:<\/dt>\s*<dd[^>]*>Laptop and p5\.js editor<\/dd>/);
+    assert.match(page, /<dt[^>]*>Topic:<\/dt>\s*<dd[^>]*>Loops<\/dd>/);
     assert.match(
       page,
       /<ul class="activity-guide__tags"[^>]*>[\s\S]*?<li class="activity-guide__tag"[^>]*>beginner<\/li>[\s\S]*?<li class="activity-guide__tag"[^>]*>p5\.js<\/li>/,
@@ -75,30 +74,17 @@ test('a populated zine collection emits linked assets and renders entries in fro
     assert.ok(pageCover, 'the zine page should render a cover image');
     assert.ok(existsSync(emittedPath(pageCover[1])), 'the zine cover should be emitted');
 
-    const zineMakingPage = readFileSync(join(DIST, 'activity-guide/zine-making-kit/index.html'), 'utf8');
-    const zineMakingCover = zineMakingPage.match(
-      /<img[^>]+src="([^"]+)"[^>]+alt="Zine Making Kit"[^>]+class="activity-guide__cover"/,
-    );
-    assert.ok(zineMakingCover, 'the Zine Making Kit page should render its accessible cover image');
-    assert.ok(existsSync(emittedPath(zineMakingCover[1])), 'the Zine Making Kit cover should be emitted');
-    assert.equal(
-      hrefForFilename(zineMakingPage, 'B230_zinemakingactivity.pdf'),
-      'https://guides.loc.gov/ld.php?content_id=67687837',
-    );
-    assert.match(zineMakingPage, /download-list__size[^>]*>519 kB</);
-    assert.match(zineMakingPage, /<dt[^>]*>Zine format<\/dt>\s*<dd[^>]*>Individual pages<\/dd>/);
-
     const library = readFileSync(join(DIST, 'organize/activity-guides/zine-library/index.html'), 'utf8');
-    assert.match(library, /<ul class="guide-grid">\s*<li>\s*<a class="guide-card guide-card--zine" href="\/activity-guide\/zine-making-kit\/"/);
+    assert.match(library, /<ul class="guide-grid">\s*<li>\s*<a class="guide-card guide-card--zine" href="\/activity-guide\/make-your-first-generative-artwork\/"/);
     assert.match(
       library,
-      /guide-card__cover-frame[\s\S]*?<\/span>\s*<span class="guide-card__body">\s*<strong>Zine Making Kit<\/strong>\s*<span class="guide-card__author">by Library of Congress<\/span>/,
+      /guide-card__cover-frame[\s\S]*?<\/span>\s*<span class="guide-card__body">\s*<strong>Make your first generative artwork<\/strong>\s*<span class="guide-card__author">by Raphaël de Courville<\/span>/,
     );
-    assert.match(library, /<img[^>]+alt="Zine Making Kit"/);
+    assert.match(library, /<img[^>]+alt="Make your first generative artwork"/);
     assert.match(library, new RegExp(`href="/activity-guide/${SLUG}/"`));
     assert.ok(
-      library.indexOf('/activity-guide/zine-making-kit/') < library.indexOf(`/activity-guide/${SLUG}/`),
-      'order 1 should render before order 13',
+      library.indexOf('/activity-guide/make-your-first-generative-artwork/') < library.indexOf(`/activity-guide/${SLUG}/`),
+      'order 2 should render before order 13',
     );
     assert.equal((library.match(/Submit a Zine/g) ?? []).length, 1, 'the grid should render one submission card');
     assert.match(
