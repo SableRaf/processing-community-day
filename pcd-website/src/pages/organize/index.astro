@@ -1,3 +1,36 @@
 ---
-return Astro.redirect('/organize/getting-started/introduction/');
+import { getEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+// `/organize/` is the short, shareable entry point to the Organizer Kit that we
+// hand out in announcements. Astro's `output: 'static'` build cannot emit a real
+// HTTP redirect, so a bare `Astro.redirect()` here produces a stub page titled
+// "Redirecting to: …" with no OG tags — which is exactly what link unfurlers
+// (Discourse, Slack) end up showing. Render the destination's own metadata
+// instead, and point canonical at it so search engines consolidate on the real
+// page rather than this hop.
+const destination = '/organize/getting-started/introduction/';
+const intro = await getEntry('organizerKit', 'getting-started/introduction');
+
+const siteUrl = Astro.site ? Astro.site.href.replace(/\/$/, '') : '';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const redirectUrl = `${base}${destination}`;
+
+const title = 'Organizer Kit — Processing Community Day';
+const description = intro?.data.description ?? '';
 ---
+
+<BaseLayout
+  title={title}
+  description={description}
+  ogImage={`${siteUrl}${base}/og-image.png`}
+  canonical={`${siteUrl}${redirectUrl}`}
+>
+  <Fragment slot="head">
+    <meta http-equiv="refresh" content={`0;url=${redirectUrl}`} />
+  </Fragment>
+  <script is:inline define:vars={{ redirectUrl }}>
+    window.location.replace(redirectUrl);
+  </script>
+  <a href={redirectUrl}>Open the Processing Community Day Organizer Kit</a>
+</BaseLayout>
