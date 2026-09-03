@@ -27,7 +27,12 @@ export interface Zine {
   cover?: { src: ImageMetadata; alt: string };
   downloads: { url: string; filename: string; fileSize: string; role?: 'reader-order' | 'print-ready' }[];
   license?: ZineLicense;
-  source_url?: string;
+  intake: {
+    issue_number: number;
+    submitted_by_github: string;
+    submitted_date: string;
+    maintainer_notes: string;
+  };
   href: string;
   entry: CollectionEntry<'zines'>;
 }

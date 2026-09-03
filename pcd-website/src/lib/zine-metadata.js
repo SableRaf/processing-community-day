@@ -44,7 +44,12 @@ export const zineMetadataSchema = z.object({
     }).strict(),
   ])).min(1, 'at least one download is required'),
   license: z.literal('CC BY-SA 4.0').optional(),
-  source_url: z.string().refine(isHttpUrl, 'must be an http(s) URL').optional(),
+  intake: z.object({
+    issue_number: z.number().int().positive(),
+    submitted_by_github: z.string().trim().min(1),
+    submitted_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'must be YYYY-MM-DD'),
+    maintainer_notes: z.string(),
+  }).strict(),
 }).strict();
 
 function formatIssues(error) {

@@ -4,8 +4,8 @@ import { render, type GetStaticPaths } from 'astro:content';
 import SiteLayout from '../../layouts/SiteLayout.astro';
 import BackButton from '../../components/BackButton.astro';
 import DocsPageActions from '../../components/DocsPageActions.astro';
-import ExternalLinkIcon from '../../components/ExternalLinkIcon.astro';
 import ZineDownloads from '../../components/ZineDownloads.astro';
+import { formatDate } from '../../lib/format';
 import { LICENSE_URLS } from '../../lib/zine-metadata.js';
 import { loadZines, type Zine } from '../../lib/zines';
 
@@ -18,6 +18,8 @@ const { zine } = Astro.props as { zine: Zine };
 const { Content } = await render(zine.entry);
 const permalink = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).href;
 const editHref = `https://github.com/processing/processing-community-day/edit/main/pcd-website/src/content/zines/${zine.id}/index.md`;
+const issueHref = `https://github.com/processing/processing-community-day/issues/${zine.intake.issue_number}`;
+const submitterHref = `https://github.com/${zine.intake.submitted_by_github}`;
 const creator = zine.created_by_url
   ? `[${zine.created_by}](${zine.created_by_url})`
   : zine.created_by;
@@ -52,14 +54,6 @@ const markdown = `# ${zine.title}\n\nby ${creator}\n\n${zine.entry.body?.trim() 
         {zine.cover
           ? <Image class="activity-guide__cover" src={zine.cover.src} alt={zine.cover.alt} />
           : <div class="activity-guide__cover activity-guide__cover--placeholder" aria-hidden="true">{zine.title}</div>}
-
-        {zine.source_url && (
-          <p class="activity-guide__source">
-            <a href={zine.source_url} target="_blank" rel="noopener noreferrer">
-              View the original submission <ExternalLinkIcon />
-            </a>
-          </p>
-        )}
       </div>
 
       <div class="activity-guide__details">
@@ -73,11 +67,11 @@ const markdown = `# ${zine.title}\n\nby ${creator}\n\n${zine.entry.body?.trim() 
 
         <section class="activity-guide__metadata" aria-label="Details">
           <dl>
-            <div><dt>Topic:</dt><dd>{zine.topic}</dd></div>
             {zine.activity_type && <div><dt>Activity type:</dt><dd>{zine.activity_type}</dd></div>}
-            {zine.zine_format && <div><dt>Zine format:</dt><dd>{zine.zine_format}</dd></div>}
             {zine.duration && <div><dt>Duration:</dt><dd>{zine.duration}</dd></div>}
             {zine.materials && <div><dt>Required materials:</dt><dd>{zine.materials}</dd></div>}
+            <div><dt>Topic:</dt><dd>{zine.topic}</dd></div>
+            {zine.zine_format && <div><dt>Zine format:</dt><dd>{zine.zine_format}</dd></div>}
             {zine.license && (
               <div>
                 <dt>License:</dt>
@@ -85,6 +79,18 @@ const markdown = `# ${zine.title}\n\nby ${creator}\n\n${zine.entry.body?.trim() 
               </div>
             )}
             {zine.attribution && <div><dt>Attribution:</dt><dd>{zine.attribution}</dd></div>}
+            <div>
+              <dt>Submitted:</dt>
+              <dd>
+                <a href={issueHref} target="_blank" rel="noopener noreferrer">
+                  <time datetime={zine.intake.submitted_date}>{formatDate(zine.intake.submitted_date)}</time>
+                </a>
+              </dd>
+            </div>
+            <div>
+              <dt>Submitted by:</dt>
+              <dd><a href={submitterHref} target="_blank" rel="noopener noreferrer">{zine.intake.submitted_by_github}</a></dd>
+            </div>
           </dl>
         </section>
       </div>
@@ -141,11 +147,6 @@ const markdown = `# ${zine.title}\n\nby ${creator}\n\n${zine.entry.body?.trim() 
     font-weight: 600;
     text-align: center;
     background: var(--color-border);
-  }
-
-  .activity-guide__source {
-    margin: var(--spacing-md) 0 0;
-    padding: 0 var(--spacing-sm);
   }
 
   .activity-guide__author {

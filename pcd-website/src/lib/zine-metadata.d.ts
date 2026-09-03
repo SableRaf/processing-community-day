@@ -15,7 +15,13 @@ export interface ZineMetadata {
   activity_type?: string; zine_format?: string;
   duration?: string; materials?: string;
   summary: string; cover?: ZineCover; downloads: ZineDownload[];
-  license?: ZineLicense; source_url?: string;
+  license?: ZineLicense;
+  intake: {
+    issue_number: number;
+    submitted_by_github: string;
+    submitted_date: string;
+    maintainer_notes: string;
+  };
 }
 
 export declare const zineMetadataSchema: import('astro/zod').ZodType<ZineMetadata>;

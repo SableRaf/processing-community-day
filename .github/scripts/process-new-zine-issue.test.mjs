@@ -228,7 +228,12 @@ describe('process-new-zine-issue', () => {
     assert.equal(metadata.duration, '45 minutes');
     assert.equal(metadata.materials, 'Paper and markers');
     assert.equal(metadata.attribution, 'Guide Author, CC BY-SA 4.0');
-    assert.equal(metadata.source_url, 'https://github.com/processing/processing-community-day/issues/801');
+    assert.deepEqual(metadata.intake, {
+      issue_number: 801,
+      submitted_by_github: 'submitter',
+      submitted_date: new Date().toISOString().slice(0, 10),
+      maintainer_notes: 'Check the fold before merging.',
+    });
     assert.match(await fs.readFile(path.join(directory, 'index.md'), 'utf8'), /^order: 8$/m);
     for (const file of ['Reader.pdf', 'Print.pdf', 'cover.jpeg', 'metadata.json']) await fs.access(path.join(directory, 'downloads', file));
     await fs.access(path.join(directory, 'cover.jpeg'));

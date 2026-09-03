@@ -22,5 +22,10 @@
     { "file": "metadata.json", "file_size": "20 B" }
   ],
   "license": "CC BY-SA 4.0",
-  "source_url": "https://discourse.processing.org/t/activity-guide-integration-test/1"
+  "intake": {
+    "issue_number": 123,
+    "submitted_by_github": "fixture-author",
+    "submitted_date": "2026-06-23",
+    "maintainer_notes": ""
+  }
 }
