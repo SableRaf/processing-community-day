@@ -3,6 +3,16 @@ import { defineConfig } from 'astro/config';
 import vue from '@astrojs/vue';
 import rehypeTableWrapper from './src/lib/rehype-table-wrapper.mjs';
 import rehypeHeadingAnchors from './src/lib/rehype-heading-anchors.mjs';
+import { readFileSync } from 'node:fs';
+
+// `npm run host -- --https` sets these to a generated self-signed cert. Unset
+// in every other case, so the dev server stays plain HTTP by default.
+const httpsKey = process.env.PCD_HTTPS_KEY;
+const httpsCert = process.env.PCD_HTTPS_CERT;
+const https =
+  httpsKey && httpsCert
+    ? { key: readFileSync(httpsKey), cert: readFileSync(httpsCert) }
+    : undefined;
 
 // https://astro.build/config
 export default defineConfig({
@@ -14,6 +24,7 @@ export default defineConfig({
     rehypePlugins: [rehypeTableWrapper, rehypeHeadingAnchors],
   },
   vite: {
+    server: { https },
     ssr: {
       // ShareMenu is server-rendered on content pages. Bundle vue-i18n so its
       // compile-time feature flags are resolved during Astro's SSR build.
