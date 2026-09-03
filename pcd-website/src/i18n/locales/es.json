@@ -98,6 +98,7 @@
         "permalink_copy_failed": "No se pudo copiar el enlace permanente.",
         "scan_qr": "Escanea este código QR",
         "close_qr": "Cerrar código QR",
+        "dismiss_notification": "Cerrar notificación",
         "qr_code_for": "Código QR para {permalink}",
         "encoded_link": "Enlace codificado en este código QR",
         "about_scanning": "Acerca de escanear códigos QR",

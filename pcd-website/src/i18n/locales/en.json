@@ -98,6 +98,7 @@
         "permalink_copy_failed": "Could not copy permalink.",
         "scan_qr": "Scan this QR code",
         "close_qr": "Close QR code",
+        "dismiss_notification": "Dismiss notification",
         "qr_code_for": "QR code for {permalink}",
         "encoded_link": "Link encoded in this QR code",
         "about_scanning": "About scanning QR codes",

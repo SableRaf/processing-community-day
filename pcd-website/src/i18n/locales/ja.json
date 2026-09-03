@@ -98,6 +98,7 @@
         "permalink_copy_failed": "パーマリンクをコピーできませんでした。",
         "scan_qr": "このQRコードをスキャン",
         "close_qr": "QRコードを閉じる",
+        "dismiss_notification": "通知を閉じる",
         "qr_code_for": "{permalink} のQRコード",
         "encoded_link": "このQRコードに含まれるリンク",
         "about_scanning": "QRコードのスキャンについて",

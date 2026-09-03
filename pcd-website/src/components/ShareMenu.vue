@@ -3,6 +3,7 @@ import { computed, nextTick, onBeforeUnmount, onMounted, ref, useId, watch } fro
 import { useI18n } from 'vue-i18n';
 import { toCanvas } from 'qrcode';
 import qrIcon from '../images/qr-code-bold-svgrepo-com_MIT_License.svg';
+import Snackbar from './Snackbar.vue';
 import { vTouchActivate } from '../directives/touchActivate';
 import '../styles/docs/tokens.css';
 import '../styles/docs/components.css';
@@ -27,12 +28,13 @@ const menuOpen = ref(false);
 const dialogFallbackOpen = ref(false);
 const copyFeedbackVisible = ref(false);
 const status = ref('');
-const qrStatus = ref('');
 const qrReady = ref(false);
 const qrCopyLabel = ref('');
+const snackbar = ref<{ id: number; message: string } | null>(null);
 let qrBlob: Blob | null = null;
 let feedbackTimer: number | undefined;
 let qrCopyTimer: number | undefined;
+let snackbarId = 0;
 
 const instanceId = useId().replace(/:/g, '');
 const menuId = `share-menu-${instanceId}`;
@@ -40,6 +42,14 @@ const qrTitleId = `share-qr-title-${instanceId}`;
 const qrInfoId = `share-qr-info-${instanceId}`;
 const menuItems = () => Array.from(menuRef.value?.querySelectorAll<HTMLButtonElement>('[role="menuitem"]') ?? []);
 const copyButtonLabel = computed(() => qrCopyLabel.value || t('share_menu.copy'));
+
+function showSnackbar(message: string) {
+  snackbar.value = { id: ++snackbarId, message };
+}
+
+function dismissSnackbar() {
+  snackbar.value = null;
+}
 
 function fallbackCopy(text: string) {
   const textarea = document.createElement('textarea');
@@ -171,7 +181,7 @@ function handleMenuKeydown(event: KeyboardEvent) {
 async function showQrCode() {
   setMenuOpen(false);
   status.value = '';
-  qrStatus.value = '';
+  dismissSnackbar();
   qrBlob = null;
   qrReady.value = false;
 
@@ -240,10 +250,10 @@ async function canvasToPngBlob(canvas: HTMLCanvasElement): Promise<Blob> {
 }
 
 async function copyQrCode() {
-  qrStatus.value = '';
+  dismissSnackbar();
 
   if (!window.isSecureContext) {
-    qrStatus.value = t('share_menu.qr_copy_requires_https');
+    showSnackbar(t('share_menu.qr_copy_requires_https'));
     return;
   }
 
@@ -261,25 +271,25 @@ async function copyQrCode() {
     });
     await navigator.clipboard.write([item]);
     qrCopyLabel.value = t('share_menu.copied');
-    qrStatus.value = t('share_menu.qr_copied');
+    showSnackbar(t('share_menu.qr_copied'));
     window.clearTimeout(qrCopyTimer);
     qrCopyTimer = window.setTimeout(() => {
       qrCopyLabel.value = '';
     }, 1600);
   } catch {
-    qrStatus.value = t('share_menu.qr_copy_failed');
+    showSnackbar(t('share_menu.qr_copy_failed'));
   }
 }
 
 async function shareQrCode() {
-  qrStatus.value = '';
+  dismissSnackbar();
   if (!qrBlob) {
-    qrStatus.value = t('share_menu.qr_share_failed');
+    showSnackbar(t('share_menu.qr_share_failed'));
     return;
   }
 
   if (!window.isSecureContext || typeof navigator.share !== 'function') {
-    qrStatus.value = t('share_menu.qr_share_unavailable');
+    showSnackbar(t('share_menu.qr_share_unavailable'));
     return;
   }
 
@@ -291,11 +301,11 @@ async function shareQrCode() {
 
   try {
     await navigator.share(shareData);
-    qrStatus.value = t(canShareFile ? 'share_menu.qr_shared' : 'share_menu.qr_link_shared');
+    showSnackbar(t(canShareFile ? 'share_menu.qr_shared' : 'share_menu.qr_link_shared'));
   } catch (error) {
     // Closing the native share sheet is a user choice, not a failure.
     if (error instanceof DOMException && error.name === 'AbortError') return;
-    qrStatus.value = t('share_menu.qr_share_failed');
+    showSnackbar(t('share_menu.qr_share_failed'));
   }
 }
 
@@ -330,7 +340,7 @@ function handleDialogClick(event: MouseEvent) {
 function handleDialogClose() {
   triggerRef.value?.focus();
   qrCopyLabel.value = '';
-  qrStatus.value = '';
+  dismissSnackbar();
 }
 
 watch(() => props.permalink, () => {
@@ -432,7 +442,7 @@ onBeforeUnmount(() => {
     >
       <div class="share-qr-dialog__header">
         <h2 :id="qrTitleId">{{ t('share_menu.scan_qr') }}</h2>
-        <button ref="dialogCloseRef" class="share-qr-dialog__close" type="button" :aria-label="t('share_menu.close_qr')" @click="closeQrDialog">
+        <button ref="dialogCloseRef" class="modal-close-button share-qr-dialog__close" type="button" :aria-label="t('share_menu.close_qr')" @click="closeQrDialog">
           &times;
         </button>
       </div>
@@ -451,8 +461,6 @@ onBeforeUnmount(() => {
           <span class="share-qr-dialog__url-label">{{ t('share_menu.encoded_link') }}</span>
           <input ref="qrUrlRef" type="url" :value="permalink" readonly @click="qrUrlRef?.select()" />
         </label>
-
-        <p class="share-qr-dialog__status" role="status" aria-live="polite">{{ qrStatus }}</p>
 
         <div class="share-qr-dialog__actions">
           <div class="share-qr-dialog__info-control">
@@ -476,6 +484,13 @@ onBeforeUnmount(() => {
           </div>
         </div>
       </div>
+      <Snackbar
+        v-if="snackbar"
+        :key="snackbar.id"
+        :message="snackbar.message"
+        :close-label="t('share_menu.dismiss_notification')"
+        @dismiss="dismissSnackbar"
+      />
     </dialog>
   </div>
 </template>

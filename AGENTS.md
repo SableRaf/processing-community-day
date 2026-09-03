@@ -84,6 +84,7 @@ The global Markdown pipeline runs `rehype-table-wrapper` and `rehype-heading-anc
 - **Leaflet CSS** is loaded via `<link>` tags in `MapLayout.astro`, NOT via JS imports — avoids SSR issues since MapView is `client:only="vue"`.
 - **Docs page share actions** render `ShareMenu.vue` with `client:load` so the control is present in the initial HTML and hydrates immediately. Keep `vue-i18n` in Vite's `ssr.noExternal` list so this server render can resolve its compile-time feature flags.
 - **Browser storage** must be accessed through `src/lib/safeStorage.mjs`; direct `localStorage` property access can throw under iOS privacy restrictions and abort Vue island hydration.
+- **Transient feedback** uses `Snackbar.vue`. Pass a translated message and close label, and mount each new notification with a unique `key` so its dismiss timeout and circular timer restart. Snackbar close controls and modal close controls share the global `.modal-close-button` style from `base.css`.
 - **`open-location-code`** exports `{ OpenLocationCode }` as a named export — use `new OpenLocationCode()` (not static methods).
 - **`leaflet.markercluster`** causes a circular dependency warning, suppressed via `rollupOptions.onwarn` in `astro.config.mjs`.
 - **Deep linking:** `?event=<id-or-uid>` query param auto-opens the event detail panel. Both the slug `id` and the short `uid` are accepted.
@@ -99,6 +100,7 @@ The global Markdown pipeline runs `rehype-table-wrapper` and `rehype-heading-anc
 | `src/components/BackButton.astro` | Reusable button-style link for navigating from a detail page back to its parent listing |
 | `src/components/DocsPageActions.astro` | Reusable share dropdown (Markdown, permalink, QR code) and GitHub edit action used by Organizer Kit and zine detail pages |
 | `src/components/ShareMenu.vue` | Shared Markdown, permalink, and QR-code menu used by docs actions and the event detail panel |
+| `src/components/Snackbar.vue` | Reusable auto-dismissing feedback snackbar with an accessible close control and circular countdown |
 | `src/directives/touchActivate.ts` | Direct-touch activation for buttons affected by iOS WebKit's unreliable synthesized clicks |
 | `src/components/ZineDownloads.astro` | Renders zine download rows with a button, filename, and human-readable file size |
 | `src/components/Header.astro` | Shared fixed site header and primary navigation |

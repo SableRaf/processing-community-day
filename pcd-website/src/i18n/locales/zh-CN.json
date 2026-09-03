@@ -98,6 +98,7 @@
         "permalink_copy_failed": "无法复制永久链接。",
         "scan_qr": "扫描此二维码",
         "close_qr": "关闭二维码",
+        "dismiss_notification": "关闭通知",
         "qr_code_for": "{permalink} 的二维码",
         "encoded_link": "此二维码中的链接",
         "about_scanning": "关于扫描二维码",

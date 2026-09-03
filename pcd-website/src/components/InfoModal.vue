@@ -63,7 +63,8 @@ onUnmounted(() => {
         class="info-modal"
       >
         <button
-          class="info-modal-close"
+          class="modal-close-button info-modal-close"
+          type="button"
           :aria-label="t('nav.info_modal_back_to_map')"
           @click="handleClose()"
         >
@@ -138,26 +139,12 @@ onUnmounted(() => {
   top: var(--spacing-sm);
   right: var(--spacing-sm);
   z-index: 1;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   background: rgba(0, 0, 0, 0.35);
   color: #fff;
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: background-color 0.15s ease;
 }
 
 .info-modal-close:hover {
   background: rgba(0, 0, 0, 0.55);
-}
-
-.info-modal-close:focus-visible {
-  outline: 2px solid var(--color-focus);
-  outline-offset: 2px;
 }
 
 .info-modal-banner {

@@ -98,6 +98,7 @@
         "permalink_copy_failed": "無法複製永久連結。",
         "scan_qr": "掃描此 QR 碼",
         "close_qr": "關閉 QR 碼",
+        "dismiss_notification": "關閉通知",
         "qr_code_for": "{permalink} 的 QR 碼",
         "encoded_link": "此 QR 碼中的連結",
         "about_scanning": "關於掃描 QR 碼",

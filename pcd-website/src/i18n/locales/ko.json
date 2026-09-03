@@ -98,6 +98,7 @@
         "permalink_copy_failed": "고유 링크를 복사할 수 없습니다.",
         "scan_qr": "이 QR 코드 스캔",
         "close_qr": "QR 코드 닫기",
+        "dismiss_notification": "알림 닫기",
         "qr_code_for": "{permalink}의 QR 코드",
         "encoded_link": "이 QR 코드에 포함된 링크",
         "about_scanning": "QR 코드 스캔 안내",

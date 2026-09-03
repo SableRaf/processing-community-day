@@ -98,6 +98,7 @@
         "permalink_copy_failed": "Permalink konnte nicht kopiert werden.",
         "scan_qr": "Diesen QR-Code scannen",
         "close_qr": "QR-Code schließen",
+        "dismiss_notification": "Benachrichtigung schließen",
         "qr_code_for": "QR-Code für {permalink}",
         "encoded_link": "In diesem QR-Code enthaltener Link",
         "about_scanning": "Informationen zum Scannen von QR-Codes",

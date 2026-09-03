@@ -213,6 +213,7 @@
   border: 1px solid var(--color-border);
   border-radius: calc(var(--border-radius) * 2);
   box-shadow: 0 14px 40px rgb(0 0 0 / 0.24);
+  overflow: visible;
 }
 .share-qr-dialog:not([open]) {
   display: none;
@@ -251,29 +252,7 @@
   text-align: left;
 }
 .share-qr-dialog__close {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2rem;
-  height: 2rem;
-  padding: 0;
-  color: var(--color-text-muted);
-  font: inherit;
-  font-size: 1.25rem;
-  line-height: 1;
-  cursor: pointer;
-  background: transparent;
-  border: 0;
-  border-radius: 50%;
-  transition: background-color 0.15s ease, color 0.15s ease;
-}
-.share-qr-dialog__close:hover {
-  color: var(--color-text);
-  background: var(--color-border);
-}
-.share-qr-dialog__close:focus-visible {
-  outline: 2px solid var(--color-focus);
-  outline-offset: 2px;
+  flex: 0 0 auto;
 }
 .share-qr-dialog__body {
   display: flex;
@@ -330,14 +309,6 @@
 .share-qr-dialog__url input:focus {
   background: var(--color-bg);
   border-color: var(--color-focus);
-}
-.share-qr-dialog__status {
-  min-height: 1.25rem;
-  margin: 0;
-  color: var(--color-text-subtle);
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  text-align: right;
 }
 .share-qr-dialog__actions {
   display: flex;
