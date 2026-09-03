@@ -3,6 +3,7 @@ title: Introduction
 section: Getting Started
 order: 1
 description: Everything you need to organize a Processing Community Day in your city, from the simplest possible event to a full day of workshops and talks.
+hideToc: true
 ---
 
 Thank you for registering to organize Processing Community Day!

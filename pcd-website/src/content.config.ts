@@ -33,6 +33,9 @@ const organizerKit = defineCollection({
     // Excludes the page from the sidebar and from build output entirely, for
     // TBD pages that shouldn't be publicly reachable yet.
     draft: z.boolean().default(false),
+    // Suppresses the "On this page" table of contents, for short pages whose
+    // headings aren't worth navigating.
+    hideToc: z.boolean().default(false),
   }),
 });
 
