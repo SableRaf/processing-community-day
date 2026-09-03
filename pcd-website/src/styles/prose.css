@@ -185,18 +185,18 @@
   position: relative;
 }
 
-/* Sits after the heading text so it never reaches into the sidebar gutter. The
-   icon is a fixed 16px regardless of heading size, so centre it on the text's
-   lowercase body rather than letting it stretch with the line box. */
+/* Sits after the heading text so it never reaches into the sidebar gutter.
+   Sized in em so it keeps the same optical weight from h2 down to h6, and
+   centred on the capitals rather than stretched to the line box. */
 :where(.prose, .docs-prose) .docs-heading-anchor {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 16px;
-  height: 16px;
+  display: inline-block;
+  width: 0.75em;
+  height: 0.75em;
   margin-left: 0.3em;
-  vertical-align: baseline;
-  transform: translateY(0.16em);
+  /* `middle` centres the icon on the parent's x-height; nudging up by half
+     the leftover cap height lands it on the centre of the capitals. */
+  vertical-align: middle;
+  transform: translateY(-0.06em);
   opacity: 0;
   color: var(--color-primary);
   text-decoration: none;
@@ -205,6 +205,8 @@
 
 :where(.prose, .docs-prose) .docs-heading-anchor svg {
   display: block;
+  width: 100%;
+  height: 100%;
   fill: currentColor;
 }
 
