@@ -31,9 +31,17 @@ const zines = await loadZines();
     </li>
   ))}
   <li>
-    <a class="guide-card guide-card--add" href={ZINE_SUBMIT_URL} target="_blank" rel="noopener noreferrer">
+    <a class="guide-card guide-card--add" href={ZINE_SUBMIT_URL} target="_blank" rel="noopener noreferrer" data-submit-zine>
       <Icon name="plus-circle" class="guide-card__plus" />
       <span>Submit a Zine</span>
     </a>
   </li>
 </ul>
+
+<script>
+  import { trackEvent, SUBMIT_ZINE_BUTTON_CLICK } from '../lib/analytics';
+
+  document.querySelectorAll('[data-submit-zine]').forEach((link) => {
+    link.addEventListener('click', () => trackEvent(SUBMIT_ZINE_BUTTON_CLICK));
+  });
+</script>
