@@ -1,0 +1,46 @@
+{
+  "id": "pcd-digital-meetup-v-a-2026",
+  "uid": "85019fd",
+  "organizers": [
+    {
+      "name": "V&A and arebyte Digital Art Centre"
+    }
+  ],
+  "primary_contact": {
+    "name": "Marc Barto",
+    "email": "digitalprogrammes@vam.ac.uk"
+  },
+  "organization_name": "V&A",
+  "organization_url": "https://www.vam.ac.uk",
+  "organization_type": "Museum, gallery, media arts center",
+  "online_event": false,
+  "event_url": "",
+  "event_name": "PCD Digital Meetup @ V&A",
+  "event_location": {
+    "address": "Cromwell Road, SW7 2RL, London",
+    "plus_code": "9C3XFRWH+M4"
+  },
+  "event_date": "2026-10-23",
+  "event_start_time": "17:30",
+  "event_end_time": "21:00",
+  "event_short_description": "An evening celebrating creative coding at the V&A. Get in touch if you would like to showcase your project.",
+  "event_activities": [
+    "Show-and-tell",
+    "Hands-on workshops",
+    "Live coding",
+    "Creative coding jams or hack sessions",
+    "Student project presentations",
+    "Screening"
+  ],
+  "event_page_url": "https://www.vam.ac.uk/event/lgoA8EBgJE/digital-meetup-october-2026",
+  "forum_thread_url": "https://discourse.processing.org/t/pcd-london-2026/49322",
+  "city": "London",
+  "country": "United Kingdom",
+  "placeholder": false,
+  "intake": {
+    "issue_number": 221,
+    "submitted_by_github": "Atomland",
+    "submitted_date": "2026-09-05",
+    "maintainer_notes": ""
+  }
+}
