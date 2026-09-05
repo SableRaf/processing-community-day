@@ -1,0 +1,198 @@
+---
+import Icon from '../../components/Icon.astro';
+import SkeletonLoader from '../../components/SkeletonLoader.astro';
+import EventListSidebar from '../../components/EventListSidebar.astro';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import { loadNodes, canonicalEventId } from '../../lib/nodes';
+import { formatDateRange, formatTimeRange } from '../../lib/format';
+import { confirmationFields, dateHeading, eventGroupDay, localDay, matchesEvent } from '../../lib/event-list.mjs';
+import '../../styles/event-list.css';
+
+const today = localDay();
+const events = (await loadNodes()).map(node => ({
+  node,
+  record: {
+    date: node.event_date || '', end: node.event_end_date || '',
+    placeholder: Boolean(node.placeholder), fields: confirmationFields(node),
+    search: [node.event_name, node.city, node.country, node.location_name, node.address,
+      node.event_short_description, node.details_text, node.organization_name,
+      ...node.organizers.map(host => host.name), ...node.event_activities,
+      node.online_event ? 'online' : ''].filter(Boolean).join(' '),
+  },
+}));
+const days = [...new Set(events.map(({ record }) => eventGroupDay(record, today)))].sort((a, b) => (a || '9999').localeCompare(b || '9999'));
+---
+<SiteLayout title="Events | Processing Community Day 2026" description="Find Processing Community Day events around the world. Search upcoming and past events by date, place, and more.">
+  <div class="event-list-page">
+    <div class="event-list-intro">
+      <div><h1>Find your community.</h1><p>Explore events celebrating art, code, and creative communities around the world.</p></div>
+    </div>
+    <div class="event-list-columns">
+    <div class="event-list-main">
+    <script is:inline>
+      // Show placeholders only when JavaScript runs; keep static events available without it.
+      const eventMain = document.currentScript.parentElement;
+      eventMain.setAttribute('aria-busy', 'true');
+      // Avoid flashing skeletons when the static list initializes immediately.
+      window.setTimeout(() => {
+        if (eventMain.getAttribute('aria-busy') === 'true') eventMain.setAttribute('data-events-loading', '');
+      }, 150);
+      // If initialization fails, reveal the static list when loading completes.
+      window.addEventListener('load', () => {
+        eventMain.removeAttribute('data-events-loading');
+        eventMain.setAttribute('aria-busy', 'false');
+      }, { once: true });
+    </script>
+    <div class="event-tab-bar" hidden>
+    <div class="event-list-tabs" role="tablist" aria-label="Event dates">
+      <button id="upcoming-tab" type="button" role="tab" aria-selected="true" aria-controls="event-results" tabindex="0">Upcoming</button>
+      <button id="past-tab" type="button" role="tab" aria-selected="false" aria-controls="event-results" tabindex="-1">Past events</button>
+      <button id="other-tab" type="button" role="tab" aria-selected="false" aria-controls="event-results" tabindex="-1">Other events</button>
+    </div>
+      <div class="confirmation-controls">
+        <details class="confirmation-dropdown">
+          <summary aria-label="Filter events" title="Filter events"><Icon name="filter-16" /></summary>
+          <div class="filter-panel">
+          <fieldset><legend>Require all selected details</legend>
+            {['time', 'location', 'description'].map(field => <label><input type="checkbox" name="confirmation" value={field} /> Has a {field}</label>)}
+            <p>Location means a street address or an online event link.</p>
+          </fieldset>
+          </div>
+        </details>
+      </div>
+    </div>
+    <div class="event-list-controls" hidden>
+      <div class="event-search"><input aria-label="Search events" aria-keyshortcuts="Meta+K Control+K" id="event-search" type="search" placeholder="Search by event, city, country…" /><kbd class="search-shortcut" aria-hidden="true">Ctrl+K</kbd></div>
+    </div>
+    <p id="event-count" class="event-count" role="status" aria-live="polite" aria-atomic="true"></p>
+    <noscript><p>Showing upcoming events as of {today}. Enable JavaScript to search, filter, and browse past and undated events.</p></noscript>
+    <div class="event-loading-placeholder"><SkeletonLoader variant="events" /></div>
+    <div id="event-results">
+      {days.map(day => {
+        const grouped = events.filter(({record}) => eventGroupDay(record, today) === day);
+        const heading = dateHeading(day, today);
+        return <section class:list={["event-date-group", { "event-other-group": !day }]} hidden={!grouped.some(({record}) => matchesEvent(record, { today }))}>
+          <h2 class="event-date-heading"><strong>{heading.title}</strong><span>{heading.weekday}</span></h2>
+          <div class="event-cards">{grouped.map(({node, record}) =>
+            <article class="event-card" data-event={JSON.stringify(record)}>
+              <div class="event-card-content">
+                <p class="event-card-datetime">
+                  {node.event_date && <span>{formatDateRange(node.event_date, node.event_end_date)}</span>}
+                  {node.event_start_time ? <span>{formatTimeRange(node.event_start_time, node.event_end_time)} <small>local time</small></span> : node.event_date && <span data-missing-time hidden={(node.event_end_date || node.event_date) < today}>Time to be announced</span>}
+                </p>
+                <h3><a href={`/event/${canonicalEventId(node)}/`}>{node.event_name}</a></h3>
+                <p class="event-card-place">{[node.city, node.country].filter(Boolean).join(', ') || (node.online_event ? 'Online' : 'Location to be announced')}{node.online_event && node.city ? ' · Online' : ''}</p>
+                {(node.event_short_description || node.details_text) && <p class="event-card-description">{node.event_short_description || node.details_text}</p>}
+                <p class="event-card-venue">{node.online_event ? 'Online event' : [node.location_name, node.address].filter(Boolean).join(' · ') || 'Venue to be announced'}</p>
+                {node.placeholder && <p class="event-placeholder">Placeholder — no real event confirmed</p>}
+              </div>
+              <span class="event-card-arrow" aria-hidden="true">→</span>
+            </article>
+          )}</div>
+        </section>;
+      })}
+    </div>
+    <div id="event-empty" class="event-empty" hidden><h2>No events found</h2><p>Try another search or adjust your filters.</p><button type="button" id="reset-event-filters">Clear filters</button></div>
+    </div>
+    <EventListSidebar nodes={events.map(({ node }) => node)} />
+    </div>
+  </div>
+</SiteLayout>
+
+<script>
+  import { dateHeading, eventGroupDay, localDay, matchesEvent } from '../../lib/event-list.mjs';
+  const root = document.querySelector<HTMLElement>('.event-list-page')!;
+  const search = root.querySelector<HTMLInputElement>('#event-search')!;
+  const applePlatform = /Mac|iPhone|iPad|iPod/i.test(navigator.platform);
+  root.querySelector('.search-shortcut')!.textContent = applePlatform ? '⌘K' : 'Ctrl+K';
+  const criteria = [...root.querySelectorAll<HTMLInputElement>('[name="confirmation"]')];
+  const tabs = [...root.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+  const results = root.querySelector<HTMLElement>('#event-results')!;
+  const dropdown = root.querySelector<HTMLDetailsElement>('.confirmation-dropdown')!;
+  const cards = [...root.querySelectorAll<HTMLElement>('[data-event]')].map(card => ({ card, record: JSON.parse(card.dataset.event!) }));
+  const tabNames = ['upcoming', 'past', 'other'] as const;
+  let activeTab: typeof tabNames[number] = 'upcoming';
+
+  let renderedDay = localDay();
+  function render() {
+    const today = localDay();
+    renderedDay = today;
+    const options = { today, tab: activeTab, query: search.value, required: criteria.filter(input => input.checked).map(input => input.value) };
+    const visible = cards.filter(({record}) => matchesEvent(record, options));
+    visible.sort((a, b) => {
+      const first = eventGroupDay(a.record, today) || '9999';
+      const second = eventGroupDay(b.record, today) || '9999';
+      return activeTab === 'past' ? second.localeCompare(first) : first.localeCompare(second);
+    });
+    results.replaceChildren();
+    let previousDay: string | undefined;
+    let stack: HTMLDivElement;
+    for (const {card, record} of visible) {
+      const day = eventGroupDay(record, today);
+      if (day !== previousDay) {
+        const section = document.createElement('section');
+        section.className = day ? 'event-date-group' : 'event-date-group event-other-group';
+        const heading = document.createElement('h2');
+        heading.className = 'event-date-heading';
+        const title = document.createElement('strong');
+        const weekday = document.createElement('span');
+        const label = dateHeading(day, today);
+        title.textContent = label.title;
+        weekday.textContent = label.weekday;
+        heading.append(title, weekday);
+        stack = document.createElement('div');
+        stack.className = 'event-cards';
+        section.append(heading, stack);
+        results.append(section);
+        previousDay = day;
+      }
+      const missingTime = card.querySelector<HTMLElement>('[data-missing-time]');
+      if (missingTime) missingTime.hidden = Boolean(record.date && (record.end || record.date) < today);
+      stack!.append(card);
+    }
+    root.querySelector('#event-count')!.textContent = `${visible.length} ${activeTab} ${visible.length === 1 ? 'event' : 'events'}`;
+    root.querySelector<HTMLElement>('#event-empty')!.hidden = visible.length > 0;
+  }
+  function selectTab(index: number) {
+    activeTab = tabNames[index];
+    tabs.forEach((tab, i) => { tab.setAttribute('aria-selected', String(i === index)); tab.tabIndex = i === index ? 0 : -1; });
+    results.setAttribute('aria-labelledby', tabs[index].id);
+    render();
+  }
+  tabs.forEach((tab, index) => {
+    tab.addEventListener('click', () => selectTab(index));
+    tab.addEventListener('keydown', event => {
+      if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+      event.preventDefault();
+      const next = event.key === 'Home' ? 0 : event.key === 'End' ? tabs.length - 1
+        : (index + (event.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length;
+      selectTab(next);
+      tabs[next].focus();
+    });
+  });
+  document.addEventListener('keydown', event => {
+    if (event.isComposing || event.altKey || event.shiftKey || !(event.metaKey || event.ctrlKey) || event.key.toLowerCase() !== 'k') return;
+    event.preventDefault();
+    dropdown.open = false;
+    search.focus();
+    search.select();
+  });
+  search.addEventListener('input', render);
+  criteria.forEach(input => input.addEventListener('change', render));
+  root.querySelector('#reset-event-filters')!.addEventListener('click', () => {
+    search.value = ''; criteria.forEach(input => input.checked = false); render(); search.focus();
+  });
+  document.addEventListener('click', event => { if (!dropdown.contains(event.target as Node)) dropdown.open = false; });
+  dropdown.addEventListener('keydown', event => { if (event.key === 'Escape') { dropdown.open = false; dropdown.querySelector('summary')!.focus(); } });
+  root.querySelector<HTMLElement>('.event-list-controls')!.hidden = false;
+  root.querySelector<HTMLElement>('.event-tab-bar')!.hidden = false;
+  results.setAttribute('role', 'tabpanel');
+  results.tabIndex = 0;
+  selectTab(0);
+  root.querySelector('.event-list-main')!.removeAttribute('data-events-loading');
+  root.querySelector('.event-list-main')!.setAttribute('aria-busy', 'false');
+  // Keep Today/Tomorrow and the past boundary current in long-lived tabs.
+  const refreshDay = () => { if (localDay() !== renderedDay) render(); };
+  window.setInterval(refreshDay, 60_000);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) refreshDay(); });
+</script>

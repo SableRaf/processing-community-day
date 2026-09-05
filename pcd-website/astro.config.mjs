@@ -14,6 +14,15 @@ const https =
     ? { key: readFileSync(httpsKey), cert: readFileSync(httpsCert) }
     : undefined;
 
+// Match the fixed production Netlify proxy for runtime forum requests.
+const forumProxy = {
+  '^/api/pcd-forum$': {
+    target: 'https://discourse.processing.org',
+    changeOrigin: true,
+    rewrite: () => '/tag/pcd/l/latest.json?order=activity',
+  },
+};
+
 // https://astro.build/config
 export default defineConfig({
   output: 'static',
@@ -24,7 +33,7 @@ export default defineConfig({
     rehypePlugins: [rehypeTableWrapper, rehypeHeadingAnchors],
   },
   vite: {
-    server: { https },
+    server: { https, proxy: forumProxy },
     ssr: {
       // ShareMenu is server-rendered on content pages. Bundle vue-i18n so its
       // compile-time feature flags are resolved during Astro's SSR build.

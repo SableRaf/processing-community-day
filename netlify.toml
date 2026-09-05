@@ -45,3 +45,10 @@
   for = "/data.json"
   [headers.values]
     Access-Control-Allow-Origin = "*"
+
+# Public Discourse feed, requested by the browser rather than during builds.
+[[redirects]]
+  from = "/api/pcd-forum"
+  to = "https://discourse.processing.org/tag/pcd/l/latest.json?order=activity"
+  status = 200
+  force = true

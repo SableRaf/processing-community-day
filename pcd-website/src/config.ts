@@ -31,3 +31,6 @@ export const SOCIAL_LINKS: SocialLink[] = [
   { label: "Medium", href: "https://medium.com/@ProcessingOrg" },
   { label: "LinkedIn", href: "https://www.linkedin.com/company/processing-foundation/" },
 ];
+
+export const PCD_FORUM_TAG_URL = "https://discourse.processing.org/tag/pcd/";
+export const PCD_FORUM_FEED_PATH = "/api/pcd-forum";
