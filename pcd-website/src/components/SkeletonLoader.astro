@@ -1,0 +1,50 @@
+---
+interface Props { variant: 'events' | 'forum'; count?: number }
+const { variant, count = variant === 'events' ? 3 : 5 } = Astro.props;
+---
+<div class:list={['skeleton-loader', `skeleton-${variant}`]} aria-hidden="true">
+  {Array.from({ length: count }, () => variant === 'events' ? (
+    <div class="skeleton-event-group">
+      <div class="skeleton-bar skeleton-date"></div>
+      <div class="skeleton-event-card">
+        <div class="skeleton-bar skeleton-short"></div>
+        <div class="skeleton-bar skeleton-title"></div>
+        <div class="skeleton-bar skeleton-medium"></div>
+        <div class="skeleton-bar skeleton-wide"></div>
+        <div class="skeleton-bar skeleton-medium"></div>
+      </div>
+    </div>
+  ) : (
+    <div class="event-forum-thread">
+      <div class="event-forum-title skeleton-forum-title"><div class="skeleton-bar skeleton-wide"></div></div>
+      <div class="event-forum-metadata">
+        <div class="event-forum-avatars">{Array.from({ length: 4 }, () => <span class="event-forum-avatar skeleton-bar skeleton-avatar"></span>)}</div>
+        <div class="skeleton-bar skeleton-replies"></div>
+        <div class="skeleton-bar skeleton-relative"></div>
+      </div>
+    </div>
+  ))}
+</div>
+<style is:global>
+  .skeleton-bar { background: #e9e6eb; border-radius: 4px; animation: skeleton-pulse 1.6s ease-in-out infinite; height: 12px; }
+  .skeleton-short { width: 36%; }
+  .skeleton-medium { width: 60%; }
+  .skeleton-wide { width: 90%; }
+  .skeleton-title { width: 72%; height: 22px; }
+  .skeleton-date { width: 130px; height: 17px; margin-bottom: 18px; }
+  .skeleton-event-group { margin-left: 8px; padding: 0 0 32px 22px; }
+  .skeleton-event-card { display: grid; gap: 18px; border: 1px solid var(--color-border); border-radius: 10px; padding: 24px; }
+  .skeleton-forum { margin-bottom: 16px; }
+  .skeleton-forum-title { display: flex; align-items: center; height: 1.5em; }
+  .skeleton-forum-title .skeleton-bar { height: 15px; }
+  .event-forum-avatar.skeleton-avatar { width: 28px; height: 28px; border-radius: 50%; background: #e9e6eb; }
+  .skeleton-replies { width: 52px; }
+  .skeleton-relative { width: 38px; }
+  .event-loading-placeholder { display: none; }
+  [data-events-loading] .event-loading-placeholder { display: block; }
+  [data-events-loading] #event-results { display: none; }
+  .forum-loading-status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  @keyframes skeleton-pulse { 50% { opacity: .45; } }
+  @media (prefers-reduced-motion: reduce) { .skeleton-bar { animation: none; } }
+  @media (max-width: 640px) { .skeleton-event-group { padding-left: 16px; } .skeleton-event-card { padding: 16px; } }
+</style>

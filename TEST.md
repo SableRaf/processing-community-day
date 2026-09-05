@@ -1,5 +1,21 @@
 # Tests
 
+## Forum sidebar
+
+**File:** `.github/scripts/forum-topics.test.mjs`
+**Run:** `node --test .github/scripts/forum-topics.test.mjs`
+
+Covers recent-activity sorting, feed limits, both Discourse tag formats, malformed responses, fixed-origin topic links, reply totals, avatar resolution, and relative timestamps. Browser checks should cover runtime loading, errors/retry, empty feeds, and square map layout.
+
+
+## Event list
+
+**File:** `.github/scripts/event-list.test.mjs`
+**Run:** `node --test .github/scripts/event-list.test.mjs`
+
+Covers calendar boundaries, Today/Tomorrow headings, ongoing and undated events, combined confirmation criteria, placeholder exclusion, and accent-insensitive multi-word search. Included in `scripts/run-tests.sh`.
+
+
 ## Browser storage safety
 
 **File:** `.github/scripts/safe-storage.test.mjs`

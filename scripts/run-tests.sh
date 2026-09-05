@@ -6,6 +6,8 @@ root_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$root_dir"
 
 tests=(
+  ".github/scripts/forum-topics.test.mjs"
+  ".github/scripts/event-list.test.mjs"
   ".github/scripts/event-issue-helpers.test.mjs"
   ".github/scripts/process-new-event-issue.test.mjs"
   ".github/scripts/process-edit-event-issue.test.mjs"

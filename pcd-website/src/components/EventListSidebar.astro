@@ -1,0 +1,119 @@
+---
+import SkeletonLoader from './SkeletonLoader.astro';
+import type { Node } from '../lib/nodes';
+import { SUBMIT_EVENT_URL, PCD_FORUM_TAG_URL } from '../config';
+import { cartoTileUrl } from '../lib/carto';
+interface Props { nodes: Node[] }
+const { nodes } = Astro.props;
+const tile = cartoTileUrl('light_all').replace('{s}', 'a').replace('{z}', '0').replace('{x}', '0').replace('{y}', '0').replace('{r}', '@2x');
+const markers = nodes.filter(node => !node.placeholder).map(node => {
+  const lat = Math.max(-85.0511, Math.min(85.0511, node.lat)) * Math.PI / 180;
+  return { x: (node.lng + 180) / 360 * 100, y: (1 - Math.log(Math.tan(lat) + 1 / Math.cos(lat)) / Math.PI) / 2 * 100 };
+});
+---
+<aside class="event-sidebar" aria-label="More from the PCD community">
+  <a class="event-submit-link" href={SUBMIT_EVENT_URL}>Submit an Event <span aria-hidden="true">↗</span></a>
+  <div class="event-minimap-section">
+    <a class="event-minimap" href="/" aria-label="Explore events on the map">
+      <img src={tile} alt="" width="512" height="512" loading="lazy" />
+      <svg viewBox="0 0 100 100" aria-hidden="true">
+        {markers.map(marker => <circle cx={marker.x} cy={marker.y} r=".8" />)}
+      </svg>
+    </a>
+    <p class="event-map-attribution">© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/attributions">CARTO</a></p>
+  </div>
+  <section class="event-forum" aria-labelledby="event-forum-heading">
+    <h2 id="event-forum-heading">Latest from the forum</h2>
+    <p class="event-forum-intro">Recently updated PCD threads</p>
+    <p data-forum-status role="status" hidden></p>
+    <div data-forum-skeleton hidden><SkeletonLoader variant="forum" /></div>
+    <ol data-forum-topics aria-label="Recently updated PCD threads"></ol>
+    <button data-forum-retry type="button" hidden>Try again</button>
+    <a class="event-forum-more" href={PCD_FORUM_TAG_URL}>All PCD discussions <span aria-hidden="true">↗</span></a>
+  </section>
+</aside>
+<script>
+  import { latestPcdTopics, relativeForumTime } from '../lib/forum-topics.mjs';
+  import { PCD_FORUM_FEED_PATH } from '../config';
+  const section = document.querySelector<HTMLElement>('.event-forum')!;
+  const status = section.querySelector<HTMLElement>('[data-forum-status]')!;
+  const list = section.querySelector<HTMLOListElement>('[data-forum-topics]')!;
+  const skeleton = section.querySelector<HTMLElement>('[data-forum-skeleton]')!;
+  const retry = section.querySelector<HTMLButtonElement>('[data-forum-retry]')!;
+  async function loadTopics() {
+    const skeletonTimer = window.setTimeout(() => {
+      skeleton.hidden = false;
+      list.hidden = true;
+    }, 150);
+    status.classList.add('forum-loading-status');
+    status.hidden = false;
+    status.textContent = 'Loading recent discussions…';
+    retry.hidden = true;
+    list.setAttribute('aria-busy', 'true');
+    try {
+      const response = await fetch(PCD_FORUM_FEED_PATH, { credentials: 'omit', signal: AbortSignal.timeout(10000) });
+      if (!response.ok) throw new Error(`Forum returned ${response.status}`);
+      const topics = latestPcdTopics(await response.json());
+      list.replaceChildren(...topics.map(topic => {
+        const item = document.createElement('li');
+        item.className = 'event-forum-thread';
+        const link = document.createElement('a');
+        link.className = 'event-forum-title';
+        link.href = topic.url;
+        link.textContent = topic.title;
+        const time = document.createElement('time');
+        time.dateTime = topic.updated;
+        time.textContent = relativeForumTime(topic.updated);
+        time.title = `Updated ${new Date(topic.updated).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' })}`;
+        time.setAttribute('aria-label', time.title);
+        const metadata = document.createElement('div');
+        metadata.className = 'event-forum-metadata';
+        const avatars = document.createElement('div');
+        avatars.className = 'event-forum-avatars';
+        avatars.setAttribute('role', 'group');
+        avatars.setAttribute('aria-label', 'Thread participants');
+        topic.posters.forEach(poster => {
+          const avatar = document.createElement('span');
+          avatar.className = 'event-forum-avatar';
+          avatar.title = poster.username;
+          avatar.setAttribute('role', 'img');
+          avatar.setAttribute('aria-label', poster.username);
+          avatar.textContent = poster.username.slice(0, 1).toUpperCase();
+          if (poster.avatar) {
+            const img = document.createElement('img');
+            img.src = poster.avatar;
+            img.alt = '';
+            img.width = 28;
+            img.height = 28;
+            img.loading = 'lazy';
+            img.addEventListener('error', () => img.remove(), { once: true });
+            avatar.append(img);
+          }
+          avatars.append(avatar);
+        });
+        const replies = document.createElement('span');
+        replies.className = 'event-forum-replies';
+        replies.textContent = `${topic.replies} ${topic.replies === 1 ? 'reply' : 'replies'}`;
+        metadata.append(avatars, replies, time);
+        item.append(link, metadata);
+        return item;
+      }));
+      status.textContent = topics.length ? '' : 'No recent PCD discussions yet.';
+      status.hidden = topics.length > 0;
+    } catch {
+      status.textContent = 'Recent discussions could not be loaded. You can still browse them on the forum.';
+      retry.hidden = false;
+    } finally {
+      window.clearTimeout(skeletonTimer);
+      skeleton.hidden = true;
+      list.hidden = false;
+      status.classList.remove('forum-loading-status');
+      list.setAttribute('aria-busy', 'false');
+    }
+  }
+  retry.addEventListener('click', loadTopics);
+  loadTopics();
+  window.setInterval(() => {
+    list.querySelectorAll('time').forEach(time => { time.textContent = relativeForumTime(time.dateTime); });
+  }, 60_000);
+</script>

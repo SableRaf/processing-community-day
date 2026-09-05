@@ -6,7 +6,7 @@ When making changes to the codebase, please also update this file as needed to r
 
 ## Project Overview
 
-Static website for Processing Community Day (PCD) 2026 — a global map of events. Built with Astro 5 (static output) + Vue 3 + Leaflet. No backend, no database, no API calls at runtime.
+Static website for Processing Community Day (PCD) 2026 — a global map of events. Built with Astro 5 (static output) + Vue 3 + Leaflet. No database or application backend. Event content is static; the event-list sidebar loads the public Discourse feed at runtime through a fixed proxy.
 
 The Astro project root is `pcd-website/`. All build commands run from there.
 
@@ -60,6 +60,14 @@ No install needed — `open-location-code` is already available at `pcd-website/
 - **Astro** owns routing, layouts, metadata, and static content pages. `src/layouts/BaseLayout.astro` provides the document shell; `MapLayout.astro`, `SiteLayout.astro`, and `DocsLayout.astro` provide the map, standard content, and Organizer Kit shells respectively.
 - The Organizer Kit introduction lives in `src/content/organizer-kit/getting-started/introduction.md`; `/organize/` redirects to its canonical `/organize/getting-started/introduction/` route.
 - **Vue** handles the interactive map UI as `client:only="vue"` island components. Map-specific interactive features belong in Vue; static site and Organizer Kit pages belong in Astro and Markdown content collections.
+
+### Event list
+
+`/events/` is an Astro page with build-time event cards and a bundled browser script for search, confirmation filters, and accessible Upcoming/Past/Other events tabs. Cmd+K or Ctrl+K focuses the event search and selects its current text; a platform-specific shortcut indicator (⌘K or Ctrl+K) appears inside the input at the right edge. Its English copy follows the static site pages. `src/lib/event-list.mjs` contains shared pure filtering and date-heading logic; `src/styles/event-list.css` owns its presentation. Dates use the visitor's local calendar day and refresh while the page stays open. Multi-day events remain upcoming through their end date and group under Today while ongoing; undated events appear exclusively in the “Other events” tab, subject to the same search and confirmation filters. Date headings sit above card groups on a vertical timeline. Cards show date and time above the title; missing times are omitted for past events. Upcoming and Past sort ascending by date; Other events sorts by event name. A single “Filter” dropdown applies time, location, and description criteria directly, with no master toggle. Date availability is controlled by the tabs, so it has no filter checkbox. All criteria start unchecked; clearing filters unchecks them. Selecting any criterion excludes placeholders and requires every selected field, and treats a location as a physical address or online event URL. This UI definition does not change `/data.json` eligibility.
+
+`src/components/SkeletonLoader.astro` provides event-card and forum-thread placeholders, with reduced-motion support. Both loaders wait 150 ms before appearing, and completion cancels pending display. Forum placeholders share row, metadata, and avatar styles with real threads to preserve spacing. Event skeletons cover client initialization only; static events remain available without JavaScript and return on window load if initialization fails. Forum skeletons cover each runtime request, including retries, and clear on success, empty responses, and errors.
+
+`src/components/EventListSidebar.astro` renders the submission link, a square noninteractive CARTO map tile with event dots, and recent PCD forum threads. Forum data is fetched by the browser (never at build time) from `/api/pcd-forum`. `netlify.toml` proxies that exact route to the public Discourse PCD tag JSON feed; `astro.config.mjs` supplies a matching Vite development proxy. Plain `astro preview` does not run this proxy; use `npm run dev` or Netlify to verify the live feed. No API key is required. Keep this a fixed destination, not an open proxy. `src/lib/forum-topics.mjs` validates the response and sorts by `bumped_at` (fallback `last_posted_at`) so pinned topics cannot override activity order. Thread metadata includes up to five overlapping participant avatars, replies (`posts_count - 1`, matching Discourse’s topic list), and relative activity timestamps refreshed every minute with exact dates in tooltips. Avatars resolve from the response’s users and posters, with initials as a fallback. Titles are inserted as text, with loading, empty, error, retry, and direct-forum-link states. The sidebar moves below the list on small screens.
 
 ### Data loading at build time
 
@@ -177,6 +185,8 @@ Use `src/config.ts` for static, non-secret values that are referenced across mul
 For local map development, `pcd-website/.env` may define `PUBLIC_CARTO_API_KEY`. During `npm run dev`, all CARTO raster tile URLs append it as the `key` query parameter; production builds do not embed it.
 
 ## UI / Styling Rules
+
+- Do not use diagonal arrows for internal links; use a right-pointing arrow when a directional indicator is needed.
 
 - The site is light-mode only — there is no dark mode, no `[data-theme]` toggling, and no theme-related CSS. Do not reintroduce it without an explicit decision to do so.
 
