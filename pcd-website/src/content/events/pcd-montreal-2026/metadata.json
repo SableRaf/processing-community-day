@@ -1,14 +1,30 @@
 {
   "id": "pcd-montreal-2026",
   "uid": "64a56e8",
-  "organizers": [],
+  "organizers": [
+    {
+      "name": "Benoit Baudry"
+    },
+    {
+      "name": "Lena Krause"
+    },
+    {
+      "name": "Marion Schneider"
+    },
+    {
+      "name": "Indiana Delsart"
+    },
+    {
+      "name": "Emir Chouchane"
+    }
+  ],
   "primary_contact": {
     "name": "Benoit Baudry",
     "email": "benoit.baudry@umontreal.ca"
   },
-  "organization_name": "",
-  "organization_url": "",
-  "organization_type": "",
+  "organization_name": "Les bibliothèques UdeM - Université de Montréal",
+  "organization_url": "https://studio.bib.umontreal.ca/",
+  "organization_type": "School, university, library",
   "online_event": false,
   "event_url": "",
   "event_name": "PCD @ Montreal",
@@ -21,11 +37,13 @@
   "event_end_time": "21:42",
   "event_short_description": "La programmation pour toutes et tous: une oeuvre d'art en un jour",
   "event_activities": [
+    "Show-and-tell",
     "Hands-on workshops",
     "Live coding",
-    "Creative coding jams or hack sessions"
+    "Panel discussions",
+    "Beginner introductions to Processing or p5.js"
   ],
-  "event_page_url": "",
+  "event_page_url": "https://studio.bib.umontreal.ca/pcd",
   "forum_thread_url": "https://discourse.processing.org/t/pcd-montreal-2026/48506",
   "city": "Montreal",
   "country": "Canada",
