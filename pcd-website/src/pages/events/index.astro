@@ -122,7 +122,7 @@ const days = [...new Set(events.map(({ record }) => eventGroupDay(record, today)
     visible.sort((a, b) => {
       const first = eventGroupDay(a.record, today) || '9999';
       const second = eventGroupDay(b.record, today) || '9999';
-      return first.localeCompare(second);
+      return activeTab === 'past' ? second.localeCompare(first) : first.localeCompare(second);
     });
     results.replaceChildren();
     let previousDay: string | undefined;
