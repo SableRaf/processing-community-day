@@ -1,4 +1,5 @@
 ---
+import Icon from '../../components/Icon.astro';
 import SkeletonLoader from '../../components/SkeletonLoader.astro';
 import EventListSidebar from '../../components/EventListSidebar.astro';
 import SiteLayout from '../../layouts/SiteLayout.astro';
@@ -42,11 +43,15 @@ const days = [...new Set(events.map(({ record }) => eventGroupDay(record, today)
         eventMain.setAttribute('aria-busy', 'false');
       }, { once: true });
     </script>
-    <div class="event-list-controls" hidden>
-      <div class="event-search"><input aria-label="Search events" aria-keyshortcuts="Meta+K Control+K" id="event-search" type="search" placeholder="Search by event, city, country…" /><kbd class="search-shortcut" aria-hidden="true">Ctrl+K</kbd></div>
+    <div class="event-tab-bar" hidden>
+    <div class="event-list-tabs" role="tablist" aria-label="Event dates">
+      <button id="upcoming-tab" type="button" role="tab" aria-selected="true" aria-controls="event-results" tabindex="0">Upcoming</button>
+      <button id="past-tab" type="button" role="tab" aria-selected="false" aria-controls="event-results" tabindex="-1">Past events</button>
+      <button id="other-tab" type="button" role="tab" aria-selected="false" aria-controls="event-results" tabindex="-1">Other events</button>
+    </div>
       <div class="confirmation-controls">
         <details class="confirmation-dropdown">
-          <summary>Filter</summary>
+          <summary aria-label="Filter events" title="Filter events"><Icon name="filter-16" /></summary>
           <div class="filter-panel">
           <fieldset><legend>Require all selected details</legend>
             {['time', 'location', 'description'].map(field => <label><input type="checkbox" name="confirmation" value={field} /> Has a {field}</label>)}
@@ -56,10 +61,8 @@ const days = [...new Set(events.map(({ record }) => eventGroupDay(record, today)
         </details>
       </div>
     </div>
-    <div class="event-list-tabs" role="tablist" aria-label="Event dates" hidden>
-      <button id="upcoming-tab" type="button" role="tab" aria-selected="true" aria-controls="event-results" tabindex="0">Upcoming</button>
-      <button id="past-tab" type="button" role="tab" aria-selected="false" aria-controls="event-results" tabindex="-1">Past events</button>
-      <button id="other-tab" type="button" role="tab" aria-selected="false" aria-controls="event-results" tabindex="-1">Other events</button>
+    <div class="event-list-controls" hidden>
+      <div class="event-search"><input aria-label="Search events" aria-keyshortcuts="Meta+K Control+K" id="event-search" type="search" placeholder="Search by event, city, country…" /><kbd class="search-shortcut" aria-hidden="true">Ctrl+K</kbd></div>
     </div>
     <p id="event-count" class="event-count" role="status" aria-live="polite" aria-atomic="true"></p>
     <noscript><p>Showing upcoming events as of {today}. Enable JavaScript to search, filter, and browse past and undated events.</p></noscript>
@@ -182,7 +185,7 @@ const days = [...new Set(events.map(({ record }) => eventGroupDay(record, today)
   document.addEventListener('click', event => { if (!dropdown.contains(event.target as Node)) dropdown.open = false; });
   dropdown.addEventListener('keydown', event => { if (event.key === 'Escape') { dropdown.open = false; dropdown.querySelector('summary')!.focus(); } });
   root.querySelector<HTMLElement>('.event-list-controls')!.hidden = false;
-  root.querySelector<HTMLElement>('.event-list-tabs')!.hidden = false;
+  root.querySelector<HTMLElement>('.event-tab-bar')!.hidden = false;
   results.setAttribute('role', 'tabpanel');
   results.tabIndex = 0;
   selectTab(0);

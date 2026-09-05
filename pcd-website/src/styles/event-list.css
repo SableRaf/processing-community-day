@@ -4,7 +4,7 @@
 .event-list-intro h1 { font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.15; letter-spacing: -.035em; margin: 0 0 16px; }
 .event-list-intro p { margin-top: 0; }
 .event-list-intro > div > p:last-child { color: var(--color-text-muted); max-width: 620px; margin-bottom: 0; }
-.event-list-controls { display: flex; align-items: flex-end; gap: 24px; padding: 24px; background: var(--docs-sidebar-color); border: 1px solid var(--color-border); border-radius: 12px; }
+.event-list-controls { margin-top: 16px; }
 .event-search { position: relative; display: grid; flex: 1; min-width: 0; font-size: .875rem; font-weight: 600; }
 .search-shortcut { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); pointer-events: none; padding: 3px 6px; border: 1px solid var(--color-border); border-radius: 4px; background: white; color: var(--color-text-muted); font: inherit; font-size: .75rem; font-weight: 400; white-space: nowrap; }
 .event-search input { width: 100%; min-width: 0; min-height: 48px; padding: 12px 88px 12px 16px; border: 1px solid #aaa; border-radius: 6px; font: inherit; font-size: 1rem; font-weight: 400; background: white; }
@@ -12,14 +12,18 @@
 .confirmation-dropdown label { display: flex; align-items: center; gap: 8px; min-height: 48px; cursor: pointer; }
 .confirmation-controls input { accent-color: var(--color-primary); width: 18px; height: 18px; flex-shrink: 0; }
 .confirmation-dropdown { position: relative; }
-.confirmation-dropdown summary { cursor: pointer; padding: 12px 0; color: var(--color-primary); }
+.confirmation-dropdown summary { display: grid; place-items: center; width: 44px; height: 44px; cursor: pointer; padding: 0; color: var(--color-text-muted); border-radius: 6px; list-style: none; }
+.confirmation-dropdown summary::-webkit-details-marker { display: none; }
+.confirmation-dropdown summary svg { width: 16px; height: 16px; fill: currentColor; }
+.confirmation-dropdown summary:hover, .confirmation-dropdown[open] summary { background: var(--docs-sidebar-color); color: var(--color-primary); }
 .confirmation-dropdown .filter-panel { position: absolute; top: calc(100% + 8px); right: 0; z-index: 2; width: 290px; padding: 20px; margin: 0; border: 1px solid var(--color-border); border-radius: 8px; background: white; box-shadow: 0 8px 28px #0002; }
 .confirmation-dropdown fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
 .confirmation-dropdown label { clear: both; }
 .confirmation-dropdown legend { float: left; width: 100%; margin-bottom: 8px; font-size: .875rem; font-weight: 600; }
 .confirmation-dropdown p { font-size: .8125rem; color: var(--color-text-muted); margin: 12px 0 0; }
-.event-list-tabs { display: flex; gap: 24px; border-bottom: 1px solid var(--color-border); margin-top: 28px; }
-.event-list-tabs button { background: none; border: 0; border-bottom: 3px solid transparent; padding: 16px 4px; font: inherit; color: var(--color-text-muted); cursor: pointer; }
+.event-tab-bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; border-bottom: 1px solid var(--color-border); }
+.event-list-tabs { display: flex; gap: 24px; min-width: 0; }
+.event-list-tabs button { background: none; border: 0; border-bottom: 3px solid transparent; padding: 20px 4px 8px; font: inherit; color: var(--color-text-muted); cursor: pointer; }
 .event-list-tabs button[aria-selected='true'] { color: var(--color-primary); border-bottom-color: var(--color-primary); font-weight: 600; }
 .event-count { color: var(--color-text-muted); font-size: .875rem; margin: 20px 0 28px; }
 .event-date-group { position: relative; margin-left: 8px; padding: 0 0 32px 20px; border-left: 2px solid transparent; }
@@ -51,13 +55,17 @@
 .event-placeholder { color: var(--color-callout-placeholder-text); font-size: .8125rem; }
 .event-empty { text-align: center; padding: 48px 16px; border: 1px dashed var(--color-border); border-radius: 10px; }
 .event-empty button { background: var(--color-primary); color: white; font: inherit; border: 0; border-radius: 6px; min-height: 48px; padding: 12px 20px; cursor: pointer; }
-@media (max-width: 1000px) { .event-list-controls { flex-direction: column; align-items: stretch; } .confirmation-controls { justify-content: space-between; } }
+
 @media (max-width: 640px) {
   .event-list-page { padding: 32px 16px 48px; }
   .event-list-intro { flex-direction: column; align-items: flex-start; gap: 12px; margin-bottom: 24px; }
-  .event-list-controls { padding: 16px; gap: 12px; }
+  .search-shortcut { display: none; }
+  .event-search input { padding-right: 16px; }
+  .event-tab-bar { gap: 8px; }
+  .event-list-tabs { gap: clamp(16px, 5vw, 24px); }
+  .event-list-tabs button { font-size: .875rem; padding: 20px 0 6px; }
   .confirmation-controls { gap: 0 16px; }
-  .confirmation-dropdown .filter-panel { left: 0; right: auto; width: min(290px, calc(100vw - 66px)); }
+  .confirmation-dropdown .filter-panel { left: auto; right: 0; width: min(290px, calc(100vw - 66px)); }
   .event-date-group { padding-left: 14px; }
   .event-other-group { padding-left: 0; }
   .event-date-heading { margin-top: 0; }
@@ -86,9 +94,6 @@
 .event-forum [role='status'] { font-size: .875rem; color: var(--color-text-muted); }
 .event-forum-more { color: var(--color-primary); font-size: .875rem; text-underline-offset: 3px; }
 .event-forum button { display: block; margin-bottom: 16px; padding: 10px 14px; min-height: 44px; background: white; color: var(--color-primary); border: 1px solid var(--color-border); border-radius: 6px; cursor: pointer; font: inherit; }
-@media (min-width: 1001px) {
-  .event-list-main .event-list-controls { padding: 16px; gap: 16px; }
-}
 @media (max-width: 900px) {
   .event-list-columns { grid-template-columns: minmax(0, 1fr) 240px; gap: 24px; }
 }

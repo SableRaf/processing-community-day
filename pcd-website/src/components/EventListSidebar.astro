@@ -33,8 +33,10 @@ const markers = nodes.filter(node => !node.placeholder).map(node => {
   </section>
 </aside>
 <script>
+  import { trackEvent, EVENT_LIST_SUBMIT_EVENT_BUTTON_CLICK } from '../lib/analytics';
   import { latestPcdTopics, relativeForumTime } from '../lib/forum-topics.mjs';
   import { PCD_FORUM_FEED_PATH } from '../config';
+  document.querySelector('.event-submit-link')?.addEventListener('click', () => trackEvent(EVENT_LIST_SUBMIT_EVENT_BUTTON_CLICK));
   const section = document.querySelector<HTMLElement>('.event-forum')!;
   const status = section.querySelector<HTMLElement>('[data-forum-status]')!;
   const list = section.querySelector<HTMLOListElement>('[data-forum-topics]')!;
