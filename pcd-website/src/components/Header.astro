@@ -1,4 +1,6 @@
 ---
+import Icon from './Icon.astro';
+import { getKitNav } from '../config/organizer-kit-nav';
 import { NAV_ITEMS } from '../config/navigation';
 import logoLine from '../images/PCD_2026_Logo_Line_White.svg?url';
 import logoMini from '../images/PCD_2026_Logo_Mini_White.svg?url';
@@ -10,6 +12,7 @@ const normalize = (pathname: string) => {
 };
 
 const currentPath = normalize(Astro.url.pathname);
+const kitNav = await getKitNav();
 ---
 
 <header data-site-header>
@@ -41,9 +44,32 @@ const currentPath = normalize(Astro.url.pathname);
         const current = isExact ? 'page' : inSection ? 'true' : undefined;
         return (
           <li>
-            <a href={item.href} aria-current={current}>
+            <a class:list={{ "desktop-organize": item.href.startsWith('/organize/') }} href={item.href} aria-current={current}>
               {item.label}
             </a>
+            {item.href.startsWith('/organize/') && (
+              <details class="mobile-organizer-kit">
+                <summary class:list={{ "kit-current": currentPath.startsWith('/organize/') }}><span>Organizer Kit</span><Icon name="nav-expander" /></summary>
+                <ul class="kit-links">
+                  {kitNav.map((node) => (
+                    <li>
+                      {node.kind === 'page' ? (
+                        <a href={node.page.href} aria-current={normalize(node.page.href) === currentPath ? 'page' : undefined}>{node.page.title}</a>
+                      ) : (
+                        <details open={node.pages.some((page) => normalize(page.href) === currentPath)}>
+                          <summary><span>{node.title}</span><Icon name="nav-expander" /></summary>
+                          <ul>
+                            {node.pages.map((page) => (
+                              <li><a href={page.href} aria-current={normalize(page.href) === currentPath ? 'page' : undefined}>{page.title}</a></li>
+                            ))}
+                          </ul>
+                        </details>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </details>
+            )}
           </li>
         );
       })}
@@ -86,6 +112,10 @@ const currentPath = normalize(Astro.url.pathname);
 
   .logo:hover img {
     opacity: 0.85;
+  }
+
+  .mobile-organizer-kit {
+    display: none;
   }
 
   .menu-toggle {
@@ -204,8 +234,81 @@ const currentPath = normalize(Astro.url.pathname);
       transform: translateY(-8px) rotate(-45deg);
     }
 
+    nav a.desktop-organize {
+      display: none;
+    }
+
+    .mobile-organizer-kit {
+      display: block;
+      color: #fff;
+    }
+
+    .mobile-organizer-kit summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      list-style: none;
+      min-height: 48px;
+      padding: 0.75rem var(--spacing-sm);
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      border-left: 3px solid transparent;
+    }
+
+    .mobile-organizer-kit summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .mobile-organizer-kit summary :global(svg) {
+      flex: 0 0 20px;
+      width: 20px;
+      height: 20px;
+    }
+
+    .mobile-organizer-kit details[open] > summary :global(svg),
+    .mobile-organizer-kit[open] > summary :global(svg) {
+      transform: rotate(90deg);
+    }
+
+    .mobile-organizer-kit summary.kit-current {
+      border-left-color: #fff;
+    }
+
+    .mobile-organizer-kit summary:hover {
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .mobile-organizer-kit summary:focus-visible {
+      outline: 2px solid #fff;
+      outline-offset: -2px;
+    }
+
+    .mobile-organizer-kit ul {
+      padding-left: 1rem;
+      align-items: stretch;
+      background: rgba(0, 0, 0, 0.08);
+    }
+
+    .mobile-organizer-kit .kit-links summary,
+    .mobile-organizer-kit .kit-links a {
+      font-size: 0.9375rem;
+      font-weight: 400;
+      line-height: 1.5;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    .mobile-organizer-kit .kit-links a[aria-current] {
+      color: #fff;
+      font-weight: 500;
+    }
+
     nav {
       position: absolute;
+      max-height: calc(100dvh - var(--header-height));
+      overflow-y: auto;
+      overscroll-behavior: contain;
       top: 100%;
       right: 0;
       left: 0;
@@ -227,9 +330,9 @@ const currentPath = normalize(Astro.url.pathname);
 
     nav a {
       display: block;
-      min-height: 44px;
-      padding: 0.6875rem var(--spacing-sm);
-      font-size: 0.9375rem;
+      min-height: 48px;
+      padding: 0.75rem var(--spacing-sm);
+      font-size: 1rem;
       border-bottom: 0;
       border-left: 3px solid transparent;
     }

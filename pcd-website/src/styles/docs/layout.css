@@ -44,3 +44,10 @@
     grid-template-columns: var(--nav-width) minmax(0, var(--content-width));
   }
 }
+
+/* Phone navigation lives inside the shared header's Organizer Kit disclosure. */
+@media (max-width: 640px) {
+  .docs-shell__nav {
+    display: none;
+  }
+}

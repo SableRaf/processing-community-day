@@ -49,12 +49,7 @@
 .nav-list .nav-list-item .nav-list-link:hover,
 .nav-list .nav-list-item .nav-list-link.active {
   color: var(--color-primary-dark);
-  background-image: linear-gradient(
-    -90deg,
-    var(--feedback-color) 0%,
-    color-mix(in srgb, var(--feedback-color) 80%, transparent) 80%,
-    transparent 100%
-  );
+  background-color: var(--feedback-color);
 }
 .nav-list .nav-list-item .nav-list-link--static {
   color: var(--docs-nav-heading-color);
@@ -62,7 +57,7 @@
   cursor: pointer;
 }
 .nav-list .nav-list-item .nav-list-link--static:hover {
-  background-image: none;
+  background-color: transparent;
 }
 .nav-list .nav-list-item .nav-list-group-toggle {
   width: 100%;

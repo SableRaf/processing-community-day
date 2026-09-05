@@ -83,6 +83,7 @@ The global Markdown pipeline runs `rehype-table-wrapper` and `rehype-heading-anc
 ### Key implementation details
 
 - **Leaflet CSS** is loaded via `<link>` tags in `MapLayout.astro`, NOT via JS imports — avoids SSR issues since MapView is `client:only="vue"`.
+- **Mobile Organizer Kit navigation** lives in the shared header below 641px: “Organize” becomes a native “Organizer Kit” disclosure populated by `getKitNav()`, with nested section disclosures and 48px touch targets. The separate docs navigation is hidden at that breakpoint; tablet and desktop navigation remain in the docs shell. Keep both navigation trees sourced from `getKitNav()`.
 - **Docs page share actions** render `ShareMenu.vue` with `client:load` so the control is present in the initial HTML and hydrates immediately. Keep `vue-i18n` in Vite's `ssr.noExternal` list so this server render can resolve its compile-time feature flags.
 - **Browser storage** must be accessed through `src/lib/safeStorage.mjs`; direct `localStorage` property access can throw under iOS privacy restrictions and abort Vue island hydration.
 - **Transient feedback** uses `Snackbar.vue`. Pass a translated message and close label, and mount each new notification with a unique `key` so its dismiss timeout and circular timer restart. Snackbar close controls and modal close controls share the global `.modal-close-button` style from `base.css`.
