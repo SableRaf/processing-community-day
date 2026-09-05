@@ -7,8 +7,6 @@ Hi!
 
 This is Atlanta's first Processing Community Day and it should be a fun time!  
 
-The event will be located at the Fulton County Futures Lab which is located at The CTR (the old CNN building in downtown Atlanta).  The CTR is located near MARTA with a parking deck located right by the building.  The space is also accessible by elevator and is ADA compliant. 
+PCD @ Atlanta will be held at the [Fulton County Futures Lab](https://publicartfutureslab.com/) at [The CTR](https://www.thectratlanta.com/), formerly the CNN Center, in downtown Atlanta. The venue is accessible by MARTA, has nearby parking, elevator access, and ADA-compliant facilities.
 
-The event will include a few talks, a vibe coding session, and a hands on beginner intro to p5.js
-
-More info to come
+The Atlanta event will feature an introductory p5.js workshop led by [Jordan Oleson-Graves](https://jordangraves.com/), a Pepper’s Ghost workshop with [Laila Jhané](https://www.lailajhane.com/), and artist talks by [Ivan Reyes](https://23d.com/) and [Hannah Hendricks](https://www.hannahhendricks.com/). Throughout the afternoon, attendees can also visit an open coding lounge hosted by artist and technologist [Eddie Farr,](https://eddiefarr.com/home.html) where participants are invited to experiment, collaborate, work on projects, or simply spend time with other members of Atlanta’s creative technology community.
