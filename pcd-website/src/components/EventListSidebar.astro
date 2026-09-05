@@ -13,15 +13,16 @@ const markers = nodes.filter(node => !node.placeholder).map(node => {
 ---
 <aside class="event-sidebar" aria-label="More from the PCD community">
   <a class="event-submit-link" href={SUBMIT_EVENT_URL}>Submit an Event <span aria-hidden="true">↗</span></a>
-  <div class="event-minimap-section">
+  <section class="event-minimap-section" aria-labelledby="event-map-heading">
+    <h2 id="event-map-heading">Events map</h2>
     <a class="event-minimap" href="/" aria-label="Explore events on the map">
       <img src={tile} alt="" width="512" height="512" loading="lazy" />
-      <svg viewBox="0 0 100 100" aria-hidden="true">
+      <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
         {markers.map(marker => <circle cx={marker.x} cy={marker.y} r=".8" />)}
       </svg>
     </a>
     <p class="event-map-attribution">© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/attributions">CARTO</a></p>
-  </div>
+  </section>
   <section class="event-forum" aria-labelledby="event-forum-heading">
     <h2 id="event-forum-heading">Latest from the forum</h2>
     <p class="event-forum-intro">Recently updated PCD threads</p>
