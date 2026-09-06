@@ -384,13 +384,14 @@ body {
 }
 
 /* ─── Leaflet Zoom Controls ─────────────────────────────────── */
-.leaflet-top.leaflet-left {
-  top: var(--spacing-md);
+.leaflet-bottom.leaflet-left {
+  bottom: var(--spacing-md);
   left: var(--spacing-md);
 }
 
-.leaflet-top.leaflet-left .leaflet-control {
+.leaflet-bottom.leaflet-left .leaflet-control {
   margin-left: 0;
+  margin-bottom: 0;
 }
 
 .leaflet-bar {

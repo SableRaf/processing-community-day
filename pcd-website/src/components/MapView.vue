@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref, watch, onMounted, onUnmounted } from 'vue';
+import { computed, nextTick, ref, watch, onMounted, onUnmounted } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { Icon } from '@iconify/vue';
 import type { Node } from '../lib/nodes';
 import { makePopupContent } from '../lib/popup';
 import NodePanel from './NodePanel.vue';
@@ -22,6 +23,62 @@ const props = defineProps<{
 const { t } = useI18n();
 
 const selectedNode = ref<Node | null>(null);
+const filterPanelOpen = ref(false);
+const filterButtonRef = ref<HTMLButtonElement | null>(null);
+const filterCloseRef = ref<HTMLButtonElement | null>(null);
+type DateFilter = 'future' | 'past' | 'all';
+const dateFilter = ref<DateFilter>('all');
+const selectedFormats = ref<string[]>([]);
+const selectedActivities = ref<string[]>([]);
+
+const activityOptions = computed(() =>
+  [...new Set(props.nodes.flatMap((node) => node.event_activities))].sort((a, b) => a.localeCompare(b))
+);
+
+function localDateKey(): string {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+function matchesFilters(node: Node): boolean {
+  const today = localDateKey();
+  const endDate = node.event_end_date ?? node.event_date;
+  const matchesDate = dateFilter.value === 'all' || (
+    dateFilter.value === 'past'
+      ? !!endDate && endDate < today
+      : !!node.event_date && (!endDate || endDate >= today)
+  );
+  const format = node.online_event ? 'online' : 'in-person';
+  const matchesFormat = selectedFormats.value.length === 0 || selectedFormats.value.includes(format);
+  const matchesActivity = selectedActivities.value.length === 0 ||
+    node.event_activities.some((activity) => selectedActivities.value.includes(activity));
+  return matchesDate && matchesFormat && matchesActivity;
+}
+
+const filteredNodes = computed(() => props.nodes.filter(matchesFilters));
+const activeFilterCount = computed(() =>
+  (dateFilter.value === 'all' ? 0 : 1) +
+  selectedFormats.value.length + selectedActivities.value.length
+);
+
+function toggleFilterPanel() {
+  filterPanelOpen.value = !filterPanelOpen.value;
+  if (filterPanelOpen.value) nextTick(() => filterCloseRef.value?.focus());
+}
+
+function closeFilterPanel({ refocus = true } = {}) {
+  filterPanelOpen.value = false;
+  if (refocus) nextTick(() => filterButtonRef.value?.focus());
+}
+
+function clearFilters() {
+  dateFilter.value = 'all';
+  selectedFormats.value = [];
+  selectedActivities.value = [];
+}
 
 const INFO_MODAL_SUPPRESS_KEY = 'pcd-info-modal-suppressed';
 const infoModalOpen = ref(false);
@@ -54,6 +111,7 @@ function preloadBannerImage() {
 
 let mapInstance: import('leaflet').Map | null = null;
 let leafletRef: typeof import('leaflet') | null = null;
+let clusterGroup: import('leaflet').LayerGroup | null = null;
 const markerMap = new Map<string, import('leaflet').Marker>();
 const nodeMap = new Map<string, Node>(); // id → Node, for O(1) lookups
 let openPopupNodeId: string | null = null;
@@ -170,7 +228,10 @@ function handleKeydown(e: KeyboardEvent) {
     !!(document.activeElement as HTMLElement)?.closest?.('header[data-site-header]');
 
   if (e.key === 'Escape') {
-    if (selectedNode.value) {
+    if (filterPanelOpen.value) {
+      e.preventDefault();
+      closeFilterPanel();
+    } else if (selectedNode.value) {
       closePanel();
     } else if (openPopupNodeId && mapInstance) {
       e.stopPropagation(); // prevent Leaflet from also handling this Escape
@@ -235,7 +296,7 @@ onMounted(async () => {
     for (const code of [61, 173, 187, 189]) delete kb._zoomKeys[code];
   }
 
-  L.control.zoom({ position: 'topleft' }).addTo(map);
+  L.control.zoom({ position: 'bottomleft' }).addTo(map);
 
   // Manage tab order for Leaflet-injected elements:
   // - Zoom buttons stay in tab order (they are our primary map keyboard controls)
@@ -292,7 +353,7 @@ onMounted(async () => {
   setMapStyle(map, L);
 
   // Cluster group with Google Maps-style concentric circles
-  const clusterGroup = (L as unknown as { markerClusterGroup: (opts?: object) => import('leaflet').LayerGroup }).markerClusterGroup({
+  clusterGroup = (L as unknown as { markerClusterGroup: (opts?: object) => import('leaflet').LayerGroup }).markerClusterGroup({
     showCoverageOnHover: false,
     maxClusterRadius: 40,
     disableClusteringAtZoom: 4,
@@ -349,6 +410,19 @@ onMounted(async () => {
   });
 
   map.addLayer(clusterGroup);
+
+  // Removing hidden markers from the group also updates cluster counts and
+  // keeps them out of the keyboard navigation order.
+  watch(filteredNodes, (visibleNodes) => {
+    if (!clusterGroup) return;
+    const visibleIds = new Set(visibleNodes.map((node) => node.id));
+    markerMap.forEach((marker, id) => {
+      const isVisible = clusterGroup!.hasLayer(marker);
+      if (visibleIds.has(id) && !isVisible) clusterGroup!.addLayer(marker);
+      if (!visibleIds.has(id) && isVisible) clusterGroup!.removeLayer(marker);
+    });
+    if (selectedNode.value && !visibleIds.has(selectedNode.value.id)) closePanel();
+  });
 
   // Apply accessible names to marker elements. Leaflet creates marker DOM elements
   // lazily, so we apply after layer is added and re-apply whenever the cluster
@@ -601,25 +675,80 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="map-chrome">
-  <div class="banner-controls-left">
-    <LanguageSwitcher />
+  <div class="map-chrome" :class="{ 'map-chrome--filters-open': filterPanelOpen }">
+    <div class="banner-controls-left">
+      <button
+        ref="filterButtonRef"
+        class="map-filter-button"
+        type="button"
+        :class="{ 'map-filter-button--active': activeFilterCount > 0 }"
+        :aria-expanded="filterPanelOpen"
+        aria-controls="map-filter-panel"
+        @click="toggleFilterPanel"
+      >
+        <Icon icon="bi:filter" width="1em" height="1em" aria-hidden="true" />
+        <span>{{ t('filters.button') }}</span>
+        <span v-if="activeFilterCount" class="filter-count" aria-hidden="true">{{ activeFilterCount }}</span>
+      </button>
+      <LanguageSwitcher />
+    </div>
+    <div class="host-btn-group">
+      <button id="host-btn" @click="handleSubmitClick()">{{ t('nav.submit_event') }}</button>
+      <button
+        id="info-btn"
+        :aria-label="t('nav.info_button_label')"
+        @mouseenter="preloadBannerImage"
+        @click="handleInfoClick()"
+      >i</button>
+    </div>
+    <InfoModal :open="infoModalOpen" :bannerImageUrl="props.bannerImageUrl" :autoOpened="infoModalAutoOpened" @close="infoModalOpen = false" @suppress="suppressInfoModal" />
+    <SubmitModal :open="submitModalOpen" @close="submitModalOpen = false" />
   </div>
-  <div class="host-btn-group">
-    <button
-      id="host-btn"
-      @click="handleSubmitClick()"
-    >{{ t('nav.submit_event') }}</button>
-    <button
-      id="info-btn"
-      :aria-label="t('nav.info_button_label')"
-      @mouseenter="preloadBannerImage"
-      @click="handleInfoClick()"
-    >i</button>
-  </div>
-  <InfoModal :open="infoModalOpen" :bannerImageUrl="props.bannerImageUrl" :autoOpened="infoModalAutoOpened" @close="infoModalOpen = false" @suppress="suppressInfoModal" />
-  <SubmitModal :open="submitModalOpen" @close="submitModalOpen = false" />
-  </div>
+  <aside
+    v-show="filterPanelOpen"
+    id="map-filter-panel"
+    class="map-filter-panel"
+    :inert="!filterPanelOpen"
+    :aria-label="t('filters.title')"
+  >
+    <div class="filter-panel-header">
+      <div>
+        <h2>{{ t('filters.title') }}</h2>
+        <p>{{ t('filters.showing', { shown: filteredNodes.length, total: props.nodes.length }) }}</p>
+      </div>
+      <button ref="filterCloseRef" type="button" class="filter-close" :aria-label="t('filters.close')" @click="closeFilterPanel()">×</button>
+    </div>
+
+    <fieldset>
+      <legend>{{ t('filters.when') }}</legend>
+      <div class="filter-options">
+        <label><input v-model="dateFilter" type="radio" value="future" /> {{ t('filters.future') }}</label>
+        <label><input v-model="dateFilter" type="radio" value="past" /> {{ t('filters.past') }}</label>
+        <label><input v-model="dateFilter" type="radio" value="all" /> {{ t('filters.all') }}</label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>{{ t('filters.format') }}</legend>
+      <div class="filter-options">
+        <label><input v-model="selectedFormats" type="checkbox" value="in-person" /> {{ t('filters.in_person') }}</label>
+        <label><input v-model="selectedFormats" type="checkbox" value="online" /> {{ t('filters.online') }}</label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>{{ t('filters.event_types') }}</legend>
+      <div class="filter-options">
+        <label v-for="activity in activityOptions" :key="activity">
+          <input v-model="selectedActivities" type="checkbox" :value="activity" /> {{ activity }}
+        </label>
+      </div>
+    </fieldset>
+
+    <button type="button" class="clear-filters" :disabled="activeFilterCount === 0" @click="clearFilters">
+      {{ t('filters.clear') }}
+    </button>
+  </aside>
   <NodePanel :node="selectedNode" @close="closePanel" />
   <div id="map" tabindex="-1" :aria-label="t('map.aria_label')"></div>
 </template>
@@ -637,10 +766,195 @@ onUnmounted(() => {
 .banner-controls-left {
   position: fixed;
   top: calc(var(--header-height) + var(--spacing-md));
-  left: calc(36px + var(--spacing-md) + var(--spacing-sm));
+  left: var(--spacing-md);
   z-index: var(--z-controls);
   display: flex;
   align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.map-filter-button {
+  display: flex;
+  align-items: center;
+  gap: 0.3em;
+  height: 40px;
+  padding: 0 0.625rem;
+  background: var(--color-bg-popup);
+  border: 2px solid var(--color-border);
+  border-radius: 8px;
+  color: var(--color-text);
+  font-family: var(--font-family);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  box-shadow: 0 10px 28px rgba(18, 19, 33, 0.18);
+  backdrop-filter: blur(14px);
+  cursor: pointer;
+  transition: background-color 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+}
+
+.map-filter-button:hover,
+.map-filter-button--active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+}
+
+.map-filter-button:focus-visible,
+.filter-close:focus-visible,
+.clear-filters:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.filter-count {
+  display: grid;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  padding: 0 0.25rem;
+  border-radius: 999px;
+  background: currentColor;
+  color: var(--color-primary);
+  font-size: 0.6875rem;
+  place-items: center;
+}
+
+.map-filter-button--active .filter-count,
+.map-filter-button:hover .filter-count {
+  background: #fff;
+}
+
+.map-filter-panel {
+  position: fixed;
+  z-index: calc(var(--z-controls) - 1);
+  top: var(--header-height);
+  bottom: 0;
+  left: 0;
+  width: min(360px, 100vw);
+  padding: calc(64px + var(--spacing-md)) var(--spacing-lg) var(--spacing-lg);
+  overflow-y: auto;
+  background: var(--color-bg-panel);
+  border-right: 1px solid var(--color-border);
+  box-shadow: 8px 0 28px rgba(18, 19, 33, 0.16);
+}
+
+.filter-panel-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  margin-inline: calc(-1 * var(--spacing-lg));
+  padding: 0 var(--spacing-lg) var(--spacing-md);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.filter-panel-header h2 {
+  margin: 0;
+  font-size: 1.375rem;
+}
+
+.filter-panel-header p {
+  margin: 0.25rem 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
+}
+
+.filter-close {
+  display: grid;
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--color-text);
+  cursor: pointer;
+  font: 400 1.75rem/1 var(--font-family);
+  place-items: center;
+}
+
+.filter-close:hover {
+  background: var(--color-bg-popup-hover);
+}
+
+.map-filter-panel fieldset {
+  margin: 0 calc(-1 * var(--spacing-lg));
+  min-width: 0;
+  padding: 1rem var(--spacing-lg) 1.25rem;
+  border: 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.map-filter-panel legend {
+  float: left;
+  width: 100%;
+  padding: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.filter-options {
+  clear: both;
+  display: grid;
+  gap: 0.75rem;
+  padding-top: 0.75rem;
+}
+
+.map-filter-panel label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+  color: var(--color-text);
+  font-size: 0.875rem;
+  line-height: 1.35;
+  cursor: pointer;
+}
+
+.map-filter-panel input {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: var(--color-primary);
+}
+
+.clear-filters {
+  width: 100%;
+  margin-top: var(--spacing-lg);
+  padding: 0.625rem 1rem;
+  border: 2px solid var(--color-primary);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--color-primary);
+  font: 600 0.875rem/1.3 var(--font-family);
+  cursor: pointer;
+}
+
+.clear-filters:hover:not(:disabled) {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.clear-filters:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+@media (max-width: 600px) {
+  .banner-controls-left {
+    top: calc(var(--header-height) + var(--spacing-sm));
+    left: var(--spacing-sm);
+    gap: 0.375rem;
+  }
+
+  .map-filter-panel {
+    padding-top: calc(56px + var(--spacing-md));
+  }
+
+  .map-chrome--filters-open .host-btn-group {
+    z-index: calc(var(--z-controls) - 2);
+  }
 }
 </style>
 

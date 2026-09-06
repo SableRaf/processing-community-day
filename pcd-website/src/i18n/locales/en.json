@@ -128,6 +128,21 @@
         "title": "Processing Community Day 2026",
         "description": "Explore Processing Community Day 2026 nodes around the world. Find your local event on the interactive map."
     },
+    "filters": {
+        "button": "Filter",
+        "title": "Filter events",
+        "close": "Close filters",
+        "showing": "Showing {shown} of {total} events",
+        "when": "When",
+        "future": "Future events",
+        "past": "Past events",
+        "all": "All events",
+        "format": "Format",
+        "in_person": "In person",
+        "online": "Online",
+        "event_types": "Event types",
+        "clear": "Clear filters"
+    },
     "language_switcher": {
         "label": "Language"
     }

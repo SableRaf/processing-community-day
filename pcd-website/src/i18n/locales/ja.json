@@ -128,6 +128,21 @@
         "title": "Processing Community Day 2026",
         "description": "世界中の Processing Community Day 2026 イベントを探索しましょう。インタラクティブマップでお近くのイベントを見つけてください。"
     },
+    "filters": {
+        "button": "絞り込み",
+        "title": "イベントを絞り込む",
+        "close": "絞り込みを閉じる",
+        "showing": "{total}件中{shown}件のイベントを表示",
+        "when": "開催時期",
+        "future": "今後のイベント",
+        "past": "過去のイベント",
+        "all": "すべてのイベント",
+        "format": "形式",
+        "in_person": "対面",
+        "online": "オンライン",
+        "event_types": "イベントの種類",
+        "clear": "絞り込みを解除"
+    },
     "language_switcher": {
         "label": "言語"
     }

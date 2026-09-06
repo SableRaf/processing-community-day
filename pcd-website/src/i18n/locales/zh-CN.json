@@ -128,6 +128,21 @@
         "title": "Processing Community Day 2026",
         "description": "探索全球 Processing Community Day 2026 节点，在互动地图上找到您附近的活动。"
     },
+    "filters": {
+        "button": "筛选",
+        "title": "筛选活动",
+        "close": "关闭筛选",
+        "showing": "显示 {total} 个活动中的 {shown} 个",
+        "when": "时间",
+        "future": "未来活动",
+        "past": "过去活动",
+        "all": "所有活动",
+        "format": "形式",
+        "in_person": "线下",
+        "online": "线上",
+        "event_types": "活动类型",
+        "clear": "清除筛选"
+    },
     "language_switcher": {
         "label": "语言"
     }
