@@ -5,7 +5,11 @@ order: 3
 description: Sample four-hour and eight-hour schedules to adapt for your PCD.
 ---
 
-It's a good idea to make a plan for the day. It helps you schedule enough time for each activity and make sure there is a good structure to the event. Add your schedule to your event page so participants know what to expect.
+It's a good idea to make a plan for the day. It helps you schedule enough time for each activity and make sure there is a good structure to the event. 
+
+## Make Your Schedule Visible
+
+Add your schedule to your event page so participants know what to expect. You can also print out copies to have on hand during the event, project it on a screen, or hang a poster on a wall so everyone can see it.
 
 ## Timekeeping
 
