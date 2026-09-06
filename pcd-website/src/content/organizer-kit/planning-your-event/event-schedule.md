@@ -1,19 +1,11 @@
 ---
-title: Example Schedules
-section: Event Resources
-order: 3
+title: Event Schedule
+section: Organizing Your Event
+order: 4
 description: Sample four-hour and eight-hour schedules to adapt for your PCD.
 ---
 
-It's a good idea to make a plan for the day. It helps you schedule enough time for each activity and make sure there is a good structure to the event. 
-
-## Make Your Schedule Visible
-
-Add your schedule to your event page so participants know what to expect. You can also print out copies to have on hand during the event, project it on a screen, or hang a poster on a wall so everyone can see it.
-
-## Timekeeping
-
-Someone (an organizer or a volunteer) should be in charge of keeping track of time. Before each session, remind each speaker or facilitator of their allotted time, and give them a 5-minute warning before they need to wrap up. You can also place a countdown clock in front of the speaker, so they have a visual reminder of how much time they have left (a simple kitchen timer works well). Sound cues can also be used to signal the end of a session.
+A schedule helps you plan enough time for each activity and lets everyone know what to expect. 
 
 ## Example Schedules
 
@@ -40,3 +32,17 @@ Here are some examples of ways you can structure your PCD. Feel free to adapt th
 - Beginner-friendly workshop II part 2 (30 min)
 - Community discussion(s) on topics related to art, code, and diversity. (45 min)
 - Wrap-up: discuss ways for the community to go forward and [take a group picture](/organize/resources/photography-and-video/#tips-for-a-good-group-photo)! (15 min)
+
+## Timekeeping Tips
+
+### Make Your Schedule Visible
+
+Add your schedule to your event page so participants know what to expect. You can also print out copies to have on hand during the event, project it on a screen, or hang a poster on a wall so everyone can see it.
+
+### Designate a Timekeeper
+
+Someone (an organizer or a volunteer) should be in charge of keeping track of time. 
+
+### Keep Sessions on Track
+
+Before each session, remind each speaker or facilitator of their allotted time, and give them a 5-minute warning before they need to wrap up. You can also place a countdown clock in front of the speaker, so they have a visual reminder of how much time they have left (a simple kitchen timer works well). Sound cues can also be used to signal the end of a session.

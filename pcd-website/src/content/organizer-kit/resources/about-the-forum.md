@@ -1,7 +1,7 @@
 ---
 title: About the Forum
 section: Event Resources
-order: 4
+order: 3
 description: Introducing yourself and coordinating in the open on the Processing forum.
 draft: true
 ---

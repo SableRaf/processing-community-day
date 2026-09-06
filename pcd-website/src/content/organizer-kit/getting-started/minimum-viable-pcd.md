@@ -29,4 +29,4 @@ If you need inspiration for activities to run at your PCD, check out the [Zine L
 
 ## Schedule
 
-See [Example Schedules](/organize/resources/example-schedules/) for some ways you can structure your PCD.
+It's a good idea to make a simple plan for the day. See the [Event Schedule](/organize/planning-your-event/event-schedule/) page for some ways you can structure your PCD.
