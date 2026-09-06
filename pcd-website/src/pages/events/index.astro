@@ -92,7 +92,7 @@ const days = [...new Set(events.map(({ record }) => eventGroupDay(record, today)
         </section>;
       })}
     </div>
-    <div id="event-empty" class="event-empty" hidden><h2>No events found</h2><p>Try another search or adjust your filters.</p><button type="button" id="reset-event-filters">Clear filters</button></div>
+    <div id="event-empty" class="event-empty" hidden><h2 id="event-empty-heading">No events found</h2><p>Try another search or adjust your filters.</p><button type="button" id="reset-event-filters">Clear filters</button></div>
     </div>
     <EventListSidebar nodes={events.map(({ node }) => node)} />
     </div>
@@ -100,7 +100,7 @@ const days = [...new Set(events.map(({ record }) => eventGroupDay(record, today)
 </SiteLayout>
 
 <script>
-  import { dateHeading, eventGroupDay, localDay, matchesEvent } from '../../lib/event-list.mjs';
+  import { dateHeading, eventCategory, eventGroupDay, localDay, matchesEvent } from '../../lib/event-list.mjs';
   const root = document.querySelector<HTMLElement>('.event-list-page')!;
   const search = root.querySelector<HTMLInputElement>('#event-search')!;
   const applePlatform = /Mac|iPhone|iPad|iPod/i.test(navigator.platform);
@@ -108,50 +108,100 @@ const days = [...new Set(events.map(({ record }) => eventGroupDay(record, today)
   const criteria = [...root.querySelectorAll<HTMLInputElement>('[name="confirmation"]')];
   const tabs = [...root.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
   const results = root.querySelector<HTMLElement>('#event-results')!;
+  const empty = root.querySelector<HTMLElement>('#event-empty')!;
   const dropdown = root.querySelector<HTMLDetailsElement>('.confirmation-dropdown')!;
   const cards = [...root.querySelectorAll<HTMLElement>('[data-event]')].map(card => ({ card, record: JSON.parse(card.dataset.event!) }));
   const tabNames = ['upcoming', 'past', 'other'] as const;
+  const categoryLabels = { upcoming: 'Upcoming', past: 'Past events', other: 'Other events' } as const;
   let activeTab: typeof tabNames[number] = 'upcoming';
 
   let renderedDay = localDay();
   function render() {
     const today = localDay();
     renderedDay = today;
-    const options = { today, tab: activeTab, query: search.value, required: criteria.filter(input => input.checked).map(input => input.value) };
+    const query = search.value.trim();
+    const searchAllCategories = Boolean(query);
+    const options = { today, tab: searchAllCategories ? 'all' : activeTab, query, required: criteria.filter(input => input.checked).map(input => input.value) };
     const visible = cards.filter(({record}) => matchesEvent(record, options));
     visible.sort((a, b) => {
+      if (searchAllCategories) {
+        const categoryOrder = [activeTab, ...tabNames.filter(category => category !== activeTab)];
+        const categoryDifference = categoryOrder.indexOf(eventCategory(a.record, today)) - categoryOrder.indexOf(eventCategory(b.record, today));
+        if (categoryDifference) return categoryDifference;
+      }
       const first = eventGroupDay(a.record, today) || '9999';
       const second = eventGroupDay(b.record, today) || '9999';
-      return activeTab === 'past' ? second.localeCompare(first) : first.localeCompare(second);
+      const category = eventCategory(a.record, today);
+      return category === 'past' ? second.localeCompare(first) : first.localeCompare(second);
     });
     results.replaceChildren();
+    const primaryCount = visible.filter(({ record }) => eventCategory(record, today) === activeTab).length;
+    const otherCount = visible.length - primaryCount;
+    empty.hidden = primaryCount > 0;
+    empty.querySelector('#event-empty-heading')!.textContent = `No ${categoryLabels[activeTab].toLowerCase()} found`;
+    let previousCategory: typeof tabNames[number] | undefined;
+    let categoryResults = results;
+    let otherResults: HTMLElement | undefined;
     let previousDay: string | undefined;
     let stack: HTMLDivElement;
     for (const {card, record} of visible) {
+      const category = eventCategory(record, today);
+      if (searchAllCategories && category !== activeTab && !otherResults) {
+        results.append(empty);
+        otherResults = document.createElement('section');
+        otherResults.className = 'event-search-other-results';
+        const otherHeading = document.createElement('h2');
+        otherHeading.className = 'event-search-other-heading';
+        otherHeading.textContent = 'Results in other categories';
+        otherResults.append(otherHeading);
+        results.append(otherResults);
+      }
+      if (searchAllCategories && category !== activeTab && category !== previousCategory) {
+        if (category === 'other') {
+          categoryResults = otherResults!;
+        } else {
+          const categorySection = document.createElement('section');
+          categorySection.className = 'event-search-category';
+          const categoryHeading = document.createElement('h3');
+          categoryHeading.className = 'event-search-category-heading';
+          categoryHeading.textContent = categoryLabels[category];
+          categorySection.append(categoryHeading);
+          otherResults!.append(categorySection);
+          categoryResults = categorySection;
+        }
+        previousCategory = category;
+        previousDay = undefined;
+      }
       const day = eventGroupDay(record, today);
       if (day !== previousDay) {
         const section = document.createElement('section');
         section.className = day ? 'event-date-group' : 'event-date-group event-other-group';
-        const heading = document.createElement('h2');
-        heading.className = 'event-date-heading';
+        const heading = document.createElement(day ? 'h2' : 'h3');
+        heading.className = day ? 'event-date-heading' : 'event-search-category-heading';
         const title = document.createElement('strong');
         const weekday = document.createElement('span');
         const label = dateHeading(day, today);
-        title.textContent = label.title;
-        weekday.textContent = label.weekday;
-        heading.append(title, weekday);
+        if (day) {
+          title.textContent = label.title;
+          weekday.textContent = label.weekday;
+          heading.append(title, weekday);
+        } else {
+          heading.textContent = label.title;
+        }
         stack = document.createElement('div');
         stack.className = 'event-cards';
         section.append(heading, stack);
-        results.append(section);
+        categoryResults.append(section);
         previousDay = day;
       }
       const missingTime = card.querySelector<HTMLElement>('[data-missing-time]');
       if (missingTime) missingTime.hidden = Boolean(record.date && (record.end || record.date) < today);
       stack!.append(card);
     }
-    root.querySelector('#event-count')!.textContent = `${visible.length} ${activeTab} ${visible.length === 1 ? 'event' : 'events'}`;
-    root.querySelector<HTMLElement>('#event-empty')!.hidden = visible.length > 0;
+    if (!otherResults && primaryCount === 0) results.append(empty);
+    root.querySelector('#event-count')!.textContent = searchAllCategories
+      ? `${primaryCount} ${activeTab} ${primaryCount === 1 ? 'event' : 'events'}${otherCount ? ` · ${otherCount} in other categories` : ''}`
+      : `${visible.length} ${activeTab} ${visible.length === 1 ? 'event' : 'events'}`;
   }
   function selectTab(index: number) {
     activeTab = tabNames[index];

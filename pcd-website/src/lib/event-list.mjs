@@ -35,10 +35,13 @@ export function eventGroupDay(event, today) {
   return event.date;
 }
 
+export function eventCategory(event, today) {
+  if (!event.date) return 'other';
+  return (event.end || event.date) < today ? 'past' : 'upcoming';
+}
+
 export function matchesEvent(event, { today, tab = 'upcoming', query = '', required = [] }) {
-  const isPast = Boolean(event.date && (event.end || event.date) < today);
-  const eventTab = !event.date ? 'other' : isPast ? 'past' : 'upcoming';
-  if (eventTab !== tab) return false;
+  if (tab !== 'all' && eventCategory(event, today) !== tab) return false;
   if (required.length > 0 && (event.placeholder || !required.every((field) => event.fields[field]))) return false;
   const text = normalizeSearch(event.search);
   return normalizeSearch(query).trim().split(/\s+/).every((term) => text.includes(term));

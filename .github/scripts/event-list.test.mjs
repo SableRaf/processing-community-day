@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { confirmationFields, dateHeading, eventGroupDay, localDay, matchesEvent } from '../../pcd-website/src/lib/event-list.mjs';
+import { confirmationFields, dateHeading, eventCategory, eventGroupDay, localDay, matchesEvent } from '../../pcd-website/src/lib/event-list.mjs';
 const today = '2026-09-05';
 const event = { date: today, end: '', placeholder: false, fields: { date: true, time: true, location: true, description: true }, search: 'Creative coding São Paulo' };
 
@@ -45,4 +45,7 @@ test('search handles case, accents, whitespace and multiple terms alongside filt
   assert.equal(matchesEvent(event, { today, query: ' SAO  coding ' }), true);
   assert.equal(matchesEvent(event, { today, query: 'Tokyo' }), false);
   assert.equal(matchesEvent(event, { today, query: 'coding', tab: 'past' }), false);
+  assert.equal(matchesEvent(event, { today, query: 'coding', tab: 'all' }), true);
+  assert.equal(matchesEvent({ ...event, date: '', search: 'Bengaluru India' }, { today, query: 'india', tab: 'all' }), true);
+  assert.equal(eventCategory({ ...event, date: '' }, today), 'other');
 });
