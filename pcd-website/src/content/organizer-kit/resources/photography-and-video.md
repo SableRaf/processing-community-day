@@ -202,7 +202,7 @@ Photography should not interfere with people's ability to participate in or enjo
 
 5. **Add Credits:** When sharing photographs of artworks, projects, performances, or presentations, include the creator's name when possible. Credit the photographer as well if requested.
 
-6. **Share With the PCD Team:** Keep the original files and your selected/edited photographs in separate folders. Share your selected photographs with the Processing Foundation using the method provided to PCD organizers so they can potentially be included in documentation of PCD events around the world.
+6. **Share With the PCD Team:** Keep the original files and your selected/edited photographs in separate folders. Share your selected photographs with the Processing Foundation by uploading them to [this folder](https://drive.google.com/drive/folders/1---yBm2vw3UUkrBlejwdlycrwwbCSLxL?usp=drive_link). This helps document PCD events around the world.
 
 A few good photographs are more valuable than hundreds of similar ones. Focus on documenting what made your PCD distinctive: the people, the work they shared, the activities they took part in, and the community that formed around the event.
 
