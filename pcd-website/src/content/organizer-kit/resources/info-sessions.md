@@ -1,7 +1,7 @@
 ---
 title: Info Sessions
 section: Event Resources
-order: 7
+order: 8
 description: Recordings of past info sessions for interested organizers.
 ---
 

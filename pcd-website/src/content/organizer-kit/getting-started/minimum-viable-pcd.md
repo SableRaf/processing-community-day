@@ -5,11 +5,16 @@ order: 3
 description: The simplest version of a Processing Community Day you can realistically host.
 ---
 
-We understand that it can take enormous physical and emotional effort to organize a community event, therefore we have compiled this Organizer's Kit to help you get things started.
-
 If this is your first time organizing an event, we encourage you to start small.
 
-Your PCD does not need to be a large event, or professionally produced, to be impactful. What matters most is creating a space where people can connect with each other around creative coding.
+Ask yourself:
+
+* What is the simplest version of this event I can realistically host?
+* What type of events do people show up for in my community?
+* Which spaces are available and how many people will fit there?
+* What can I organize with the time and energy I have?
+
+## Minimum Viable PCD
 
 A minimum viable PCD might look like:
 
@@ -17,15 +22,11 @@ A minimum viable PCD might look like:
 * 1 space (a room, studio, classroom, coffee shop, or online)
 * 1 simple activity (a small workshop, talk, book club session, screening, or collaborative coding session)
 * A small group of participants (even 5-15 people is enough)
-* A few photos or a short recap to share back with the community
 
-Many of the most impactful community events start this way. You can grow your PCD over time.
+## Activities
 
-If you're feeling overwhelmed, ask yourself:
+If you need inspiration for activities to run at your PCD, check out the [Zine Library](/organize/zines/zine-library/), which contains a collection of ready-to-run workshops and activities created by the community.
 
-* What is the simplest version of this event I can realistically host?
-* What type of events do people show up for in my community?
-* Which spaces are available and how many people will fit there?
-* What can I organize with the time and energy I have?
+## Schedule
 
-If you need inspiration for activities to run at your PCD, check out the [Zine Library](/organize/zines/zine-library/), which contains a collection of ready-to-run workshops and activities created by the community. You are also welcome to create your own zine and share it with the community. See [How to Make a Zine](/organize/zines/how-to-make-a-zine/) for more information.
+See [Example Schedules](/organize/resources/example-schedules/) for some ways you can structure your PCD.

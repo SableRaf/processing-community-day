@@ -1,7 +1,7 @@
 ---
 title: Taking Photos
 section: Event Resources
-order: 6
+order: 7
 description: Consent, tips, and who should be behind the camera.
 ---
 
@@ -180,7 +180,7 @@ Photography should not interfere with people's ability to participate in or enjo
 
 * **Take Several Photos:** Take several shots. Someone will almost certainly blink, look away, or move.
 
-* **Take a Fun One:** After the regular group photo, you can ask, **"Let's do a silly one!"** It often produces a more relaxed photograph and gives you another version to choose from.
+* **Take a Fun One:** After the regular group photo, you can ask, *"Let's do a silly one!"*. Yes, it is a bit cliché but it often produces a more interesting picture. Take a few more candid shots *after* the "silly" one too, as people often relax and smile more naturally afterwards.
 
 * **Take More Than One Composition:** If time allows, take both a wider photograph showing the setting and a tighter one focused on the group.
 
