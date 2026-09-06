@@ -202,6 +202,8 @@ New events are submitted via GitHub Issues using `.github/ISSUE_TEMPLATE/01-new-
 
 ### Edit events
 
+When a valid edit produces no PR because the generated files already match the site, the `create-pr` job upserts the shared status comment with the canonical event link and a short note about the form workaround. This feedback runs only after successful PR creation returns operation `none` without a PR number; failures and existing PRs must not be described as unchanged submissions.
+
 Organizers can edit existing events via `.github/ISSUE_TEMPLATE/04-edit-event.yml`. The same workflow (`process-edit-event` job) runs `.github/scripts/process-edit-event-issue.mjs`. The edit script: reads the existing event by `event_id`, preserves the immutable `uid` and `intake` block, preserves `event_activities` if all checkboxes are unchecked (GitHub issue forms cannot prefill checkboxes), and preserves `content.md` if `full_description` is blank.
 
 ### New zines

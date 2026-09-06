@@ -254,6 +254,7 @@ async function main() {
   await setOutput('pr_title', `Update ${eventName} on the PCD map`);
   await setOutput('pr_body_path', prBodyPath);
   await setOutput('event_name', eventName);
+  await setOutput('event_url', `https://day.processing.org/event/${eventId}-${uid}`);
   await setOutput('pr_label', 'edit event');
   await setOutput('action_verb', 'updated on');
 }
