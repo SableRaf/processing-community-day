@@ -16,6 +16,13 @@ function toIntlLocale(locale: string): string {
   return INTL_LOCALE_MAP[locale] ?? locale;
 }
 
+/** Date-only event ranges end after their final day in the visitor's local time. */
+export function isPastEvent(node: Pick<Node, 'event_date' | 'event_end_date'>, now = new Date()): boolean {
+  if (!node.event_date) return false;
+  const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+  return (node.event_end_date || node.event_date) < today;
+}
+
 export function formatDate(dateString: string, abbrev = false, locale = 'en'): string {
   try {
     // Parse as UTC to avoid timezone issues with date-only strings

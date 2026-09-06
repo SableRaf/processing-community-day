@@ -128,6 +128,21 @@
         "title": "Processing Community Day 2026",
         "description": "전 세계 Processing Community Day 2026 노드를 탐색하세요. 인터랙티브 지도에서 가까운 이벤트를 찾아보세요."
     },
+    "filters": {
+        "button": "필터",
+        "title": "이벤트 필터",
+        "close": "필터 닫기",
+        "showing": "전체 {total}개 중 {shown}개 이벤트 표시",
+        "when": "시기",
+        "future": "예정된 이벤트",
+        "past": "지난 이벤트",
+        "all": "모든 이벤트",
+        "format": "형식",
+        "in_person": "오프라인",
+        "online": "온라인",
+        "event_types": "이벤트 유형",
+        "clear": "필터 지우기"
+    },
     "language_switcher": {
         "label": "언어"
     }

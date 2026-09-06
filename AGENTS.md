@@ -59,7 +59,7 @@ No install needed — `open-location-code` is already available at `pcd-website/
 
 - **Astro** owns routing, layouts, metadata, and static content pages. `src/layouts/BaseLayout.astro` provides the document shell; `MapLayout.astro`, `SiteLayout.astro`, and `DocsLayout.astro` provide the map, standard content, and Organizer Kit shells respectively.
 - The Organizer Kit introduction lives in `src/content/organizer-kit/getting-started/introduction.md`; `/organize/` redirects to its canonical `/organize/getting-started/introduction/` route.
-- **Vue** handles the interactive map UI as `client:only="vue"` island components. Map-specific interactive features belong in Vue; static site and Organizer Kit pages belong in Astro and Markdown content collections.
+- **Vue** handles the interactive map UI as `client:only="vue"` island components. Map-specific interactive features belong in Vue; static site and Organizer Kit pages belong in Astro and Markdown content collections. The map filter drawer in `MapView.vue` filters clustered markers by date (future, past, or all), format, and activity type; checkbox choices are ORed within a group and filter groups are ANDed together.
 
 ### Event list
 
@@ -104,7 +104,7 @@ The global Markdown pipeline runs `rehype-table-wrapper` and `rehype-heading-anc
 
 | File | Role |
 |---|---|
-| `src/components/MapView.vue` | Leaflet map, marker clustering, keyboard shortcuts |
+| `src/components/MapView.vue` | Leaflet map, marker clustering, filter drawer, keyboard shortcuts |
 | `src/components/NodePanel.vue` | Slide-in event detail panel with minimap, calendar links, share button |
 | `src/components/LanguageSwitcher.vue` | Language selector dropdown in the top bar |
 | `src/components/BackButton.astro` | Reusable button-style link for navigating from a detail page back to its parent listing |

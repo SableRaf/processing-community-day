@@ -1,5 +1,5 @@
 import type { Node } from './nodes';
-import { formatPopupDate } from './format';
+import { formatPopupDate, isPastEvent } from './format';
 import { i18n } from '../i18n/index';
 import { currentLocale } from '../i18n/localeState';
 
@@ -25,6 +25,7 @@ export function getOsmUrl(node: Node): string {
 
 export function makePopupContent(node: Node): string {
   const locale = currentLocale.value;
+  const past = isPastEvent(node);
 
   const date = node.date_tbd
     ? t('popup.date_tbd')
@@ -45,7 +46,7 @@ export function makePopupContent(node: Node): string {
     : '';
 
   const onlineBadgeHtml = node.online_event ? `<span class="popup-online-badge">${t('popup.online_event')}</span>` : '';
-  const timeHint = !node.date_tbd && node.time_tbd ? ` · ${t('popup.time_tbd')}` : '';
+  const timeHint = !node.date_tbd && node.time_tbd && !past ? ` · ${t('popup.time_tbd')}` : '';
   const dateLineContent = `${date}${timeHint}`;
 
   const venueNameHtml = node.online_event
@@ -94,10 +95,10 @@ export function makePopupContent(node: Node): string {
       ${organizingEntityHtml}
       <div class="popup-info-card">
         <p class="popup-date">${dateLineContent}</p>
-        <div class="popup-venue">
+        ${node.location_tbd && past ? '' : `<div class="popup-venue">
           ${venueNameHtml}
           ${venueAddressHtml}
-        </div>
+        </div>`}
       </div>
       <div class="popup-body">
         ${descriptionHtml}

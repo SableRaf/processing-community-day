@@ -4,7 +4,7 @@ import { useI18n } from 'vue-i18n';
 import { createFocusTrap, type FocusTrap } from 'focus-trap';
 import { Icon } from '@iconify/vue';
 import type { Node } from '../lib/nodes';
-import { formatDateRange, formatTimeRange, calendarLinks, onlinePlatformName } from '../lib/format';
+import { formatDateRange, formatTimeRange, calendarLinks, onlinePlatformName, isPastEvent } from '../lib/format';
 import { cartoTileUrl } from '../lib/carto';
 import { getOsmUrl } from '../lib/popup';
 import { GITHUB_EDIT_EVENT_URL, GITHUB_CONTENT_ISSUE_URL } from '../config';
@@ -241,7 +241,7 @@ function getEditEventHref(node: Node): string {
   return `${GITHUB_EDIT_EVENT_URL}&${params.toString().replace(/\+/g, '%20')}`;
 }
 
-const calLinks = computed(() => props.node && !props.node.date_tbd ? calendarLinks(props.node) : null);
+const calLinks = computed(() => props.node && !props.node.date_tbd && !isPastEvent(props.node) ? calendarLinks(props.node) : null);
 </script>
 
 <template>
@@ -325,46 +325,47 @@ const calLinks = computed(() => props.node && !props.node.date_tbd ? calendarLin
             <div>
               <span v-if="node.date_tbd" class="info-card-date info-card-tbd">{{ t('panel.date_tbd') }}</span>
               <span v-else class="info-card-date">{{ formatDateRange(node.event_date ?? '', node.event_end_date, false, locale) }}</span>
-              <span v-if="!node.date_tbd && node.time_tbd" class="info-card-time info-card-tbd">· {{ t('panel.time_tbd') }}</span>
+              <span v-if="!node.date_tbd && node.time_tbd && !isPastEvent(node)" class="info-card-time info-card-tbd">· {{ t('panel.time_tbd') }}</span>
               <span v-else-if="!node.date_tbd && node.event_start_time" class="info-card-time">
                 · {{ formatTimeRange(node.event_start_time, node.event_end_time) }}
               </span>
               <span v-if="!node.date_tbd && node.event_start_time" class="info-card-time-note">{{ t('panel.local_time') }}</span>
             </div>
           </div>
-          <hr class="info-card-divider" aria-hidden="true" />
-
           <!-- Row 2: Venue + address (OSM link) or Online platform -->
-          <div class="info-card-row info-card-venue-row">
-            <div class="info-card-row-leading">
-              <Icon :icon="!node.online_event && node.location_tbd ? 'bi:geo-alt' : 'bi:link-45deg'" width="1em" height="1em" aria-hidden="true" class="info-card-icon" />
-              <div class="info-card-venue">
-                <span class="info-card-venue-name">{{ node.online_event ? onlinePlatformName(node.event_url) : node.location_tbd ? t('panel.location_tbd') : (node.location_name || node.address) }}</span>
-                <a
-                  v-if="node.online_event && node.event_url"
-                  :href="node.event_url"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="info-card-venue-address"
-                  :title="t('panel.join_online')"
-                >{{ node.event_url }}</a>
-                <a
-                  v-else-if="!node.online_event && !node.location_tbd && node.address"
-                  :href="getOsmUrl(node)"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="info-card-venue-address"
-                  :title="t('panel.get_directions_osm')"
-                >{{ node.location_name ? node.address : t('panel.view_osm') }}</a>
+          <template v-if="node.online_event || !node.location_tbd || !isPastEvent(node)">
+            <hr class="info-card-divider" aria-hidden="true" />
+            <div class="info-card-row info-card-venue-row">
+              <div class="info-card-row-leading">
+                <Icon :icon="!node.online_event && node.location_tbd ? 'bi:geo-alt' : 'bi:link-45deg'" width="1em" height="1em" aria-hidden="true" class="info-card-icon" />
+                <div class="info-card-venue">
+                  <span class="info-card-venue-name">{{ node.online_event ? onlinePlatformName(node.event_url) : node.location_tbd ? t('panel.location_tbd') : (node.location_name || node.address) }}</span>
+                  <a
+                    v-if="node.online_event && node.event_url"
+                    :href="node.event_url"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="info-card-venue-address"
+                    :title="t('panel.join_online')"
+                  >{{ node.event_url }}</a>
+                  <a
+                    v-else-if="!node.online_event && !node.location_tbd && node.address"
+                    :href="getOsmUrl(node)"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="info-card-venue-address"
+                    :title="t('panel.get_directions_osm')"
+                  >{{ node.location_name ? node.address : t('panel.view_osm') }}</a>
+                </div>
               </div>
+              <p v-if="node.online_event" class="panel-online-badge info-card-online-badge">
+                <Icon icon="bi:wifi" width="1em" height="1em" aria-hidden="true" />
+                {{ t('panel.online_event') }}
+              </p>
             </div>
-            <p v-if="node.online_event" class="panel-online-badge info-card-online-badge">
-              <Icon icon="bi:wifi" width="1em" height="1em" aria-hidden="true" />
-              {{ t('panel.online_event') }}
-            </p>
-          </div>
-          <!-- Row 3: Add to calendar (hidden when date is TBD) -->
-          <template v-if="!node.date_tbd">
+          </template>
+          <!-- Row 3: Add to calendar (hidden when date is TBD or the event has ended) -->
+          <template v-if="!node.date_tbd && !isPastEvent(node)">
             <hr class="info-card-divider" aria-hidden="true" />
             <div class="info-card-row info-card-calendar-row">
               <Icon icon="bi:calendar-plus" width="1em" height="1em" aria-hidden="true" class="info-card-icon" />
