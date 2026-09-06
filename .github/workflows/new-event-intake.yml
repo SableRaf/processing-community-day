@@ -138,6 +138,7 @@ jobs:
       PCD_TEAM_ASSIGNEES: ${{ vars.PCD_TEAM_ASSIGNEES }}
       PCD_TEAM_REVIEWERS: ${{ vars.PCD_TEAM_REVIEWERS }}
     outputs:
+      event_url: ${{ steps.generate.outputs.event_url }}
       valid: ${{ steps.generate.outputs.valid }}
       branch: ${{ steps.generate.outputs.branch }}
       commit_message: ${{ steps.generate.outputs.commit_message }}
@@ -346,6 +347,41 @@ jobs:
         run: |
           echo "pull-request-number=${{ steps.create_pr.outputs.pull-request-number }}"
           echo "pull-request-url=${{ steps.create_pr.outputs.pull-request-url }}"
+      - name: Explain unchanged event edit
+        if: >-
+          success() && needs.process-edit-event.outputs.valid == 'true' &&
+          steps.create_pr.outputs.pull-request-operation == 'none' &&
+          steps.create_pr.outputs.pull-request-number == ''
+        uses: actions/github-script@v8
+        env:
+          EVENT_URL: ${{ needs.process-edit-event.outputs.event_url }}
+        with:
+          script: |
+            const marker = process.env.STATUS_COMMENT_MARKER;
+            const body = [
+              marker,
+              `Your edits match the [event data already on the site](${process.env.EVENT_URL}), so no pull request was created.`,
+              '',
+              'If you meant to change something, edit this issue with your desired changes. It will be processed again automatically.',
+              '',
+              '> [!NOTE]',
+              '> We’re aware of [an issue](https://discourse.processing.org/t/pcd-worldwide-2026/48081/75) that prevents changes to existing data when first submitting through the "edit event" issue template. To work around it, please edit the issue above rather than creating a new one.',
+            ].join('\n');
+            const { owner, repo } = context.repo;
+            const issue_number = context.issue.number;
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              owner, repo, issue_number,
+            });
+            const existing = comments.find((comment) =>
+              comment.user?.type === 'Bot' && comment.body?.includes(marker)
+            );
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner, repo, comment_id: existing.id, body,
+              });
+            } else {
+              await github.rest.issues.createComment({ owner, repo, issue_number, body });
+            }
 
   post-pr-actions:
     needs: [process-new-event, process-edit-event, create-pr]
