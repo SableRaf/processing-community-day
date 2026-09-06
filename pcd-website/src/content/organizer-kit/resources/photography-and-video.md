@@ -180,7 +180,7 @@ Photography should not interfere with people's ability to participate in or enjo
 
 * **Take Several Photos:** Take several shots. Someone will almost certainly blink, look away, or move.
 
-* **Take a Fun One:** After the regular group photo, you can ask, **"Let's do a silly one!"** It often produces a more relaxed photograph and gives you another version to choose from.
+* **Take a Fun One:** After the regular group photo, you can ask, *"Let's do a silly one!"*. Yes, it is a bit cliché but it often produces a more interesting picture. Take a few more candid shots *after* the "silly" one too, as people often relax and smile more naturally afterwards.
 
 * **Take More Than One Composition:** If time allows, take both a wider photograph showing the setting and a tighter one focused on the group.
 
@@ -202,7 +202,7 @@ Photography should not interfere with people's ability to participate in or enjo
 
 5. **Add Credits:** When sharing photographs of artworks, projects, performances, or presentations, include the creator's name when possible. Credit the photographer as well if requested.
 
-6. **Share With the PCD Team:** Keep the original files and your selected/edited photographs in separate folders. Share your selected photographs with the Processing Foundation using the method provided to PCD organizers so they can potentially be included in documentation of PCD events around the world.
+6. **Share With the PCD Team:** Keep the original files and your selected/edited photographs in separate folders. Share your selected photographs with the Processing Foundation by uploading them to [this folder](https://drive.google.com/drive/folders/1---yBm2vw3UUkrBlejwdlycrwwbCSLxL?usp=drive_link). This helps document PCD events around the world.
 
 A few good photographs are more valuable than hundreds of similar ones. Focus on documenting what made your PCD distinctive: the people, the work they shared, the activities they took part in, and the community that formed around the event.
 

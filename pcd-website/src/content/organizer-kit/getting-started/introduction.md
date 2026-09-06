@@ -10,9 +10,11 @@ Thank you for registering to organize Processing Community Day!
 
 Processing Community Day (PCD) is a global celebration of art, code, and diversity, with events taking place on dates chosen by local organizers throughout October 2026.
 
-We understand that it can take enormous physical and emotional effort to organize a community event, therefore we have compiled this Organizer's Kit to help you get things started.
+We understand that it can take enormous physical and emotional effort to organize a community event, therefore we have compiled this Organizer's Kit to help you get things started. Think of it as an inspiration rather than a set of instructions to follow like a rule book. 
 
-Think of it as an inspiration rather than a set of instructions to follow like a rule book. If this is your first time, start with the [Minimum Viable PCD](/organize/getting-started/minimum-viable-pcd/).
+Next, you can read Raphaël's [Letter to PCD organizers](/organize/getting-started/a-letter-to-organizers/).
+
+If this is your first time hosting an event a [Minimum Viable PCD](/organize/getting-started/minimum-viable-pcd/) might be a good place to start.
 
 ## Acknowledgement
 

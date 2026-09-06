@@ -1,7 +1,7 @@
 ---
 title: Promoting Your Event
 section: Organizing Your Event
-order: 4
+order: 5
 description: Getting the word out, using PCD assets, and how to describe your event's relationship to the Processing Foundation.
 ---
 
