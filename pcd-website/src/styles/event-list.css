@@ -26,7 +26,7 @@
 .event-list-tabs button { background: none; border: 0; border-bottom: 3px solid transparent; padding: 20px 4px 8px; font: inherit; color: var(--color-text-muted); cursor: pointer; }
 .event-list-tabs button[aria-selected='true'] { color: var(--color-primary); border-bottom-color: var(--color-primary); font-weight: 600; }
 .event-count { color: var(--color-text-muted); font-size: .875rem; margin: 20px 0 28px; }
-.event-search-other-results { margin-top: 40px; padding-top: 32px; border-top: 1px solid var(--color-border); }
+#event-other-results { margin-top: 40px; padding-top: 32px; border-top: 1px solid var(--color-border); }
 .event-search-other-heading { margin: 0 0 24px; font-size: 1.5rem; line-height: 1.3; }
 .event-search-category + .event-search-category { margin-top: 36px; }
 .event-search-category-heading {

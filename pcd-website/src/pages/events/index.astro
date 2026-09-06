@@ -68,6 +68,7 @@ const days = [...new Set(events.map(({ record }) => eventGroupDay(record, today)
     <noscript><p>Showing upcoming events as of {today}. Enable JavaScript to search, filter, and browse past and undated events.</p></noscript>
     <div class="event-loading-placeholder"><SkeletonLoader variant="events" /></div>
     <div id="event-results">
+      <div id="event-primary-results">
       {days.map(day => {
         const grouped = events.filter(({record}) => eventGroupDay(record, today) === day);
         const heading = dateHeading(day, today);
@@ -91,8 +92,10 @@ const days = [...new Set(events.map(({ record }) => eventGroupDay(record, today)
           )}</div>
         </section>;
       })}
+      </div>
+      <div id="event-empty" class="event-empty" hidden><h2 id="event-empty-heading">No events found</h2><p>Try another search or adjust your filters.</p><button type="button" id="reset-event-filters">Clear filters</button></div>
+      <div id="event-other-results" hidden></div>
     </div>
-    <div id="event-empty" class="event-empty" hidden><h2 id="event-empty-heading">No events found</h2><p>Try another search or adjust your filters.</p><button type="button" id="reset-event-filters">Clear filters</button></div>
     </div>
     <EventListSidebar nodes={events.map(({ node }) => node)} />
     </div>
@@ -108,12 +111,21 @@ const days = [...new Set(events.map(({ record }) => eventGroupDay(record, today)
   const criteria = [...root.querySelectorAll<HTMLInputElement>('[name="confirmation"]')];
   const tabs = [...root.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
   const results = root.querySelector<HTMLElement>('#event-results')!;
+  const primaryResults = root.querySelector<HTMLElement>('#event-primary-results')!;
   const empty = root.querySelector<HTMLElement>('#event-empty')!;
+  const otherResults = root.querySelector<HTMLElement>('#event-other-results')!;
   const dropdown = root.querySelector<HTMLDetailsElement>('.confirmation-dropdown')!;
   const cards = [...root.querySelectorAll<HTMLElement>('[data-event]')].map(card => ({ card, record: JSON.parse(card.dataset.event!) }));
   const tabNames = ['upcoming', 'past', 'other'] as const;
   const categoryLabels = { upcoming: 'Upcoming', past: 'Past events', other: 'Other events' } as const;
+  const eventCountLabels = {
+    upcoming: ['upcoming event', 'upcoming events'],
+    past: ['past event', 'past events'],
+    other: ['other event', 'other events'],
+  } as const;
   let activeTab: typeof tabNames[number] = 'upcoming';
+
+  const eventCountLabel = (count: number) => eventCountLabels[activeTab][count === 1 ? 0 : 1];
 
   let renderedDay = localDay();
   function render() {
@@ -134,31 +146,28 @@ const days = [...new Set(events.map(({ record }) => eventGroupDay(record, today)
       const category = eventCategory(a.record, today);
       return category === 'past' ? second.localeCompare(first) : first.localeCompare(second);
     });
-    results.replaceChildren();
+    primaryResults.replaceChildren();
+    otherResults.replaceChildren();
     const primaryCount = visible.filter(({ record }) => eventCategory(record, today) === activeTab).length;
     const otherCount = visible.length - primaryCount;
     empty.hidden = primaryCount > 0;
-    empty.querySelector('#event-empty-heading')!.textContent = `No ${categoryLabels[activeTab].toLowerCase()} found`;
+    empty.querySelector('#event-empty-heading')!.textContent = `No ${eventCountLabels[activeTab][1]} found`;
+    otherResults.hidden = otherCount === 0;
+    if (otherCount) {
+      const otherHeading = document.createElement('h2');
+      otherHeading.className = 'event-search-other-heading';
+      otherHeading.textContent = 'Results in other categories';
+      otherResults.append(otherHeading);
+    }
     let previousCategory: typeof tabNames[number] | undefined;
-    let categoryResults = results;
-    let otherResults: HTMLElement | undefined;
+    let categoryResults = primaryResults;
     let previousDay: string | undefined;
     let stack: HTMLDivElement;
     for (const {card, record} of visible) {
       const category = eventCategory(record, today);
-      if (searchAllCategories && category !== activeTab && !otherResults) {
-        results.append(empty);
-        otherResults = document.createElement('section');
-        otherResults.className = 'event-search-other-results';
-        const otherHeading = document.createElement('h2');
-        otherHeading.className = 'event-search-other-heading';
-        otherHeading.textContent = 'Results in other categories';
-        otherResults.append(otherHeading);
-        results.append(otherResults);
-      }
       if (searchAllCategories && category !== activeTab && category !== previousCategory) {
         if (category === 'other') {
-          categoryResults = otherResults!;
+          categoryResults = otherResults;
         } else {
           const categorySection = document.createElement('section');
           categorySection.className = 'event-search-category';
@@ -166,7 +175,7 @@ const days = [...new Set(events.map(({ record }) => eventGroupDay(record, today)
           categoryHeading.className = 'event-search-category-heading';
           categoryHeading.textContent = categoryLabels[category];
           categorySection.append(categoryHeading);
-          otherResults!.append(categorySection);
+          otherResults.append(categorySection);
           categoryResults = categorySection;
         }
         previousCategory = category;
@@ -198,10 +207,9 @@ const days = [...new Set(events.map(({ record }) => eventGroupDay(record, today)
       if (missingTime) missingTime.hidden = Boolean(record.date && (record.end || record.date) < today);
       stack!.append(card);
     }
-    if (!otherResults && primaryCount === 0) results.append(empty);
     root.querySelector('#event-count')!.textContent = searchAllCategories
-      ? `${primaryCount} ${activeTab} ${primaryCount === 1 ? 'event' : 'events'}${otherCount ? ` · ${otherCount} in other categories` : ''}`
-      : `${visible.length} ${activeTab} ${visible.length === 1 ? 'event' : 'events'}`;
+      ? `${primaryCount} ${eventCountLabel(primaryCount)}${otherCount ? ` · ${otherCount} in other categories` : ''}`
+      : `${visible.length} ${eventCountLabel(visible.length)}`;
   }
   function selectTab(index: number) {
     activeTab = tabNames[index];
