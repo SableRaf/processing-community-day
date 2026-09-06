@@ -4,7 +4,7 @@ import SkeletonLoader from '../../components/SkeletonLoader.astro';
 import EventListSidebar from '../../components/EventListSidebar.astro';
 import SiteLayout from '../../layouts/SiteLayout.astro';
 import { loadNodes, canonicalEventId } from '../../lib/nodes';
-import { formatDateRange, formatTimeRange } from '../../lib/format';
+import { formatDateRange, formatTimeRange, isPastEvent } from '../../lib/format';
 import { confirmationFields, dateHeading, eventGroupDay, localDay, matchesEvent } from '../../lib/event-list.mjs';
 import '../../styles/event-list.css';
 
@@ -82,9 +82,17 @@ const days = [...new Set(events.map(({ record }) => eventGroupDay(record, today)
                   {node.event_start_time ? <span>{formatTimeRange(node.event_start_time, node.event_end_time)} <small>local time</small></span> : node.event_date && <span data-missing-time hidden={(node.event_end_date || node.event_date) < today}>Time to be announced</span>}
                 </p>
                 <h3><a href={`/event/${canonicalEventId(node)}/`}>{node.event_name}</a></h3>
-                <p class="event-card-place">{[node.city, node.country].filter(Boolean).join(', ') || (node.online_event ? 'Online' : 'Location to be announced')}{node.online_event && node.city ? ' · Online' : ''}</p>
+                <p
+                  class="event-card-place"
+                  data-missing-location={!node.city && !node.country && !node.online_event || undefined}
+                  hidden={!node.city && !node.country && !node.online_event && isPastEvent(node)}
+                >{[node.city, node.country].filter(Boolean).join(', ') || (node.online_event ? 'Online' : 'Location to be announced')}{node.online_event && node.city ? ' · Online' : ''}</p>
                 {(node.event_short_description || node.details_text) && <p class="event-card-description">{node.event_short_description || node.details_text}</p>}
-                <p class="event-card-venue">{node.online_event ? 'Online event' : [node.location_name, node.address].filter(Boolean).join(' · ') || 'Venue to be announced'}</p>
+                <p
+                  class="event-card-venue"
+                  data-missing-location={!node.online_event && node.location_tbd || undefined}
+                  hidden={!node.online_event && node.location_tbd && isPastEvent(node)}
+                >{node.online_event ? 'Online event' : [node.location_name, node.address].filter(Boolean).join(' · ') || 'Venue to be announced'}</p>
                 {node.placeholder && <p class="event-placeholder">Placeholder — no real event confirmed</p>}
               </div>
               <span class="event-card-arrow" aria-hidden="true">→</span>
@@ -205,6 +213,9 @@ const days = [...new Set(events.map(({ record }) => eventGroupDay(record, today)
       }
       const missingTime = card.querySelector<HTMLElement>('[data-missing-time]');
       if (missingTime) missingTime.hidden = Boolean(record.date && (record.end || record.date) < today);
+      card.querySelectorAll<HTMLElement>('[data-missing-location]').forEach((element) => {
+        element.hidden = Boolean(record.date && (record.end || record.date) < today);
+      });
       stack!.append(card);
     }
     root.querySelector('#event-count')!.textContent = searchAllCategories
