@@ -4,7 +4,7 @@ import { useI18n } from 'vue-i18n';
 import { createFocusTrap, type FocusTrap } from 'focus-trap';
 import { Icon } from '@iconify/vue';
 import type { Node } from '../lib/nodes';
-import { formatDateRange, formatTimeRange, calendarLinks, onlinePlatformName } from '../lib/format';
+import { formatDateRange, formatTimeRange, calendarLinks, onlinePlatformName, isPastEvent } from '../lib/format';
 import { cartoTileUrl } from '../lib/carto';
 import { getOsmUrl } from '../lib/popup';
 import { GITHUB_EDIT_EVENT_URL, GITHUB_CONTENT_ISSUE_URL } from '../config';
@@ -325,7 +325,7 @@ const calLinks = computed(() => props.node && !props.node.date_tbd ? calendarLin
             <div>
               <span v-if="node.date_tbd" class="info-card-date info-card-tbd">{{ t('panel.date_tbd') }}</span>
               <span v-else class="info-card-date">{{ formatDateRange(node.event_date ?? '', node.event_end_date, false, locale) }}</span>
-              <span v-if="!node.date_tbd && node.time_tbd" class="info-card-time info-card-tbd">· {{ t('panel.time_tbd') }}</span>
+              <span v-if="!node.date_tbd && node.time_tbd && !isPastEvent(node)" class="info-card-time info-card-tbd">· {{ t('panel.time_tbd') }}</span>
               <span v-else-if="!node.date_tbd && node.event_start_time" class="info-card-time">
                 · {{ formatTimeRange(node.event_start_time, node.event_end_time) }}
               </span>
