@@ -1,38 +1,31 @@
 {
   "id": "pcd-shanghai-2026",
   "uid": "754d2bc",
-  "organizers": [
-    {
-      "name": "Experimental Programming / 实验编程 (2016-) is a pioneering community and knowledge platform centered around technology and art, connecting cross-disciplinary experimenters worldwide. It originated from HUDOIT, China's most active interactive media art forum in the 2010s. As a source of cutting-edge creative paradigms, it has long been invited to provide teaching solutions and technical support to many universities (including the CAFA, Tongji, Tsinghua, etc.), focusing on the practical exploration and knowledge dissemination of AI, interactive media, and generative art."
-    }
-  ],
+  "organizers": [],
   "primary_contact": {
-    "name": "avantcontra (Luo Xiao)",
+    "name": "Luo Xiao",
     "email": "dadadaluo@gmail.com"
   },
-  "organization_name": "Code2Art Lab, Experimental Programming community",
-  "organization_url": "https://code2art.com/",
-  "organization_type": "Meetup, code club, community group",
+  "organization_name": "",
+  "organization_url": "",
+  "organization_type": "",
   "online_event": false,
   "event_url": "",
   "event_name": "PCD @ Shanghai",
   "event_location": {
-    "address": "",
-    "plus_code": "8Q336FJW+H55"
+    "address": "Shanghai New York University, Century Avenue, Pudong New Area, Shanghai",
+    "plus_code": "8Q336GGM+7H"
   },
-  "event_date": "",
+  "event_date": "2026-10-31",
   "event_start_time": "",
   "event_end_time": "",
-  "event_short_description": "Processing Community Day Shanghai and Suzhou. Workshops, forum, etc.",
+  "event_short_description": "",
   "event_activities": [
     "Show-and-tell",
     "Hands-on workshops",
-    "Live coding",
-    "Exhibition",
-    "Panel discussions",
     "Beginner introductions to Processing or p5.js",
-    "Creative coding jams or hack sessions",
-    "Student project presentations"
+    "Student project presentations",
+    "Other"
   ],
   "event_page_url": "",
   "forum_thread_url": "https://discourse.processing.org/t/pcd-shanghai-2026/48212",
