@@ -1,31 +1,34 @@
 {
   "id": "pcd-suzhou-2026",
   "uid": "3a665a1",
-  "organizers": [],
+  "organizers": [
+    {
+      "name": "code2art Community, Luo Xiao, Shen Bin"
+    }
+  ],
   "primary_contact": {
     "name": "Luo Xiao",
     "email": "dadadaluo@gmail.com"
   },
-  "organization_name": "code2art",
+  "organization_name": "code2art Community",
   "organization_url": "https://code2art.com",
   "organization_type": "Meetup, code club, community group",
   "online_event": false,
   "event_url": "",
   "event_name": "PCD @ Suzhou",
   "event_location": {
-    "address": "Nanmen Rd, Gusu District, Suzhou, Jiangsu, China, 215007",
-    "plus_code": "8Q327JPH+M9H"
+    "address": "No. 40, Daru Lane, Gusu District, Suzhou City, Jiangsu Province",
+    "plus_code": "8Q328J7M+32"
   },
-  "event_date": "",
-  "event_start_time": "",
-  "event_end_time": "",
-  "event_short_description": "",
+  "event_date": "2026-10-17",
+  "event_start_time": "14:00",
+  "event_end_time": "17:00",
+  "event_short_description": "code2art (2016- ) is a pioneering community and knowledge platform centered around AI, interactive media, and generative art, connecting cross-disciplinary experimenters worldwide.",
   "event_activities": [
     "Show-and-tell",
-    "Live coding",
-    "Exhibition",
+    "Hands-on workshops",
     "Beginner introductions to Processing or p5.js",
-    "Creative coding jams or hack sessions"
+    "Student project presentations"
   ],
   "event_page_url": "",
   "forum_thread_url": "https://discourse.processing.org/t/pcd-suzhou-2026/48877",
